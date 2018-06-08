@@ -32,4 +32,5 @@ VYPS_ww = WooWallet shortcode
 
 VidYen, LLC
 https://www.vidyen.com/
+
 2018
