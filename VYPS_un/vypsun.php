@@ -1,8 +1,8 @@
 <?php
 /*
   Plugin Name: VYPS SQL DB Uninstall Cleaner
-  Description: Active, deactive, and delete to delete the tables that the base plugin created.
-  Version: 0.0.02
+  Description: Activate, deactivate, and delete to delete the tables that the base plugin created. ***THIS WILL WIPE THE LOGS!***
+  Version: 0.0.03
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -15,9 +15,9 @@
 *
  */
  
-register_activation_hook(__FILE__, 'vyps_ch_install');
+register_activation_hook(__FILE__, 'vyps_un_install');
 
-function vyps_ch_install() {
+function vyps_un_install() {
  
 	/*
 	* Have removed all install as this should not install a table but just clean the tables.
