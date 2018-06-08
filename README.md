@@ -22,12 +22,19 @@ that could be used for that.
 I need to finish labeling what the folders more professionally but here is what I have:
 
 VYPS_as = VYPS AdScend
+
 VYPS_base = The base plugin required for all plugins to work
+
 VYPS_bc = balance shortcode
+
 VYPS_cf = CoinFlip game
+
 VYPS_ch = Coinhive plugin
+
 VYPS_un = Uninstall plugin
+
 VYPS_wr = Weighted Raffle (not funcitonal)
+
 VYPS_ww = WooWallet shortcode
 
 VidYen, LLC
