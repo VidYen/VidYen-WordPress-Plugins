@@ -139,7 +139,7 @@ function vyps_points_parent_menu_page() {
 	<h1>Welcome to the VidYen Point System</h1>
 	<p>VidYen Point System allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.</p>
 	<p>This is a multipart system similar to WooCommerce as it intends to allow WordPress administrators to create points for monetization and rewards into other system.</p>
-	<p><b>***WARNING***</b> Uninstalling this plugin will automatically delete the VYPS history data! Please backup before you delete it!</p>
+	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To clean you WPDB, use the VYPS Uninstall plugin if you really need to do a clean install.</p>
 	<br><br>
 	<h2>Instructions</h2>
 	<p>Add points put navigating to the Add Point list.</p>
