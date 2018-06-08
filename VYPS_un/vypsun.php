@@ -1,8 +1,8 @@
 <?php
 /*
-  Plugin Name: VYPS Coinhive Addon
-  Description: VidYen Point System CoinHive Addon
-  Version: 0.0.01
+  Plugin Name: VYPS SQL DB Uninstall Cleaner
+  Description: Active, deactive, and delete to delete the tables that the base plugin created.
+  Version: 0.0.02
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -11,7 +11,7 @@
  /* 
 * Note: Have renamed all tables to the right tables... ie. tables_ch, table_points
 * Need to make every variable have specific context so can simply glance at something to know what it does
-*
+* I realized that should have a submenu in case users doesn't have VYPS installed, but 
 *
  */
  
