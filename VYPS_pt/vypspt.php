@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Point Transfer Plugin Addon
   Description: Allows users to transfer VYPS point type to another at different rates.
-  Version: 0.0.01
+  Version: 0.0.02
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -35,8 +35,8 @@ add_action('admin_menu', 'vyps_pt_submenu', 24 );
 function vyps_pt_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "Points Transfer Plugin";
-    $menu_title = 'VYPS Points Transfer Plugin';
+	$page_title = "Point Transfer Plugin";
+    $menu_title = 'Point Transfer Plugin';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_pt_page';
     $function = 'vyps_pt_sub_menu_page';
@@ -150,7 +150,7 @@ function pt_func( $atts ) {
 	
 	$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID");
 	
-	if ( $pt_spend >= $balance_points ) {
+	if ( $pt_sAmount > $balance_points ) {
 		
 		return "You don't have enought points to transfer!";
 		
