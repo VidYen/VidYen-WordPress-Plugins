@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS WooWallet Plugin Addon
   Description: Adds user WooWallet interaction to the VYPS Plugin (requires WooWallet and VYPS)
-  Version: 0.0.09
+  Version: 0.0.10
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -36,8 +36,8 @@ add_action('admin_menu', 'vyps_ww_submenu', 13 );
 function vyps_ww_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "VYPS WooWallet Bridge";
-    $menu_title = 'VYPS WooWallet Bridge';
+	$page_title = "WooWallet Bridge";
+    $menu_title = 'WooWallet Bridge';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_ww_page';
     $function = 'vyps_ww_sub_menu_page';
