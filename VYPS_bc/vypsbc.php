@@ -185,11 +185,6 @@ add_shortcode( 'vyps-balance-icon', 'bc_icon_list_current_func');
 
 function bc_current_func( $atts ) {
 	
-	/* Ok saving this for tomorow 5.21
-	* https://codex.wordpress.org/Function_Reference/shortcode_atts
-	* Need to rewrite the whole goddamn thing because extract is a bad practice
-	*/
-	
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 	$current_user_id = get_current_user_id();
