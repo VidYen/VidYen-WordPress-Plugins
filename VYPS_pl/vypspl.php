@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Public Log Shortcode Addon
   Description: Adds user a public log to the VYPS Plugin
-  Version: 0.0.01
+  Version: 0.0.02
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -92,9 +92,7 @@ function pl_func() {
     $point_logs = $wpdb->get_results($query2);
     ?>
     <div class="wrap">        
-        <h1 class="wp-heading-inline">Public Point Log</h1>        
-        <h2>Point Log</h2>
-        <table class="wp-list-table widefat fixed striped users">
+       <table class="wp-list-table widefat fixed striped users">
             <tr>
                 <th>Date</th>
                 <th>Name</th>
@@ -109,7 +107,8 @@ function pl_func() {
                         <td><?= $logs->time; ?></td>
                         <td><?php
                             $userdata = get_userdata($logs->user_id);
-                            echo $userdata->data->user_nicename; //I'm guessing this works with the user_nicename. Who knows.
+                            echo $userdata->data->user_nickname; //Going to try nickname... just guessing
+							//echo $userdata->data->user_nicename; 
                             ?>
                         <td><?php
                             $points_name = $wpdb->get_row("select * from {$wpdb->prefix}vyps_points where id= '{$logs->points}'");
