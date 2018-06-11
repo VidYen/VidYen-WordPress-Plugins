@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS CoinFlip Plugin Addon
   Description: Let's user have an RNG coin flip to bet VYPS points
-  Version: 0.0.19
+  Version: 0.0.20
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -12,7 +12,7 @@
  
 register_activation_hook(__FILE__, 'vyps_cf_install');
 
-/* vypsbb does need its own table. It will still need to call the vyps_point_log and have a 
+/* vypscf does need its own table. It will still need to call the vyps_point_log and have a 
 *  need for an uninstall file. The way I envisionsed this is to have a log similar to the regular log
 *  to show who won and who lost and how much was wagered. The table for wins/losses will be a shortcode
 *  unto itself, but the game will be A (heads) or B (tales). So... Player A ID and player B ID two
@@ -48,7 +48,10 @@ function vyps_cf_install() {
 	*  Since we aren't using API keys, the amount and point types will be decided by shortcode
 	*  attributes by Admin. But have to check to make sure if they run two types that there are
 	*  are two games going on at same time rather than having two players playing same game with
-	*  different point types
+	*  different point types.
+	*  I am debating whether or not to keep this with an uninstall file but the worse that can happen
+	*  is that admin uninstalls and current game is lost with the record, but the main log will show
+	*  the history.
 	*/
 
     $sql = "CREATE TABLE {$table_name_cf} (
@@ -91,8 +94,8 @@ add_action('admin_menu', 'vyps_cf_submenu', 14 );
 function vyps_cf_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "VYPS CoinFlip Game";
-    $menu_title = 'VYPS CoinFlip Game';
+	$page_title = "CoinFlip Game";
+    $menu_title = 'CoinFlip Game';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_cf_page';
     $function = 'vyps_cf_sub_menu_page';
@@ -108,11 +111,12 @@ function vyps_cf_sub_menu_page()
 	/* Actually I don't think I need to do calls on this page */
     
 	echo
-	"<h1>Welcome to VYPS WooWallet Shortcode Addon Plugin</h1>
+	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
+	<h1>Welcome to VYPS WooWallet Shortcode Addon Plugin</h1>
 	<p>This plugin needs both VYPS and WooWallet to function. The intention is to allow a quick and easy bridge to use points for users to buy things with points on WooCommerce from their monetization activities.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-cf bet=1000 pid=1]</b></p>
-	<p>Function debits points from the VYPS system and credits it to the WooWallet system. Do not use quotes aroudn the nubmers.</p>
+	<p>Function debits points from the VYPS system and opens game for another player to accept to bet.</p>
 	<p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The earn attribute is how much currency the user earns in WooWallet. The spend attribute is how many VYPS points is spent.</p>
 	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
