@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Balance Shortcode Addon
   Description: Adds user balance shortcodes to the VYPS Plugin
-  Version: 0.0.37
+  Version: 0.0.39
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -128,6 +128,53 @@ function bc_list_current_func() {
 
 add_shortcode( 'vyps-balance-list', 'bc_list_current_func');
 
+/* shorcote for icon balance */
+
+function bc_icon_list_current_func() {
+	
+	/* Should check to see if user is logged in */
+	/* Or at least it shouldn't show anything */
+
+	if ( is_user_logged_in() ) {
+		
+		global $wpdb;
+		//$table_log = $wpdb->prefix . 'vyps_point_log';
+		$current_user_id = get_current_user_id();
+		//Originally I had no idea what Orion was doing but $query_row is just a string to feed into another query. Redudant but works.
+		$query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by points, user_id having user_id = '{$current_user_id}'";
+		$row_data = $wpdb->get_results($query_row);
+		
+		$points = '';
+		
+		if (!empty($row_data)) {
+			foreach($row_data as $type){
+				$query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->points}'";
+				$row_data2 = $wpdb->get_row($query_for_name);
+				//$points .= $row_data2->name. $type->sum . ' ' . '<br>';
+				$points .= '<img src="'. $row_data2->icon .'" width="16" hight="16" title="'. $row_data2->name . '" >' . ' ' . $type->sum . ' ' . '<br>';
+				/* btw, manage_point.php has $d->icon where this uses $row_data2 one day we should make this all universally descriptive */
+			}
+		} else {
+			$points = '';
+		}
+
+		return $points;
+		return $value;
+	
+	} else {
+		
+		return "You need to be logged to see your balance!";
+		
+	}
+}
+	
+/* Telling WP to use function for shortcode
+* ICON
+* If I ever get around to it I might just put all the shortcode calls in there own section
+* Like an educated coder would.
+*/
+
+add_shortcode( 'vyps-balance-icon', 'bc_icon_list_current_func');
 
 /*  General BALANCE SHORTCODE
 *  By default this shows specific balance for current user
