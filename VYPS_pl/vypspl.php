@@ -1,8 +1,8 @@
 <?php
 /*
   Plugin Name: VYPS Public Log Shortcode Addon
-  Description: Adds user a public log to the VYPS Plugin
-  Version: 0.0.02
+  Description: Adds a public log of all point transactions to VYPS
+  Version: 0.0.04
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -107,7 +107,7 @@ function pl_func() {
                         <td><?= $logs->time; ?></td>
                         <td><?php
                             $userdata = get_userdata($logs->user_id);
-                            echo $userdata->data->user_nickname; //Going to try nickname... just guessing
+                            echo $userdata->data->display_name; //Display Name might not work in all cases but for now its the best we got
 							//echo $userdata->data->user_nicename; 
                             ?>
                         <td><?php
