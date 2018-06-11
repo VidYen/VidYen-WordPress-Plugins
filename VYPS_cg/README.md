@@ -1,1 +1,11 @@
-Note: As of 6.8.2018 the Weighted Raffle Plugin does not actually function fully and has been kicked down the road a bit.
+# VYPS Combat Game Plugin
+
+6.11.2018 - Game does not actually work on our server. Going to figure out why soon.
+
+Might work on yours. -Felty
+
+VidYen, LLC
+
+https://www.vidyen.com/
+
+2018
