@@ -1,8 +1,8 @@
 <?php
 /*
-  Plugin Name: VidYen Point System Game Plugin
+  Plugin Name: VYPS Game Plugin
   Description: Spend points by playing games.
-  Version: 0.0.10
+  Version: 0.0.11
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
