@@ -2,7 +2,7 @@
 /*
   Plugin Name: VidYen Point System Base Plugin
   Description: VidYen Point System allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-  Version: 0.0.27
+  Version: 0.0.28
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -304,10 +304,13 @@ if (isset($_POST['updateusers'])) {
 } else {
 
     function save_custom_user_profile_fields_points($user_id) {
-        # again do this only if you can
+		/*Turns out this blows up the admin account */
+	   // again do this only if you can
         if (!current_user_can('manage_options'))
             return false;
-
+		
+		/* I'm going to comment this whole thing as I realize VYPS should not longer mess with the profiles * /
+		/*
         # save my custom field
         update_user_meta($user_id, 'points', $_POST['points']);
         update_user_meta($user_id, 'vyps_age', $_POST['vyps_age']);
@@ -322,6 +325,8 @@ if (isset($_POST['updateusers'])) {
             'time' => date('Y-m-d H:i:s')
         ];
         $wpdb->insert($table, $data);
+		
+		*/
     }
 
     add_action('user_register', 'save_custom_user_profile_fields_points');
