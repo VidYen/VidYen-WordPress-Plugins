@@ -7,6 +7,39 @@ global $wpdb;
 
 $data = $wpdb->get_results("SELECT * FROM $wpdb->vypsg_equipment ORDER BY id DESC" );
 
+if(isset($_POST['id'])){
+
+    $item = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%s", $_POST['id'])
+    );
+
+    if(!empty($item)){
+        $wpdb->insert(
+            $wpdb->vypsg_tracking,
+            array(
+                'name' => $item[0]->name,
+                'item_id' => $item[0]->id,
+                'username' => wp_get_current_user()->user_login,
+            ),
+            array(
+                '%s',
+                '%d',
+                '%s',
+            )
+        );
+
+        echo "<div class=\"notice notice-success is-dismissible\">";
+        echo "<p><strong>Thank you for your purchase.</strong></p>";
+        echo "</div>";
+
+    } else {
+        echo "<div class=\"notice notice-error is-dismissible\">";
+        echo "<p><strong>This equipment does not exist.</strong></p>";
+        echo "</div>";
+    }
+
+}
+
 ?>
 
 <div class="wrap">

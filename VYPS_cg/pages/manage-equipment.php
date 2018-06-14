@@ -132,7 +132,7 @@ $systems = $wpdb->get_results(
 );
 
 //has css for card
-wp_enqueue_style('vidyen-admin', plugins_url('VYPS_Game/admin.css' ), '', '1.0.5' );
+wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' );
 
 ?>
 <?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.removeslashes($text).'</div>'; } ?>
@@ -335,7 +335,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_Game/admin.css' ), '', '1.0.5
                     <td class="column-primary"><?= $d->support; ?></td>
                     <td class="column-primary"><?= $d->faction; ?></td>
                     <td class="column-primary"><?= $d->model_year; ?></td>
-                    <td class="column-primary"><a href="<?= site_url(); ?>/wp-admin/admin.php?page=VYPS_Game%2Fpages%2Fmanage-equipment.php&edit_equipment=<?= $d->id; ?>">Edit</a> | <a onclick="return confirm('Are you sure want to do this ?');" href="<?= site_url(); ?>/wp-admin/admin.php?page=VYPS_Game%2Fpages%2Fmanage-equipment.php&delete_equipment=<?= $d->id; ?>">Delete</a></td>
+                    <td class="column-primary"><a href="<?= site_url(); ?>/wp-admin/admin.php?page=VYPS_cg%2Fpages%2Fmanage-equipment.php&edit_equipment=<?= $d->id; ?>">Edit</a> | <a onclick="return confirm('Are you sure want to do this ?');" href="<?= site_url(); ?>/wp-admin/admin.php?page=VYPS_cg%2Fpages%2Fmanage-equipment.php&delete_equipment=<?= $d->id; ?>">Delete</a></td>
                 </tr>
 
             <?php endforeach; ?>

@@ -17,6 +17,7 @@ foreach($user_equipment as $indiv){
     } else {
         $equipment[$indiv->name]['id'] = $indiv->item_id;
         $equipment[$indiv->name]['amount'] = 1;
+        $equipment[$indiv->name]['name'] = $indiv->name;
     }
 }
 
@@ -43,15 +44,15 @@ foreach($user_equipment as $indiv){
         <?php foreach($equipment as $single): ?>
             <tr id="log-1">
                 <td>
-                    <?= $equipment->name ?>
+                    <?= $single['name'] ?>
                 </td>
                 <td>
-                    <?= $equipment->amount ?>
+                    <?= $single['amount'] ?>
                 </td>
                 <td class="column-primary">
                     <form method="post">
-                        <input type="hidden" value="<?= $equipment->id ?>" name="id"/>
-                        <input type="submit" class="button-secondary" value="Buy" onclick="return confirm('Are you sure want to sell one <?= $d->name ?>?');" />
+                        <input type="hidden" value="<?= $single['id'] ?>" name="id"/>
+                        <input type="submit" class="button-secondary" value="Sell" onclick="return confirm('Are you sure want to sell one <?= $single['name'] ?>?');" />
                     </form>
                 </td>
             </tr>

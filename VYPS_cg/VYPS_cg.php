@@ -89,7 +89,7 @@ function vypsg_activate()
       name VARCHAR(255) NOT NULL,
       item_id VARCHAR(255) NOT NULL,
       username VARCHAR(25) NOT NULL,
-      battle_id MEDIUMINT(9),
+      battle_id MEDIUMINT(9), /* what battle it was lost in */
       lost INTEGER(1), /* 0 = lost, 1 = gained */
       PRIMARY KEY  (id)
     ) $charset_collate;";
