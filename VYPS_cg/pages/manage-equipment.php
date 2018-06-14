@@ -220,14 +220,14 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                 <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->hard_attack : ''; ?>" autocomplete="off" required placeholder="Hard attack of equipment" size="70" maxlength="32" name="equipment_hard_attack" /></td>
                 <!-- Armor -->
                 <th width="10%" scope="row" valign="top"><?php _e('Armor', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->armor : ''; ?>" autocomplete="off" required placeholder="Armor of equipment" size="70" maxlength="32" name="equipment_armor" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->armor : ''; ?>" autocomplete="off" placeholder="Armor of equipment" size="70" maxlength="32" name="equipment_armor" /></td>
             </tr>
         </table>
         <table class="form-table">
             <tr>
                 <!-- Entrenchment -->
                 <th width="10%" scope="row" valign="top" title="How hard it is to destroy equipment. The higher number, harder to kill."><?php _e('Entrenchment', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->entrenchment : ''; ?>" autocomplete="off" required placeholder="Entrenchment of equipment" size="70" maxlength="32" name="equipment_entrenchment" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->entrenchment : ''; ?>" autocomplete="off" placeholder="Entrenchment of equipment" size="70" maxlength="32" name="equipment_entrenchment" /></td>
                 <!-- Support -->
                 <th width="10%" scope="row" valign="top"><?php _e('Support', 'vidyen') ?></th>
                 <td width="40%">
@@ -255,10 +255,10 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
             <tr>
                 <!-- Faction -->
                 <th width="10%" scope="row" valign="top"><?php _e('Faction', 'vidyen') ?></th>
-                <td width="40%"><input type="text" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->faction : ''; ?>" autocomplete="off" required placeholder="Faction of equipment" size="70" maxlength="32" name="equipment_faction" /></td>
+                <td width="40%"><input type="text" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->faction : ''; ?>" autocomplete="off" placeholder="Faction of equipment" size="70" maxlength="32" name="equipment_faction" /></td>
                 <!-- Model year -->
                 <th width="10%" scope="row" valign="top"><?php _e('Model Year', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->model_year : ''; ?>" autocomplete="off" required placeholder="Model year of equipment" size="70" maxlength="32" name="equipment_model_year" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->model_year : ''; ?>" autocomplete="off" placeholder="Model year of equipment" size="70" maxlength="32" name="equipment_model_year" /></td>
             </tr>
         </table>
         <p>

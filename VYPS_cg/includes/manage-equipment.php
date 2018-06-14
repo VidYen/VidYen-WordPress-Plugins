@@ -39,26 +39,8 @@ function check_equipment_errors( $name, $description, $icon, $point_type, $point
         case empty($combat_range):
             $error = "Your equipment must have a combat range.";
             break;
-        case empty($soft_attack):
-            $error = "Your equipment must have a soft attack.";
-            break;
-        case empty($hard_attack):
-            $error = "Your equipment must have a hard attack.";
-            break;
-        case empty($armor):
-            $error = "Your equipment must have an armor value.";
-            break;
-        case empty($entrenchment):
-            $error = "Your equipment must have a entrenchment value.";
-            break;
         case empty($support) && $support != '0':
             $error = "Your equipment must have a support value.";
-            break;
-        case empty($faction):
-            $error = "Your equipment must have a faction.";
-            break;
-        case empty($model_year):
-            $error = "Your equipment must have a model year.";
             break;
     }
 
@@ -85,6 +67,18 @@ function create_equipment( $name, $description, $icon, $point_type_id, $point_co
 
     if ( ! empty( $error ) ) {
         return $error;
+    }
+
+    if(empty($armor)){
+        $armor = 1;
+    }
+
+    if(empty($entrenchment)){
+        $entrenchment = 1;
+    }
+
+    if(empty($model_year)){
+        $model_year = 1970;
     }
 
     $wpdb->insert(

@@ -74,19 +74,18 @@ function vypsg_activate()
       manpower_use INTEGER(10) NOT NULL,
       speed_modifier INTEGER(10) NOT NULL,
       combat_range INTEGER(10) NOT NULL,
-      soft_attack INTEGER(10) NOT NULL,
-      hard_attack INTEGER(10) NOT NULL,
-      armor INTEGER(10) NOT NULL,
-      entrenchment INTEGER(255) NOT NULL,
+      soft_attack INTEGER(10) NOT NULL DEFAULT 0,
+      hard_attack INTEGER(10) NOT NULL DEFAULT 0,
+      armor INTEGER(10) NOT NULL DEFAULT '1',
+      entrenchment INTEGER(255) NOT NULL DEFAULT '1',
       support INTEGER(1) NOT NULL, /* 0 = no support, 1 = support */
-      faction VARCHAR(255) NOT NULL,
-      model_year INTEGER(5) NOT NULL,
+      faction VARCHAR(255) NOT NULL DEFAULT '',
+      model_year INTEGER(5) NOT NULL DEFAULT '1970',
       PRIMARY KEY  (id)
     ) $charset_collate;";
 
     $table['vypsg_tracking'] = "CREATE TABLE $wpdb->vypsg_tracking (
       id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
-      name VARCHAR(255) NOT NULL,
       item_id VARCHAR(255) NOT NULL,
       username VARCHAR(25) NOT NULL,
       battle_id MEDIUMINT(9), /* what battle it was lost in */

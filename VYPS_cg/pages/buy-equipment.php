@@ -17,12 +17,10 @@ if(isset($_POST['id'])){
         $wpdb->insert(
             $wpdb->vypsg_tracking,
             array(
-                'name' => $item[0]->name,
                 'item_id' => $item[0]->id,
                 'username' => wp_get_current_user()->user_login,
             ),
             array(
-                '%s',
                 '%d',
                 '%s',
             )
