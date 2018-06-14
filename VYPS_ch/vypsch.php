@@ -1,8 +1,8 @@
 <?php
 /*
   Plugin Name: VYPS Coinhive Addon
-  Description: VidYen Point System CoinHive Addon
-  Version: 0.0.18
+  Description: Adds Coinhive API to the VYPS so you can award points based on hashes mined to your users
+  Version: 0.0.19
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
