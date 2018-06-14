@@ -1,8 +1,8 @@
 <?php
 /*
   Plugin Name: VYPS WooWallet Addon
-  Description: Adds user WooWallet interaction to the VYPS Plugin (requires WooWallet and VYPS)
-  Version: 0.0.10
+  Description: Adds shortcode to transfer VYPS points to WooWallet credit (requires both WooWallet and VYPS)
+  Version: 0.0.12
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -29,7 +29,7 @@ register_activation_hook(__FILE__, 'vyps_ww_install');
 
 
 
-add_action('admin_menu', 'vyps_ww_submenu', 13 );
+add_action('admin_menu', 'vyps_ww_submenu', 46 );
 
 /* Creates the Coin Hive submenu on the main VYPS plugin */
 
@@ -99,7 +99,7 @@ function ww_func( $atts ) {
 		
 	} else {
 		
-		return "Well user doesn't seem logged in.";
+		return "You are not logged in.";
 		
 	}
 	
@@ -132,13 +132,13 @@ function ww_func( $atts ) {
 	
 	if ( $ww_earn == 0 ) {
 		
-		return "Earn was 0!";
+		return "Shortcode Error: Earn was 0!";
 		
 	}
 	
 	if ( $ww_spend == 0 ) {
 		
-		return "Spend was 0!";
+		return "Shortcode Error: Spend was 0!";
 		
 	}
 	
@@ -146,7 +146,7 @@ function ww_func( $atts ) {
 	
 	if ( $pointID == 0 ) {
 		
-		return "You did not set pid!";
+		return "Shortcode Error: The pid was no set!";
 		
 	}
 
@@ -157,7 +157,7 @@ function ww_func( $atts ) {
 	
 	if ( $ww_spend >= $balance_points ) {
 		
-		return "You don't have enought points!";
+		return "Not enough points! You need a minimum of $ww_spend points to transfer credit to the WooWallet!";
 		
 	}
 	
@@ -173,7 +173,7 @@ function ww_func( $atts ) {
 	/* The CH add code to insert in the vyps log */
 	
 	$table_log = $wpdb->prefix . 'vyps_points_log';
-	$reason = "Market Transfer";
+	$reason = "WooWallet Transfer";
 	$amount = $ww_spend * -1; //Seems like this is a bad idea to just multiply it by a negative 1 but hey
 
 	$pointType = $pointID; //Originally this was a table call, but seems easier this way
@@ -192,7 +192,7 @@ function ww_func( $atts ) {
 	*/
 	
 	$table_ww = $wpdb->prefix . 'woo_wallet_transactions';
-	/* I feel like if WooWallet admin was more competant, I wouldn't have to do the following */
+	/* I feel like if WooWallet coder realized balances were bad and logs were good, I wouldn't have to do the following */
 	/* I'm pulling the max transaction_id for the user and then creating a new one with the balance + earn to get the new balance on new row */
 	$last_trans_id = $wpdb->get_var( "SELECT max(transaction_id) FROM $table_ww WHERE user_id = $current_user_id");
 	//return $last_trans_id; //this was 7
@@ -220,7 +220,7 @@ function ww_func( $atts ) {
 		//'transaction_id' => $new_trans_id,
 		//I think the t_id gets autoinc
 
-	return "$ww_spend points spent for $ww_earn earned";
+	return "Success! $ww_spend points used to earn $ww_earn in credit on the WooCommerce Wallet!";
 	
 }
 
