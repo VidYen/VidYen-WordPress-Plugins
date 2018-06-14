@@ -83,7 +83,7 @@ function vyps_as_submenu()
 {
 	$parent_menu_slug = 'vyps_points';
 	$page_title = "VYPS AdScend Addon";
-    $menu_title = 'VYPS AdScend Addon';
+    $menu_title = 'AdScend Addon';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_as_page';
     $function = 'vyps_as_sub_menu_page';
