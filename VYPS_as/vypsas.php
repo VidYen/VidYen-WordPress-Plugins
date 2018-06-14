@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: VYPS AdScend Plugin Addon
+  Plugin Name: VYPS AdScend Addon
   Description: Earn VYPS points by watching AdScend videos
   Version: 0.0.14
   Author: VidYen, LLC

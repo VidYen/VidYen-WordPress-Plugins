@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: VYPS WooWallet Plugin Addon
+  Plugin Name: VYPS WooWallet Addon
   Description: Adds user WooWallet interaction to the VYPS Plugin (requires WooWallet and VYPS)
   Version: 0.0.10
   Author: VidYen, LLC

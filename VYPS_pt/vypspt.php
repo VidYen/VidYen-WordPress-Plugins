@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: VYPS Point Transfer Plugin Addon
+  Plugin Name: VYPS Point Transfer Addon
   Description: Allows users to transfer VYPS point type to another at different rates.
   Version: 0.0.02
   Author: VidYen, LLC

@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: VYPS CoinFlip Plugin Addon
+  Plugin Name: VYPS CoinFlip Addon
   Description: Let's user have an RNG coin flip to bet VYPS points
   Version: 0.0.20
   Author: VidYen, LLC
