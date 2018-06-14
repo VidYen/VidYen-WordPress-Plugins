@@ -1,8 +1,8 @@
 <?php
 /*
   Plugin Name: VidYen Point System Base Plugin
-  Description: VidYen Point System allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-  Version: 0.0.28
+  Description: VidYen Point System (VYPS) allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
+  Version: 0.0.29
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -179,6 +179,8 @@ function register_custom_user_column($columns) {
     return $columns;
 }
 
+/* The next function is important to show the points in the user table */
+
 function register_custom_user_column_view($value, $column_name, $user_id) {
     $user_info = get_userdata($user_id);
     global $wpdb;
@@ -210,6 +212,11 @@ add_action('manage_users_custom_column', 'register_custom_user_column_view', 10,
 
 //end of add column in user table
 
+/* I am removing below but leaving in for now. May should remove for WP.org version
+*  but it needs to go as no longer needed as may interfere with BuddyPress
+*/
+
+/*
 function custom_user_profile_fields_points($user) {
     global $wpdb;
     $query = "select * from " . $wpdb->prefix . 'vyps_points';
@@ -286,6 +293,12 @@ function custom_user_profile_fields_points($user) {
     <?php
 }
 
+*/
+
+/* I am going to try removing the below and see if it breaks anything. Revert if needed */
+
+
+
 if (isset($_POST['updateusers'])) {
 
 
@@ -332,6 +345,8 @@ if (isset($_POST['updateusers'])) {
     add_action('user_register', 'save_custom_user_profile_fields_points');
     add_action('profile_update', 'save_custom_user_profile_fields_points');
 }
+
+
 
 function cgc_ub_action_links($actions, $user_object) {
     $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_points_list&edituserpoints=$user_object->ID") . "'>" . __('Edit Points') . "</a>";
