@@ -149,7 +149,7 @@ function vyps_points_parent_menu_page() {
 	<h2>Here is a list of our other addons that go along with this system:</h2>
 	<ul>
 		<li>Coinhive addon plugin</li>
-		<li><th>AdScend Plugin</li>
+		<li>AdScend Plugin</li>
 		<li>WooWallet Bridge Plugin</li>
 		<li>CoinFlip Game Plugin</li>
 		<li>Balance Shortcode Plugin</li>
