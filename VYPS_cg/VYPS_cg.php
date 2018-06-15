@@ -73,6 +73,7 @@ function vypsg_activate()
       manpower VARCHAR(255) NOT NULL,
       manpower_use INTEGER(10) NOT NULL,
       speed_modifier INTEGER(10) NOT NULL,
+      morale_modifier INTEGER(10) NOT NULL DEFAULT 0,
       combat_range INTEGER(10) NOT NULL,
       soft_attack INTEGER(10) NOT NULL DEFAULT 0,
       hard_attack INTEGER(10) NOT NULL DEFAULT 0,

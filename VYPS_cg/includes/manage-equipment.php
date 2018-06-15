@@ -1,7 +1,7 @@
 <?php
 
 function check_equipment_errors( $name, $description, $icon, $point_type, $point_cost, $point_sell, $manpower,
-                                $manpower_use, $speed_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
+                                $manpower_use, $speed_modifier, $morale_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
                                 $entrenchment, $support, $faction, $model_year, $edit )
 {
     global $wpdb;
@@ -57,12 +57,12 @@ function check_equipment_errors( $name, $description, $icon, $point_type, $point
 }
 
 function create_equipment( $name, $description, $icon, $point_type_id, $point_cost, $point_sell, $manpower,
-                        $manpower_use, $speed_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
+                        $manpower_use, $speed_modifier, $morale_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
                         $entrenchment, $support, $faction, $model_year, $edit = false)
 {
     global $wpdb;
     $error = check_equipment_errors( $name, $description, $icon, $point_type_id, $point_cost, $point_sell, $manpower,
-        $manpower_use, $speed_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
+        $manpower_use, $speed_modifier, $morale_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
         $entrenchment, $support, $faction, $model_year, $edit );
 
     if ( ! empty( $error ) ) {
@@ -93,6 +93,7 @@ function create_equipment( $name, $description, $icon, $point_type_id, $point_co
             'manpower' => $manpower,
             'manpower_use' => $manpower_use,
             'speed_modifier' => $speed_modifier,
+            'morale_modifier' => $morale_modifier,
             'combat_range' => $combat_range,
             'soft_attack' => $soft_attack,
             'hard_attack' => $hard_attack,
@@ -110,6 +111,7 @@ function create_equipment( $name, $description, $icon, $point_type_id, $point_co
             '%d',
             '%d',
             '%s',
+            '%d',
             '%d',
             '%d',
             '%d',

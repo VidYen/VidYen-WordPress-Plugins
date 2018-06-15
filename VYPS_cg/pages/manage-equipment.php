@@ -50,8 +50,8 @@ if ( ! empty($_POST['submit'] ) ) {
                 $_POST['equipment_point_type_id'], $_POST['equipment_point_cost'], $_POST['equipment_point_sell'],
                 $_POST['equipment_manpower'], $_POST['equipment_manpower_use'], $_POST['equipment_speed_modifier'],
                 $_POST['equipment_combat_range'], $_POST['equipment_soft_attack'], $_POST['equipment_hard_attack'],
-                $_POST['equipment_armor'], $_POST['equipment_entrenchment'], $_POST['equipment_support'],
-                $_POST['equipment_faction'], $_POST['equipment_model_year'] );
+                $_POST['equipment_speed_modifier'], $_POST['equipment_armor'], $_POST['equipment_entrenchment'],
+                $_POST['equipment_support'], $_POST['equipment_faction'], $_POST['equipment_model_year'] );
         }
 
         if ( empty( $error ) ) {
@@ -89,8 +89,8 @@ if ( ! empty($_POST['submit'] ) ) {
                 $_POST['equipment_point_type_id'], $_POST['equipment_point_cost'], $_POST['equipment_point_sell'],
                 $_POST['equipment_manpower'], $_POST['equipment_manpower_use'], $_POST['equipment_speed_modifier'],
                 $_POST['equipment_combat_range'], $_POST['equipment_soft_attack'], $_POST['equipment_hard_attack'],
-                $_POST['equipment_armor'], $_POST['equipment_entrenchment'], $_POST['equipment_support'],
-                $_POST['equipment_faction'], $_POST['equipment_model_year'], true );
+                $_POST['equipment_speed_modifier'], $_POST['equipment_armor'], $_POST['equipment_entrenchment'],
+                $_POST['equipment_support'], $_POST['equipment_faction'], $_POST['equipment_model_year'], true );
         }
 
         if ( empty( $error ) ) {
@@ -150,17 +150,20 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                 <td width="40%"><input type="text" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->description : ''; ?>" autocomplete="off" required placeholder="Description of equipment" size="70" maxlength="32" name="equipment_description" /></td>
             </tr>
         </table>
-        <!-- equipment icon -->
         <table class="form-table">
             <tr>
+                <!-- equipment icon -->
                 <th width="10%" scope="row" valign="top" title="The picture that represents the equipment."><?php _e('Icon', 'vidyen') ?></th>
-                <td width="90%">
+                <td width="40%">
                     <?php if(!empty($_GET['edit_equipment'])) { ?>
                         <input type="hidden" name="edit_equipment" value="<?= $_GET['edit_equipment'] ?>"/>
                         <img height="16" width="16" src="<?= $edit_equipment[0]->icon ?>"/>
                     <?php } ?>
                     <input type="file" required name="equipment_icon" accept="image/*"/>
                 </td>
+                <!-- morale number -->
+                <th width="10%" scope="row" valign="top"><?php _e('Morale Modifier', 'vidyen') ?></th>
+                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->morale_modifier : ''; ?>" autocomplete="off" required placeholder="Morale modifier of equipment" size="70" maxlength="32" name="equipment_morale_modifier" /></td>
             </tr>
         </table>
         <table class="form-table">
@@ -292,7 +295,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
             <th scope="col" class="manage-column column-name">Point Sell Cost</th>
             <th scope="col" class="manage-column column-name">Manpower</th>
             <th scope="col" class="manage-column column-name">Manpower Use</th>
-            <th scope="col" class="manage-column column-name">Speed Modifier</th>
+            <th scope="col" class="manage-column column-name">Speed/Morale Modifier</th>
             <th scope="col" class="manage-column column-name">Combat Range</th>
             <th scope="col" class="manage-column column-name">Soft Attack</th>
             <th scope="col" class="manage-column column-name">Hard Attack</th>
@@ -326,7 +329,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                     <td class="column-primary"><?= (float)$d->point_sell; ?></td>
                     <td class="column-primary"><?= $d->manpower; ?></td>
                     <td class="column-primary"><?= $d->manpower_use; ?></td>
-                    <td class="column-primary"><?= $d->speed_modifier; ?></td>
+                    <td class="column-primary"><?= $d->speed_modifier; ?>/<?= $d->morale_modifier ?></td>
                     <td class="column-primary"><?= $d->combat_range; ?></td>
                     <td class="column-primary"><?= $d->soft_attack; ?></td>
                     <td class="column-primary"><?= $d->hard_attack; ?></td>
@@ -356,7 +359,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
             <th scope="col" class="manage-column column-name">Point Sell Cost</th>
             <th scope="col" class="manage-column column-name">Manpower</th>
             <th scope="col" class="manage-column column-name">Manpower Use</th>
-            <th scope="col" class="manage-column column-name">Speed Modifier</th>
+            <th scope="col" class="manage-column column-name">Speed/Morale Modifier</th>
             <th scope="col" class="manage-column column-name">Combat Range</th>
             <th scope="col" class="manage-column column-name">Soft Attack</th>
             <th scope="col" class="manage-column column-name">Hard Attack</th>
