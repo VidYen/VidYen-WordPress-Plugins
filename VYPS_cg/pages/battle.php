@@ -6,31 +6,55 @@
 global $wpdb;
 
 $pending_battles = $wpdb->get_results(
-    "SELECT * FROM $wpdb->vypsg_pending_battles WHERE (user_one = '" . wp_get_current_user()->user_login . "' and user_two is null) or (user_one is null and user_two= '" . wp_get_current_user()->user_login . "')"
-    );
+    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE (user_one = %s) or (user_two = %s)", wp_get_current_user()->user_login, wp_get_current_user()->user_login)
+);
 
 if(isset($_GET['cancel'])){
-    $total = $wpdb->delete(
-        $wpdb->vypsg_pending_battles,
-        array(
-            'id' => $_POST['cancel'],
-        ),
-        array(
-            '%d'
-        )
+
+    $battle = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d and user_one=%s or user_two = %s", $_GET['cancel'], wp_get_current_user()->user_login, wp_get_current_user()->user_login )
     );
 
-    if($total > 0){
-        echo "<div class=\"notice notice-success is-dismissible\">";
-        echo "<p><strong>Battle canceled.</strong></p>";
-        echo "</div>";
+    if($battle[0]->user_one == wp_get_current_user()->user_login){
+        $total = $wpdb->delete(
+            $wpdb->vypsg_pending_battles,
+            array(
+                'id' => $battle[0]->id,
+            ),
+            array(
+                '%d'
+            )
+        );
+    } else {
+        $data = array('user_two' => null, 'user_two_accept' => null);
+        $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
+
+    echo '<script type="text/javascript">document.location = "/wp-admin/profile.php?page=battle";</script>';
+}
+
+if(isset($_GET['ready'])){
+
+    $battle = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d and user_one=%s or user_two = %s", $_GET['ready'], wp_get_current_user()->user_login, wp_get_current_user()->user_login )
+    );
+
+    if($battle[0]->user_one == wp_get_current_user()->user_login){
+        $data = array('user_one_accept' => true);
+        $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
+    } else {
+        $data = array('user_two_accept' => true);
+        $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
+    }
+
+    echo '<script type="text/javascript">document.location = "/wp-admin/profile.php?page=battle";</script>';
+
 }
 
 if(isset($_POST['battle']) && count($pending_battles) == 0){
 
     $ongoing = $wpdb->get_results(
-        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE user_one != %s and user_two = ''", wp_get_current_user()->user_login )
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE user_one != %s and user_two is null", wp_get_current_user()->user_login )
     );
 
     if(count($ongoing) == 0){
@@ -50,6 +74,7 @@ if(isset($_POST['battle']) && count($pending_battles) == 0){
 
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $ongoing[0]->id]);
     }
+    echo '<script type="text/javascript">location.reload(true);</script>';
 }
 
 if(isset($_POST['battle_user']) && count($pending_battles) == 0){
@@ -70,6 +95,7 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
             )
         );
     }
+    echo '<script type="text/javascript">location.reload(true);</script>';
 }
 
 ?>
@@ -98,72 +124,204 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
     ?>
 </div>
 
+<?php if(!isset($_GET['view'])): ?>
+    <div class="wrap">
+        <h2><?php _e('Pending Battles', 'vidyen'); ?></h2>
+        <table class="wp-list-table widefat fixed striped users">
+            <thead>
+            <tr>
+                <th scope="col" class="manage-column column-name">Id</th>
+                <th scope="col" class="manage-column column-name">Opponent</th>
+                <th scope="col" class="manage-column column-name">Strength</th>
+                <th scope="col" class="manage-column column-name">Action</th>
+            </tr>
+            </thead>
+            <tbody id="the-list" data-wp-lists="list:log">
+                <?php
+                    if(count($pending_battles) == 0){
+                        ?>
+                        <tr>
+                            <td colspan="4">No pending battles.</td>
+                        </tr>
+                        <?php
+                    } else {
+                        foreach($pending_battles as $pending_battle){
+                            ?>
+                            <tr>
+                                <td><?= $pending_battle->id ?></td>
+                                <?php
+
+                                $opponent = $pending_battle->user_one;
+                                $status = true;
+                                $user = 2;
+
+                                if($opponent == wp_get_current_user()->user_login){
+                                    $opponent = $pending_battle->user_two;
+                                    $user = 1;
+                                }
+
+                                if($opponent == '' or is_null($opponent)){
+                                    $opponent = "Searching for opponent...";
+                                    $status = false;
+                                }
+
+                                $user_one_accept = false;
+                                if($pending_battle->user_one_accept == true){
+                                    $user_one_accept = true;
+                                }
+
+                                $user_two_accept = false;
+                                if($pending_battle->user_two_accept == true){
+                                    $user_two_accept = true;
+                                }
+
+                                ?>
+                                <td><?= $opponent ?></td>
+                                <?php
+                                    if($status){
+                                        ?>
+                                            <td><a href="/wp-admin/profile.php?page=battle&view=<?= $opponent ?>" class="button-secondary">View Opponent Army</a></td>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <td></td>
+                                        <?php
+                                    }
+                                    if($status){
+                                        if(!$user_two_accept && $user == 2
+                                            || !$user_one_accept && $user == 1) {
+                                            ?>
+                                            <td>
+                                                <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&ready=<?= $pending_battle->id; ?>"
+                                                   class="button-primary">Ready</a>
+                                                <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&cancel=<?= $pending_battle->id; ?>"
+                                                   class="button-secondary">Cancel</a>
+                                            </td>
+                                            <?php
+                                        }
+                                        if(!$user_one_accept && $user_two_accept && $user == 2){
+                                            ?>
+                                            <td>Waiting for opponent to accept.</td>
+                                            <?php
+                                        }
+                                        if(!$user_two_accept && $user_one_accept && $user == 1){
+                                            ?>
+                                            <td>Waiting for opponent to accept.</td>
+                                            <?php
+                                        }
+                                        if($user_one_accept && $user_two_accept){
+                                            ?>
+                                            <td>
+                                                <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&battle=<?= $pending_battle->id; ?>"
+                                                   class="button-primary">Battle</a>
+                                            </td>
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <td>
+                                            <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&cancel=<?= $pending_battle->id; ?>" class="button-secondary">Cancel</a>
+                                        </td>
+                                        <?php
+                                    }
+                                ?>
+                            </tr>
+                            <?php
+                        }
+                    }
+                ?>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <th scope="col" class="manage-column column-name">Id</th>
+                <th scope="col" class="manage-column column-name">Opponent</th>
+                <th scope="col" class="manage-column column-name">Strength</th>
+                <th scope="col" class="manage-column column-name">Action</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div
+<?php else: ?>
+
+<?php
+$user_equipment = $wpdb->get_results(
+    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s ORDER BY id DESC", $_GET['view'] )
+);
+
+//add counting
+$equipment = [];
+
+
+foreach($user_equipment as $indiv){
+
+    if(array_key_exists($indiv->item_id, $equipment)){
+        $equipment[$indiv->item_id]['amount'] += 1;
+    } else {
+        $new = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $indiv->item_id )
+        );
+
+        $equipment[$indiv->item_id]['item'] = $indiv->item_id;
+        $equipment[$indiv->item_id]['amount'] = 1;
+        $equipment[$indiv->item_id]['name'] = $new[0]->name;
+        $equipment[$indiv->item_id]['icon'] = $new[0]->icon;
+    }
+}
+
+?>
 <div class="wrap">
-    <h2><?php _e('Pending Battles', 'vidyen'); ?></h2>
-    <table class="wp-list-table widefat fixed striped users">
+    <h2 style="display:inline-block;">
+        <?= strip_tags($_GET['view']) ?> Equipment | <a href="/wp-admin/profile.php?page=battle">Back</a>
+    </h2>
+    <table class="wp-list-table widefat fixed striped">
         <thead>
         <tr>
-            <th scope="col" class="manage-column column-name">Id</th>
-            <th scope="col" class="manage-column column-name">Opponent</th>
-            <th scope="col" class="manage-column column-name">Strength</th>
-            <th scope="col" class="manage-column column-name">Action</th>
+            <th scope="col" class="manage-column column-primary">
+                <span>Icon</span>
+            </th>
+            <th scope="col" class="manage-column column-primary">
+                <span>Name</span>
+            </th>
+            <th scope="col" class="manage-column column-primary">
+                <span>Amount</span>
+            </th>
         </tr>
         </thead>
         <tbody id="the-list" data-wp-lists="list:log">
-            <?php
-                if(count($pending_battles) == 0){
-                    ?>
-                    <tr>
-                        <td colspan="3">No pending battles.</td>
-                    </tr>
-                    <?php
-                } else {
-                    foreach($pending_battles as $pending_battle){
-                        ?>
-                        <tr>
-                            <td><?= $pending_battle->id ?></td>
-                            <?php
-
-                            $opponent = $pending_battle->user_one;
-                            $user_one = true;
-
-                            if($opponent != wp_get_current_user()->user_login){
-                                $opponent = $pending_battle->user_two;
-                                $user_one = false;
-                            }
-
-                            if($opponent == '' or is_null($opponent)){
-                                $opponent = "Searching for opponent...";
-                            }
-
-                            ?>
-                            <td><?= $opponent ?></td>
-
-                            <?php
-                                if($user_one){
-                                    ?>
-                                    <td><a class="button-secondary">View Opponent Army</a></td>
-                                    <td>
-                                        <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&ready=<?= $pending_battle->id; ?>" class="button-primary">Ready</a>
-                                        <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&cancel=<?= $pending_battle->id; ?>" class="button-secondary">Cancel</a>
-                                    </td>
-                                    <?php
-                                }
-                            ?>
-                        </tr>
-                        <?php
-                    }
-                }
-            ?>
+        <?php foreach($equipment as $single): ?>
+            <tr id="log-1">
+                <td>
+                    <img width="42" src="<?= $single['icon']; ?>"/>
+                </td>
+                <td>
+                    <?= $single['name'] ?>
+                </td>
+                <td>
+                    <?= $single['amount'] ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        <?php if(empty($equipment)): ?>
+            <tr>
+                <td colspan="4">This user has no equipment or manpower.</td>
+            </tr>
+        <?php endif; ?>
         </tbody>
-
         <tfoot>
         <tr>
-            <th scope="col" class="manage-column column-name">Id</th>
-            <th scope="col" class="manage-column column-name">Opponent</th>
-            <th scope="col" class="manage-column column-name">Strength</th>
-            <th scope="col" class="manage-column column-name">Action</th>
+        <tr>
+            <th scope="col" class="manage-column column-primary">
+                <span>Icon</span>
+            </th>
+            <th scope="col" class="manage-column column-primary">
+                <span>Name</span>
+            </th>
+            <th scope="col" class="manage-column column-primary">
+                <span>Amount</span>
+            </th>
         </tr>
         </tfoot>
     </table>
-</div
+</div>
+<?php endif; ?>

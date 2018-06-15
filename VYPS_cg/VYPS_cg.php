@@ -108,6 +108,7 @@ function vypsg_activate()
       user_two VARCHAR(255),
       user_one_accept INTEGER(1), /* 0 = declines, 1 = accepts */
       user_two_accept INTEGER(1), /* 0 = declines, 1 = accepts */
+      battled INTEGER(1) DEFAULT 0,
       PRIMARY KEY  (id)
     ) $charset_collate;";
 
