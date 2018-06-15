@@ -120,7 +120,7 @@ function ww_func( $atts ) {
 	
 	if ( $ww_earn == 0 ) {
 		
-		return 'Shortcode Error. Earn was 0!';
+		return 'Shortcode Error. Earn was 0.';
 		
 	}
 	
