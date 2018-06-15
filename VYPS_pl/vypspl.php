@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Public Log Shortcode Addon
   Description: Adds a public log of all point transactions to VYPS
-  Version: 0.0.04
+  Version: 0.0.06
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -24,7 +24,7 @@ register_activation_hook(__FILE__, 'vyps_pl_install');
 
 
 
-add_action('admin_menu', 'vyps_pl_submenu', 17);
+add_action('admin_menu', 'vyps_pl_submenu', 45); //See github order list
 
 /* Creates the Coin Hive submenu on the main VYPS plugin */
 
@@ -45,26 +45,24 @@ function vyps_pl_submenu()
 
 function vyps_pl_sub_menu_page() 
 { 
-	/* Actually I don't think I need to do calls on this page */
+	/* No calls required on this page. Just HTML for instructions. */
     
 	echo
-	"<h1>Welcome to Public Log Shortcode Addon Plugin</h1>
-	<p>This plugin addon to the VYPS allow you add shortcodes so your users can see their own and other users balances.</p>
+	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
+	<h1>Welcome to Public Log Shortcode Addon Plugin</h1>
+	<p>This plugin addon to the VYPS allow you add shortcodes so your users can see a log of all transactions on the VidYen Point System.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-pl]</b></p>
-	<p> Shows a list of all points with the current balance along with name for logged in user. They must be logged into see this.</p>
-	<p><b>[vyps-balance-list pid=&quot;#&quot; uid=&quot;#&quot;]</b></p>
-	<p>Replace the # with desired numerical value of the pid and uid.</p>
-	<p>The pid is the pointID number seen on the points list page along with the uid which is the user id in WordPress. Leaving the uid option out (ie. [vyps-balance-list pid=&quote;&quote;]  will default to the logged on user.</p>
-	<p>Note: Leaving the uid blank will tell the user they need to log in if you intend to show this to users who are not log in.</p>
-	<p>Also Note: pid will default to 1 which is the first point you have unless you delete it. I would recommend specifing pid at all times.</p>
+	<p>Shows the entire log.</p>
 	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<p>Coin Hive addon plugin</p>
-	<p>AdScend Plugin</p>
-	<p>WooWallet Bridge Plugin</p>
-	<p>CoinFlip Game Plugin</p>
-	<p>Balance Shortcode Plugin</p>
-	<p>Plublic Log Plugin</p>";
+	<p>VYPS AdScend Addon</p>
+	<p>VYPS Balance Shortcode Addon</p>
+	<p>VYPS CoinFlip Addon</p>
+	<p>VYPS Coinhive Addon</p>
+	<p>VYPS Point Transfer Addon</p>
+	<p>VYPS Public Log Shortcode Addon</p>
+	<p>VYPS WooWallet Addon</p>
+	";
 } 
 
 /* I'm shouting in caps as I need to tell which shortcode is which */
