@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Balance Shortcode Addon
   Description: Adds user balance shortcodes to the VYPS Plugin
-  Version: 0.0.39
+  Version: 0.0.41
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -24,9 +24,9 @@ register_activation_hook(__FILE__, 'vyps_bc_install');
 
 
 
-add_action('admin_menu', 'vyps_bc_submenu', 10 );
+add_action('admin_menu', 'vyps_bc_submenu', 41 );
 
-/* Creates the Coin Hive submenu on the main VYPS plugin */
+/* Creates submenu on the main VYPS plugin */
 
 function vyps_bc_submenu() 
 {
@@ -41,11 +41,11 @@ function vyps_bc_submenu()
 }
 
 
-/* Below is the functions for the shortcode */
+/* Below is the functions for this plugin */
 
 function vyps_bc_sub_menu_page() 
 { 
-	/* Actually I don't think I need to do calls on this page */
+	/* No need to do calls on thsi this page. */
     
 	echo
 	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
@@ -55,20 +55,20 @@ function vyps_bc_sub_menu_page()
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-balance-list]</b></p>
 	<p> Shows a list of all points with the current balance along with name for logged in user. They must be logged into see this.</p>
-	<p><b>[vyps-balance-list pid=&quot;#&quot; uid=&quot;#&quot;]</b></p>
-	<p>Replace the # with desired numerical value of the pid and uid.</p>
-	<p>The pid is the pointID number seen on the points list page along with the uid which is the user id in WordPress. Leaving the uid option out (ie. [vyps-balance-list pid=&quote;&quote;]  will default to the logged on user.</p>
+	<p><b>[vyps-balance-list pid=1 uid=12]</b></p>
+	<p>Replace the numbers with desired numerical value of the pid and uid.</p>
+	<p>The pid is the pointID number seen on the points list page along with the uid which is the user id in WordPress. Leaving the uid option out (ie. [vyps-balance-list pid=1]  will default to the logged on user.</p>
 	<p>Note: Leaving the uid blank will tell the user they need to log in if you intend to show this to users who are not log in.</p>
 	<p>Also Note: pid will default to 1 which is the first point you have unless you delete it. I would recommend specifing pid at all times.</p>
 	<br><br>
 	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<p>Coin Hive addon plugin - Allows you to track users mining hashes and recognize their efforts by awarding them points based on how many hashes they mined.</p>
-	<p>AdScend Plugin - Ties into the AdScend API so you can award users points for taking surveys, watching ads, or playing mobile games.</p>
-	<p>WooWallet Bridge Plugin - Allows you to convert points into credits in the WooWallet system so you users can exchange their points for WooCommerce Credit.</p>
-	<p>CoinFlip Game Plugin - A simple multiplayer RNG game where users can challenge other users to a coin toss while betting points.</p>
-	<p>Balance Shortcode Plugin - Show users balance through shortcode anywhere in word press.</p>
-	<p>Plublic Log Plugin - Shows a log of all point transaction on your site to let users know what is happening in the background.</p>
-	
+	<p>VYPS AdScend Addon</p>
+	<p>VYPS Balance Shortcode Addon</p>
+	<p>VYPS CoinFlip Addon</p>
+	<p>VYPS Coinhive Addon</p>
+	<p>VYPS Point Transfer Addon</p>
+	<p>VYPS Public Log Shortcode Addon</p>
+	<p>VYPS WooWallet Addon</p>	
 	";
 } 
 
@@ -111,11 +111,11 @@ function bc_list_current_func() {
 		}
 
 		return $points;
-		return $value;
+		//return $value; //The two reutrn values should be dropped in future versions.
 	
 	} else {
 		
-		return "You need to be logged to see your balance!";
+		return "You need to be logged in to see your balance.";
 		
 	}
 }
@@ -152,6 +152,7 @@ function bc_icon_list_current_func() {
 				$row_data2 = $wpdb->get_row($query_for_name);
 				//$points .= $row_data2->name. $type->sum . ' ' . '<br>';
 				$points .= '<img src="'. $row_data2->icon .'" width="16" hight="16" title="'. $row_data2->name . '" >' . ' ' . $type->sum . ' ' . '<br>';
+				/* I am not 100% certain but I believe the line above may be responsible for character plugin warning. */
 				/* btw, manage_point.php has $d->icon where this uses $row_data2 one day we should make this all universally descriptive */
 			}
 		} else {
@@ -159,11 +160,11 @@ function bc_icon_list_current_func() {
 		}
 
 		return $points;
-		return $value;
+		//return $value; //This was a copy and paste and does nothing except troubleshoot
 	
 	} else {
 		
-		return "You need to be logged to see your balance!";
+		return 'You need to be logged in to see your balance.';
 		
 	}
 }
