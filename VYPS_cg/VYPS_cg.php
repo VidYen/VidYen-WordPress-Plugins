@@ -90,7 +90,6 @@ function vypsg_activate()
       item_id VARCHAR(255) NOT NULL,
       username VARCHAR(25) NOT NULL,
       battle_id MEDIUMINT(9), /* what battle it was lost in */
-      lost INTEGER(1), /* 0 = lost, 1 = gained */
       PRIMARY KEY  (id)
     ) $charset_collate;";
 
@@ -98,7 +97,6 @@ function vypsg_activate()
       id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
       winner VARCHAR(255) NOT NULL,
       loser VARCHAR(255) NOT NULL,
-      lost_id DECIMAL(16,8) NOT NULL,
       battle_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY  (id)
     ) $charset_collate;";
