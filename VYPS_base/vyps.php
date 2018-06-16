@@ -2,7 +2,7 @@
 /*
   Plugin Name: VidYen Point System Base Plugin
   Description: VidYen Point System (VYPS) allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-  Version: 0.0.29
+  Version: 0.0.33
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -134,28 +134,32 @@ function vyps_points_all_point_adjustments() {
 /*I'm going to rewrite the below into a better advertisment */
 
 function vyps_points_parent_menu_page() {
-    echo
-	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
-	<h1>Welcome to the VidYen Point System</h1>
+    
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
+
+	//Static text for the base plugin
+	echo
+	"<h1>Welcome to the VidYen Point System</h1>
 	<p>VidYen Point System allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.</p>
 	<p>This is a multipart system similar to WooCommerce as it intends to allow WordPress administrators to create points for monetization and rewards into other system.</p>
 	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To clean you WPDB, use the VYPS Uninstall plugin if you really need to do a clean install.</p>
-	<br><br>
-	<h2>Instructions</h2>
+	<br>
+	<h2>Base Plugin Instructions</h2>
 	<p>Add points put navigating to the Add Point list.</p>
 	<p>To modify or see a users current point balance go to the users panel and use the context menu by edit information under &quot;Edit Points&quot;.</p>
 	<p>To see a log of all user transactions, go to &quot;All Point Adjustments&quot; in the VidYen Points menu.</p>
 	<br><br>
-	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<ul>
-		<li>Coinhive addon plugin</li>
-		<li>AdScend Plugin</li>
-		<li>WooWallet Bridge Plugin</li>
-		<li>CoinFlip Game Plugin</li>
-		<li>Balance Shortcode Plugin</li>
-		<li>Plublic Log Plugin</li>
-	</ul>
 	";
+	
+	/* This is the credits.php which only needs to be modified in the base to show on all addon plugins
+	*  Credit for this fix goes to skotperez off stack exchange for his answer on Nov 2, 2016
+	*  https://stackoverflow.com/questions/32177667/include-a-php-file-in-another-php-file-wordpress-plugin
+	*  I added the ../ to make it work in my case though.
+	*/
+	
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
+	
 }
 
 function vyps_points_sub_menu_page() {
