@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS WooWallet Addon
   Description: Adds shortcode to transfer VYPS points to WooWallet credit (requires both WooWallet and VYPS)
-  Version: 0.0.14
+  Version: 0.0.15
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -24,7 +24,7 @@ register_activation_hook(__FILE__, 'vyps_ww_install');
 *  I'm not going to rewrite WW but rather only touch the VYPS log (like CH in reverse) and then the balance and log for the WW
 *  Its all in the same table anyways. Touching the log does not affect the actual balance in WW so I don't actually
 *  have to mess with it if I was really lazy, but I'm sure if someone starts giving them free gift cards it would
-*  be useful to trouble shoot. Rant off. -Felty
+*  be useful to trouble shoot. -Felty
 */
 
 
@@ -50,27 +50,24 @@ function vyps_ww_submenu()
 
 function vyps_ww_sub_menu_page() 
 { 
-	/* No calls required */
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
     
+	//WooWallet instructions. I'm tempted to link to the WooCommerce Wallet page, but maybe down the road
 	echo
-	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
-	<h1>Welcome to VYPS WooWallet Shortcode Addon Plugin</h1>
+	"<h1>Welcome to VYPS WooWallet Shortcode Addon Plugin</h1>
 	<p>This plugin needs both VYPS and WooCommerce Wallet to function. The intention is to allow a quick and easy bridge to use points for users to buy things with points on WooCommerce from their monetization activities.</p>
 	<h2>Shortcodes Syntax</h2>
-	<p><b>[vyps-ww earn=1.25 spend=1000 pid=1]</b></p>
+	<p><b>[vyps-ww earn=0.01 spend=1000 pid=1]</b></p>
 	<p>Function debits points from the VYPS system and credits it to the WooWallet system. Do not use quotes aroudn the nubmers.</p>
 	<p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The earn attribute is how much currency the user earns in WooWallet. The spend attribute is how many VYPS points is spent.</p>
-	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
-	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<p>VYPS AdScend Addon</p>
-	<p>VYPS Balance Shortcode Addon</p>
-	<p>VYPS CoinFlip Addon</p>
-	<p>VYPS Coinhive Addon</p>
-	<p>VYPS Point Transfer Addon</p>
-	<p>VYPS Public Log Shortcode Addon</p>
-	<p>VYPS WooWallet Addon</p>
+	<p>All attributes must be set for this to function. There is no interface and is up to the site admin to add shortcode to a page or button. Future versions will include an actual interface.</p>
+	<br><br>
 	";
+	
+	//Credits include
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
 } 
 
 /* 
