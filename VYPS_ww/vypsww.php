@@ -29,7 +29,7 @@ register_activation_hook(__FILE__, 'vyps_ww_install');
 
 
 
-add_action('admin_menu', 'vyps_ww_submenu', 46 );
+add_action('admin_menu', 'vyps_ww_submenu', 460 );
 
 /* Creates the WW submenu on the main VYPS plugin */
 

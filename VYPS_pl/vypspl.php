@@ -24,7 +24,7 @@ register_activation_hook(__FILE__, 'vyps_pl_install');
 
 
 
-add_action('admin_menu', 'vyps_pl_submenu', 45); //See github order list
+add_action('admin_menu', 'vyps_pl_submenu', 450); //See github order list
 
 /* Creates the Coin Hive submenu on the main VYPS plugin */
 
