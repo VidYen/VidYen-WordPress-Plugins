@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Coinhive Addon
   Description: Adds Coinhive API to the VYPS so you can award points based on hashes mined to your users
-  Version: 0.0.19
+  Version: 0.0.20
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -67,7 +67,7 @@ function vyps_ch_install() {
 	$data_id = $wpdb->insert($table_ch, $data);
 }
 
-add_action('admin_menu', 'vyps_ch_submenu', 11 );
+add_action('admin_menu', 'vyps_ch_submenu', 430 );
 
 /* Creates the Coinhive submenu on the main VYPS plugin */
 
@@ -127,9 +127,12 @@ function vyps_ch_sub_menu_page()
 	$query = "select * from " . $wpdb->prefix . 'vyps_points';
     $data = $wpdb->get_results($query);
 
+	/* I'm putting the logo at top because I can */
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
+		
 	?>
 	<div class="wrap">
-		<h1 id="add-new-user">Coinhive API Settings</h1>
+		<h1 id="add-new-user">VYPS Coinhive API Settings</h1>
 		 <?php if (!empty($message)): ?>
             <div id="message" class="updated notice is-dismissible">
                 <p><strong><?= $message; ?>.</strong></p>
@@ -209,10 +212,14 @@ function vyps_ch_sub_menu_page()
 		<p>Display the simple miner for users on a page.</p>
 		<p><b>[vyps-simple-miner]</b></p>
 		<p>Call the Coinhive POST/GET API to redeem to the VidYen point system. Will return the number of hashes acknolwedged from CoinHive that is added to the VYPS database.</p>
-		<p><b>[vyps-redeem-ch]</b></p>
+		<p><b>[vyps-redeem-ch]</b></p><br><br>
 		
 	</div>
+	
 	<?php
+	
+	/* I may not want advertising, but I suppose putting it here never hurts */
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 	
 } 
 
 /* Next section for creatiung short code for the simple miner. */
