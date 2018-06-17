@@ -193,7 +193,7 @@ function vyps_ch_sub_menu_page()
                             <option value='<?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 6, 0 ); ?>'><?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 7, 0 ); ?></option>
                             <?php if (!empty($data)): ?>
                                 <?php foreach ($data as $d): ?>
-                                    <option <?php echo ($user_points == (string) $d->id) ? 'selected' : ''; ?> value='<?= $d->id ?>'><?= $d->name; ?></option>
+                                    <option <?php echo ($user_points = (string) $d->id) ? 'selected' : ''; ?> value='<?= $d->id ?>'><?= $d->name; ?></option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>                
