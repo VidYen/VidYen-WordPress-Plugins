@@ -52,7 +52,7 @@ class Battle
 
             /** First user attacks manpower of second **/
             $manpower_damage = $this->generateManpowerDamage($this->user_first, $this->range);
-            $this->destroyManpower($manpower_damage, $this->user_second, $first_equipment_damage);
+            $this->destroyManpower($manpower_damage, $this->user_second);
 
             if($this->getEquipmentLeft($this->user_second) == 0){
                 $this->finish($this->user_first, $this->user_second);
@@ -61,7 +61,7 @@ class Battle
 
             /** Second user attacks manpower of first **/
             $manpower_damage = $this->generateManpowerDamage($this->user_second, $this->range);
-            $this->destroyManpower($manpower_damage, $this->user_first, $second_equipment_damage);
+            $this->destroyManpower($manpower_damage, $this->user_first);
 
             if($this->getEquipmentLeft($this->user_first) == 0){
                 $this->finish($this->user_second, $this->user_first);
@@ -141,7 +141,7 @@ class Battle
     {
         global $wpdb;
         $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY id DESC", $username )
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and combat_range >= $this->range and battle_id is null ORDER BY id DESC", $username )
         );
 
         //add counting
@@ -221,7 +221,7 @@ class Battle
     {
         global $wpdb;
         $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY id DESC", $username )
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and combat_range >= $this->range and battle_id is null ORDER BY id DESC", $username )
         );
 
         //add counting
