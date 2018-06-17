@@ -40,6 +40,7 @@ if( ! class_exists('VYPS' ) ) {
         private function includes()
         {
             include_once VY_ABSPATH . '/includes/menu-page.php';
+            include_once VY_ABSPATH . '/includes/cg-shortcode.php';
         }
 
     }
