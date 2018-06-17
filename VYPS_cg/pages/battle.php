@@ -9,6 +9,18 @@ $pending_battles = $wpdb->get_results(
     $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE (user_one = %s) or (user_two = %s)", wp_get_current_user()->user_login, wp_get_current_user()->user_login)
 );
 
+if(isset($_GET['battle'])){
+    $pending_battles = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d", $_GET['battle'])
+    );
+
+    if($pending_battles[0]->user_one == wp_get_current_user()->user_login || $pending_battles[0]->user_two == wp_get_current_user()->user_login){
+        include '../includes/Battle.php';
+        $battle = new Battle(5000, [$pending_battles[0]->user_one, $pending_battles[0]->user_two], $pending_battles[0]->id);
+        $battle->startBattle();
+    }
+}
+
 if(isset($_GET['cancel'])){
 
     $battle = $wpdb->get_results(
