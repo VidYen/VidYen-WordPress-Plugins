@@ -200,19 +200,33 @@ elseif (isset($_GET['edit_vyps'])):
             $prev_icon = $wpdb->get_row("select * from {$wpdb->prefix}vyps_points where id = '{$_GET['edit_vyps']}'");
             $icon = $prev_icon->icon;
         }
+		
+		
+		/* Some cases below where the post of the point would be empty */
+		if (isset($_POST['point'])){
+			
+			$point = $_POST['point'];
+			
+			$table = $wpdb->prefix . 'vyps_points';
+			$data = [
+				'name' => $point_name,
+				'icon' => $icon,
+				'points' => $point,
+				'time' => date('Y-m-d H:i:s')
+			];
+		} else {
 
-        $point = $_POST['point'];
-
-        $table = $wpdb->prefix . 'vyps_points';
-        $data = [
-            'name' => $point_name,
-            'icon' => $icon,
-            'points' => $point,
-            'time' => date('Y-m-d H:i:s')
-        ];
+			$table = $wpdb->prefix . 'vyps_points';
+			$data = [
+				'name' => $point_name,
+				'icon' => $icon,
+				//'points' => $point, //see what i did here?
+				'time' => date('Y-m-d H:i:s')
+			];
+		}
         $wpdb->update($table, $data, ['id' => $_GET['edit_vyps']]);
 
-        $message = "updated successfully.";
+        $message = "Updated successfully.";
     }
 
     $query_row = "select * from {$wpdb->prefix}vyps_points where id= '{$_GET['edit_vyps']}'";
@@ -316,7 +330,7 @@ else:
                                 <td class="column-primary"><?= $d->name; ?></td>                
                                 <td class="column-primary"><a href="<?php echo $d->icon; ?>" target="_blank"><img src="<?php echo $d->icon; ?>" width="42" hight="36"></a></td>
 								<td class="column-primary"><?= $d->id; ?></td>
-                                <td class="column-primary"><a href="<?= site_url(); ?>/wp-admin/admin.php?page=vyps_points_list&edit_vyps=<?= $d->id; ?>">Edit</a> | <a onclick="return confirm('Are you sure want to do this ?');" href="<?= site_url(); ?>/wp-admin/admin.php?page=vyps_points_list&delete_vyps=<?= $d->id; ?>">Delete</a></td>
+                                <td class="column-primary"><a href="<?= site_url(); ?>/wp-admin/admin.php?page=vyps_points_list&edit_vyps=<?= $d->id; ?>">Edit</a> | <a onclick="return confirm('Are you sure want to do this ?');" href="<?= site_url(); ?>/wp-admin/admin.php?page=vyps_points_list&edit_vyps=<?= $d->id; ?>">Rename</a></td> <? /* I'm being cute with this menu. *shades* -Felty*/ ?>
                             </tr>	
 
                         <?php endforeach; ?>
