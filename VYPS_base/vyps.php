@@ -53,7 +53,7 @@ add_action('admin_menu', 'vyps_points_menu');
 function vyps_points_menu() {
 
     $parent_page_title = "VidYen Point System";
-    $parent_menu_title = 'VidYen Points';
+    $parent_menu_title = 'VYPS';
     $capability = 'manage_options';
     $parent_menu_slug = 'vyps_points';
     $parent_function = 'vyps_points_parent_menu_page';
