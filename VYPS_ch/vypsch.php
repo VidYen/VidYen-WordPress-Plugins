@@ -114,7 +114,7 @@ function vyps_ch_sub_menu_page()
 			'pointName' => $ch_point_name,
 		];
 		
-		/* what does the 2 lines below do? I can't remember. -Felty */
+		/* what does the 2 lines below do? I should find out someday. -Felty */
 		$data_id = $wpdb->update($table_ch, $data, array( 'id' => 1 ) );
 		
 		$site_key_field = $wpdb->get_var( "SELECT * FROM $table_ch", 1, 0 );		
@@ -190,13 +190,13 @@ function vyps_ch_sub_menu_page()
 				</tr>
 				<!-- Point Type -->
 				<tr>
-                    <th><label for="points">Point type to redeem to: <span class="description">(If you delete the point off the main point system you need to reset this field)</span></label></th>
+                    <th><label for="points">Point type to redeem to: <span class="description"></span></label></th>
                     <td>                     
                         <select class="points" id="points" name="points">
-                            <option value='<?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 6, 0 ); ?>'><?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 7, 0 ); ?></option>
+                            <option value="<?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 6, 0 ); ?>" selected><?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 7, 0 ); ?></option>
                             <?php if (!empty($data)): ?>
                                 <?php foreach ($data as $d): ?>
-                                    <option <?php echo ($user_points = (string) $d->id) ? 'selected' : ''; ?> value='<?= $d->id ?>'><?= $d->name; ?></option>
+                                    <option <?php /* echo ($user_points = (string) $d->id) ? 'selected' : ''; */ ?> value="<?= $d->id ?>"><?= $d->name; ?></option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>                
