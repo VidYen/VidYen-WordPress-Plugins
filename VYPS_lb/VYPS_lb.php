@@ -1,11 +1,17 @@
 <?php
    /*
    Plugin Name: VYPS Leaderboard 
-   description: it makes leaderboards out of VYPS point data, almost fully configurable
-   Version: 0.1
-   Author: Curtis D. Mimes
+   Description: Leaderboards shortcode for the VYPS plugin system
+   Version: 0.0.02
+   Author: VidYen, LLC
+   Author URI: https://vidyen.com/
+   License: GPLv2 or later
    */
 
+   /*
+   * Contract work by: Curtis D. Mimes
+   * On upwork
+   */
 
    /*
 	pointId:  from wp_vyps_point
@@ -130,7 +136,7 @@ class SelectQueryBuilder
  * @link   http://nestedcode.com
  */
 
-remove_shortcode("vyps_leaderboard");
+remove_shortcode("vyps_lb");
 function data_table( $db_data ) {
 	if ( !is_array( $db_data) || empty( $db_data ) ) return false;
 	// Get the table header cells by formatting first row's keys
@@ -163,7 +169,8 @@ function data_table( $db_data ) {
 
 	   	//use wordpress fancy global
 	   	global $wpdb;
-	   	$pre = "wp_";
+		$pre = $wpdb->prefix;
+	   	//$pre = "wp_"; //Well this is -Felty code above. Hope it sticks.
 
 	   	//setup the query builder
 	   	$builder = new SelectQueryBuilder();
