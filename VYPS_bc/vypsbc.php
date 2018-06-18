@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Balance Shortcode Addon
   Description: Adds user balance shortcodes to the VYPS Plugin
-  Version: 0.0.41
+  Version: 0.0.42
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -24,14 +24,14 @@ register_activation_hook(__FILE__, 'vyps_bc_install');
 
 
 
-add_action('admin_menu', 'vyps_bc_submenu', 41 );
+add_action('admin_menu', 'vyps_bc_submenu', 410 );
 
 /* Creates submenu on the main VYPS plugin */
 
 function vyps_bc_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "Balance Shortcode";
+	$page_title = "VYPS Balance Shortcode";
     $menu_title = 'Balance Shortcode';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_bc_page';
@@ -45,14 +45,16 @@ function vyps_bc_submenu()
 
 function vyps_bc_sub_menu_page() 
 { 
-	/* No need to do calls on thsi this page. */
+	
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > '; 
     
+	//Instructions on page
 	echo
-	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
-	<h1>Welcome to Balance Shortcode Addon Plugin</h1>
+	"<h1VYPS Balance Shortcode Addon Plugin</h1>
 	<p>This plugin addon to the VYPS allow you add shortcodes so your users can see their own and other users balances.</p>
 	<br><br>
-	<h2>Shortcodes Syntax</h2>
+	<h2>Shortcode Syntax</h2>
 	<p><b>[vyps-balance-list]</b></p>
 	<p> Shows a list of all points with the current balance along with name for logged in user. They must be logged into see this.</p>
 	<p><b>[vyps-balance-list pid=1 uid=12]</b></p>
@@ -60,16 +62,11 @@ function vyps_bc_sub_menu_page()
 	<p>The pid is the pointID number seen on the points list page along with the uid which is the user id in WordPress. Leaving the uid option out (ie. [vyps-balance-list pid=1]  will default to the logged on user.</p>
 	<p>Note: Leaving the uid blank will tell the user they need to log in if you intend to show this to users who are not log in.</p>
 	<p>Also Note: pid will default to 1 which is the first point you have unless you delete it. I would recommend specifing pid at all times.</p>
-	<br><br>
-	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<p>VYPS AdScend Addon</p>
-	<p>VYPS Balance Shortcode Addon</p>
-	<p>VYPS CoinFlip Addon</p>
-	<p>VYPS Coinhive Addon</p>
-	<p>VYPS Point Transfer Addon</p>
-	<p>VYPS Public Log Shortcode Addon</p>
-	<p>VYPS WooWallet Addon</p>	
 	";
+	
+	//Credits include
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
+	
 } 
 
 /* I'm shouting in caps as I need to tell which shortcode is which */
