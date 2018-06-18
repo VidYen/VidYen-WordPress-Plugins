@@ -87,14 +87,14 @@ function vyps_cf_install() {
 
 }
 
-add_action('admin_menu', 'vyps_cf_submenu', 14 );
+add_action('admin_menu', 'vyps_cf_submenu', 420 );
 
 /* Creates the CoinFlip submenu on the main VYPS plugin */
 
 function vyps_cf_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "CoinFlip Game";
+	$page_title = "VYPS CoinFlip Game";
     $menu_title = 'CoinFlip Game';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_cf_page';
@@ -108,20 +108,24 @@ function vyps_cf_submenu()
 
 function vyps_cf_sub_menu_page() 
 { 
-	/* Actually I don't think I need to do calls on this page */
-    
+
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';  
+	
+	//Instructions on page
 	echo
-	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
-	<h1>Welcome to VYPS WooWallet Shortcode Addon Plugin</h1>
-	<p>This plugin needs both VYPS and WooWallet to function. The intention is to allow a quick and easy bridge to use points for users to buy things with points on WooCommerce from their monetization activities.</p>
+	"<h1>VYPS CoinFlip Game Addon Plugin</h1>
+	<p>This plugin adds a simple multiplayer coin flip game via shortcode to your site.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-cf bet=1000 pid=1]</b></p>
 	<p>Function debits points from the VYPS system and opens game for another player to accept to bet.</p>
 	<p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The earn attribute is how much currency the user earns in WooWallet. The spend attribute is how many VYPS points is spent.</p>
 	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
-	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<p>Coin Hive addon plugin</p>";
+	";
+	
+	//Credits include
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
 } 
 
 
