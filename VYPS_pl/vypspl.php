@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Public Log Shortcode Addon
   Description: Adds a public log of all point transactions to VYPS
-  Version: 0.0.06
+  Version: 0.0.07
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -45,24 +45,20 @@ function vyps_pl_submenu()
 
 function vyps_pl_sub_menu_page() 
 { 
-	/* No calls required on this page. Just HTML for instructions. */
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
     
+	//Instructions on page
 	echo
-	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
-	<h1>Welcome to Public Log Shortcode Addon Plugin</h1>
+	"<h1>Welcome to Public Log Shortcode Addon Plugin</h1>
 	<p>This plugin addon to the VYPS allow you add shortcodes so your users can see a log of all transactions on the VidYen Point System.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-pl]</b></p>
 	<p>Shows the entire log.</p>
-	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<p>VYPS AdScend Addon</p>
-	<p>VYPS Balance Shortcode Addon</p>
-	<p>VYPS CoinFlip Addon</p>
-	<p>VYPS Coinhive Addon</p>
-	<p>VYPS Point Transfer Addon</p>
-	<p>VYPS Public Log Shortcode Addon</p>
-	<p>VYPS WooWallet Addon</p>
 	";
+	
+	//Credits include
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
 } 
 
 /* I'm shouting in caps as I need to tell which shortcode is which */
