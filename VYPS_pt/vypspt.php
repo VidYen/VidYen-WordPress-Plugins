@@ -27,16 +27,15 @@ register_activation_hook(__FILE__, 'vyps_pt_install');
 
 
 
-add_action('admin_menu', 'vyps_pt_submenu', 24 );
+add_action('admin_menu', 'vyps_pt_submenu', 440 );
 
 /* Creates the PT submenu on the main VYPS plugin to show instructions and that its installed */
-/* The next time I do this I'm going to write up what all the plugin menus should be in order */
 
 function vyps_pt_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "Point Transfer Plugin";
-    $menu_title = 'Point Transfer Plugin';
+	$page_title = "Point Transfer Addon Plugin";
+    $menu_title = 'Point Transfer';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_pt_page';
     $function = 'vyps_pt_sub_menu_page';
@@ -49,11 +48,13 @@ function vyps_pt_submenu()
 
 function vyps_pt_sub_menu_page() 
 { 
-	/* Actually I don't think I need to do calls on this page */
+
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
     
+	//Instructions on page
 	echo
-	"<br><br><img src=\"../wp-content/plugins/VYPS_base/logo.png\">
-	<h1>Welcome to VPoints Transfer Shortcode Plugin</h1>
+	"<h1>VYPS Transfer Shortcode Plugin</h1>
 	<p>This plugin needs VYPS Base and two point types to function. The intention is to allow a quick and easy way for users to transfer one type of point to another at varrying rates</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-pt spid=1 dpid=2 samount=100000 damount=100]</b></p>
@@ -61,17 +62,10 @@ function vyps_pt_sub_menu_page()
 	<p>The spid is the source pointID and the dpid is the destination seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The earn attribute is how much currency the user gets in the other poitn type. The spend attribute is how many VYPS points is spent.</p>
 	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
-	<br><br>
-	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<ul>
-		<li>Coinhive addon plugin</li>
-		<li><th>AdScend Plugin</li>
-		<li>WooWallet Bridge Plugin</li>
-		<li>CoinFlip Game Plugin</li>
-		<li>Balance Shortcode Plugin</li>
-		<li>Plublic Log Plugin</li>
-	</ul>
 	";
+	
+	//Credits include
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
 } 
 
 function pt_func( $atts ) {
@@ -84,7 +78,7 @@ function pt_func( $atts ) {
 		
 	} else {
 		
-		return "Well user doesn't seem logged in.";
+		return "You are not logged in.";
 		
 	}
 	
