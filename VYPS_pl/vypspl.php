@@ -50,7 +50,7 @@ function vyps_pl_sub_menu_page()
     
 	//Instructions on page
 	echo
-	"<h1>Welcome to Public Log Shortcode Addon Plugin</h1>
+	"<h1>Public Log Shortcode Addon Plugin</h1>
 	<p>This plugin addon to the VYPS allow you add shortcodes so your users can see a log of all transactions on the VidYen Point System.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-pl]</b></p>

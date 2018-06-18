@@ -55,7 +55,7 @@ function vyps_ww_sub_menu_page()
     
 	//WooWallet instructions. I'm tempted to link to the WooCommerce Wallet page, but maybe down the road
 	echo
-	"<h1>Welcome to VYPS WooWallet Shortcode Addon Plugin</h1>
+	"<h1>VYPS WooWallet Shortcode Addon Plugin</h1>
 	<p>This plugin needs both VYPS and WooCommerce Wallet to function. The intention is to allow a quick and easy bridge to use points for users to buy things with points on WooCommerce from their monetization activities.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-ww earn=0.01 spend=1000 pid=1]</b></p>
