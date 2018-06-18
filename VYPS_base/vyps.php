@@ -149,7 +149,6 @@ function vyps_points_parent_menu_page() {
 	<p>Add points put navigating to the Add Point list.</p>
 	<p>To modify or see a users current point balance go to the users panel and use the context menu by edit information under &quot;Edit Points&quot;.</p>
 	<p>To see a log of all user transactions, go to &quot;All Point Adjustments&quot; in the VidYen Points menu.</p>
-	<br><br>
 	";
 	
 	/* This is the credits.php which only needs to be modified in the base to show on all addon plugins

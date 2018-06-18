@@ -63,7 +63,6 @@ function vyps_ww_sub_menu_page()
 	<p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The earn attribute is how much currency the user earns in WooWallet. The spend attribute is how many VYPS points is spent.</p>
 	<p>All attributes must be set for this to function. There is no interface and is up to the site admin to add shortcode to a page or button. Future versions will include an actual interface.</p>
-	<br><br>
 	";
 	
 	//Credits include

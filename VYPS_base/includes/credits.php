@@ -3,7 +3,7 @@
  * Simple credits file to update the list so it doesn't have to be updated every time
   */
 
- echo "
+ echo "<br><br>
 	<h2>Here is a list of our other addons that go along with this system:</h2>
 	<p>VYPS AdScend Addon</p>
 	<p>VYPS Balance Shortcode Addon</p>
