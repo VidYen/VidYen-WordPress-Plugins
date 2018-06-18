@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS AdScend Addon
   Description: Earn VYPS points by watching AdScend videos
-  Version: 0.0.14
+  Version: 0.0.15
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -75,7 +75,7 @@ function vyps_as_install() {
 *  Need Adscend shortcode
 */
 
-add_action('admin_menu', 'vyps_as_submenu', 17 );
+add_action('admin_menu', 'vyps_as_submenu', 400 );
 
 /* Creates the AdScend submenu on the main VYPS plugin */
 
@@ -96,10 +96,13 @@ function vyps_as_submenu()
 
 function vyps_as_sub_menu_page() 
 { 
-	/* Actually I don't think I need to do calls on this page */
+
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > '; 
     
+	//Instructions on page
 	echo
-	"<h1>Welcome to VYPS AdScend Shortcode Addon Plugin</h1>
+	"<h1>VYPS AdScend Shortcode Addon Plugin</h1>
 	<p>This plugin needs VYPS and an Adscend Account to function. The intention is to allow a quick and easy way for you to award user points for Adscend Activity.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-as-watch pub=1000 profile=5000 pid=1]</b></p>
@@ -107,13 +110,10 @@ function vyps_as_sub_menu_page()
 	<p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The earn attribute is how much currency the user earns in WooWallet. The spend attribute is how many VYPS points is spent.</p>
 	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
-	<h2>Here is a list of our other addons that go along with this system:</h2>
-	<p>Coin Hive addon plugin</p>
-	<p>AdScend Plugin</p>
-	<p>WooWallet Bridge Plugin</p>
-	<p>CoinFlip Game Plugin</p>
-	<p>Balance Shortcode Plugin</p>
-	<p>Plublic Log Plugin</p>";
+	";
+	
+	//Credits include
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
 } 
 
 
@@ -132,7 +132,7 @@ function as_watch_func( $atts ) {
 		
 	} else {
 		
-		return "You need to be logged in to watch ads for points.";
+		return "You need to be logged in to watch advertisments for points.";
 		
 	}
 	
