@@ -103,7 +103,7 @@ if (isset($_GET['edituserpoints'])):
                     </td>                    
                 </tr>
 				
-				<?php /* The Orion person thought the below was useful. I did not. Keeping the code around until making sure it can be removed safely.
+				<?php /* Keeping the code around until making sure it can be removed safely.
 				
                 <tr>
                     <td colspan="2">--- Or ----</td>
