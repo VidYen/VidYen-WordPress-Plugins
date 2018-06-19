@@ -13,7 +13,7 @@
    * On upwork
    */
 
-   /*
+ /*
 	pointId:  from wp_vyps_point
 	adjustmentReason: reason on wp_vyps_point_log
 	rank:  top, current, bottom
@@ -41,6 +41,7 @@ class SelectQueryBuilder
     private $orderByArray = [];
     private $isDesc = false;
     private $limit = 99999999; //arbitrarily large number
+    private $subQueryAlias = "";
 
     //for turning arrays of params into a comma seperated string
     //oof, maybe not efficient but we'll live 
@@ -84,6 +85,19 @@ class SelectQueryBuilder
     	}
     }
 
+    //this lets the thing know if it needs to wrap the output in parenthesis
+    public function isNowSubquery(){
+    	$this->start ='(select ';
+    	$this->end=')';
+    }
+
+    //this wraps a given query string in a function
+    //*NB* ONLY accepts a single param atm. ifyou want it to do more, go wild
+    //should also be only for subqueries I think right now.
+    public static function wrapQueryInFunction($queryString, $fnName, $param){
+    	return "{$fnName}( " . $queryString . ", {$param})";
+    }
+
     //for setting desc/asc
     public function setDescToTrue(){
     	$this->isDesc = true;
@@ -93,6 +107,13 @@ class SelectQueryBuilder
     public function setLimit($limit){
     	$this->limit = $limit;
     }
+
+
+    //doesn't work as intended, will fix late
+    // public function setSubQueryAlias($alias){
+    // 	$this->subQueryAlias = $alias;
+    // 	//$this->end = ") as {$alias}";
+    // }
 
     public function getQueryString(){
     	$output = "";
@@ -118,10 +139,10 @@ class SelectQueryBuilder
     	}
     	//then asc/desc
     	if($this->isDesc){
-    		$output .= "desc";
+    		$output .= " desc";
     	}
 
-    	$output .= $this->end;
+    	$output .= $this->end . (!(empty($this->subQueryAlias)) ? " as " . $this->subQueryAlias : "");
 
     	return $output;
     }
@@ -136,7 +157,7 @@ class SelectQueryBuilder
  * @link   http://nestedcode.com
  */
 
-remove_shortcode("vyps_lb");
+remove_shortcode("vyps_leaderboard");
 function data_table( $db_data ) {
 	if ( !is_array( $db_data) || empty( $db_data ) ) return false;
 	// Get the table header cells by formatting first row's keys
@@ -169,9 +190,7 @@ function data_table( $db_data ) {
 
 	   	//use wordpress fancy global
 	   	global $wpdb;
-		$pre = $wpdb->prefix;
-	   	//$pre = "wp_"; //Well this is -Felty code above. Hope it sticks.
-
+	   	$pre = $wpdb->prefix;	
 	   	//setup the query builder
 	   	$builder = new SelectQueryBuilder();
 	   	$wheres = [];
@@ -179,7 +198,14 @@ function data_table( $db_data ) {
 
 	   	//tells us what to add to the sql statement for the value of rank
 	   	if($rank == "top"){
-	   		$builder->setDescToTrue();
+	   		//$builder->setDescToTrue();
+	   	}
+
+	   	//add the pointId to wheres...if it's not just return missing param as string.
+	   	if(!empty($pointId)){
+	   		array_push($wheres, "{$pre}vyps_points_log.points = {$pointId}");
+	   	}else{
+	   		return "no point id defined in shortcode. ";
 	   	}
 
 	   	//determine what to do about the abs input...
@@ -194,35 +220,58 @@ function data_table( $db_data ) {
 	   		array_push($wheres, " {$pre}vyps_points_log.reason = '{$adjustmentReason}'");
 	   	}
 
-	   	//do the join for the user name
-	   	array_push($wheres, "{$pre}users.ID = {$pre}vyps_points_log.user_id");
+
+	   	/*
+		we've got to make a subquery that's equivalent to this:
 	   	
+	   	{$pre}users.display_name",
+	   			"ifnull((select sum(points_amount)
+			    from {$pre}vyps_points_log 
+			    where {$pre}vvyps_points_log.user_id = {$pre}users.ID and
+			    points = {$pointId} group by user_id),0) as total
+		*/
+
+		$subBuilder = new SelectQueryBuilder();
+		$subBuilder->isNowSubquery();
+		$subBuilder->addSelects(array(
+			"sum(points_amount)"
+		));
+		$subBuilder->addWheres(array(
+			"{$pre}vyps_points_log.user_id = {$pre}users.ID",
+			"points = {$pointId}"
+		));
+		$subBuilder->addWheres($wheres);
+		$subBuilder->addFroms(array(
+			"{$pre}vyps_points_log"
+		));
+
+		
+		$sumSubQuery = SelectQueryBuilder::wrapQueryInFunction($subBuilder->getQueryString(), 'ifnull', 0) . "as total";
+		//echo("<br>subquery: <Br>{$sumSubQuery}<br>"); //ok need to commment this out for debuging -Felty
+		/*
+		end subquery
+		*/
 	   	//set our selects
 	   	$builder->addSelects(
 	   		array(
 	   			"{$pre}users.display_name",
-	   			"SUM({$pre}vyps_points_log.points_amount)"
+	   			$sumSubQuery
 	   		)
 	   	);
 
-	   	//set our wheres
-	   	$builder->addWheres($wheres);
-
 	   	//set our froms
-	   	$builder->addFroms(array("{$pre}vyps_points_log", "{$pre}users"));
-
-	   	//set our group by
-	   	$builder->addGroupBys(array("{$pre}vyps_points_log.user_id "));
+	   	$builder->addFroms(array( "{$pre}users"));
 
 	   	//set our order by
-	   	$builder->addOrderBys(array("SUM({$pre}vyps_points_log.points_amount)"));
+	   	// $builder->addOrderBys(array("SUM({$pre}vyps_points_log.points_amount)"));
 
 	   	//set our limit
 	   	$builder->setLimit($limit);
 
 	   	$query = $builder->getQueryString();
-	    $leaderboardResults = $wpdb->get_results($query, ARRAY_A);
+
 	    //echo $query;  // just for debugging
+	    $leaderboardResults = $wpdb->get_results($query, ARRAY_A);
 	    return $leaderboardResults;
    }
 
@@ -260,10 +309,8 @@ function data_table( $db_data ) {
 	   	
 	   	// $result3 = vypsSumPointLog(2, "Coinhive Mining", 'bottom', 10);
 	   	// // echo("<br><br>");
-	   	// // data_table($result1);
+	   	// echo(data_table($result3));
 	   	// // echo("<br><br>");
 	   	// // data_table($result2);
 	   	// echo("<br><br>");
 	   	// echo(data_table($result3));
-
-?>
