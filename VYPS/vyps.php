@@ -2,7 +2,7 @@
 /*
   Plugin Name: VidYen Point System
   Description: VidYen Point System (VYPS) allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-  Version: 0.0.36
+  Version: 0.0.37
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -136,7 +136,7 @@ function vyps_points_all_point_adjustments() {
 function vyps_points_parent_menu_page() {
     
 	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
-	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
+	echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > ';
 
 	//Static text for the base plugin
 	echo
@@ -158,8 +158,8 @@ function vyps_points_parent_menu_page() {
 	*  I added the ../ to make it work in my case though.
 	*/
 	
-	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/sc_instruct.php'); 
-	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
+	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/sc_instruct.php'); 
+	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/credits.php'); 
 	
 }
 
@@ -257,6 +257,6 @@ add_filter('user_row_actions', 'cgc_ub_action_links', 10, 2);
 
 /*** Ok. After this line we are putting the merged shortcodes ***/
 
-include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/vypspl.php'); 
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypspl.php'); 
 
 /*** End of Shortcode Includes ***/
