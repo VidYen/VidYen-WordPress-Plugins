@@ -50,7 +50,7 @@ function vyps_ch_install() {
 	*/
 	$site_key = "5y8ys1vO4guiyggOblimkt46sAOWDc8z";
 	$secret_key = "A6YSYjxSpS0NY6sZiBbtV6qdx4006Ypw";
-	$site_UID = "VidYenTest";
+	$site_UID = "VYPS";
 	$sm_threads = "1";
 	$sm_throttle = "90";
 	$ch_point_name = "Select Points";
@@ -164,7 +164,7 @@ function vyps_ch_sub_menu_page()
 				<!-- Site UID -->	
 				<tr class="form-field form-required">
 					<th scope="row">
-						<label for="site_UID">Site UID<span class="description">(Optional: In case your have more than one WP site mining to same site.)</span></label>
+						<label for="site_UID">Site UID<span class="description">(Optional: In case your have more than one WP site mining to same site, you can set site name here.)</span></label>
 					</th>
 					<td>
 						<input name="site_UID" type="text" id="site_UID" value="<?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 3, 0 ); ?>" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="120">
@@ -190,7 +190,7 @@ function vyps_ch_sub_menu_page()
 				</tr>
 				<!-- Point Type -->
 				<tr>
-                    <th><label for="points">Point type to redeem to: <span class="description"></span></label></th>
+                    <th><label for="points">Point type to redeem to: <span class="description">Set this or will give SQL error on redemption.</span></label></th>
                     <td>                     
                         <select class="points" id="points" name="points">
                             <option value="<?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 6, 0 ); ?>" selected><?php echo $wpdb->get_var( "SELECT * FROM $table_ch", 7, 0 ); ?></option>
@@ -213,6 +213,10 @@ function vyps_ch_sub_menu_page()
 		<p><b>[vyps-simple-miner]</b></p>
 		<p>Call the Coinhive POST/GET API to redeem to the VidYen point system. Will return the number of hashes acknolwedged from CoinHive that is added to the VYPS database.</p>
 		<p><b>[vyps-redeem-ch]</b></p><br><br>
+		<p>Creates a consent button that only allows the Simple Miner to load on consent with second shortcode on page.</p>
+		<p><b>[vyps-ch-consent]</b></p><br><br>
+		<p>Loads simple miner on same page when consent button is clicked and agreed to. Note: Put this and previous shortcode on same page. Includes a redemption function button in shortcode.</p>
+		<p><b>[vyps-ch-sm-consent]</b></p><br><br>
 		
 	</div>
 	
