@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Coinhive Addon
   Description: Adds Coinhive API to the VYPS so you can award points based on hashes mined to your users
-  Version: 0.0.23
+  Version: 0.0.24
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -293,10 +293,116 @@ function sm_short_consent_func() {
 					data-user=\"$sm_user\"
 					>
 					<em>Loading...</em>
-					</div>";
+					</div>
+					<br>
+					<form method=\"post\">
+						<input type=\"hidden\" value=\"\" name=\"redeem\"/>
+					<input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
+					</form>";
 		} else {
 			echo "You need to be logged in to use Coinhive on this site!";
 		}
+		
+	} elseif (isset($_POST["redeem"])) { //see if post button is redeem and run that
+		
+			if ( is_user_logged_in() ) {
+	
+				/* Pulling the WPDB variables*/
+				global $wpdb;
+				$table_ch = $wpdb->prefix . 'vyps_ch';
+				$current_user_id = get_current_user_id();
+				$sm_siteUID = $wpdb->get_var( "SELECT * FROM $table_ch", 3, 0 ); 
+				$sm_site_key = $wpdb->get_var( "SELECT * FROM $table_ch", 1, 0 );
+				$hiveKey = $wpdb->get_var( "SELECT * FROM $table_ch", 2, 0 );
+				$hiveUser = $sm_siteUID . $current_user_id;
+				
+				
+				//Copied and pasted from the old VidYen.com code
+				// fetch from DB
+				//$hiveUser = $user->id;
+				//$hiveKey = 'baMweSSSVy93nOaQXOuQ0rKFRQlX0PY1';
+				// --------------------
+												
+				$url = "https://api.coinhive.com/user/balance?name={$hiveUser}&secret={$hiveKey}";
+												
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$result = curl_exec($ch);
+				curl_close($ch);
+												
+				$jsonData = json_decode($result, true);
+				$balance = $jsonData['balance'];
+												
+				/* echo $balance;
+												
+				$hostBalance = $unbalance + ($unbalance - $balance);
+												
+				echo $hostBalance; */
+										
+				//
+				// A very simple PHP example that sends a HTTP POST to a remote site
+				//
+
+				$ch = curl_init();
+												
+				curl_setopt($ch, CURLOPT_URL,"https://api.coinhive.com/user/withdraw");
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS,
+					"name={$hiveUser}&amount={$balance}&secret={$hiveKey}");
+												
+				// in real life you should use something like:
+				// curl_setopt($ch, CURLOPT_POSTFIELDS, 
+				//          http_build_query(array('postvar1' => 'value1')));
+												
+				// receive server response ...
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+												
+				$server_output = curl_exec ($ch);
+												
+				curl_close ($ch);
+												
+				// further processing ....
+				//if ($server_output == "OK") { ... } else { ... }
+				
+				/* OK. Pulling log table to post return to it. What could go wrong? */
+				/* Honestly, we should always refer to table by the actual table?   */
+				
+				/* Just checking to see if balance is 0. If it is, no need to do anything other than return the results.*/
+				if( $balance > 0 )
+				{
+					global $wpdb;
+					
+					$table_log = $wpdb->prefix . 'vyps_points_log';
+					$reason = "Coinhive Mining";
+					$amount = $balance;
+
+					$pointType = $wpdb->get_var( "SELECT * FROM $table_ch", 6, 0 );
+					$user_id = get_current_user_id();
+						$data = [
+							'reason' => $reason,
+							'points' => $pointType,
+							'points_amount' => $amount,
+							'user_id' => $user_id,
+							'time' => date('Y-m-d H:i:s')
+						];
+					$wpdb->insert($table_log, $data);
+				}
+				
+				/* It dawned on me that text in here only needs a number and let the admin right there response
+				*  One could in theory might make an IF statement you have no hashes to redeem, but KISS */
+				
+				return "$balance points redeemed.<br><br>
+					<form method=\"post\">
+						<input type=\"hidden\" value=\"\" name=\"consent\"/>
+						<input type=\"submit\" class=\"button-secondary\" value=\"Go back to mining.\" onclick=\"return confirm('Click OK to go back to mining.');\" />
+					</form>
+				";
+			} else {
+				echo "You need to be logged in to use Coinhive on this site!";
+			}
+		
 		
 	} else {
 		//return; //if post is not ran than do nothing. I could check to see if logged in first, but then I guess you couldn't see consent button.
