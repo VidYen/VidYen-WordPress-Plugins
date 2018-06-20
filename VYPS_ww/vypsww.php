@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS WooWallet Addon
   Description: Adds shortcode to transfer VYPS points to WooWallet credit (requires both WooWallet and VYPS)
-  Version: 0.0.15
+  Version: 0.0.16
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -51,12 +51,12 @@ function vyps_ww_submenu()
 function vyps_ww_sub_menu_page() 
 { 
 	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
-	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
+	echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > ';
     
 	//WooWallet instructions. I'm tempted to link to the WooCommerce Wallet page, but maybe down the road
 	echo
 	"<h1>VYPS WooWallet Shortcode Addon Plugin</h1>
-	<p>This plugin needs both VYPS and WooCommerce Wallet to function. The intention is to allow a quick and easy bridge to use points for users to buy things with points on WooCommerce from their monetization activities.</p>
+	<p>This plugin needs both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function. The intention is to allow a quick and easy bridge to use points for users to buy things with points on WooCommerce from their monetization activities.</p>
 	<h2>Shortcodes Syntax</h2>
 	<p><b>[vyps-ww earn=0.01 spend=1000 pid=1]</b></p>
 	<p>Function debits points from the VYPS system and credits it to the WooWallet system. Do not use quotes aroudn the nubmers.</p>
@@ -66,7 +66,7 @@ function vyps_ww_sub_menu_page()
 	";
 	
 	//Credits include
-	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
+	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/credits.php'); 
 } 
 
 /* 
