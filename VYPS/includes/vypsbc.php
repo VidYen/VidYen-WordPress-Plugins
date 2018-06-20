@@ -14,7 +14,7 @@
 *
  */
  
-register_activation_hook(__FILE__, 'vyps_bc_install');
+//register_activation_hook(__FILE__, 'vyps_bc_install'); //moving to base
 
 /* Removed all the database and table creation call as this addon does not need its own table
 *  Or even an uninstall file as it just adds code fuctionality. Yes you can get on me for not
@@ -24,10 +24,11 @@ register_activation_hook(__FILE__, 'vyps_bc_install');
 
 
 
-add_action('admin_menu', 'vyps_bc_submenu', 410 );
+//add_action('admin_menu', 'vyps_bc_submenu', 410 ); //base move
 
 /* Creates submenu on the main VYPS plugin */
 
+/* Base move
 function vyps_bc_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
@@ -40,9 +41,11 @@ function vyps_bc_submenu()
     add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
 
+*/
 
 /* Below is the functions for this plugin */
 
+/* Base move
 function vyps_bc_sub_menu_page() 
 { 
 	
@@ -69,7 +72,7 @@ function vyps_bc_sub_menu_page()
 	
 } 
 
-/* I'm shouting in caps as I need to tell which shortcode is which */
+*/
 
 /* LIST FUCNTION SHORTCODE
 *  Because an admin might just want a full list without messing around with

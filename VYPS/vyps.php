@@ -255,8 +255,9 @@ function cgc_ub_action_links($actions, $user_object) {
 
 add_filter('user_row_actions', 'cgc_ub_action_links', 10, 2);
 
-/*** Ok. After this line we are putting the merged shortcodes ***/
+/*** SHORTCODE INCLUDES IN BASE ***/
 
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypspl.php'); 
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypspl.php'); //Point Log
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypsbc.php'); //Balance
 
 /*** End of Shortcode Includes ***/
