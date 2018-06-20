@@ -1,8 +1,8 @@
 <?php
 /*
-  Plugin Name: VidYen Point System Base Plugin
+  Plugin Name: VidYen Point System
   Description: VidYen Point System (VYPS) allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-  Version: 0.0.34
+  Version: 0.0.36
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -44,7 +44,7 @@ function vyps_points_install() {
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
 
-    require_once (ABSPATH . 'wp-admin/includes/upgrade.php');
+    require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I am concerned that this used ABSPATH rather than the normie WP methods
 
     dbDelta($sql);
 }
@@ -149,6 +149,7 @@ function vyps_points_parent_menu_page() {
 	<p>Add points put navigating to the Add Point list.</p>
 	<p>To modify or see a users current point balance go to the users panel and use the context menu by edit information under &quot;Edit Points&quot;.</p>
 	<p>To see a log of all user transactions, go to &quot;All Point Adjustments&quot; in the VidYen Points menu.</p>
+	
 	";
 	
 	/* This is the credits.php which only needs to be modified in the base to show on all addon plugins
@@ -157,6 +158,7 @@ function vyps_points_parent_menu_page() {
 	*  I added the ../ to make it work in my case though.
 	*/
 	
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/sc_instruct.php'); 
 	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
 	
 }
@@ -252,3 +254,9 @@ function cgc_ub_action_links($actions, $user_object) {
 }
 
 add_filter('user_row_actions', 'cgc_ub_action_links', 10, 2);
+
+/*** Ok. After this line we are putting the merged shortcodes ***/
+
+include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/vypspl.php'); 
+
+/*** End of Shortcode Includes ***/

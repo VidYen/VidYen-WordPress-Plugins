@@ -14,7 +14,7 @@
 * I needed a way so people could see activity of everything
  */
  
-register_activation_hook(__FILE__, 'vyps_pl_install');
+//register_activation_hook(__FILE__, 'vyps_pl_install'); //VYPS_pl used to be a standalone plug, now merged with base.
 
 /* Removed all the database and table creation call as this addon does not need its own table
 *  Or even an uninstall file as it just adds code fuctionality. Yes you can get on me for not
@@ -24,10 +24,11 @@ register_activation_hook(__FILE__, 'vyps_pl_install');
 
 
 
-add_action('admin_menu', 'vyps_pl_submenu', 450); //See github order list
+//add_action('admin_menu', 'vyps_pl_submenu', 450); //See github order list //Menu needs to not be added.
 
-/* Creates the Coin Hive submenu on the main VYPS plugin */
-
+/* Creates the Public log submenu on the main VYPS plugin */
+/* I may move this to a single page -Felty */
+/* The function below can be removed.
 function vyps_pl_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
@@ -40,9 +41,10 @@ function vyps_pl_submenu()
     add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
 
+*/
 
 /* Below is the functions for the shortcode */
-
+/* As well as this one as no longer needed as moving the shortcode list.
 function vyps_pl_sub_menu_page() 
 { 
 	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
@@ -60,8 +62,7 @@ function vyps_pl_sub_menu_page()
 	//Credits include
 	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
 } 
-
-/* I'm shouting in caps as I need to tell which shortcode is which */
+*/
 
 /* LIST FUCNTION SHORTCODE
 *  Because an admin might just want a full list without messing around with
@@ -102,7 +103,7 @@ function pl_func() {
                         <td><?php
                             $userdata = get_userdata($logs->user_id);
                             echo $userdata->data->display_name; //Display Name might not work in all cases but for now its the best we got
-							//echo $userdata->data->user_nicename; 
+							//echo $userdata->data->user_nicename; //Uncomment this if you want the nicename instead of display_name
                             ?>
                         <td><?php
                             $points_name = $wpdb->get_row("select * from {$wpdb->prefix}vyps_points where id= '{$logs->points}'");
