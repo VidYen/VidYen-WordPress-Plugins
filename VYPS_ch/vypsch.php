@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Coinhive Addon
   Description: Adds Coinhive API to the VYPS so you can award points based on hashes mined to your users
-  Version: 0.0.20
+  Version: 0.0.23
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -261,14 +261,66 @@ function sm_short_func() {
 
 add_shortcode( 'vyps-simple-miner', 'sm_short_func');	
 
+
+/* Ok. This is the consent version simple miner shortcode. Only works when user consents with the other button.
+*  I have half a mine to make it required, but only if I come across admins abusing it.
+*/
+
+function sm_short_consent_func() {
+	
+	if (isset($_POST["consent"])){ // button name
+		
+		/* Check to see if user is logged in */
+		if ( is_user_logged_in() ) {
+	
+			/* Pulling the WPDB variables*/
+			global $wpdb;
+			$table_ch = $wpdb->prefix . 'vyps_ch';
+			$sm_site_key = $wpdb->get_var( "SELECT * FROM $table_ch", 1, 0 );
+			$sm_siteUID = $wpdb->get_var( "SELECT * FROM $table_ch", 3, 0 ); 
+			$sm_threads = $wpdb->get_var( "SELECT * FROM $table_ch", 4, 0 );
+			$sm_throttle = $wpdb->get_var( "SELECT * FROM $table_ch", 5, 0 );
+			$current_user_id = get_current_user_id();
+			$sm_user = $sm_siteUID . $current_user_id;
+			
+			return "
+				<script src=\"https://authedmine.com/lib/simple-ui.min.js\" async></script>
+				<div class=\"coinhive-miner\" 
+					style=\"width: 256px; height: 310px\"
+					data-key=\"$sm_site_key\"
+					data-threads=\"$sm_threads\"
+					data-throttle=\"$sm_throttle\"
+					data-user=\"$sm_user\"
+					>
+					<em>Loading...</em>
+					</div>";
+		} else {
+			echo "You need to be logged in to use Coinhive on this site!";
+		}
+		
+	} else {
+		//return; //if post is not ran than do nothing. I could check to see if logged in first, but then I guess you couldn't see consent button.
+	}
+
+}
+
+/* Telling WP to use function for shortcode for sm-consent*/
+
+add_shortcode( 'vyps-ch-sm-consent', 'sm_short_consent_func');	
+
+
+
 /* Shortcode for the API call to create a lot entry */
 /* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
 
 function sm_short_redeem_func() {
 	
 	/* Check to see if user is logged in */
+	/* Actually redeem does not need consent as user never sees coinhive's servers and therefore will not run client code */
 		
 	if ( is_user_logged_in() ) {
+		
+
 	
 		/* Pulling the WPDB variables*/
 		global $wpdb;
@@ -364,3 +416,45 @@ function sm_short_redeem_func() {
 }
 
 add_shortcode( 'vyps-redeem-ch', 'sm_short_redeem_func');
+
+/* Ok. I got annoyed with WordPress and relative links so I thought I might as well add a button to opt in.
+*  This gist is that user will have an opt in button. Admin can put anything on the page they want at bottom.
+*  And user had to click. I consent. It ads a 0 entry log in for that user for the point id with reason "consent"
+*  Page reloads and then the if will let the shortcode run the coinhive simple miner. I really want it to not touch
+*  the authmine server until the consent. Least someone freaks out by randomly exploring. Since it does not do that
+*  if you are not logged in, I'm going to assume it's just another if logged in user was logged in and consented
+*  in the log. One in theory could give points for consented, but that might be too much effort. -Felty
+*/
+
+function sm_short_click_consent_func() {
+	
+	/* User needs to be logged into consent. NO EXCEPTIONS */
+	
+	if ( is_user_logged_in() ) {
+		
+		//echo "<b>e</b> Where does this go?";
+		//return "<b>r</b> where does this go?";
+		
+		return "<form method=\"post\">
+                <input type=\"hidden\" value=\"\" name=\"consent\"/>
+                <input type=\"submit\" class=\"button-secondary\" value=\"I agree and consent\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
+                </form>";
+		
+		/*
+		if(isset($_POST['consent'])){ // button name
+			//do_stuff();
+			echo "hooo";
+		} else {
+			//do_other_stuff();
+			echo "booo";
+		}
+		*/
+		
+	} else {
+		
+		return "You need to be logged in to consent!";
+	}
+	
+}
+
+add_shortcode( 'vyps-ch-consent', 'sm_short_click_consent_func');
