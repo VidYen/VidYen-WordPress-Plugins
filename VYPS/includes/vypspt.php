@@ -10,7 +10,7 @@
 
 
  
-register_activation_hook(__FILE__, 'vyps_pt_install');
+//register_activation_hook(__FILE__, 'vyps_pt_install'); //Base move
 
 /* vypspt does not need its own table. It will need to call the vyps_point_log and the 
 *  No need for an uninstall file as it just adds shortcode fuctionality. 
@@ -27,10 +27,11 @@ register_activation_hook(__FILE__, 'vyps_pt_install');
 
 
 
-add_action('admin_menu', 'vyps_pt_submenu', 440 );
+//add_action('admin_menu', 'vyps_pt_submenu', 440 ); //base move
 
 /* Creates the PT submenu on the main VYPS plugin to show instructions and that its installed */
 
+/* Base move.
 function vyps_pt_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
@@ -42,10 +43,12 @@ function vyps_pt_submenu()
 
     add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
+*/
 
 
 /* Below is the functions for the shortcode */
 
+/* Base move
 function vyps_pt_sub_menu_page() 
 { 
 
@@ -66,7 +69,9 @@ function vyps_pt_sub_menu_page()
 	
 	//Credits include
 	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
-} 
+}
+
+*/
 
 function pt_func( $atts ) {
 	
