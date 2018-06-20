@@ -1,8 +1,8 @@
 <?php
 /*
-  Plugin Name: VYPS AdScend Addon
-  Description: Earn VYPS points by watching AdScend videos
-  Version: 0.0.15
+  Plugin Name: VYPS Adscend Media API Addon
+  Description: Earn VYPS points by doing AdScend Media activities
+  Version: 0.0.19
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -48,7 +48,7 @@ function vyps_as_install() {
 	*  breaks it.
 	*/
 	
-	/* Decided no longer required to make the table as apparently AdScend actually has a API despite the contrary
+	/* Decided no longer required to make the table as apparently Adscend actually has a API despite the contrary
 
     $sql = "CREATE TABLE {$table_name_as} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -77,13 +77,13 @@ function vyps_as_install() {
 
 add_action('admin_menu', 'vyps_as_submenu', 400 );
 
-/* Creates the AdScend submenu on the main VYPS plugin */
+/* Creates the Adscend submenu on the main VYPS plugin */
 
 function vyps_as_submenu() 
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "VYPS AdScend Addon";
-    $menu_title = 'AdScend Addon';
+	$page_title = "VYPS Adscend Addon";
+    $menu_title = 'Adscend Addon';
 	$capability = 'manage_options';
     $menu_slug = 'vyps_as_page';
     $function = 'vyps_as_sub_menu_page';
@@ -98,29 +98,30 @@ function vyps_as_sub_menu_page()
 { 
 
 	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
-	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > '; 
+	echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > '; 
     
 	//Instructions on page
 	echo
-	"<h1>VYPS AdScend Shortcode Addon Plugin</h1>
-	<p>This plugin needs VYPS and an Adscend Account to function. The intention is to allow a quick and easy way for you to award user points for Adscend Activity.</p>
+	"<h1>VYPS Adscend Media Shortcode Addon Plugin</h1>
+	<p>This plugin needs VYPS and an <a href=\"https://adscendmedia.com\" target=\"_blank\">Adscend Media</a> account to function. The intention is to allow a quick and easy way for you to award user points for Adscend Activity.</p>
 	<h2>Shortcodes Syntax</h2>
-	<p><b>[vyps-as-watch pub=1000 profile=5000 pid=1]</b></p>
-	<p>Function debits points from the VYPS system and credits it to the WooWallet system. Do not use quotes aroudn the nubmers.</p>
+	<p><b>[vyps-as-watch pub=113812 profile=13246 pid=1]</b></p>
+	<p>The above shorcode will put up an Adscend wall using the publisher and profile id. (Those are our test site numbers, replace with yours) The pid is the point ID of course.</p>
 	<p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
-	<p>The earn attribute is how much currency the user earns in WooWallet. The spend attribute is how many VYPS points is spent.</p>
-	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
+	<p>To have a user redeem points through the Adscend API (the points Adscend has said they earned). You need to get your own API off your Adscend wall page. The API key is on the integration page on your offer wall under API/SDK integration.</p>
+	<p><b>[vyps-as-redeem pub=113812 profile=13246 api=typekeyhere pid=1 payout=750]</b></p>
+	<p>All attributes must be set for this to function. There is no interface and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
 	";
 	
 	//Credits include
-	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 
+	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/credits.php'); 
 } 
 
 
 
 /* I will need two short codes. One for the game result tables and one for the game itself. */
 
-/* Below is the AdScend game shortcode itself */
+/* Below is the Adscend game shortcode itself */
 
 function as_watch_func( $atts ) {
 	
@@ -170,7 +171,7 @@ function as_watch_func( $atts ) {
 	
 	if ( $atts['profile'] == 0 ) {
 		
-		return "You did not a profile!";
+		return "You did not set a profile!";
 		
 	}
 	
