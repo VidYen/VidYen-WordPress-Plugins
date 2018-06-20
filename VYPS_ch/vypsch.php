@@ -128,7 +128,7 @@ function vyps_ch_sub_menu_page()
     $data = $wpdb->get_results($query);
 
 	/* I'm putting the logo at top because I can */
-	echo '<br><br><img src="' . plugins_url( '../VYPS_base/images/logo.png', __FILE__ ) . '" > ';
+	echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > ';
 		
 	?>
 	<div class="wrap">
@@ -219,7 +219,7 @@ function vyps_ch_sub_menu_page()
 	<?php
 	
 	/* I may not want advertising, but I suppose putting it here never hurts */
-	include( plugin_dir_path( __FILE__ ) . '../VYPS_base/includes/credits.php'); 	
+	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/credits.php'); 	
 } 
 
 /* Next section for creatiung short code for the simple miner. */
@@ -338,7 +338,7 @@ function sm_short_redeem_func() {
 			global $wpdb;
 			
 			$table_log = $wpdb->prefix . 'vyps_points_log';
-			$reason = "Coin Hive Mining";
+			$reason = "Coinhive Mining";
 			$amount = $balance;
 
 			$pointType = $wpdb->get_var( "SELECT * FROM $table_ch", 6, 0 );
