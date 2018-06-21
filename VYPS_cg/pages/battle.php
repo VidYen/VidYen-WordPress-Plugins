@@ -6,25 +6,29 @@
 global $wpdb;
 
 $pending_battles = $wpdb->get_results(
-    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE (user_one = %s) or (user_two = %s)", wp_get_current_user()->user_login, wp_get_current_user()->user_login)
+    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE ((user_one = %s) or (user_two = %s)) and battled = 0", wp_get_current_user()->user_login, wp_get_current_user()->user_login)
 );
 
 if(isset($_GET['battle'])){
     $pending_battles = $wpdb->get_results(
         $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d", $_GET['battle'])
     );
-
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
     if($pending_battles[0]->user_one == wp_get_current_user()->user_login || $pending_battles[0]->user_two == wp_get_current_user()->user_login){
-        include '../includes/Battle.php';
+        include __DIR__ . '/../includes/Battle.php';
         $battle = new Battle(5000, [$pending_battles[0]->user_one, $pending_battles[0]->user_two], $pending_battles[0]->id);
         $battle->startBattle();
     }
+
+    echo '<script type="text/javascript">document.location = "/wp-admin/profile.php?page=battle-log";</script>';
 }
 
 if(isset($_GET['cancel'])){
 
     $battle = $wpdb->get_results(
-        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d and user_one=%s or user_two = %s", $_GET['cancel'], wp_get_current_user()->user_login, wp_get_current_user()->user_login )
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d and (user_one=%s or user_two = %s)", $_GET['cancel'], wp_get_current_user()->user_login, wp_get_current_user()->user_login )
     );
 
     if($battle[0]->user_one == wp_get_current_user()->user_login){
@@ -41,21 +45,21 @@ if(isset($_GET['cancel'])){
         $data = array('user_two' => null, 'user_two_accept' => null);
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
-
     echo '<script type="text/javascript">document.location = "/wp-admin/profile.php?page=battle";</script>';
+
 }
 
 if(isset($_GET['ready'])){
 
     $battle = $wpdb->get_results(
-        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d and user_one=%s or user_two = %s", $_GET['ready'], wp_get_current_user()->user_login, wp_get_current_user()->user_login )
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d and (user_one=%s or user_two = %s)", $_GET['ready'], wp_get_current_user()->user_login, wp_get_current_user()->user_login )
     );
 
     if($battle[0]->user_one == wp_get_current_user()->user_login){
-        $data = array('user_one_accept' => true);
+        $data = array('user_one_accept' => 1);
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     } else {
-        $data = array('user_two_accept' => true);
+        $data = array('user_two_accept' => 1);
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
 
@@ -100,9 +104,10 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
             $wpdb->vypsg_pending_battles,
             array(
                 'user_one' => wp_get_current_user()->user_login,
-                'user_two' => $_POST['battle_user']
+                'user_two' => $_POST['username']
             ),
             array(
+                '%s',
                 '%s',
             )
         );

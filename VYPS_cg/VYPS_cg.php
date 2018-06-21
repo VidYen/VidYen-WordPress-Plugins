@@ -12,7 +12,6 @@ if ( ! defined('ABSPATH' ) ) {
     die();
 }
 
-define('VY_ABSPATH', __DIR__);
 if( ! class_exists('VYPS' ) ) {
     class VYPS
     {
@@ -39,8 +38,8 @@ if( ! class_exists('VYPS' ) ) {
         //build extra menus
         private function includes()
         {
-            include_once VY_ABSPATH . '/includes/menu-page.php';
-            include_once VY_ABSPATH . '/includes/cg-shortcode.php';
+            include_once plugin_dir_path( __file__ ) . '/includes/menu-page.php';
+            include_once plugin_dir_path( __file__ ) . '/includes/cg-shortcode.php';
         }
 
     }
@@ -98,6 +97,8 @@ function vypsg_activate()
       id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
       winner VARCHAR(255) NOT NULL,
       loser VARCHAR(255) NOT NULL,
+      battle_id INT NOT NULL,
+      tie INT NOT NULL,
       battle_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY  (id)
     ) $charset_collate;";
@@ -120,3 +121,23 @@ function vypsg_activate()
     dbDelta( $table['vypsg_pending_battles'] );
 }
 register_activation_hook(__FILE__, 'vypsg_activate' );
+
+
+/**
+ * Deletes tables
+ */
+function vypsg_deactivate()
+{
+    global $wpdb;
+
+    /*
+     * @var $table_name
+     * name of table to be dropped
+     * prefixed with $wpdb->prefix from the database
+     */
+    $table_name_log = $wpdb->prefix . 'vypsg_battles';
+    $wpdb->query( "DROP TABLE IF EXISTS $table_name_log" );
+
+
+}
+register_deactivation_hook(__FILE__, 'vypsg_deactivate' );
