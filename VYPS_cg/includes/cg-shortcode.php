@@ -256,7 +256,82 @@ add_shortcode('cg-buy-equipment', 'cg_buy_equipment');
  */
 function cg_battle_log($params = array()) {
 
+    global $wpdb;
+    $logs = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE winner=%s or loser=%s ORDER BY id DESC", wp_get_current_user()->user_login, wp_get_current_user()->user_login )
+    );
 
+    if(!isset($_GET['view'])){
+    $return = "
+        <div class=\"wrap\">
+        <h2>Battle Log</h2>
+        <table class=\"wp-list-table widefat fixed striped users\">
+            <thead>
+            <tr>
+                <th scope=\"col\" class=\"manage-column column-name\">Id</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Opponent</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Outcome</th>
+                <th scope=\"col\" class=\"manage-column column-name\">View Loses</th>
+            </tr>
+            </thead>
+            <tbody id=\"the-list\" data-wp-lists=\"list:log\">
+            ";
+
+            foreach($logs as $log){
+                $opponent = "";
+                $outcome = "Lost";
+                if($log->winner == wp_get_current_user()->user_login){
+                    $opponent = $log->loser;
+                    $outcome = "Won";
+                } else {
+                    $opponent = $log->winner;
+                }
+
+                if($log->tie == 1){
+                    $outcome = "Tie";
+                }
+
+                $return .= "
+                <tr id=\"log-1\">
+                    <td>
+                      $log->id
+                    </td>
+                    <td>
+                        $opponent
+                    </td>
+                    <td>
+                        $outcome
+                    </td>
+                    <td>
+                        <a class=\"button-secondary\" target='_blank' href=\"/wp-admin/profile.php?page=battle-log&view=$log->id\">View Loses</a>
+                    </td>
+    
+                </tr>
+                ";
+            }
+
+            if(empty($logs)) {
+                $return .= "<tr>
+                    <td colspan=\"4\">You have no battles .</td>
+                </tr>";
+            }
+            $return .= "
+
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <th scope=\"col\" class=\"manage-column column-name\">Id</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Opponent</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Outcome</th>
+                <th scope=\"col\" class=\"manage-column column-name\">View Loses</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div
+    ";
+            return $return;
+    }
 }
 add_shortcode('cg-battle-log', 'cg_battle_log');
 
@@ -265,6 +340,113 @@ add_shortcode('cg-battle-log', 'cg_battle_log');
  */
 function cg_battle($params = array()) {
 
+    global $wpdb;
+    $pending_battles = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE ((user_one = %s) or (user_two = %s)) and battled = 0", wp_get_current_user()->user_login, wp_get_current_user()->user_login)
+    );
 
+    $return = "
+   <div class=\"wrap\">
+        <h2>Pending Battles</h2>
+        <table class=\"wp-list-table widefat fixed striped users\">
+            <thead>
+            <tr>
+                <th scope=\"col\" class=\"manage-column column-name\">Id</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Opponent</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Strength</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Action</th>
+            </tr>
+            </thead>
+            <tbody id=\"the-list\" data-wp-lists=\"list:log\">";
+
+                    if(count($pending_battles) == 0){
+                        $return .= "
+                        <tr>
+                            <td colspan=\"4\">No pending battles.</td>
+                        </tr>
+                        ";
+
+                    } else {
+                        foreach($pending_battles as $pending_battle){
+
+                            $return .= "<tr><td>$pending_battle->id</td>";
+
+                                $opponent = $pending_battle->user_one;
+                                $status = true;
+                                $user = 2;
+
+                                if($opponent == wp_get_current_user()->user_login){
+                                    $opponent = $pending_battle->user_two;
+                                    $user = 1;
+                                }
+
+                                if($opponent == '' or is_null($opponent)){
+                                    $opponent = "Searching for opponent...";
+                                    $status = false;
+                                }
+
+                                $user_one_accept = false;
+                                if($pending_battle->user_one_accept == true){
+                                    $user_one_accept = true;
+                                }
+
+                                $user_two_accept = false;
+                                if($pending_battle->user_two_accept == true){
+                                    $user_two_accept = true;
+                                }
+
+                                $return .= "<td>$opponent</td>";
+                                    if($status){
+                                        $return .= "<td><a href=\"/wp-admin/profile.php?page=battle&view=$opponent\" class=\"button-secondary\">View Opponent Army</a></td>";
+                                    } else {
+
+                                        $return .= "<td></td>";
+                                    }
+                                    if($status){
+                                        if(!$user_two_accept && $user == 2
+                                            || !$user_one_accept && $user == 1) {
+                                            $return .= "<td>
+                                                <a href=\"/wp-admin/profile.php?page=battle&ready=$pending_battle->id\"
+                                                   class=\"button-primary\">Ready</a>
+                                                <a href=\"/wp-admin/profile.php?page=battle&cancel=$pending_battle->id\"
+                                                   class=\"button-secondary\">Cancel</a>
+                                            </td>";
+                                        }
+                                        if(!$user_one_accept && $user_two_accept && $user == 2){
+                                            $return .= "<td>Waiting for opponent to accept.</td>";
+                                        }
+                                        if(!$user_two_accept && $user_one_accept && $user == 1){
+                                            $return .= "<td>Waiting for opponent to accept.</td>";
+                                        }
+                                        if($user_one_accept && $user_two_accept){
+                                            $return .="
+                                            <td>
+                                                <a href=\"/wp-admin/profile.php?page=battle&battle=$pending_battle->id\"
+                                                   class=\"button-primary\">Battle</a>
+                                            </td>";
+                                        }
+                                    } else {
+                                        $return .= "<td>
+                                            <a href=\"/wp-admin/profile.php?page=battle&cancel=$pending_battle->id\" class=\"button-secondary\">Cancel</a>
+                                        </td>";
+                                    }
+                            $return .= "</tr>";
+                        }
+                    }
+
+           $return .= " </tbody>
+
+            <tfoot>
+            <tr>
+                <th scope=\"col\" class=\"manage-column column-name\">Id</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Opponent</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Strength</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Action</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div
+    ";
+    return $return;
 }
 add_shortcode('cg-battle', 'cg_battle');

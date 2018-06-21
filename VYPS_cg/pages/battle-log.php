@@ -6,11 +6,12 @@
 global $wpdb;
 
 $logs = $wpdb->get_results(
-    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE username=%s ORDER BY id DESC", wp_get_current_user()->user_login )
+    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE winner=%s or loser=%s ORDER BY id DESC", wp_get_current_user()->user_login, wp_get_current_user()->user_login )
 );
 
 ?>
 
+<?php if(!isset($_GET['view'])): ?>
 <div class="wrap">
     <h2><?php _e('Battle Log', 'vidyen'); ?></h2>
     <table class="wp-list-table widefat fixed striped users">
@@ -32,15 +33,16 @@ $logs = $wpdb->get_results(
                     $opponent = $log->loser;
                     $outcome = "Won";
                 } else {
-                    $opponent = $log->winner();
+                    $opponent = $log->winner;
+                }
+
+                if($log->tie == 1){
+                    $outcome = "Tie";
                 }
             ?>
             <tr id="log-1">
                 <td>
                     <?= $log->id ?>
-                </td>
-                <td>
-                    <?= $log->amount ?>
                 </td>
                 <td>
                     <?= $opponent ?>
@@ -49,12 +51,12 @@ $logs = $wpdb->get_results(
                     <?= $outcome ?>
                 </td>
                 <td>
-                    <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle-log&view=<?= $log->id; ?>">View Loses</a>
+                    <a class="button-secondary" href="<?= site_url(); ?>/wp-admin/profile.php?page=battle-log&view=<?= $log->battle_id; ?>">View Loses</a>
                 </td>
 
             </tr>
         <?php endforeach; ?>
-        <?php if(empty($equipment)): ?>
+        <?php if(empty($logs)): ?>
             <tr>
                 <td colspan="4">You have no battles.</td>
             </tr>
@@ -72,3 +74,86 @@ $logs = $wpdb->get_results(
         </tfoot>
     </table>
 </div
+<?php else: ?>
+
+    <?php
+    $user_equipment = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id = %d ORDER BY id DESC", wp_get_current_user()->user_login, $_GET['view'] )
+    );
+
+    //add counting
+    $equipment = [];
+
+
+    foreach($user_equipment as $indiv){
+
+        if(array_key_exists($indiv->item_id, $equipment)){
+            $equipment[$indiv->item_id]['amount'] += 1;
+        } else {
+            $new = $wpdb->get_results(
+                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $indiv->item_id )
+            );
+
+            $equipment[$indiv->item_id]['item'] = $indiv->item_id;
+            $equipment[$indiv->item_id]['amount'] = 1;
+            $equipment[$indiv->item_id]['name'] = $new[0]->name;
+            $equipment[$indiv->item_id]['icon'] = $new[0]->icon;
+        }
+    }
+
+    ?>
+    <div class="wrap">
+        <h2 style="display:inline-block;">
+            Equipment | <a href="/wp-admin/profile.php?page=battle-log">Back</a>
+        </h2>
+        <table class="wp-list-table widefat fixed striped">
+            <thead>
+            <tr>
+                <th scope="col" class="manage-column column-primary">
+                    <span>Icon</span>
+                </th>
+                <th scope="col" class="manage-column column-primary">
+                    <span>Name</span>
+                </th>
+                <th scope="col" class="manage-column column-primary">
+                    <span>Amount</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody id="the-list" data-wp-lists="list:log">
+            <?php foreach($equipment as $single): ?>
+                <tr id="log-1">
+                    <td>
+                        <img width="42" src="<?= $single['icon']; ?>"/>
+                    </td>
+                    <td>
+                        <?= $single['name'] ?>
+                    </td>
+                    <td>
+                        <?= $single['amount'] ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <?php if(empty($equipment)): ?>
+                <tr>
+                    <td colspan="4">No equipment was lost.</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+            <tfoot>
+            <tr>
+            <tr>
+                <th scope="col" class="manage-column column-primary">
+                    <span>Icon</span>
+                </th>
+                <th scope="col" class="manage-column column-primary">
+                    <span>Name</span>
+                </th>
+                <th scope="col" class="manage-column column-primary">
+                    <span>Amount</span>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+<?php endif; ?>

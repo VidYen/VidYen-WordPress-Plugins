@@ -6,7 +6,7 @@
 global $wpdb;
 
 $user_equipment = $wpdb->get_results(
-    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s ORDER BY id DESC", wp_get_current_user()->user_login )
+    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY id DESC", wp_get_current_user()->user_login )
 );
 
 //add counting
@@ -31,7 +31,7 @@ foreach($user_equipment as $indiv){
 
 if(isset($_POST['id'])){
     $user_equipment = $wpdb->get_results(
-        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and item_id=%d", wp_get_current_user()->user_login, $_POST['id'] )
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and item_id=%d and battle_id is null", wp_get_current_user()->user_login, $_POST['id'] )
     );
 
     $total = $wpdb->delete(
