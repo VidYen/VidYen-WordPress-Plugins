@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Adscend Media API Addon
   Description: Earn VYPS points by doing AdScend Media activities
-  Version: 0.0.21
+  Version: 0.0.22
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -481,7 +481,7 @@ function as_redeem_btn_func( $atts ) {
 		/* Just show them button if button has not been clicked. Its a requirement not a suggestion. */
 		return "<form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"redeem\"/>
-                <input type=\"submit\" class=\"button-secondary\" value=\"Reedem Adscend\" onclick=\"return confirm('You are about to synce your Adscend point with this site. Are you sure?');\" />
+                <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Adscend\" onclick=\"return confirm('You are about to synce your Adscend point with this site. Are you sure?');\" />
                 </form>";		
 	}
 
@@ -585,9 +585,9 @@ function as_redeem_btn_func( $atts ) {
 	/* Developers note. I try to put working into site admins mouth but this only way to show button and the redeemed points in a way that I liked.
 	*  In theory if admin doesn't like it, they edit the below wording or just use the old shortcodes which I left in. -Felty
 	*/
-	return $amount . " points redeemed. <br><br><form method=\"post\">
+	return "<b>" . $amount . " points redeemed.</b><br><br><form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"redeem\"/>
-                <input type=\"submit\" class=\"button-secondary\" value=\"Reedem Adscend\" onclick=\"return confirm('You are about to synce your Adscend point with this site. Are you sure?');\" />
+                <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Adscend\" onclick=\"return confirm('You are about to synce your Adscend point with this site. Are you sure?');\" />
                 </form>";		
 		
 }
