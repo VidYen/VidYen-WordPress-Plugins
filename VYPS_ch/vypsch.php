@@ -212,11 +212,11 @@ function vyps_ch_sub_menu_page()
 		<p>Display the simple miner for users on a page.</p>
 		<p><b>[vyps-simple-miner]</b></p>
 		<p>Call the Coinhive POST/GET API to redeem to the VidYen point system. Will return the number of hashes acknolwedged from CoinHive that is added to the VYPS database.</p>
-		<p><b>[vyps-redeem-ch]</b></p><br><br>
+		<p><b>[vyps-redeem-ch]</b></p><br>
 		<p>Creates a consent button that only allows the Simple Miner to load on consent with second shortcode on page.</p>
-		<p><b>[vyps-ch-consent]</b></p><br><br>
+		<p><b>[vyps-ch-consent]</b></p><br>
 		<p>Loads simple miner on same page when consent button is clicked and agreed to. Note: Put this and previous shortcode on same page. Includes a redemption function button in shortcode.</p>
-		<p><b>[vyps-ch-sm-consent]</b></p><br><br>
+		<p><b>[vyps-ch-sm-consent]</b></p><br>
 		
 	</div>
 	
