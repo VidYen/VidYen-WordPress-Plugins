@@ -23,7 +23,9 @@
 	<p>Function debits points from one point type to another with in being how many points used to transfer and out as how many points they get in the new point type</p>
 	<p>The spid is the source pointID and the dpid is the destination seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The earn attribute is how much currency the user gets in the other poitn type. The spend attribute is how many VYPS points is spent.</p>
-	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
+	<p>All attributes must be set for this to function. There is no interfact and is up to the site admin to add shortcode to a page or button.</p>
+	<p><b>[vyps-pt-btn spid=1 dpid=2 samount=100000 damount=100]</b></p>
+	<p>Does the same except now has built in button and user confirmation rather than a direct page call.</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
