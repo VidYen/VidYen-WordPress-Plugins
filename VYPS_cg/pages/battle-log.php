@@ -104,7 +104,7 @@ $logs = $wpdb->get_results(
     ?>
     <div class="wrap">
         <h2 style="display:inline-block;">
-            Equipment | <a href="/wp-admin/profile.php?page=battle-log">Back</a>
+            Equipment | <a href="<?= site_url() ?>/wp-admin/profile.php?page=battle-log">Back</a>
         </h2>
         <table class="wp-list-table widefat fixed striped">
             <thead>
