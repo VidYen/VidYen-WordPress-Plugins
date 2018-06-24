@@ -151,7 +151,7 @@ function bc_icon_list_current_func() {
 				$query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->points}'";
 				$row_data2 = $wpdb->get_row($query_for_name);
 				//$points .= $row_data2->name. $type->sum . ' ' . '<br>';
-				$points .= '<img src="'. $row_data2->icon .'" width="16" hight="16" title="'. $row_data2->name . '" >' . ' ' . $type->sum . ' ' . '<br>';
+				$points .= '<img src="'. $row_data2->icon .'" width="16" hight="16" title="'. $row_data2->name . '" >' . ' ' . number_format($type->sum) . ' ' . '<br>';
 				/* I am not 100% certain but I believe the line above may be responsible for character plugin warning. */
 				/* btw, manage_point.php has $d->icon where this uses $row_data2 one day we should make this all universally descriptive */
 			}
