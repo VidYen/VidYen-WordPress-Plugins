@@ -77,6 +77,11 @@ if(isset($_POST['id'])){
         </thead>
         <tbody id="the-list" data-wp-lists="list:log">
         <?php foreach($equipment as $single): ?>
+            <?php
+                if(isset($_POST['id'])){
+                    $single['amount']--;
+                }
+            ?>
             <tr id="log-1">
                 <td>
                     <img width="42" src="<?= $single['icon']; ?>"/>

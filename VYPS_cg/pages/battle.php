@@ -9,6 +9,8 @@ $pending_battles = $wpdb->get_results(
     $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE ((user_one = %s) or (user_two = %s)) and battled = 0", wp_get_current_user()->user_login, wp_get_current_user()->user_login)
 );
 
+$url = site_url();
+
 if(isset($_GET['battle'])){
     $pending_battles = $wpdb->get_results(
         $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d", $_GET['battle'])
@@ -22,7 +24,7 @@ if(isset($_GET['battle'])){
         $battle->startBattle();
     }
 
-    echo '<script type="text/javascript">document.location = "/wp-admin/profile.php?page=battle-log";</script>';
+    echo '<script type="text/javascript">document.location = "' . $url .'/wp-admin/profile.php?page=battle-log";</script>';
 }
 
 if(isset($_GET['cancel'])){
@@ -45,7 +47,7 @@ if(isset($_GET['cancel'])){
         $data = array('user_two' => null, 'user_two_accept' => null);
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
-    echo '<script type="text/javascript">document.location = "/wp-admin/profile.php?page=battle";</script>';
+    echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/profile.php?page=battle";</script>';
 
 }
 
@@ -63,7 +65,7 @@ if(isset($_GET['ready'])){
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
 
-    echo '<script type="text/javascript">document.location = "/wp-admin/profile.php?page=battle";</script>';
+    echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/profile.php?page=battle";</script>';
 
 }
 
@@ -197,7 +199,7 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
                                 <?php
                                     if($status){
                                         ?>
-                                            <td><a href="/wp-admin/profile.php?page=battle&view=<?= $opponent ?>" class="button-secondary">View Opponent Army</a></td>
+                                            <td><a href="<?= site_url() ?>/wp-admin/profile.php?page=battle&view=<?= $opponent ?>" class="button-secondary">View Opponent Army</a></td>
                                         <?php
                                     } else {
                                         ?>
@@ -289,7 +291,7 @@ foreach($user_equipment as $indiv){
 ?>
 <div class="wrap">
     <h2 style="display:inline-block;">
-        <?= strip_tags($_GET['view']) ?> Equipment | <a href="/wp-admin/profile.php?page=battle">Back</a>
+        <?= strip_tags($_GET['view']) ?> Equipment | <a href="<?= site_url() ?>/wp-admin/profile.php?page=battle">Back</a>
     </h2>
     <table class="wp-list-table widefat fixed striped">
         <thead>

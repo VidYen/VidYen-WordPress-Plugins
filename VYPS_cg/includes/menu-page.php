@@ -20,13 +20,16 @@ add_action( 'admin_menu', 'vy_register_menu_page');
  */
 function my_users_menu()
 {
-    add_users_page('My Equipment', 'My Equipment', 'read', 'my-equipment', 'my_equipment_page' );
+    add_menu_page('My Equipment', 'VYPS Game', 'read', 'my-equipment', 'my_equipment_page', 'dashicons-smiley' );
 
-    add_users_page('Buy Equipment', 'Buy Equipment', 'read','buy-equipment', 'buy_equipment' );
+    add_submenu_page( 'my-equipment', 'Buy Equipment', 'Buy Equipment',
+        'read', 'buy-equipment', 'buy_equipment' );
 
-    add_users_page('Battle Log', 'Battle Log', 'read','battle-log', 'battle_log' );
+    add_submenu_page( 'my-equipment', 'Battle Log', 'Battle Log',
+        'read', 'battle-log', 'battle_log' );
 
-    add_users_page('Battle', 'Battle', 'read','battle', 'battle' );
+    add_submenu_page( 'my-equipment', 'Battle', 'Battle',
+        'read', 'battle', 'battle' );
 
 }
 add_action( 'admin_menu', 'my_users_menu' );
