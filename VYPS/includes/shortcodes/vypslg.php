@@ -1,7 +1,9 @@
 <?php
+
 /*
-  You are not logged in return shortcode
+ *  You are not logged in return shortcode
  */
+ 
 /*** Shortcode without button ***/
 
 function lg_func( $atts ) {

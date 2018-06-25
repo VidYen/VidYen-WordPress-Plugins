@@ -10,13 +10,12 @@
 	<p><b>[vyps-pl]</b></p>
 	<p>Shows the entire log.</p>
 	<h2>Balances</h2>
-	<p><b>[vyps-balance-list]</b></p>
-	<p> Shows a list of all points with the current balance along with name for logged in user. They must be logged into see this.</p>
-	<p><b>[vyps-balance-list pid=1 uid=12]</b></p>
-	<p>Replace the numbers with desired numerical value of the pid and uid.</p>
-	<p>The pid is the pointID number seen on the points list page along with the uid which is the user id in WordPress. Leaving the uid option out (ie. [vyps-balance-list pid=1]  will default to the logged on user.</p>
-	<p>Note: Leaving the uid blank will tell the user they need to log in if you intend to show this to users who are not log in.</p>
-	<p>Also Note: pid will default to 1 which is the first point you have unless you delete it. I would recommend specifing pid at all times.</p>
+	<p><b>[vyps-balance pid=# uid=optional icon=optional ]</b></p>
+	<p>Shows the balance of a particular point thorugh shortcode. Replace the # with the corresponding point ID. (Optional) You can set the user ID specifically by setting the uid attribute or if you want to turn off icons by setting to icon=0</p>
+	<p><b>[vyps-balance-ww]</b></p>
+	<p>Shows the current <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> if it is installed.</p>
+	<p><b>[vyps-balance-ww-menu]</b></p>
+	<p>Used only if you wish to stick the My Icon in a menu. This of course does require you to use a Shortcode In Menu Plugin and may have unexpected results.</p>
 	<h2>Point Transfer</h2>
 	<p>This plugin needs VYPS Base and two point types to function. The intention is to allow a quick and easy way for users to transfer one type of point to another at varrying rates</p>
 	<p><b>[vyps-pt spid=1 dpid=2 samount=100000 damount=100]</b></p>

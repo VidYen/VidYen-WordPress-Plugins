@@ -27,7 +27,7 @@ function pt_tbl_func( $atts ) {
 				'dpid' => '0',
 				'samount' => '0',
 				'damount' => '0',
-		), $atts, 'vyps-pt' );
+		), $atts, 'vyps-pt-tbl' );
 		
 	$sourcePointID = $atts['spid'];
 	$destinationPointID = $atts['dpid'];
