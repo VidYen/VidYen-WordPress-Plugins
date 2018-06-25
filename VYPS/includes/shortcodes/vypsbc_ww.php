@@ -32,13 +32,25 @@ function bc_ww_func() {
 		
 		//Poke the WW table and get balance. Stolen from my own code in VYPS_ww
 		$last_trans_id = $wpdb->get_var( "SELECT max(transaction_id) FROM $table_ww WHERE user_id = $current_user_id");
-		$old_balance = $wpdb->get_var( "SELECT sum(balance) FROM $table_ww WHERE user_id = $current_user_id AND transaction_id = $last_trans_id");
 		
+		//Ok there are some issues wehere if you don't have a balance it blows up SQL
+		//Transid should be 1 or greater if its exist if not.
+		if ($last_trans_id > 1 ) { 
+			
+			//fire it and only do this wpdb if it legel. Otherwise just return
+			$old_balance = $wpdb->get_var( "SELECT sum(balance) FROM $table_ww WHERE user_id = $current_user_id AND transaction_id = $last_trans_id");
+			
+		} else {
+			
+			//Well if they don't have a transaction ID they they don't have a balane
+			//Note. OCD to make it a string 0f 0.00 which shouldn't matter because is a display and never used for calculations
+			$old_balance = "0.00";
+		
+		}
+		
+		//This seems to be just built in to the plugin. I should check to see if its installed.
 		$icon_url = WOO_WALLET_ICON;
-		
-		$query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by points, user_id having user_id = '{$current_user_id}'";
-		$row_data = $wpdb->get_results($query_row);
-		
+				
 		$balance_return = ''; //Note, I am changing this from the original points orion used. Eventually it will all be this. Descriptive variables. No exceptions!
 		$walletURL = get_site_url() . '/my-account/woo-wallet/'; //I'm going to take a big assumption that this url will not change. What could go wrong?
 			
@@ -76,12 +88,23 @@ function bc_ww_menu_func() {
 		
 		//Poke the WW table and get balance. Stolen from my own code in VYPS_ww
 		$last_trans_id = $wpdb->get_var( "SELECT max(transaction_id) FROM $table_ww WHERE user_id = $current_user_id");
-		$old_balance = $wpdb->get_var( "SELECT sum(balance) FROM $table_ww WHERE user_id = $current_user_id AND transaction_id = $last_trans_id");
 		
+		//Ok there are some issues wehere if you don't have a balance it blows up SQL
+		//Transid should be 1 or greater if its exist if not.
+		if ($last_trans_id > 1 ) { 
+			
+			//fire it and only do this wpdb if it legel. Otherwise just return
+			$old_balance = $wpdb->get_var( "SELECT sum(balance) FROM $table_ww WHERE user_id = $current_user_id AND transaction_id = $last_trans_id");
+			
+		} else {
+			
+			//Well if they don't have a transaction ID they they don't have a balane
+			$old_balance = "0.00";
+		
+		}
+		
+		//This seems to be just built in to the plugin. I should check to see if its installed.
 		$icon_url = WOO_WALLET_ICON;
-		
-		$query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by points, user_id having user_id = '{$current_user_id}'";
-		$row_data = $wpdb->get_results($query_row);
 		
 		$balance_return = ''; //Note, I am changing this from the original points orion used. Eventually it will all be this. Descriptive variables. No exceptions!
 		$walletURL = get_site_url() . '/my-account/woo-wallet/'; //I'm going to take a big assumption that this url will not change. What could go wrong?
