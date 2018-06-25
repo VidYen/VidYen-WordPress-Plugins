@@ -2,7 +2,7 @@
 /*
   Plugin Name: VidYen Point System
   Description: VidYen Point System (VYPS) allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-  Version: 0.0.44
+  Version: 0.0.45
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -259,6 +259,9 @@ add_filter('user_row_actions', 'cgc_ub_action_links', 10, 2);
 
 include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypspl.php'); //Point Log
 include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypsbc.php'); //Balance
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypspt.php'); //Balance
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspt.php'); //Point Transfer
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypsww.php'); //WW Bridge Shortcode table
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
 
 /*** End of Shortcode Includes ***/

@@ -28,6 +28,15 @@
 	<p>Does the same except now has built in button and user confirmation rather than a direct page call.</p>
 	<p><b>[vyps-pt-tbl spid=1 dpid=2 samount=100000 damount=100]</b></p>
 	<p>Creates a table interface UI for the point transfer which includes a button and better interface including point icons and feedback. If you do not want to mess with your special layout, use this.</p>
+	<p><b>[vyps-pt-ww spid=1 samount=100000 damount=0.010]</b></p>
+	<p>Creates table transer menu to transfer points to the WooWallet if you have it installed. This shortcode needs both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function.
+	As its assumed that you are going straigh to WooWallet there is no need to set dpid, but you still need to set damount.</p>
+	<h2>Login Awareness Shortcode</h2>
+	<p>Other plugins do this, but made a quick way to let users know they are not logged and therefore cannot interact with VYPS.</p>
+	<p><b>[vyps-lg]</b></p>
+	<p>Just shows a generic \"You are not logged in.\" message when user not logged in.</p>
+	<p><b>[vyps-lg message=\"Hey foo! You need to log in.\"]</b></p>
+	<p>Allows custom message by admin when setting up the awareness message.</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
