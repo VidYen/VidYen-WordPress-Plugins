@@ -3,7 +3,7 @@
    Plugin Name: VYPS Leaderboard 
    Description: Leaderboards shortcode for the VYPS plugin system
    Version: 0.0.05
-   Author: VidYen, LLC (Contract work by Curtis D. Mimes)
+   Author: Curtis D. Mimes
    Author URI: https://vidyen.com/
    License: GPLv2 or later
    */
