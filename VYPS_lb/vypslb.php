@@ -2,8 +2,8 @@
    /*
    Plugin Name: VYPS Leaderboard 
    Description: Leaderboards shortcode for the VYPS plugin system
-   Version: 0.0.02
-   Author: VidYen, LLC
+   Version: 0.0.05
+   Author: VidYen, LLC (Contract work by Curtis D. Mimes)
    Author URI: https://vidyen.com/
    License: GPLv2 or later
    */
@@ -13,7 +13,8 @@
    * On upwork
    */
 
- /*
+
+   /*
 	pointId:  from wp_vyps_point
 	adjustmentReason: reason on wp_vyps_point_log
 	rank:  top, current, bottom
@@ -23,6 +24,25 @@
 
 $path = $_SERVER['DOCUMENT_ROOT']; 
 include_once $path . '/wp-load.php';
+
+/* Code added later for menu -Felty
+*  Checking to see if VYPS is installed and run menus accordingly
+*  Technically the shortcodes will still run, but the menus won't the shortcode instructions
+*  and tell you VYPS not installed
+*  Checking if VYPS active. Note. After looking around , it is better to check to see if function exists rather than plugin. 
+*  So we know that if the vyps_points_menu exists, then it's installed. Otherwise, it could be uninstalled or it is, but
+*  the admin did something they shouldn't have like rename the menu and broke everything.
+*/
+
+if (function_exists('vyps_points_menu')) {
+	
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_lb/includes/lb_menu.php'); //This include creates the menu in the VYPS submenu
+
+} else {
+	
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_lb/includes/lb_no_vyps_menu.php'); //This include creates it on top level to inform to install VYPS
+
+}
 
 
 /*
@@ -39,9 +59,11 @@ class SelectQueryBuilder
     private $groupByArray = [];
     //todo: private $havingArray
     private $orderByArray = [];
-    private $isDesc = false;
+    private $isAsc = false;
     private $limit = 99999999; //arbitrarily large number
     private $subQueryAlias = "";
+    private $isSubQuery = false;
+    private $variableArray = [];
 
     //for turning arrays of params into a comma seperated string
     //oof, maybe not efficient but we'll live 
@@ -99,13 +121,18 @@ class SelectQueryBuilder
     }
 
     //for setting desc/asc
-    public function setDescToTrue(){
-    	$this->isDesc = true;
+    public function setAscToTrue(){
+    	$this->isAsc = true;
     }
 
     //set limit
     public function setLimit($limit){
     	$this->limit = $limit;
+    }
+
+    //add variables
+    public function addVariable($varName, $varValue){
+    	array_push($this->variableArray, array($varName,$varValue));
     }
 
 
@@ -117,6 +144,23 @@ class SelectQueryBuilder
 
     public function getQueryString(){
     	$output = "";
+
+    	//first go ahead and declare anyvariables that are set before the query.
+    	if(sizeof($this->variableArray) == 1){
+    		$output .= "SET ";
+	    	foreach($this->variableArray as $variableKeyPair){
+				$output .= " @".$variableKeyPair[0] . " = " . $variableKeyPair[1] . ";"; 
+	    	}
+    	}elseif(sizeof($this->variableArray) > 1){
+    		$output .= "SET ";
+    		foreach($this->variableArray as $variableKeyPair){
+	    		$output .= " @".$variableKeyPair[0] . " = " . $variableKeyPair[1] . ", "; // a comma instead of semicolon cause we're adding more
+	    	}
+	    	//add a final semi colon
+	    	$output .= "; ";
+    	}
+    	
+
     	$output .= $this->start;
 
     	//add the select first
@@ -138,8 +182,10 @@ class SelectQueryBuilder
     		$output .= " order by " .SelectQueryBuilder::paramsToString($this->orderByArray, ",");
     	}
     	//then asc/desc
-    	if($this->isDesc){
+    	if($this->isAsc && !$this->isSubQuery){
     		$output .= " desc";
+    	}else if($this->isAsc && !$this->isSubQuery){
+    		$output .= " asc";
     	}
 
     	$output .= $this->end . (!(empty($this->subQueryAlias)) ? " as " . $this->subQueryAlias : "");
@@ -163,22 +209,38 @@ function data_table( $db_data ) {
 	// Get the table header cells by formatting first row's keys
 	$header_vals = array();
 	$keys = array_keys( $db_data[0] );
+	array_push($header_vals, 'Position');
 	foreach ($keys as $row_key) {
 		$header_vals[] = ucwords( str_replace( '_', ' ', $row_key ) ); // capitalise and convert underscores to spaces
 	}
 	$header = "<thead><tr><th>" . join( '</th><th>', $header_vals ) . "</th></tr></thead>";
+
 	// Make the data rows
 	$rows = array();
+	$positionCounter = 1;
 	foreach ( $db_data as $row ) {
 		$row_vals = array();
+
+		//add the position value
+		array_push($row_vals, $positionCounter);
+
+		//increment the counter to add a 'position' col
+		$positionCounter++;
 		foreach ($row as $key => $value) {
+
 			// format any date values properly with WP date format
 			if ( strpos( $key, 'date' ) !== false || strpos( $key, 'modified' ) !== false ) {
 				$date_format = get_option( 'date_format' );
 				$value = mysql2date( $date_format, $value );
 			}
+
+			//format the amount field
+			if(ucwords($key) == 'Total'){
+				$value = number_format($value);
+			}
 			$row_vals[] = $value;
 		}
+		
 		$rows[] = "<tr><td>" . join( '</td><td>', $row_vals ) . "</td></tr>";
 	}
 	// Put the table together and output
@@ -194,11 +256,10 @@ function data_table( $db_data ) {
 	   	//setup the query builder
 	   	$builder = new SelectQueryBuilder();
 	   	$wheres = [];
-	   	$rankOrder = false;
 
 	   	//tells us what to add to the sql statement for the value of rank
 	   	if($rank == "top"){
-	   		//$builder->setDescToTrue();
+	   		$builder->setAscToTrue();
 	   	}
 
 	   	//add the pointId to wheres...if it's not just return missing param as string.
@@ -220,7 +281,7 @@ function data_table( $db_data ) {
 	   		array_push($wheres, " {$pre}vyps_points_log.reason = '{$adjustmentReason}'");
 	   	}
 
-
+	   	
 	   	/*
 		we've got to make a subquery that's equivalent to this:
 	   	
@@ -247,7 +308,7 @@ function data_table( $db_data ) {
 
 		
 		$sumSubQuery = SelectQueryBuilder::wrapQueryInFunction($subBuilder->getQueryString(), 'ifnull', 0) . "as total";
-		//echo("<br>subquery: <Br>{$sumSubQuery}<br>"); //ok need to commment this out for debuging -Felty
+		//echo("<br>subquery: <Br>{$sumSubQuery}<br>"); <-- for debugging the subquery
 		/*
 		end subquery
 		*/
@@ -263,14 +324,14 @@ function data_table( $db_data ) {
 	   	$builder->addFroms(array( "{$pre}users"));
 
 	   	//set our order by
-	   	// $builder->addOrderBys(array("SUM({$pre}vyps_points_log.points_amount)"));
+	   	$builder->addOrderBys(array("total"));
 
 	   	//set our limit
 	   	$builder->setLimit($limit);
 
 	   	$query = $builder->getQueryString();
 
-	    //echo $query;  // just for debugging
+	    //echo $query;  // just for debugging the outputted sql
 	    $leaderboardResults = $wpdb->get_results($query, ARRAY_A);
 	    return $leaderboardResults;
    }
@@ -293,24 +354,3 @@ function data_table( $db_data ) {
    }
 
    	add_shortcode( 'vyps_lb', 'vypsLeaderboardShortcodeHandler' );
-
-   	/*
-	going to leave this here, as this could be valuable debugging in the event something critical goes wrong with the plugin
-   	*/
-	   // (data_table(vypsSumPointLog(1, "Point Transfer", 'top', 10, 'negative')));
-	   // echo("<br>");
-	   // echo(print_r(vypsSumPointLog(2, "Point Transfer", 'bottom', 10,'positive'), true));
-	   // echo("<br>");
-	   //  echo(print_r(vypsSumPointLog(2, "Point Transfer", 'bottom', 10,'positive'));
-	    // echo("<br>");
-	   	// $result1 = vypsSumPointLog(1, "Point Transfer", 'top', 10, 'negative');
-	   	// $result2 = vypsSumPointLog(2, "Manual Admin Adjustment", 'bottom', 10,'positive');
-	   	// echo("<br><br>");
-	   	
-	   	// $result3 = vypsSumPointLog(2, "Coinhive Mining", 'bottom', 10);
-	   	// // echo("<br><br>");
-	   	// echo(data_table($result3));
-	   	// // echo("<br><br>");
-	   	// // data_table($result2);
-	   	// echo("<br><br>");
-	   	// echo(data_table($result3));
