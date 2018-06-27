@@ -5,7 +5,7 @@
  */
  
  /* Designed for informational purposes to see total supply of points in system.
-  * And own user leaderboard. Maybe.
+  * And own soft leaderboard that isn't ranked.
   *
   */
 
