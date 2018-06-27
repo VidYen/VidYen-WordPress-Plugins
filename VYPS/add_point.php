@@ -1,92 +1,106 @@
 <?php
 
+/* This is the add_point page obviously */
+//As I didn't writ this, I kind of feel maybe this should be a function */
+
 $mesage = '';
-$query = "select * from " . $wpdb->prefix . 'vyps_points';
-    $data = $wpdb->get_results($query);
 
-$points=count($data);
-if(isset($_POST['nomore']))
-{ $message = "You have already created the maximum of 3 point types."; }
-else
-{
+//I know what they were doing but have no clue why they did it that way
+//It works and I get no error 
+
+//$query = "select * from " . $wpdb->prefix . 'vyps_points';
+//    $query_results = $wpdb->get_results($query);
+
+//Wait, they are just counting points?
+//Well now that is how they found the amount of points. I would do max id.
+//Also
+//$points = count($query_results);
+
+//I have a theory that none of the above is needed.
+
+	
 if (isset($_POST['add_point'])) {
-
+	
+	//There is some debate between me and monroe that this field should check for SQL injection.
+	//Although he is right that one should always avoid it, I feel like if you can get to this screen
+	//then the person who would inject stuff into the field already can modify your PHP
+	//If we do need non-admin level people modifying your point system, then we will build and advance cpanel like system
+	//Because you shoulnd't have more than 10 points unless you got some weird ICO exchange going on.
+	
+	//Point name. Text value
     $point_name = $_POST['point_name'];
-
+	
+	//The icon. I'm suprised this works so well
     $point_icon_url = media_handle_upload('point_icon_url',0); 
 
-//    $point = $_POST['point'];
-// The below comment out was not done by me. The Above was. -Felty
-//    $icon=$_FILES['point_icon_url']['name'];
+	//$point = $_POST['point'];
+	//The below comment out was not done by me. The Above was. -Felty
+	//$icon=$_FILES['point_icon_url']['name'];
+
     $icon = wp_get_attachment_url( $point_icon_url );
-    $table = $wpdb->prefix . 'vyps_points';
+    $table_name_points = $wpdb->prefix . 'vyps_points';
+	
     $data = [
         'name' => $point_name,
         'icon' => $icon,
         'time' => date('Y-m-d H:i:s')
     ];
-    $data_id = $wpdb->insert($table, $data);
+    $data_id = $wpdb->insert($table_name_points , $data);
 
     //'points' => $point,
     $message = "Added successfully.";
-
-?><script>window.location.href="admin.php?page=vyps_points_list";</script> <?php
+	
+	//Always echo no exceptions!
+	echo "<script>window.location.href=\"admin.php?page=vyps_points_list\";</script>";
 
     
 }
+
+//I'm kind of annoyed the the original author didn't do a function, but I'm limited for him so...
+//I'll deal with you later. -Felty
+
+echo "
+	<div class=\"wrap\">
+		<h1 id=\"add-new-user\">Add Point</h1>
+	";
+
+//well that is one way to do a message
+if(!empty($message)) {
+	
+	echo "<div id=\"message\" class=\"updated notice is-dismissible\">
+			<p><strong>$message;.</strong></p>
+			<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
+		</div>";
 }
-?>
-<div class="wrap">
-    <h1 id="add-new-user">Add Point</h1>
-    <?php if(!empty($message)): ?>
-    <div id="message" class="updated notice is-dismissible">
-        <p><strong><?= $message; ?>.</strong></p>
-        <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
-    </div>
-    <?php endif; ?>
-    <p>Create a new point.</p>
-    <form method="post" name="createuser" id="createuser" class="validate" novalidate="novalidate" enctype="multipart/form-data">
-        <table class="form-table">
-        <tbody>
-            <tr class="form-field form-required">
-                <th scope="row">
-                    <label for="point_name">Point Name<span class="description">(required)</span></label>
-                </th>
-                <td>
-                    <input name="point_name" type="text" id="point_name" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="60">
-                </td>
-            </tr>        
-            <tr class="form-field form-required">
-                <th scope="row">
-                    <label for="point_icon_url">Point Icon url<span class="description">(required)</span></label>
-                </th>
-                <td>
-                    <input name="point_icon_url" type="file" id="point_icon_url" value="" aria-required="true" autocapitalize="none" autocorrect="off">
-                </td>
-            </tr>
-			<? /* Commenting all this out as really asked a few times not to have this, yet they kept it. KISS -Felty */?>
-            <? /* <tr class="form-field form-required">
-                <th scope="row">
-                    <label for="point">Users start with how many points ? <span class="description">(required)</span></label>
-                </th>
-                <td>
-                    <input name="point" type="number" min="1" id="point" value="" aria-required="true" autocapitalize="none" autocorrect="off" maxlength="10">
-                </td>
-            </tr>
-			*/ ?>
-        </tbody>
-        </table>
-        <p class="submit">
-<?php
-if($points>=3)
-{
-?>
-            <input type="submit" name="nomore" id="add_point" class="button button-primary" value="Add New Point"> <?php
-}
-else
-{
-?>
-            <input type="submit" name="add_point" id="add_point" class="button button-primary" value="Add New Point"> <?php } ?>
-        </p>
-    </form>
-</div>
+		
+echo "	
+
+	<div>
+			<p>Create a new point.</p>
+			<form method=\"post\" name=\"createuser\" id=\"createuser\" class=\"validate\" novalidate=\"novalidate\" enctype=\"multipart/form-data\">
+				<table class=\"form-table\">
+					<tbody>
+						<tr class=\"form-field form-required\">
+							<th scope=\"row\">
+								<label for=\"point_name\">Point Name<span class=\"description\">(required)</span></label>
+							</th>
+							<td>
+								<input name=\"point_name\" type=\"text\" id=\"point_name\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"60\">
+							</td>
+						</tr>        
+						<tr class=\"form-field form-required\">
+							<th scope=\"row\">
+								<label for=\"point_icon_url\">Point Icon url<span class=\"description\">(required)</span></label>
+							</th>
+							<td>
+								<input name=\"point_icon_url\" type=\"file\" id=\"point_icon_url\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p class=\"submit\">
+				<input type=\"submit\" name=\"add_point\" id=\"add_point\" class=\"button button-primary\" value=\"Add New Point\">
+			</p>
+		</form>
+	</div>
+";
