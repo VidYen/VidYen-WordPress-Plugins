@@ -28,9 +28,9 @@ function vyps_points_install() {
 
     $table_name = $wpdb->prefix . 'vyps_points_log';
 
-	/* I intend to figure out what to do about the point_amount data type.
-	*  I would like to have some type of decimals for people who use VidYen for and exchange type of system for crypto
-	*  But my target audience doesn't care so will figure out a better solution in future.
+	/* As number_format() seems to solve most of the display problems I have added .16 decimals
+	*  so it doesn't screw up everything. That said. I will need to test on fresh copy and so on
+	*  to make sure it installs without blowing up
 	*/
 	
     $sql .= "CREATE TABLE {$table_name} (
@@ -39,7 +39,7 @@ function vyps_points_install() {
                 user_id mediumint(9) NOT NULL,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		points varchar(11) NOT NULL,
-                points_amount double(64, 0) NOT NULL,
+                points_amount double(64, 16) NOT NULL,
                 adjustment varchar(100) NOT NULL,
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
