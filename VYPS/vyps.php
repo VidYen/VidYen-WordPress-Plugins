@@ -301,7 +301,7 @@ add_filter('user_row_actions', 'cgc_ub_action_links', 10, 2);
 
 /*** SHORTCODE INCLUDES IN BASE ***/
 
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/vypspl.php'); //Point Log
+include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspl.php'); //Point Log
 include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypsbc.php'); //Balance shortcode
 include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update
 include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
