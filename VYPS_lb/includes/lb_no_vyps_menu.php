@@ -27,7 +27,7 @@ function vyps_lb_parent_menu_page()
 	//echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > '; //It dawned on me that if they don't have VYPS installed they can't see the credits.
 		
 	echo "  <br><br>
-			<b>***Warning***</b><br><br>It does not like you have the VYPS base plugin installed!
+			<b>***Warning***</b><br><br>It does not appear that you have the VYPS base plugin installed!
 			Please visit <a href=\"https://www.vdiden.com/vyps/\" target=\"_blank\">VidYen</a> to download or search for \"VYPS\" on Wordpress.org to install.<br>
 			After install, deactivate and reactivate this plugin.
 			";
