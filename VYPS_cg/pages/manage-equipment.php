@@ -24,6 +24,7 @@ if ( ! empty($_GET['delete_equipment'] ) ) {
     }
 }
 
+$show_previous = false;
 //if submitted
 if ( ! empty($_POST['submit'] ) ) {
     check_admin_referer('vyps_add-equipment');
@@ -65,7 +66,7 @@ if ( ! empty($_POST['submit'] ) ) {
             echo "<div class=\"notice notice-error is-dismissible\">";
             echo "<p><strong>$error</strong></p>";
             echo "</div>";
-
+            $show_previous = true;
         }
 
         //if not creating, then edit
@@ -144,10 +145,10 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
             <tr>
                 <!-- Equipment name -->
                 <th width="10%" scope="row" valign="top" title="This will be the name of the equipment."><?php _e('Name', 'vidyen') ?></th>
-                <td width="40%"><input type="text" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->name : ''; ?>" autocomplete="off" required placeholder="Name of equipment" size="70" maxlength="32" name="equipment_name" /></td>
+                <td width="40%"><input type="text" value="<?= !empty($_POST['equipment_name']) && $show_previous ? $_POST['equipment_name'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->name : ''; ?>" autocomplete="off" required placeholder="Name of equipment" size="70" maxlength="32" name="equipment_name" /></td>
                 <!-- Equipment description -->
                 <th width="10%" scope="row" valign="top" title="Simple description of what the equipment is, and how it functions in the game."><?php _e('Description', 'vidyen') ?></th>
-                <td width="40%"><input type="text" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->description : ''; ?>" autocomplete="off" required placeholder="Description of equipment" size="70" maxlength="32" name="equipment_description" /></td>
+                <td width="40%"><input type="text" value="<?= !empty($_POST['equipment_description']) && $show_previous ? $_POST['equipment_description'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->description : ''; ?>" autocomplete="off" required placeholder="Description of equipment" size="70" maxlength="32" name="equipment_description" /></td>
             </tr>
         </table>
         <table class="form-table">
@@ -163,7 +164,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                 </td>
                 <!-- morale number -->
                 <th width="10%" scope="row" valign="top"><?php _e('Morale Modifier', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->morale_modifier : ''; ?>" autocomplete="off" required placeholder="Morale modifier of equipment" size="70" maxlength="32" name="equipment_morale_modifier" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_morale_modifier']) && $show_previous ? $_POST['equipment_morale_modifier'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->morale_modifier : ''; ?>" autocomplete="off" required placeholder="Morale modifier of equipment" size="70" maxlength="32" name="equipment_morale_modifier" /></td>
             </tr>
         </table>
         <table class="form-table">
@@ -183,54 +184,54 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                 </td>
                 <!-- Point cost -->
                 <th width="10%" scope="row" valign="top" title="How many points the equipment costs."><?php _e('Point Cost', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->point_cost : ''; ?>" autocomplete="off" required placeholder="Point cost of equipment" size="70" maxlength="32" name="equipment_point_cost" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_point_cost']) && $show_previous ? $_POST['equipment_point_cost'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->point_cost : ''; ?>" autocomplete="off" required placeholder="Point cost of equipment" size="70" maxlength="32" name="equipment_point_cost" /></td>
             </tr>
         </table>
         <table class="form-table">
             <tr>
                 <!-- Point sell -->
                 <th width="10%" scope="row" valign="top" title="How much the equipment sells for."><?php _e('Point Sell', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->point_sell : ''; ?>" autocomplete="off" required placeholder="Point sell of equipment" size="70" maxlength="32" name="equipment_point_sell" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_point_sell']) && $show_previous ? $_POST['equipment_point_sell'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->point_sell : ''; ?>" autocomplete="off" required placeholder="Point sell of equipment" size="70" maxlength="32" name="equipment_point_sell" /></td>
                 <!-- Manpower -->
                 <th width="10%" scope="row" valign="top" title="ex: tankCrew, infantry. The type of manpower."><?php _e('Manpower', 'vidyen') ?></th>
-                <td width="40%"><input type="text" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->manpower : ''; ?>" autocomplete="off" required placeholder="Manpower of equipment" size="70" maxlength="32" name="equipment_manpower" /></td>
+                <td width="40%"><input type="text" value="<?= !empty($_POST['equipment_manpower']) && $show_previous ? $_POST['equipment_manpower'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->manpower : ''; ?>" autocomplete="off" required placeholder="Manpower of equipment" size="70" maxlength="32" name="equipment_manpower" /></td>
             </tr>
         </table>
         <table class="form-table">
             <tr>
                 <!-- Manpower use -->
                 <th width="10%" scope="row" valign="top" title="How much manpower is used."><?php _e('Manpower Use', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->manpower_use : ''; ?>" autocomplete="off" required placeholder="Manpower use of equipment" size="70" maxlength="32" name="equipment_manpower_use" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_manpower_use']) && $show_previous ? $_POST['equipment_manpower_use'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->manpower_use : ''; ?>" autocomplete="off" required placeholder="Manpower use of equipment" size="70" maxlength="32" name="equipment_manpower_use" /></td>
                 <!-- Speed modifier -->
                 <th width="10%" scope="row" valign="top"><?php _e('Speed Modifier', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->speed_modifier : ''; ?>" autocomplete="off" required placeholder="Speed modifier of equipment" size="70" maxlength="32" name="equipment_speed_modifier" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_speed_modifier']) && $show_previous ? $_POST['equipment_speed_modifier'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->speed_modifier : ''; ?>" autocomplete="off" required placeholder="Speed modifier of equipment" size="70" maxlength="32" name="equipment_speed_modifier" /></td>
             </tr>
         </table>
         <table class="form-table">
             <tr>
                 <!-- Combat range -->
                 <th width="10%" scope="row" valign="top" title="How far the equipment can attack."><?php _e('Combat Range', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->combat_range : ''; ?>" autocomplete="off" required placeholder="Combat range of equipment" size="70" maxlength="32" name="equipment_combat_range" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_combat_range']) && $show_previous ? $_POST['equipment_combat_range'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->combat_range : ''; ?>" autocomplete="off" required placeholder="Combat range of equipment" size="70" maxlength="32" name="equipment_combat_range" /></td>
                 <!-- Soft attack -->
                 <th width="10%" scope="row" valign="top" title="Attack to the man power."><?php _e('Soft Attack', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->soft_attack : ''; ?>" autocomplete="off" required placeholder="Soft attack of equipment" size="70" maxlength="32" name="equipment_soft_attack" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_soft_attack']) && $show_previous ? $_POST['equipment_soft_attack'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->soft_attack : ''; ?>" autocomplete="off" required placeholder="Soft attack of equipment" size="70" maxlength="32" name="equipment_soft_attack" /></td>
             </tr>
         </table>
         <table class="form-table">
             <tr>
                 <!-- Hard attack -->
                 <th width="10%" scope="row" valign="top" title="Attack to the equipment."><?php _e('Hard Attack', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->hard_attack : ''; ?>" autocomplete="off" required placeholder="Hard attack of equipment" size="70" maxlength="32" name="equipment_hard_attack" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_hard_attack']) && $show_previous ? $_POST['equipment_hard_attack'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->hard_attack : ''; ?>" autocomplete="off" required placeholder="Hard attack of equipment" size="70" maxlength="32" name="equipment_hard_attack" /></td>
                 <!-- Armor -->
                 <th width="10%" scope="row" valign="top"><?php _e('Armor', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->armor : ''; ?>" autocomplete="off" placeholder="Armor of equipment" size="70" maxlength="32" name="equipment_armor" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_armor']) && $show_previous ? $_POST['equipment_armor'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->armor : ''; ?>" autocomplete="off" placeholder="Armor of equipment" size="70" maxlength="32" name="equipment_armor" /></td>
             </tr>
         </table>
         <table class="form-table">
             <tr>
                 <!-- Entrenchment -->
                 <th width="10%" scope="row" valign="top" title="How hard it is to destroy equipment. The higher number, harder to kill."><?php _e('Entrenchment', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->entrenchment : ''; ?>" autocomplete="off" placeholder="Entrenchment of equipment" size="70" maxlength="32" name="equipment_entrenchment" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) && $show_previous ? $edit_equipment[0]->entrenchment : ''; ?>" autocomplete="off" placeholder="Entrenchment of equipment" size="70" maxlength="32" name="equipment_entrenchment" /></td>
                 <!-- Support -->
                 <th width="10%" scope="row" valign="top"><?php _e('Support', 'vidyen') ?></th>
                 <td width="40%">
@@ -258,10 +259,10 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
             <tr>
                 <!-- Faction -->
                 <th width="10%" scope="row" valign="top"><?php _e('Faction', 'vidyen') ?></th>
-                <td width="40%"><input type="text" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->faction : ''; ?>" autocomplete="off" placeholder="Faction of equipment" size="70" maxlength="32" name="equipment_faction" /></td>
+                <td width="40%"><input type="text" value="<?= !empty($_POST['equipment_faction']) && $show_previous ? $_POST['equipment_faction'] : ''; ?><?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->faction : ''; ?>" autocomplete="off" placeholder="Faction of equipment" size="70" maxlength="32" name="equipment_faction" /></td>
                 <!-- Model year -->
                 <th width="10%" scope="row" valign="top"><?php _e('Model Year', 'vidyen') ?></th>
-                <td width="40%"><input type="number" value="<?= !empty($_GET['edit_equipment']) ? $edit_equipment[0]->model_year : ''; ?>" autocomplete="off" placeholder="Model year of equipment" size="70" maxlength="32" name="equipment_model_year" /></td>
+                <td width="40%"><input type="number" value="<?= !empty($_POST['equipment_model_year']) && $show_previous ? $_POST['equipment_model_year'] : ''; ?><?= !empty($_GET['year']) ? $edit_equipment[0]->model_year : ''; ?>" autocomplete="off" placeholder="Model year of equipment" size="70" maxlength="32" name="equipment_model_year" /></td>
             </tr>
         </table>
         <p>
