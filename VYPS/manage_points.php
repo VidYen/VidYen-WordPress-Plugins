@@ -256,6 +256,114 @@ if (isset($_GET['edituserpoints'])){
 		
 	}
 
-	//EOF
-}
+	//eoif
+} elseif ( isset($_GET['edit_vyps'])) ){
+	
+	//Ok we going to check to see if post is &edit_vyps=2 and just show the add point page
+	
+	//NEED TO FIX
+	
+} else {
+	
+	//I'm going out on a big assumption taht if not &edituserpoints that we should show something
 
+	//Here is where the main manage points goes. Reference old file to reconstruct.
+	//It actually wansn't an error. There just wasn't any html to display
+
+	global $wpdb;
+	
+	//Only need the poitns list.
+	$table_name_points = $wpdb->prefix . 'vyps_points';
+	
+	//and numbers of rows (i feel maybe this should be outside rather than called twice, but what if  sometimes the if doesn't need to call either?
+	$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
+	
+
+	
+	for ($x_for_count = $number_of_point_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) { /**************** This is where you left off for diner ****/
+		
+		$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$x_for_count'" ); // is the $x_for_count for the id. There should never be one out of place unless was being naughty on the SQL
+		$point_icon_data = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$x_for_count'" ); //Grabbing the icon
+		$point_id_data = $wpdb->get_var( "SELECT id FROM $table_name_points WHERE id= '$x_for_count'" ); //You know I don't think we have to get the id since its in the count, but I'm doing it for buggin reasons.
+		
+		//Need the siteurl and such
+		$edit_rename_url = site_url() . '/wp-admin/admin.php?page=vyps_points_list&edit_vyps=' . $point_id_data;
+		
+		$current_row_output = "
+			<tr>
+				<td>$point_type_data</td>
+				<td><img src=\"$point_icon_data\" width=\"32\" hight=\"32\"></td>
+				<td>$point_id_data</td>
+				<td class=\"column-primary\"><a href=\"$edit_rename_url\">Edit</a> | <a onclick=\"return confirm('Are you sure want to do this ?');\" href=\"$edit_rename_url\">Rename</a></td>
+			</tr>
+				";
+		
+		//Compile into row output.
+		$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
+	}
+
+	//Feels like the message should be handled better.
+	if (!empty($message)){
+		
+		$message_output = "
+		
+			<div id=\"message\" class=\"updated notice is-dismissible\">
+				<p><strong>$message.</strong></p>
+				<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
+			</div>	
+		";
+	}
+
+	$page_url = site_url() . '/wp-admin/admin.php?page=vyps_points_add'; //Most likley not required but I feel like if I need to manipulate site_url() somehow best to had a variable.
+	
+	//Ok the header
+	$vyps_list_header_output = "
+
+		
+			<h1 class=\"wp-heading-inline\">Manage Points</h1>
+				$message_output
+			<a href=\"$page_url\" class=\"page-title-action\">Add New</a>
+			<hr class=\"wp-header-end\">
+	";
+	
+	//Output for table header and footer.
+	$vyps_table_header_footer_output = "
+		<tr>
+			<th scope=\"col\" id=\"name\" class=\"manage-column column-name column-primary sortable desc\">
+				<a href=\"#\">
+					<span>Point Name</span>
+					<span class=\"sorting-indicator\"></span>
+				</a>
+			</th>
+			<th scope=\"col\" id=\"icon\" class=\"manage-column column-icon\">Icon</th>
+			<th scope=\"col\" id=\"pointid\" class=\"manage-column column-pointid\">Point ID</th>                    
+			<th scope=\"col\" id=\"posts\" class=\"manage-column column-posts num\">Action</th>	
+		</tr>	
+	";
+	
+	$vyps_list_output = "
+		<div class=\"wrap\">
+			$vyps_list_header_output
+			<form method=\"get\">   
+				<h2 class=\"screen-reader-text\">Points list</h2>
+				<table class=\"wp-list-table widefat fixed striped users\">
+					<thead>
+						$vyps_table_header_footer_output
+					</thead>
+					<tbody>
+						$table_output
+					</tbody>
+					<tfoot>
+						$vyps_table_header_footer_output
+					</tfoot>
+				</table>
+			</form>
+			<br class=\"clear\">
+		</div>
+		";
+	
+	
+	//End result is echo output to manage points.
+	echo $vyps_list_output; 
+
+}
