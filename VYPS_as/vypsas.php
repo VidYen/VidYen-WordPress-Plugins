@@ -1,6 +1,7 @@
 <?php
 /*
   Plugin Name: VYPS Adscend Media API Addon
+  Plugin URI: http://vyps.org
   Description: Earn VYPS points by doing AdScend Media activities
   Version: 0.0.26
   Author: VidYen, LLC
