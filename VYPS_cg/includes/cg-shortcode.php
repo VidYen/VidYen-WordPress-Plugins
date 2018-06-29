@@ -315,7 +315,7 @@ function cg_battle_log($params = array()) {
                         $outcome
                     </td>
                     <td>
-                        <a class=\"button-secondary\" target='_blank' href=\"$url/wp-admin/profile.php?page=battle-log&view=$log->id\">View Loses</a>
+                        <a class=\"button-secondary\" target='_blank' href=\"$url/wp-admin/admin.php?page=battle-log&view=$log->id\">View Loses</a>
                     </td>
     
                 </tr>
@@ -356,6 +356,8 @@ function cg_battle($params = array()) {
     $pending_battles = $wpdb->get_results(
         $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE ((user_one = %s) or (user_two = %s)) and battled = 0", wp_get_current_user()->user_login, wp_get_current_user()->user_login)
     );
+
+    $link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
     if(isset($_POST['battle']) && count($pending_battles) == 0){
 
@@ -441,7 +443,7 @@ function cg_battle($params = array()) {
 
                                 $return .= "<td>$opponent</td>";
                                     if($status){
-                                        $return .= "<td><a href=\"$url/wp-admin/profile.php?page=battle&view=$opponent\" class=\"button-secondary\">View Opponent Army</a></td>";
+                                        $return .= "<td><a href=\"$url/wp-admin/admin.php?page=battle&view=$opponent&return=$link\" class=\"button-secondary\">View Opponent Army</a></td>";
                                     } else {
 
                                         $return .= "<td></td>";
@@ -450,9 +452,9 @@ function cg_battle($params = array()) {
                                         if(!$user_two_accept && $user == 2
                                             || !$user_one_accept && $user == 1) {
                                             $return .= "<td>
-                                                <a href=\"$url/wp-admin/profile.php?page=battle&ready=$pending_battle->id\"
+                                                <a href=\"$url/wp-admin/admin.php?page=battle&ready=$pending_battle->id&return=$link\"
                                                    class=\"button-primary\">Ready</a>
-                                                <a href=\"$url/wp-admin/profile.php?page=battle&cancel=$pending_battle->id\"
+                                                <a href=\"$url/wp-admin/admin.php?page=battle&cancel=$pending_battle->id&return=$link\"
                                                    class=\"button-secondary\">Cancel</a>
                                             </td>";
                                         }
@@ -465,13 +467,13 @@ function cg_battle($params = array()) {
                                         if($user_one_accept && $user_two_accept){
                                             $return .="
                                             <td>
-                                                <a href=\"$url/wp-admin/profile.php?page=battle&battle=$pending_battle->id\"
+                                                <a href=\"$url/wp-admin/admin.php?page=battle&battle=$pending_battle->id&return=$link\"
                                                    class=\"button-primary\">Battle</a>
                                             </td>";
                                         }
                                     } else {
                                         $return .= "<td>
-                                            <a href=\"$url/wp-admin/profile.php?page=battle&cancel=$pending_battle->id\" class=\"button-secondary\">Cancel</a>
+                                            <a href=\"$url/wp-admin/admin.php?page=battle&cancel=$pending_battle->id&return=$link\" class=\"button-secondary\">Cancel</a>
                                         </td>";
                                     }
                             $return .= "</tr>";

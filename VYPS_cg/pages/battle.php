@@ -24,7 +24,9 @@ if(isset($_GET['battle'])){
         $battle->startBattle();
     }
 
-    echo '<script type="text/javascript">document.location = "' . $url .'/wp-admin/profile.php?page=battle-log";</script>';
+    if(!isset($_GET['return'])){
+        echo '<script type="text/javascript">document.location = "' . $url .'/wp-admin/admin.php?page=battle-log";</script>';
+    }
 }
 
 if(isset($_GET['cancel'])){
@@ -47,7 +49,10 @@ if(isset($_GET['cancel'])){
         $data = array('user_two' => null, 'user_two_accept' => null);
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
-    echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/profile.php?page=battle";</script>';
+
+    if(!isset($_GET['return'])){
+        echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/admin.php?page=battle";</script>';
+    }
 
 }
 
@@ -65,7 +70,9 @@ if(isset($_GET['ready'])){
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
 
-    echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/profile.php?page=battle";</script>';
+    if(!isset($_GET['return'])){
+        echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/admin.php?page=battle";</script>';
+    }
 
 }
 
@@ -92,7 +99,10 @@ if(isset($_POST['battle']) && count($pending_battles) == 0){
 
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $ongoing[0]->id]);
     }
-    echo '<script type="text/javascript">location.reload(true);</script>';
+
+    if(!isset($_GET['return'])){
+        echo '<script type="text/javascript">location.reload(true);</script>';
+    }
 }
 
 if(isset($_POST['battle_user']) && count($pending_battles) == 0){
@@ -114,7 +124,14 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
             )
         );
     }
-    echo '<script type="text/javascript">location.reload(true);</script>';
+
+    if(!isset($_GET['return'])){
+        echo '<script type="text/javascript">location.reload(true);</script>';
+    }
+}
+
+if(isset($_GET['return'])){
+    echo '<script type="text/javascript">window.location.href = "' . $_GET['return'] . '";</script>';
 }
 
 ?>
@@ -199,7 +216,7 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
                                 <?php
                                     if($status){
                                         ?>
-                                            <td><a href="<?= site_url() ?>/wp-admin/profile.php?page=battle&view=<?= $opponent ?>" class="button-secondary">View Opponent Army</a></td>
+                                            <td><a href="<?= site_url() ?>/wp-admin/admin.php?page=battle&view=<?= $opponent ?>" class="button-secondary">View Opponent Army</a></td>
                                         <?php
                                     } else {
                                         ?>
@@ -211,9 +228,9 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
                                             || !$user_one_accept && $user == 1) {
                                             ?>
                                             <td>
-                                                <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&ready=<?= $pending_battle->id; ?>"
+                                                <a href="<?= site_url(); ?>/wp-admin/admin.php?page=battle&ready=<?= $pending_battle->id; ?>"
                                                    class="button-primary">Ready</a>
-                                                <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&cancel=<?= $pending_battle->id; ?>"
+                                                <a href="<?= site_url(); ?>/wp-admin/admin.php?page=battle&cancel=<?= $pending_battle->id; ?>"
                                                    class="button-secondary">Cancel</a>
                                             </td>
                                             <?php
@@ -231,7 +248,7 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
                                         if($user_one_accept && $user_two_accept){
                                             ?>
                                             <td>
-                                                <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&battle=<?= $pending_battle->id; ?>"
+                                                <a href="<?= site_url(); ?>/wp-admin/admin.php?page=battle&battle=<?= $pending_battle->id; ?>"
                                                    class="button-primary">Battle</a>
                                             </td>
                                             <?php
@@ -239,7 +256,7 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
                                     } else {
                                         ?>
                                         <td>
-                                            <a href="<?= site_url(); ?>/wp-admin/profile.php?page=battle&cancel=<?= $pending_battle->id; ?>" class="button-secondary">Cancel</a>
+                                            <a href="<?= site_url(); ?>/wp-admin/admin.php?page=battle&cancel=<?= $pending_battle->id; ?>" class="button-secondary">Cancel</a>
                                         </td>
                                         <?php
                                     }
@@ -291,7 +308,7 @@ foreach($user_equipment as $indiv){
 ?>
 <div class="wrap">
     <h2 style="display:inline-block;">
-        <?= strip_tags($_GET['view']) ?> Equipment | <a href="<?= site_url() ?>/wp-admin/profile.php?page=battle">Back</a>
+        <?= strip_tags($_GET['view']) ?> Equipment | <a href="<?= site_url() ?>/wp-admin/admin.php?page=battle">Back</a>
     </h2>
     <table class="wp-list-table widefat fixed striped">
         <thead>
