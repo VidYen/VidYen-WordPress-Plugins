@@ -109,7 +109,7 @@ if (isset($_GET['edituserpoints'])){
 						</td>
 					</tr>
 					<tr>
-						<th><label for=\"update_user_point\">Adjust Points Manually</label></th>
+						<th><label for=\"update_user_point\">Point Amount to Adjust</label></th>
 						<td>
 							<input type=\"number\" name=\"update_user_point\" id=\"update_user_point\" step=\"0.000000001\">
 						</td>     
