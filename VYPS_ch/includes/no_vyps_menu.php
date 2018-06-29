@@ -3,25 +3,25 @@
    This menu shows when user does not have VYPS base installed for some odd reason. They should know, but sometimes you never know.
  */
 
- add_action('admin_menu', 'vyps_as_menu'); //Note dropping the number so I think it should sort alpha
+ add_action('admin_menu', 'vyps_ch_menu'); //Note dropping the number so I think it should sort alpha
 
 /* Create the menu if VYPS not installed */
 
-function vyps_as_menu() 
+function vyps_ch_menu() 
 {
 	
-    $parent_page_title = "Adscend Addon: VYPS not installed!";
-    $parent_menu_title = 'VYPS Adscend';
+    $parent_page_title = "Coinhive Addon: VYPS not installed!";
+    $parent_menu_title = 'VYPS Coinhive';
     $capability = 'manage_options';
-    $parent_menu_slug = 'vyps_as';
-    $parent_function = 'vyps_as_parent_menu_page';
+    $parent_menu_slug = 'vyps_ch';
+    $parent_function = 'vyps_ch_parent_menu_page';
     add_menu_page($parent_page_title, $parent_menu_title, $capability, $parent_menu_slug, $parent_function);
 }
 
 
 /* this next function creates the page on the Coinhive submenu */
 
-function vyps_as_parent_menu_page() 
+function vyps_ch_parent_menu_page() 
 { 
 	/* I'm putting the logo at top because I can */
 	//echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > '; //It dawned on me that if they don't have VYPS installed they can't see the credits.
