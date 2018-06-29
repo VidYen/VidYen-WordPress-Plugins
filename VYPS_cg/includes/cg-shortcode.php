@@ -55,6 +55,10 @@ function cg_my_equipment($params = array()) {
             $return .= "<p><strong>One sold.</strong></p>";
             $return .= "</div>";
         }
+
+        unset($_POST['sell_id']);
+        echo '<script type="text/javascript">window.location.href = window.location.href;</script>';
+
     }
 
 
@@ -84,12 +88,6 @@ function cg_my_equipment($params = array()) {
             ";
 
         foreach($equipment as $single){
-            if(isset($_POST['sell_id'])){
-                $single['amount']--;
-            }
-            if(isset($_POST['buy_id'])){
-                $single['amount']++;
-            }
             $return .= "
                 <tr id=\"log-1\">
                     <td>
@@ -184,6 +182,9 @@ function cg_buy_equipment($params = array()) {
             $return .= "<p><strong>This equipment does not exist.</strong></p>";
             $return .= "</div>";
         }
+        unset($_POST['buy_id']);
+        echo '<script type="text/javascript">window.location.href = window.location.href;</script>';
+
     }
 
     $return .= "
@@ -218,7 +219,7 @@ function cg_buy_equipment($params = array()) {
 
                     $return .= "
                                         <tr>
-                        <td class=\"column-primary\"><a href=\"$url/wp-admin/profile.php?page=buy-equipment\">$d->name</a></td>
+                        <td class=\"column-primary\">$d->name</td>
                         <td class=\"column-primary\"><img width=\"42\" src=\"$d->icon\"/></td>
                         <td class=\"column-primary\">{$point_system[0]->name}</td>
                         <td class=\"column-primary\">$d->point_cost</td>
