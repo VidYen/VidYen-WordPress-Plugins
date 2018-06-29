@@ -257,13 +257,130 @@ if (isset($_GET['edituserpoints'])){
 	}
 
 	//eoif
-} elseif ( isset($_GET['edit_vyps'])) ){
+}
+
+/**** EDIT PAGE VIEW ****/
+
+elseif ( isset($_GET['edit_vyps'])) {
 	
-	//Ok we going to check to see if post is &edit_vyps=2 and just show the add point page
+	//usual init
+	global $wpdb;
+	$point_id = $_GET['edit_vyps'];
 	
-	//NEED TO FIX
 	
-} else {
+	//the $wpdb stuff to find what the current name and icons are
+	$table_name_points = $wpdb->prefix . 'vyps_points';
+	$point_name = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id'" ); //Grabbing the icon
+	$icon_url = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$point_id'" ); //Grabbing the icon
+	
+	//So after we see if there is an edit_vyps get we check to see if there is an update post (aka user pressed the update point button.
+	if (isset($_POST['update_point'])) {
+		
+		//Obviously we need the name of the point if they updated it.
+		$point_name = $_POST['point_name'];
+		
+		//Ok we seeing if there was an upload for the point icon etc
+		if (!empty($_FILES['point_icon_url']['name'])) {
+				
+				$point_icon_url = media_handle_upload('point_icon_url', 0);
+				$icon = wp_get_attachment_url($point_icon_url);
+				
+        } else {
+			
+			//Ok we just make the $icon_url the $icon if there wasn't anything there in the first place. Might be redudant.
+			$icon = $icon_url;
+        }
+		
+		//I think this was something the old devs left in.
+		//$point = $_POST['point']; //not actual point but starting point which was a stupid idea. daily rewards only
+		//'points' => $point, // this was from table data
+        //$table = $wpdb->prefix . 'vyps_points'; //Some of stuff. When I see it I try to rename to the new convention, which only I know now I think abouit as it hasn't been documented.
+		
+        $data_insert = [
+            'name' => $point_name,
+            'icon' => $icon,
+            'time' => date('Y-m-d H:i:s')
+        ];
+		
+		//$wpdb call to update row
+		
+        $wpdb->update($table_name_points, $data_insert, ['id' => $point_id]);
+
+        $message = "Updated successfully.";
+		
+	}
+	
+	//Ok. The above was the post when you hit the update point button.
+	//Below is the echo to show you the page. I suppose the above has to come first
+	//Due to you need to see results of the update point post if you did click it.
+	
+	//Ye old message output //I just pulled a Benard though since what I wrote originally comes after this
+	if (!empty($message)){
+		$message_output = "
+		
+			<div id=\"message\" class=\"updated notice is-dismissible\">
+				<p><strong>$message.</strong></p>
+				<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
+			</div>	
+		";
+	} else {
+		
+		//If no message then the output should be blank.
+		$message_output = '';
+		
+	}
+	
+	//The page HTML since no list it should need no loop
+	//BTW I didn't write the HTML so I may want to go back someday if I am looking at this and try to improve -Felty
+	//Also I think they used the creatureuser id and class. Which I guess works, but not what I would have called it.
+	
+	$update_point_view = "
+	
+		<div class=\"wrap\">
+        <h1 id=\"add-new-user\">Update Point</h1>
+			$message_output
+        <p>Update this point.</p>
+        <form method=\"post\" name=\"createuser\" id=\"createuser\" class=\"validate\" novalidate=\"novalidate\" enctype=\"multipart/form-data\">
+            <table class=\"form-table\">
+                <tbody>
+                    <tr class=\"form-field form-required\">
+                        <th scope=\"row\">
+                            <label for=\"point_name\">Point Name<span class=\"description\">(required)</span></label>
+                        </th>
+                        <td>
+                            <input name=\"point_name\" type=\"text\" id=\"point_name\" value=\"$point_name\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"60\" >
+                        </td>
+                    </tr>        
+                    <tr class=\"form-field form-required\">
+                        <th scope=\"row\">
+                            <label for=\"point_icon_url\">Point Icon url<span class=\"description\">(required)</span></label>
+                        </th>
+                        <td>
+                            <img src=\"$icon_url\" class=\"img-responsive\" width=\"50px\">
+                            <br>
+                            <input name=\"point_icon_url\" type=\"file\" id=\"point_icon_url\" value=\"$icon_url\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class=\"submit\">
+                <input type=\"submit\" name=\"update_point\" id=\"update_point\" class=\"button button-primary\" value=\"Update Point\">
+            </p>
+        </form>
+    </div>
+	";
+
+	//Echo out the table
+	
+	echo $update_point_view;
+	
+	//I feel like that could be more efficienct but its 400% better than the original way.
+	
+}
+
+/**** JUST THE LIST ****/
+
+else {
 	
 	//I'm going out on a big assumption taht if not &edituserpoints that we should show something
 
@@ -278,9 +395,10 @@ if (isset($_GET['edituserpoints'])){
 	//and numbers of rows (i feel maybe this should be outside rather than called twice, but what if  sometimes the if doesn't need to call either?
 	$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
 	
-
+	//Init for $table_output
+	$table_output = '';
 	
-	for ($x_for_count = $number_of_point_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) { /**************** This is where you left off for diner ****/
+	for ($x_for_count = $number_of_point_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) { 
 		
 		$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$x_for_count'" ); // is the $x_for_count for the id. There should never be one out of place unless was being naughty on the SQL
 		$point_icon_data = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$x_for_count'" ); //Grabbing the icon
@@ -312,6 +430,11 @@ if (isset($_GET['edituserpoints'])){
 				<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
 			</div>	
 		";
+	} else {
+		
+		//Need to just set to blank since PHP needs something if its called
+		$message_output = '';
+		
 	}
 
 	$page_url = site_url() . '/wp-admin/admin.php?page=vyps_points_add'; //Most likley not required but I feel like if I need to manipulate site_url() somehow best to had a variable.
