@@ -285,6 +285,9 @@ elseif ( isset($_GET['edit_vyps'])) {
 				$point_icon_url = media_handle_upload('point_icon_url', 0);
 				$icon = wp_get_attachment_url($point_icon_url);
 				
+				//This is needed so on refresh it shows the new icon.
+				$icon_url = $icon;
+				
         } else {
 			
 			//Ok we just make the $icon_url the $icon if there wasn't anything there in the first place. Might be redudant.
