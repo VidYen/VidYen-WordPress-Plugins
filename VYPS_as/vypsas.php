@@ -2,7 +2,7 @@
 /*
   Plugin Name: VYPS Adscend Media API Addon
   Description: Earn VYPS points by doing AdScend Media activities
-  Version: 0.0.22
+  Version: 0.0.26
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
   License: GPLv2 or later
@@ -12,115 +12,35 @@
  
 register_activation_hook(__FILE__, 'vyps_as_install');
 
-/* Will need a table.
-*  
-*/
-
-/* 
-* Installing the AdScend table below
-*/
+/* Originally, designed a table, but found the Adscend API made it unnecessary */
  
 register_activation_hook(__FILE__, 'vyps_as_install');
 
 function vyps_as_install() {
-    global $wpdb;
-	
-	$message = ''; //yeah should set that somewhere
-
-    $table_name_as = $wpdb->prefix . 'vyps_as'; //btw if you hadn't notice I always name my tables variables visually
-
-    $charset_collate = $wpdb->get_charset_collate();
-	
-	/* Some design thoughts. One could use a static table to hold the wall ID or various other static variables like
-	*  a custom subid2 etc but that could be all kept in shortcode attributions. To keep WP less table flush (as
-	*  given all the other woocomerce junk that will be floating around, we will keep this to a log only. Now why
-	*  would you need a log for Adscend while you didn't have to with CoinHive is becasue the peopel who developed
-	*  Adscend were not forward thinking and only give you a total. Sooo... The log has to be used as you see if the
-	*  user did a post request and then make a log of what their Adscend points were at that time. Then when they
-	*  post again see how much had changed between the last before post and now the current and award that difference
-	*  It's all terrible and could go horribly wrong for botht he user and the site admin, but again... If AS made
-	*  it like Coin Hive we would not have to do this. BTW for my sanities sake, I am going to make this for one
-	*  point system only. You could in theory mess it up by having more than one point type with adscend
-	*  but why would you? If you wan to, the issues are on you. There will be two shortcodes. 1. for the watching
-	*  2. for the post redemption
-	*  It dawned on me that the as log should tell you what it thought the last lead was from the pior last row
-	*  May not bee completely necessary but it would be nice to know least someone spams the F5 button and somehow
-	*  breaks it.
-	*/
-	
-	/* Decided no longer required to make the table as apparently Adscend actually has a API despite the contrary
-
-    $sql = "CREATE TABLE {$table_name_as} (
-		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-		playerID tinytext NOT NULL,
-		pointID varchar(11) NOT NULL,
-		leads double(64, 0) NOT NULL,
-		priorLeads double(64, 0) NOT NULL,
-		PRIMARY KEY  (id)
-        ) {$charset_collate};";
-	    
-    require_once (ABSPATH . 'wp-admin/includes/upgrade.php');
-
-    dbDelta($sql);
-	
-	*/
-
-	//Should be no need to have default data
+    
+	//Not sure if this is even needed?
+	$message = 'VidYen Adscend Addon installed.'; //yeah should set that somewhere
 	
 }
 
-/* Ok above is the install table creation need to set values
-*  And then tie in function. Honestly want to see if function comes in first.
-*  Need Adscend shortcode
+
+/* Below checks to see if vyps_points_menu function is installed and activated
+*  If not it puts it on its own menu saying you need to install/enable VYPS base
 */
 
-add_action('admin_menu', 'vyps_as_submenu', 400 );
+if (function_exists('vyps_points_menu')) {
+	
+	//I would love to make this like it's own thing but then we'd have to assume they installed the warning plug in. lol.
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_as/includes/as_menu.php'); //This include creates the menu in the VYPS submenu
 
-/* Creates the Adscend submenu on the main VYPS plugin */
+} else {
+	
+	//I would love to make this like it's own thing but then we'd have to assume they installed the warning plug in. lol.
+	include( plugin_dir_path( __FILE__ ) . '../VYPS_as/includes/no_vyps_menu.php'); //This include creates it on top level to inform to install VYPS
 
-function vyps_as_submenu() 
-{
-	$parent_menu_slug = 'vyps_points';
-	$page_title = "VYPS Adscend Addon";
-    $menu_title = 'Adscend Addon';
-	$capability = 'manage_options';
-    $menu_slug = 'vyps_as_page';
-    $function = 'vyps_as_sub_menu_page';
-
-    add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
 
-
-/* Below is the functions for the shortcode */
-
-function vyps_as_sub_menu_page() 
-{ 
-
-	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
-	echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > '; 
-    
-	//Instructions on page
-	echo
-	"<h1>VYPS Adscend Media Shortcode Addon Plugin</h1>
-	<p>This plugin needs VYPS and an <a href=\"https://adscendmedia.com\" target=\"_blank\">Adscend Media</a> account to function. The intention is to allow a quick and easy way for you to award user points for Adscend Activity.</p>
-	<h2>Shortcodes Syntax</h2>
-	<p><b>[vyps-as-watch pub=113812 profile=13246 pid=1]</b></p>
-	<p>The above shorcode will put up an Adscend wall using the publisher and profile id. (Those are our test site numbers, replace with yours) The pid is the point ID of course.</p>
-	<p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
-	<p>To have a user redeem points through the Adscend API (the points Adscend has said they earned). You need to get your own API off your Adscend wall page. The API key is on the integration page on your offer wall under API/SDK integration.</p>
-	<p><b>[vyps-as-redeem pub=113812 profile=13246 api=typekeyhere pid=1 payout=750]</b></p>
-	<p>All attributes must be set for this to function. There is no interface and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
-	<p><b>[vyps-as-redeem-btn pub=113812 profile=13246 api=typekeyhere pid=1 payout=750]</b></p>
-	<p>Using the btn shortcode will just have a redemption function that calls the function without having to create seperate pages.</p>
-	";
-	
-	//Credits include
-	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/credits.php'); 
-} 
-
-
-
+/* I will move the shortcodes to its own page later. But now its fine here */
 /* I will need two short codes. One for the game result tables and one for the game itself. */
 
 /* Below is the Adscend game shortcode itself */
