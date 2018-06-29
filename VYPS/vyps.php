@@ -39,7 +39,7 @@ function vyps_points_install() {
                 user_id mediumint(9) NOT NULL,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		points varchar(11) NOT NULL,
-                points_amount double(64, 16) NOT NULL,
+                points_amount double(64, 0) NOT NULL,
                 adjustment varchar(100) NOT NULL,
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
