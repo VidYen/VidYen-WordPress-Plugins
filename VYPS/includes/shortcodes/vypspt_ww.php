@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Only one function in here. */
 
-function pt_ww_func( $atts ) {
+function vyps_point_transfer_woowallet_func( $atts ) {
 	
 	/* Check to see if user is logged in and boot them out of function if they aren't. */
 	
@@ -314,4 +314,4 @@ function pt_ww_func( $atts ) {
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-pt-ww', 'pt_ww_func');		
+add_shortcode( 'vyps-pt-ww', 'vyps_point_transfer_woowallet_func');		

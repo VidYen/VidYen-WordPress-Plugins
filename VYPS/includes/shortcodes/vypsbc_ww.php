@@ -19,7 +19,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-function bc_ww_func() {
+function vyps_balance_woowallet_func() {
 	
 	/* Should check to see if user is logged in */
 	/* Or at least it shouldn't show anything */
@@ -70,12 +70,12 @@ function bc_ww_func() {
 	
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-balance-ww', 'bc_ww_func');
+add_shortcode( 'vyps-balance-ww', 'vyps_balance_woowallet_func');
 
 /* I thought I could get away with attributes, but it seems that formatting overrides so making two shortcodes. One of the menus and want for the page. */
 /* Only use the menu if you are hacking shortcodes into your menus */
 
-function bc_ww_menu_func() {
+function vyps_balance_woowallet_menu_func() {
 	
 	/* Should check to see if user is logged in */
 	/* Or at least it shouldn't show anything */
@@ -125,5 +125,5 @@ function bc_ww_menu_func() {
 	
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-balance-ww-menu', 'bc_ww_menu_func');
+add_shortcode( 'vyps-balance-ww-menu', 'vyps_balance_woowallet_menu_func');
 

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Main Public Log shortcode function */
 
-function pl_func() {
+function vyps_public_log_func() {
 	
 	/* Technically users don't have to be logged in
 	* Should litterally be the log the admin sees 
@@ -112,5 +112,5 @@ function pl_func() {
 * Shortcode for the log.
 */
 
-add_shortcode( 'vyps-pl', 'pl_func');
+add_shortcode( 'vyps-pl', 'vyps_public_log_func');
 

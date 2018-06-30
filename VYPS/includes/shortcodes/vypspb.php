@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Main Public Log shortcode function */
 
-function pb_func() {
+function vyps_public_balance_func() {
 	
 	/* Technically users don't have to be logged in
 	* Should litterally be the log the admin sees 
@@ -120,5 +120,5 @@ function pb_func() {
 * Shortcode for the log.
 */
 
-add_shortcode( 'vyps-pb', 'pb_func');
+add_shortcode( 'vyps-pb', 'vyps_public_balance_func');
 

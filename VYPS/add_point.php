@@ -2,6 +2,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+VYPS_check_if_true_admin(); //VYPS internal admin check
+
 /* This is the add_point page obviously */
 //As I didn't writ this, I kind of feel maybe this should be a function */
 

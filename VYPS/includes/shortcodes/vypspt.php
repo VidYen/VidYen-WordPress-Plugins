@@ -77,7 +77,7 @@ function vyps_pt_sub_menu_page()
 
 /*** Shortcode without button ***/
 
-function pt_func( $atts ) {
+function vyps_point_transfer_func( $atts ) {
 	
 	/* Check to see if user is logged in and boot them out of function if they aren't. */
 	
@@ -211,12 +211,12 @@ function pt_func( $atts ) {
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-pt', 'pt_func');
+add_shortcode( 'vyps-pt', 'vyps_point_transfer_func');
 
 
 /*** Shortcode with button ***/
 
-function pt_btn_func( $atts ) {
+function vyps_point_transfer_btn_func( $atts ) {
 	
 	/* Check to see if user is logged in and boot them out of function if they aren't. */
 	
@@ -395,7 +395,7 @@ function pt_btn_func( $atts ) {
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-pt-btn', 'pt_btn_func');
+add_shortcode( 'vyps-pt-btn', 'vyps_point_transfer_btn_func');
 
 /* Ok. After much deliberation and anguish at messing with modals, I have remembered that I am a system designed not a UI designer and should let users handle that
 *  That said, before I make the shortcodes just out raw data, I want a table system that does just that. Behold. The table system. -Felty

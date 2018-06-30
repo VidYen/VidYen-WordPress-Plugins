@@ -7,7 +7,7 @@
  if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
-function pt_tbl_func( $atts ) {
+function vyps_point_transfer_tbl_func( $atts ) {
 	
 	/* Check to see if user is logged in and boot them out of function if they aren't. */
 	
@@ -253,7 +253,7 @@ function pt_tbl_func( $atts ) {
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-pt-tbl', 'pt_tbl_func');
+add_shortcode( 'vyps-pt-tbl', 'vyps_point_transfer_tbl_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */

@@ -1,13 +1,15 @@
 <?php
-/*
-  Plugin Name: VidYen Point System [VYPS]
-  Plugin URI: http://vyps.org
-  Description: VidYen Point System [VYPS] allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-  Version: 0.2.01
-  Author: VidYen, LLC
-  Author URI: https://vidyen.com/
-  License: GPLv2 or later
- */
+ 
+ /*
+Plugin Name:  VidYen Point System [VYPS]
+Plugin URI:   http://vyps.org
+Description:  VidYen Point System [VYPS] allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
+Version:      00.02.02
+Author:       VidYen, LLC
+Author URI:   https://vidyen.com/
+License:      GPLv2
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+*/
  
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -18,8 +20,14 @@ function VYPS_check_if_true_admin(){
 	
 	//I'm going to be a little lenient and if you can edit users maybe you should be able to edit their point since you can just
 	//Change roles at that point. May reconsider.
-	if( ! current_user_can('install_plugin') OR ! current_user_can('edit_users') ){
+	if( current_user_can('install_plugin') OR current_user_can('edit_users') ){
 		
+		//echo "You good!"; //Debugging
+		return;
+
+	} else {
+		
+		echo "<br><br>You need true adminstrator rights to see this page!"; //Debugging
 		exit; //Might be a better solution to iform before exit like an echo before hand, but well....
 	}
 		
