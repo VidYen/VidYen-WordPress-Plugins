@@ -3,6 +3,8 @@
 	VIDYEN Points Transfer Table Shortcode
 	
  */
+ 
+ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
 function pt_tbl_func( $atts ) {

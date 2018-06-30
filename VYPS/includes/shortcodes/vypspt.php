@@ -7,6 +7,8 @@
   Author URI: https://vidyen.com/
   License: GPLv2 or later
  */
+ 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
  

@@ -2,6 +2,8 @@
 /*
    Improved shortcode of public log.
  */
+ 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Main Public Log shortcode function */
 

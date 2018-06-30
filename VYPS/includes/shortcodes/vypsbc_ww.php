@@ -17,6 +17,8 @@
 
 /* shorcote for icon balance */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 function bc_ww_func() {
 	
 	/* Should check to see if user is logged in */

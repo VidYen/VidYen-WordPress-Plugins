@@ -7,6 +7,8 @@
 *	Scrapping the old code as it was terrible.
 */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 function vyps_balance( $atts ) {
 	
 	//Make sure user is logged in.

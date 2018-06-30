@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /* This is the add_point page obviously */
 //As I didn't writ this, I kind of feel maybe this should be a function */
 

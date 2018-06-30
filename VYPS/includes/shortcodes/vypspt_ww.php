@@ -4,6 +4,8 @@
    VYPS bridge for WooWocommerce Shortcode
   
  */
+ 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Only one function in here. */
 

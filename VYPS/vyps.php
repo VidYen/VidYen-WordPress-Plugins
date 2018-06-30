@@ -8,6 +8,8 @@
   Author URI: https://vidyen.com/
   License: GPLv2 or later
  */
+ 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 register_activation_hook(__FILE__, 'vyps_points_install');
 

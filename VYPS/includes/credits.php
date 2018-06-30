@@ -2,6 +2,8 @@
 /* 
  * Simple credits file to update the list so it doesn't have to be updated every time
   */
+  
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
  echo "<br><br>
 	<h2>Here is a list of our other addons that go along with this system on our <a href=\"https://www.vidyen.com/vyps/\" target=\"_blank\">website</a>:</h2>

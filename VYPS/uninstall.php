@@ -4,6 +4,8 @@
  * the below function clears the database table on uninstall
  * only loads this file when uninstalling a plugin.
  */
+ 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* 
  * exit uninstall if not called by WP

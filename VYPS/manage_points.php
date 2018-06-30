@@ -1,4 +1,7 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 $message = '';
 $uploads = wp_upload_dir();
 $upload_path = $uploads['url'];

@@ -2,6 +2,8 @@
 /* 
  * Simple credits file to update the list so it doesn't have to be updated every time
   */
+  
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
  echo "<br><br>
 	<h1>Shortcodes and Syntax</h1>
