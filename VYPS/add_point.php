@@ -30,7 +30,7 @@ if (isset($_POST['add_point'])) {
 	//Because you shoulnd't have more than 10 points unless you got some weird ICO exchange going on.
 	
 	//Point name. Text value
-    $point_name = $_POST['point_name'];
+    $point_name = sanitize_text_field($_POST['point_name']); //Even though I am in the believe if an admin sql injects himself, we got bigger issues, but this has been sanitized.
 	
 	//The icon. I'm suprised this works so well
     $point_icon_url = media_handle_upload('point_icon_url',0); 

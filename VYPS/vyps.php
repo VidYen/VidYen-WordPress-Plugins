@@ -11,6 +11,20 @@
  
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+//Ok. I'm adding a custom fuction to the VYPS plugin. It's put on pages where, you just want to straight kick people out if they aren't admins.
+//Similar to the login check, but the admins. This will put put on all pages that only admins should be able to see but not the shortcodes results.
+
+function VYPS_check_if_true_admin(){
+	
+	//I'm going to be a little lenient and if you can edit users maybe you should be able to edit their point since you can just
+	//Change roles at that point. May reconsider.
+	if( ! current_user_can('install_plugin') OR ! current_user_can('edit_users') ){
+		
+		exit; //Might be a better solution to iform before exit like an echo before hand, but well....
+	}
+		
+}
+
 register_activation_hook(__FILE__, 'vyps_points_install');
 
 function vyps_points_install() {
@@ -225,15 +239,17 @@ add_action('edit_user_profile', 'custom_user_profile_fields_points');
 add_action("user_new_form", "custom_user_profile_fields_points");
 
 //start add new column points in user table 
+//BTW I prefixed the next two functions with vyps_ as I have a feeling that might be used by other plugins
+//Since it was generic
 
-function register_custom_user_column($columns) {
+function vyps_register_custom_user_column($columns) {
     $columns['points'] = 'Points';
     return $columns;
 }
 
 /* The next function is important to show the points in the user table */
 
-function register_custom_user_column_view($value, $column_name, $user_id) {
+function vyps_register_custom_user_column_view($value, $column_name, $user_id) {
     $user_info = get_userdata($user_id);
     global $wpdb;
     $query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by points, user_id having user_id = '{$user_id}'";
@@ -259,48 +275,72 @@ function register_custom_user_column_view($value, $column_name, $user_id) {
     return $value;
 }
 
-add_action('manage_users_columns', 'register_custom_user_column');
-add_action('manage_users_custom_column', 'register_custom_user_column_view', 10, 3);
+add_action('manage_users_columns', 'vyps_register_custom_user_column');
+add_action('manage_users_custom_column', 'vyps_register_custom_user_column_view', 10, 3);
 
-//end of add column in user table
+//Hrm... The below appararently did not break anything when commented out
+//Need to check user profiles as I do recall it was the last thing that broke
+//Trying to elimintated as much $_POST as possible for input
+
+/* I am curious to what happens if we comment all this out */
+
+/*
 
 if (isset($_POST['updateusers'])) {
 
+	global $wpdb;
+	$table = $wpdb->prefix . 'vyps_points_log';
+	$data = [
+		'points' => $_POST['points'],
+		'user_id' => $_POST['updateusers'],
+		'time' => date('Y-m-d H:i:s')
+	];
 
-    global $wpdb;
-    $table = $wpdb->prefix . 'vyps_points_log';
-    $data = [
-        'points' => $_POST['points'],
-        'user_id' => $_POST['updateusers'],
-        'time' => date('Y-m-d H:i:s')
-    ];
 
+	$wpdb->update($table, $data, ['user_id' => $_POST['updateusers']]);
 
-    $wpdb->update($table, $data, ['user_id' => $_POST['updateusers']]);
-
-    $message = "updated successfully.";
+	$message = "Updated successfully.";
 } else {
 
-    function save_custom_user_profile_fields_points($user_id) {
-		/*Turns out this blows up the admin account */
+	function save_custom_user_profile_fields_points($user_id) {
+		//Turns out this blows up the admin account
 	   // again do this only if you can
-        if (!current_user_can('manage_options'))
-            return false;
+		if (!current_user_can('manage_options'))
+			return false;
 
-    }
+	}
 
-    add_action('user_register', 'save_custom_user_profile_fields_points');
-    add_action('profile_update', 'save_custom_user_profile_fields_points');
+add_action('user_register', 'save_custom_user_profile_fields_points');
+add_action('profile_update', 'save_custom_user_profile_fields_points');
 }
 
+*/
+
+//Ok what happens if we comment it all out
+
+/*	
+function save_custom_user_profile_fields_points($user_id) {
+		//Turns out this blows up the admin account
+	   // again do this only if you can
+		if (!current_user_can('manage_options'))
+			return false;
+
+}
+
+add_action('user_register', 'save_custom_user_profile_fields_points');
+add_action('profile_update', 'save_custom_user_profile_fields_points');
 
 
-function cgc_ub_action_links($actions, $user_object) {
+*/
+
+
+//BTW this was all original from orion (Are they ever getting the daily login). I have no clue what cgc_ub_action_links stands for but I know what it does. I'll call it something more informative.
+function vyps_user_menu_action_links($actions, $user_object) {
     $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_points_list&edituserpoints=$user_object->ID") . "'>" . __('Edit Points') . "</a>";
     return $actions;
 }
 
-add_filter('user_row_actions', 'cgc_ub_action_links', 10, 2);
+add_filter('user_row_actions', 'vyps_user_menu_action_links', 10, 2);
 
 /*** SHORTCODE INCLUDES IN BASE ***/
 
