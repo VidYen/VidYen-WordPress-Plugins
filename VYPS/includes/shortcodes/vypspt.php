@@ -263,8 +263,16 @@ function vyps_point_transfer_btn_func( $atts ) {
 	
 	/* Just doing some table calls to get point names. Can you put icons in buttons? Hrm... */
 	
-	$sourceName = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$sourcePointID'" );
-	$destName = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$destinationPointID'" );
+	//"SELECT name FROM $table_name_points WHERE id= '$sourcePointID'"
+	$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $sourcePointID );
+	$sourceName = $wpdb->get_var( $sourceName_query_prepared );
+	
+	//SELECT name FROM $table_name_points WHERE id= '$destinationPointID'"
+	$destName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d";
+	$destName_query_prepared = $wpdb->prepare( $destName_query, $destinationPointID );
+	$destName = $wpdb->get_var( $destName_query_prepared );	
+
 	
 	if (isset($_POST[ $btn_name ])){ 
 	
@@ -333,8 +341,11 @@ function vyps_point_transfer_btn_func( $atts ) {
 	
 	//Ok. Now we get balance. If it is not enough for the spend variable, we tell them that and return out. NO EXCEPTIONS
 	
-	$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID");
-	
+	//SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID
+	$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND points = %d";
+	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $sourcePointID );
+	$balance_points = $wpdb->get_var( $balance_points_query_prepared );
+		
 	if ( $pt_sAmount > $balance_points ) {
 		
 		return "You don't have enought points to transfer!";
