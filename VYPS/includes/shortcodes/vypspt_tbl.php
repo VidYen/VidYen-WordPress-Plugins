@@ -55,11 +55,35 @@ function vyps_point_transfer_tbl_func( $atts ) {
 	
 	/* Just doing some table calls to get point names and icons. Can you put icons in buttons? Hrm... */
 	
-	$sourceName = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$sourcePointID'" );
-	$sourceIcon = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$sourcePointID'" );
+	//Ok below is just the new way we are going to handle prepares. Takes 4 lines to do one get_var now, but just throw more hardware at it.
+	//1. Query comment as should be written out if you pasted it into command lines
+	//2. the Query pre-pregarded
+	//3. the query prepared
+	//4. The get_var command. Btw, I would like to avoid calling entire rows if possible as we usually are interested in different tables
+	//   And would be harder to read and not really needed.
+	//   BTW all table names are hard coded even though they are variables depending on the name of the WP table, but I think
+	//   if the prefix was an injection string the entire SQL server would have broke before then -Felty
 	
-	$destName = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$destinationPointID'" );
-	$destIcon = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$destinationPointID'" );
+	
+	//"SELECT name FROM $table_name_points WHERE id= '$sourcePointID'"
+	$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $sourcePointID );
+	$sourceName = $wpdb->get_var( $sourceName_query_prepared );
+	
+	//"SELECT icon FROM $table_name_points WHERE id= '$sourcePointID'"
+	$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
+	$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $sourcePointID );
+	$sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
+	
+	//SELECT name FROM $table_name_points WHERE id= '$destinationPointID'"
+	$destName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d";
+	$destName_query_prepared = $wpdb->prepare( $destName_query, $destinationPointID );
+	$destName = $wpdb->get_var( $destName_query_prepared );
+	
+	//SELECT icon FROM $table_name_points WHERE id= '$destinationPointID'
+	$destIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
+	$destIcon_query_prepared = $wpdb->prepare( $destIcon_query, $destinationPointID );
+	$destIcon = $wpdb->get_var( $destIcon_query_prepared );
 	
 	if (isset($_POST[ $btn_name ])){ 
 	
@@ -147,7 +171,11 @@ function vyps_point_transfer_tbl_func( $atts ) {
 	
 	//Ok. Now we get balance. If it is not enough for the spend variable, we tell them that and return out. NO EXCEPTIONS
 	
-	$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID");
+	
+	//SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID
+	$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE id= %d AND points = %d";
+	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $sourcePointID );
+	$balance_points = $wpdb->get_var( $balance_points_query_prepared );
 	
 	/* I do not ever see the need for a non-formatted need point */
 	
