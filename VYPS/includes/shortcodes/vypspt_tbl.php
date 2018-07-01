@@ -178,7 +178,6 @@ function vyps_point_transfer_tbl_func( $atts ) {
 	$balance_points = $wpdb->get_var( $balance_points_query_prepared );
 	
 	/* I do not ever see the need for a non-formatted need point */
-	
 	$need_points = number_format($pt_sAmount - $balance_points);
 	
 	if ( $pt_sAmount > $balance_points ) {
