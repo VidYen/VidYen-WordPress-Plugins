@@ -150,9 +150,13 @@ function vyps_point_transfer_func( $atts ) {
 
 	
 	//Ok. Now we get balance. If it is not enough for the spend variable, we tell them that and return out. NO EXCEPTIONS
+	//Luckily this was the same variable names as the tbl version so could just copy and paste.
 	
-	$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID");
-	
+	//SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID
+	$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND points = %d";
+	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $sourcePointID );
+	$balance_points = $wpdb->get_var( $balance_points_query_prepared );
+		
 	if ( $pt_sAmount > $balance_points ) {
 		
 		return "You don't have enought points to transfer!";
