@@ -27,7 +27,7 @@ function VYPS_check_if_true_admin(){
 
 	} else {
 		
-		echo "<br><br>You need true adminstrator rights to see this page!"; //Debugging
+		echo "<br><br>You need true administrator rights to see this page!"; //Debugging
 		exit; //Might be a better solution to iform before exit like an echo before hand, but well....
 	}
 		
