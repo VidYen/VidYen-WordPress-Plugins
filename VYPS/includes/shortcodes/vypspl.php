@@ -5,6 +5,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+/* Added prepare() to all SQL SELECT calls 7.1.2018 */
+
 /* Main Public Log shortcode function */
 
 function vyps_public_log_func() {
@@ -93,12 +95,12 @@ function vyps_public_log_func() {
 		$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
 
 		//$point_id_data = $wpdb->get_var( "SELECT points FROM $table_name_log WHERE id= '$x_for_count'" );
-		$point_id_data_query = "SELECT point_id FROM ". $table_name_log . " WHERE id = %d";
+		$point_id_data_query = "SELECT points FROM ". $table_name_log . " WHERE id = %d";
 		$point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
 		$point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
 
 		//$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id_data'" );
-		$point_type_data_query = "SELECT point_id FROM ". $table_name_points . " WHERE id = %d";
+		$point_type_data_query = "SELECT name FROM ". $table_name_points . " WHERE id = %d";
 		$point_type_data_query_prepared = $wpdb->prepare( $point_type_data_query, $point_id_data );
 		$point_type_data = $wpdb->get_var( $point_type_data_query_prepared );
 
@@ -108,7 +110,7 @@ function vyps_public_log_func() {
     $amount_data = $wpdb->get_var( $amount_data_query_prepared );
 
 		//$reason_data = $wpdb->get_var( "SELECT reason FROM $table_name_log WHERE id= '$x_for_count'" );
-    $reason_data_query = "SELECT points_amount FROM ". $table_name_log . " WHERE id = %d";
+    $reason_data_query = "SELECT reason FROM ". $table_name_log . " WHERE id = %d";
     $reason_data_query_prepared = $wpdb->prepare( $reason_data_query, $x_for_count );
     $reason_data = $wpdb->get_var( $reason_data_query_prepared );
 

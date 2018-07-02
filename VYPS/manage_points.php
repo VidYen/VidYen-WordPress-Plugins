@@ -2,6 +2,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+/* Added prepare() to all SQL SELECT calls 7.1.2018 */
+
 $message = '';
 $uploads = wp_upload_dir();
 $upload_path = $uploads['url'];
@@ -17,49 +19,49 @@ $upload_path = $uploads['url'];
 //was designed to do.
 
 if(current_user_can('install_plugins')){
-	
+
 	//My code revision. -Felty
 	if (isset($_GET['edituserpoints'])){
-		
+
 		global $wpdb;
-		
+
 		//Standard issue table names. We should make this an include?
 		$table_name_points = $wpdb->prefix . 'vyps_points';
 		$table_name_log = $wpdb->prefix . 'vyps_points_log';
 		$table_name_users = $wpdb->prefix . 'users';
 
 		//Grab the GET
-		$user_id = $_GET['edituserpoints'];
-		
+		$user_id = ($int) $_GET['edituserpoints'];
+
 		//I'm going to reverse the the order
 		//Two buttons with a add and subtract buttons with two different post values
-		
+
 		//Going to do an OR to get check to see if either button was clicked
-		
+
 		if ( isset($_POST['addpoint']) OR isset($_POST['subpoint']) ){
-			
+
 			//Coerce amount value into double This could go wrong. Might consider doubleval(post) instead
 			$point_amount_post = (double)( $_POST['update_user_point']);
 
-			
+
 			if ( isset($_POST['addpoint']) ){
-			
+
 			//Actually checking if addpoint may be unneeded
-				
-				
+
+
 			} elseif ( isset($_POST['subpoint']) ) {
-				
+
 				//Reverse the polarity
 				$point_amount_post = $point_amount_post * -1;
-				
+
 			}
-			
+
 			//Ok. So we know they clicked a button so let's do something
 			//We need to post the point type, amount of points, and the reason
 			//Since the points which should be point id. I REALLY WANT TO CHANGE POINTS TO POINT_ID
 			//Also points_amount to point_amount. Have to wait till monroe is done and do it simultaneously
 			//And make a whole branch to resolve.
-			
+
 			$data_insert = [
 				'reason' => $_POST['reason'],
 				'points' => $_POST['points'],
@@ -68,43 +70,55 @@ if(current_user_can('install_plugins')){
 				'time' => date('Y-m-d H:i:s')
 				];
 			$wpdb->insert($table_name_log, $data_insert);
-			
+
 			//So entry done. Now I guess we just have to log success message
-			
+
 			$message = 'Success. Points added to user.';
-			
+
 		}
-		
+
 		//Now the page output. This runs regardless of there is a POST or not. Without the url GET it's pointless though so should not run.
-		
+
 		//user_login so its easy to see who your modifying at top of page
-		$user_name_data = $wpdb->get_var( "SELECT user_login FROM $table_name_users WHERE id= '$user_id'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
-		
+
+		$user_id_data = $user_id; //This was a copy and paste, but I'm resanitizing it as it is a post pull to go through the prepare even though it was (int)'d'
+
+		//$user_name_data = $wpdb->get_var( "SELECT user_login FROM $table_name_users WHERE id= '$user_id_data'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
+		$user_name_data_query = "SELECT user_login FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
+		$user_name_data_query_prepared = $wpdb->prepare( $user_name_data_query, $user_id_data );
+		$user_name_data = $wpdb->get_var( $user_name_data_query_prepared );
+
 		//We need the list of the coins. I'm going to move this down the page later.
-		$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
-		
+		//$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
+		$number_of_point_rows_query = "SELECT max( id ) FROM ". $table_name_points;  //I'm wondering if a prepare is even needed, but throw it all in.
+		$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
+		$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+
 		//Have to pull the point list as this needed before post is made
-		
+
 		//Ok. I could in theory check to see if they have selected. But admins shouldn't be messign around here without payint attention.
 		//$drop_down_list_data = "<option value=''>Select Points</option>"; //Commented out due to potential admin error issues. May find better fix later.
 		$drop_down_list_data = '';
-		
+
 		//Pull the rest of the list properly.
 		for ($x_for_count = $number_of_point_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) {
-			
+
 			//Table call to get the point names
-			$point_type_name = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$x_for_count'" ); //I changed the variable names so its a bit more readable from PL
-			
+			//$point_type_name = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$x_for_count'" ); //I changed the variable names so its a bit more readable from PL
+			$point_type_name_query = "SELECT name FROM ". $table_name_points . " WHERE id = %d";
+			$point_type_name_query_prepared = $wpdb->prepare( $point_type_name_query, $x_for_count );
+			$point_type_name = $wpdb->get_var( $point_type_name_query_prepared );
+
 			$row_output = "<option value='$x_for_count'>$point_type_name</option>";
-			
+
 			//Concat in the loop
 			$drop_down_list_data = $drop_down_list_data . $row_output;
-			
+
 		}
 
 		//$drop_down_list_data now contains all the point types that exist and can be thrown at the form
-		
-			
+
+
 		//The table where they enter information
 		$manage_points_menu_tbl = "
 			<div class=\"wrap\">
@@ -116,7 +130,7 @@ if(current_user_can('install_plugins')){
 							<td>
 								<select class=\"points\" id=\"points\" name=\"points\">
 									$drop_down_list_data
-								</select>                
+								</select>
 								<span class=\"description\">Chose point type</span>
 							</td>
 						</tr>
@@ -124,11 +138,11 @@ if(current_user_can('install_plugins')){
 							<th><label for=\"update_user_point\">Point Amount to Adjust</label></th>
 							<td>
 								<input type=\"number\" name=\"update_user_point\" id=\"update_user_point\" step=\"0.000000001\">
-							</td>     
+							</td>
 							<td>
 								Note: Administrators should avoid adjusting points manually and rely on the monetization systems.
 							</td>
-						</tr>						
+						</tr>
 						<tr>
 							<th><label for=\"reason\">Adjustment Reason</label></th>
 							<td>
@@ -142,39 +156,46 @@ if(current_user_can('install_plugins')){
 					</p>
 				</form>
 		";
-		
+
 		//Ok the echo ouput for the page. I'm not going to use the old point log but rather the new PL
 		echo $manage_points_menu_tbl;
-		
+
 		//Ok now for the points log. Meh. I'm kind of in a crunch so I'm going to copy and paste the new PL code
 		//I should functionize it or do an include. But I'll kick that can of worms down the road after we burn the bridge when we get to it.
 		//For now I'm litteraly just going to to an isset on the user id to make it look nice. Please no WTF in the github comments
-		
+
 		if ( isset($user_id) ) {
-			
+
 			/* Technically users don't have to be logged in
-			* Should litterally be the log the admin sees 
-			* I don't care. Tell users to not put personal identificable 
+			* Should litterally be the log the admin sees
+			* I don't care. Tell users to not put personal identificable
 			* information in their user name (referred to PID in the health care industry)
 			*/
-			
+
 			global $wpdb;
 			$table_name_points = $wpdb->prefix . 'vyps_points';
 			$table_name_log = $wpdb->prefix . 'vyps_points_log';
 			$table_name_users = $wpdb->prefix . 'users';
-			
+
 			//Ok. Since this for user instead of the entire log whe need to get get where the user did
 			//And that is against the psuedo-blockchain philosophy. //Also it dawned on me I can rewrite the public log here.
-			
-			$number_of_log_rows = $wpdb->get_var( "SELECT count( id ) FROM $table_name_log"); //We need to go through entire log
-			$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No where needed. All rows. No exceptions
-			
+
+			//$number_of_log_rows = $wpdb->get_var( "SELECT count( id ) FROM $table_name_log"); //We need to go through entire log //NOTE: I'm not sure why I did count(id) and then max(id) as no rows should be deleted in log ever.
+			$number_of_log_rows_query = "SELECT max( id ) FROM ". $table_name_log;  //I'm wondering if a prepare is even needed, but throw it all in.
+		  $number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query );
+		  $number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query_prepared );
+
+			//$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No where needed. All rows. No exceptions
+			$number_of_point_rows_query = "SELECT max( id ) FROM ". $table_name_points;  //I'm wondering if a prepare is even needed, but throw it all in.
+			$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
+			$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+
 			//echo '<br>'. $number_of_log_rows; //Some debugging
 			//echo '<br>'. $number_of_point_rows; //More debugging
-			
+
 			$begin_row = 1;
 			$end_row = ''; //Eventually will have admin ability to filter how many rows they see as after 1000 may be intensive
-			
+
 			/* Although normally against totally going programatic. Since I know I'm going to reuse this for the public log I'm going to put the headers into variables */
 			/* For public log the user_name should be display name and no need to see the UID and PID */
 			/* BTW since we already saw user name before display name is fine here since user ID is always the user ID */
@@ -196,44 +217,73 @@ if(current_user_can('install_plugins')){
 						<th>$point_type_label</th>
 						<th>$amount_label</th>
 						<th>$reason_label</th>
-					</tr>	
+					</tr>
 			";
 
 
-			
-			
+
+
 			//Because the shorcode version won't have this
 			$page_header_text = "
-				<h1 class=\"wp-heading-inline\">All Point Adjustments</h1>        
+				<h1 class=\"wp-heading-inline\">All Point Adjustments</h1>
 				<h2>Point Log</h2>
 			";
-			
+
 			//this is what it's goint to be called
 			$table_output = "";
-			
+
 			for ($x_for_count = $number_of_log_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
-			
-				$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count' AND user_id = '$user_id'" ); //Straight up going to brute force this un-programatically not via entire row
-				$user_id_data = $wpdb->get_var( "SELECT user_id FROM $table_name_log WHERE id= '$x_for_count' AND user_id = '$user_id'" ); //We already know which one we are looking form but.
-				$display_name_data = $wpdb->get_var( "SELECT display_name FROM $table_name_users WHERE id= '$user_id_data'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
-				$point_id_data = $wpdb->get_var( "SELECT points FROM $table_name_log WHERE id= '$x_for_count' AND user_id = '$user_id'" ); //Yeah this is why I want to call points something else in this table, but its the PID if you can't tell
-				$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id_data'" ); //And now we are calling a total of 3 tables in this operation
-				$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count' AND user_id = '$user_id'" );
-				$reason_data = $wpdb->get_var( "SELECT reason FROM $table_name_log WHERE id= '$x_for_count' AND user_id = '$user_id'" );
-				
+
+				//I swear I need to make this all a function
+
+				//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
+				$date_data_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
+				$date_data_query_prepared = $wpdb->prepare( $date_data_query, $x_for_count );
+				$date_data = $wpdb->get_var( $date_data_query_prepared );
+
+				//$user_id_data = $wpdb->get_var( "SELECT user_id FROM $table_name_log WHERE id= '$x_for_count'" );
+				$user_id_data_query = "SELECT user_id FROM ". $table_name_log . " WHERE id = %d";
+				$user_id_data_query_prepared = $wpdb->prepare( $user_id_data_query, $x_for_count );
+				$user_id_data = $wpdb->get_var( $user_id_data_query_prepared );
+
+				//$user_name_data = $wpdb->get_var( "SELECT display_name FROM $table_name_users WHERE id= '$user_id_data'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
+				$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table //BTW I'm not sure why display_name here instead of user? or do we already know login_name?
+				$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $user_id_data );
+				$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
+
+				//$point_id_data = $wpdb->get_var( "SELECT points FROM $table_name_log WHERE id= '$x_for_count'" );
+				$point_id_data_query = "SELECT points FROM ". $table_name_log . " WHERE id = %d";
+				$point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
+				$point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
+
+				//$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id_data'" );
+				$point_type_data_query = "SELECT name FROM ". $table_name_points . " WHERE id = %d";
+				$point_type_data_query_prepared = $wpdb->prepare( $point_type_data_query, $point_id_data );
+				$point_type_data = $wpdb->get_var( $point_type_data_query_prepared );
+
+				//$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count'" );
+				$amount_data_query = "SELECT points_amount FROM ". $table_name_log . " WHERE id = %d";
+				$amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $x_for_count );
+				$amount_data = $wpdb->get_var( $amount_data_query_prepared );
+
+				//$reason_data = $wpdb->get_var( "SELECT reason FROM $table_name_log WHERE id= '$x_for_count'" );
+				$reason_data_query = "SELECT reason FROM ". $table_name_log . " WHERE id = %d";
+				$reason_data_query_prepared = $wpdb->prepare( $reason_data_query, $x_for_count );
+				$reason_data = $wpdb->get_var( $reason_data_query_prepared );
+
 				//Did I got through the entire log row by row? Yes I did. Yes its way resource inefficient, but it's better to have code readability than efficiency. Also admins don't look at this as often as the public log.
 				//Though this would be how I would make it so users can look at their own logs... Eventually. Honestly, I think I will just have the users download the CSV file at this rate.
 				//On second thought. I am going to make copy and paste it into a current user log and make it a function.
 				//$amount_data = number_format($amount_data); //Adds commas but leaving it out here to be raw and when make [vyps-pl-tbl] will have formatting and color attributes. Also icons.
-				
+
 				//That said, we do not want a bunch of blank rows
-				
+
 				if ($amount_data == ''){ //In theory if amount data is blank, then no useful data exists on the row. If its broken, you should be looking at the entire log at that point
-				
+
 					//Nothing should happen
-					
+
 				} else {
-					
+
 					//Run the table creation as normal
 					$current_row_output = "
 						<tr>
@@ -244,15 +294,15 @@ if(current_user_can('install_plugins')){
 							<td>$reason_data</td>
 						</tr>
 							";
-							
+
 					//Compile into row output.
 					$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
 				}
-				
+
 
 				//Next for
-			} 
-			
+			}
+
 			//The page output
 			echo "
 				<div class=\"wrap\">
@@ -261,94 +311,107 @@ if(current_user_can('install_plugins')){
 						$header_output
 						$table_output
 						$header_output
-					</table>			
+					</table>
 				</div>
 			";
-			
-			
+
+
 		}
 
 		//end of the first if
 	}
-	
+
 	elseif ( isset($_GET['edit_vyps'])) {
-	
+
 		//usual init
 		global $wpdb;
 		$point_id = $_GET['edit_vyps'];
-		
-		
+
+		//For the preapre and Get validation. A bit overkill I guess, but it's hardened. Also saves some variable renaming
+		$sourcePointID = (int) $point_id;
+
+
 		//the $wpdb stuff to find what the current name and icons are
 		$table_name_points = $wpdb->prefix . 'vyps_points';
-		$point_name = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id'" ); //Grabbing the icon
-		$icon_url = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$point_id'" ); //Grabbing the icon
-		
+
+		//$point_name = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id'" ); //Grabbing the icon
+		$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+		$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $sourcePointID );
+		$sourceName = $wpdb->get_var( $sourceName_query_prepared );
+
+		//$icon_url = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$point_id'" ); //Grabbing the icon
+		$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
+		$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $sourcePointID );
+		$sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
+
+		$icon_url = $sourceIcon; //Lazy but I didn't want to mess up the copy and paste with the variables.
+
 		//So after we see if there is an edit_vyps get we check to see if there is an update post (aka user pressed the update point button.
 		if (isset($_POST['update_point'])) {
-			
+
 			//Obviously we need the name of the point if they updated it.
 			$point_name = $_POST['point_name'];
-			
+
 			//Ok we seeing if there was an upload for the point icon etc
 			if (!empty($_FILES['point_icon_url']['name'])) {
-					
+
 					$point_icon_url = media_handle_upload('point_icon_url', 0);
 					$icon = wp_get_attachment_url($point_icon_url);
-					
+
 					//This is needed so on refresh it shows the new icon.
 					$icon_url = $icon;
-					
+
 			} else {
-				
+
 				//Ok we just make the $icon_url the $icon if there wasn't anything there in the first place. Might be redudant.
 				$icon = $icon_url;
 			}
-			
+
 			//I think this was something the old devs left in.
 			//$point = $_POST['point']; //not actual point but starting point which was a stupid idea. daily rewards only
 			//'points' => $point, // this was from table data
 			//$table = $wpdb->prefix . 'vyps_points'; //Some of stuff. When I see it I try to rename to the new convention, which only I know now I think abouit as it hasn't been documented.
-			
+
 			$data_insert = [
 				'name' => $point_name,
 				'icon' => $icon,
 				'time' => date('Y-m-d H:i:s')
 			];
-			
+
 			//$wpdb call to update row
-			
+
 			$wpdb->update($table_name_points, $data_insert, ['id' => $point_id]);
 
 			$message = "Updated successfully.";
-			
+
 		}
-		
+
 		//Ok. The above was the post when you hit the update point button.
 		//Below is the echo to show you the page. I suppose the above has to come first
 		//Due to you need to see results of the update point post if you did click it.
-		
+
 		//Ye old message output //I just pulled a Benard though since what I wrote originally comes after this
 		if (!empty($message)){
 			$message_output = "
-			
+
 				<div id=\"message\" class=\"updated notice is-dismissible\">
 					<p><strong>$message.</strong></p>
 					<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
-				</div>	
+				</div>
 			";
 		} else {
-			
+
 			//If no message then the output should be blank.
 			$message_output = '';
-			
+
 		}
-		
+
 		//The page HTML since no list it should need no loop
 		//BTW I didn't write the HTML so I may want to go back someday if I am looking at this and try to improve -Felty
 		//Also I think they used the creatureuser id and class. Which I guess works, but not what I would have called it.
-		
+
 		$update_point_view = "
-		
+
 			<div class=\"wrap\">
 			<h1 id=\"add-new-user\">Update Point</h1>
 				$message_output
@@ -363,7 +426,7 @@ if(current_user_can('install_plugins')){
 							<td>
 								<input name=\"point_name\" type=\"text\" id=\"point_name\" value=\"$point_name\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"60\" >
 							</td>
-						</tr>        
+						</tr>
 						<tr class=\"form-field form-required\">
 							<th scope=\"row\">
 								<label for=\"point_icon_url\">Point Icon url<span class=\"description\">(required)</span></label>
@@ -384,42 +447,61 @@ if(current_user_can('install_plugins')){
 		";
 
 		//Echo out the table
-		
+
 		echo $update_point_view;
-		
+
 		//I feel like that could be more efficienct but its 400% better than the original way.
-	
+
 	}
 
 	/**** JUST THE LIST ****/
 
 	else {
-		
+
 		//I'm going out on a big assumption taht if not &edituserpoints that we should show something
 
 		//Here is where the main manage points goes. Reference old file to reconstruct.
 		//It actually wansn't an error. There just wasn't any html to display
 
 		global $wpdb;
-		
+
 		//Only need the poitns list.
 		$table_name_points = $wpdb->prefix . 'vyps_points';
-		
+
 		//and numbers of rows (i feel maybe this should be outside rather than called twice, but what if  sometimes the if doesn't need to call either?
 		$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
-		
+
 		//Init for $table_output
 		$table_output = '';
-		
-		for ($x_for_count = $number_of_point_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) { 
-			
-			$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$x_for_count'" ); // is the $x_for_count for the id. There should never be one out of place unless was being naughty on the SQL
-			$point_icon_data = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$x_for_count'" ); //Grabbing the icon
-			$point_id_data = $wpdb->get_var( "SELECT id FROM $table_name_points WHERE id= '$x_for_count'" ); //You know I don't think we have to get the id since its in the count, but I'm doing it for buggin reasons.
-			
+
+		for ($x_for_count = $number_of_point_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) {
+
+			//$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$x_for_count'" ); // is the $x_for_count for the id. There should never be one out of place unless was being naughty on the SQL
+			$point_type_data_query = "SELECT name FROM ". $table_name_points . " WHERE id = %d";
+			$point_type_data_query_prepared = $wpdb->prepare( $point_type_data_query, $x_for_count );
+			$point_type_data = $wpdb->get_var( $point_type_data_query_prepared );
+
+			//$point_icon_data = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$x_for_count'" ); //Grabbing the icon
+			$point_icon_data_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
+			$point_icon_data_query_prepared = $wpdb->prepare( $point_icon_data_query, $x_for_count );
+			$point_icon_data  = $wpdb->get_var( $point_icon_data_query_prepared );
+
+
+			//$point_id_data = $wpdb->get_var( "SELECT id FROM $table_name_points WHERE id= '$x_for_count'" ); //You know I don't think we have to get the id since its in the count, but I'm doing it for buggin reasons.
+			/* I do not think we have to get the id since we got the $x_for_count? Could go horribly wrong though.
+			$point_id_data_query = "SELECT points FROM ". $table_name_log . " WHERE id = %d";
+			$point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
+			$point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
+			*/
+
+			$point_id_data = $x_for_count; //Throwing this in this way rather than rechecking the table.
+
+
+
+
 			//Need the siteurl and such
 			$edit_rename_url = site_url() . '/wp-admin/admin.php?page=vyps_points_list&edit_vyps=' . $point_id_data;
-			
+
 			$current_row_output = "
 				<tr>
 					<td>$point_type_data</td>
@@ -428,40 +510,40 @@ if(current_user_can('install_plugins')){
 					<td class=\"column-primary\"><a href=\"$edit_rename_url\">Edit</a> | <a onclick=\"return confirm('Are you sure want to do this ?');\" href=\"$edit_rename_url\">Rename</a></td>
 				</tr>
 					";
-			
+
 			//Compile into row output.
 			$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
 		}
 
 		//Feels like the message should be handled better.
 		if (!empty($message)){
-			
+
 			$message_output = "
-			
+
 				<div id=\"message\" class=\"updated notice is-dismissible\">
 					<p><strong>$message.</strong></p>
 					<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
-				</div>	
+				</div>
 			";
 		} else {
-			
+
 			//Need to just set to blank since PHP needs something if its called
 			$message_output = '';
-			
+
 		}
 
 		$page_url = site_url() . '/wp-admin/admin.php?page=vyps_points_add'; //Most likley not required but I feel like if I need to manipulate site_url() somehow best to had a variable.
-		
+
 		//Ok the header
 		$vyps_list_header_output = "
 
-			
+
 				<h1 class=\"wp-heading-inline\">Manage Points</h1>
 					$message_output
 				<a href=\"$page_url\" class=\"page-title-action\">Add New</a>
 				<hr class=\"wp-header-end\">
 		";
-		
+
 		//Output for table header and footer.
 		$vyps_table_header_footer_output = "
 			<tr>
@@ -472,15 +554,15 @@ if(current_user_can('install_plugins')){
 					</a>
 				</th>
 				<th scope=\"col\" id=\"icon\" class=\"manage-column column-icon\">Icon</th>
-				<th scope=\"col\" id=\"pointid\" class=\"manage-column column-pointid\">Point ID</th>                    
-				<th scope=\"col\" id=\"posts\" class=\"manage-column column-posts num\">Action</th>	
-			</tr>	
+				<th scope=\"col\" id=\"pointid\" class=\"manage-column column-pointid\">Point ID</th>
+				<th scope=\"col\" id=\"posts\" class=\"manage-column column-posts num\">Action</th>
+			</tr>
 		";
-		
+
 		$vyps_list_output = "
 			<div class=\"wrap\">
 				$vyps_list_header_output
-				<form method=\"get\">   
+				<form method=\"get\">
 					<h2 class=\"screen-reader-text\">Points list</h2>
 					<table class=\"wp-list-table widefat fixed striped users\">
 						<thead>
@@ -497,20 +579,20 @@ if(current_user_can('install_plugins')){
 				<br class=\"clear\">
 			</div>
 			";
-		
-		
-		//End result is echo output to manage points.
-		echo $vyps_list_output; 	
 
-		} 
+
+		//End result is echo output to manage points.
+		echo $vyps_list_output;
+
+		}
 
 	//End of if cheking if user can install plugins.
-		
+
 }
 
 else {
-	
+
 	//Whelp you weren't an admin. You shoulnd't even be in here.
 	return false;
-	
+
 }

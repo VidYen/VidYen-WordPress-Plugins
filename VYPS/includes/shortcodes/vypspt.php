@@ -10,6 +10,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+/* Added prepare() to all SQL SELECT calls 7.1.2018 */
+
 /*** Shortcode without button ***/
 
 function vyps_point_transfer_func( $atts ) {
