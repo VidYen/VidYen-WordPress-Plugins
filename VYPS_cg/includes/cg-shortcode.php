@@ -139,6 +139,10 @@ function cg_my_equipment($params = array()) {
         </table>
     </div>
             ";
+
+        if(!is_user_logged_in()){
+            $return = "You must log in.<br />";
+        }
         return $return;
 }
 add_shortcode('cg-my-equipment', 'cg_my_equipment');
@@ -255,7 +259,9 @@ function cg_buy_equipment($params = array()) {
         </table>
     </div
             ";
-
+    if(!is_user_logged_in()){
+        $return = "You must log in.<br />";
+    }
             return $return;
 
 }
@@ -342,6 +348,9 @@ function cg_battle_log($params = array()) {
         </table>
     </div
     ";
+        if(!is_user_logged_in()){
+            $return = "You must log in.<br />";
+        }
             return $return;
     }
 }
@@ -493,6 +502,9 @@ function cg_battle($params = array()) {
         </table>
     </div
     ";
+    if(!is_user_logged_in()){
+        $return = "You must log in.<br />";
+    }
     return $return;
 }
 add_shortcode('cg-battle', 'cg_battle');
