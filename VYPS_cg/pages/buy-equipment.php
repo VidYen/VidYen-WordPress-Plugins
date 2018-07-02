@@ -2,6 +2,9 @@
 /**
  * Shows equipment available to buy
  */
+if ( ! defined('ABSPATH' ) ) {
+    die();
+}
 
 global $wpdb;
 

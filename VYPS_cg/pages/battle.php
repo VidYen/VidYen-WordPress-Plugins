@@ -11,6 +11,9 @@ $pending_battles = $wpdb->get_results(
 
 $url = site_url();
 
+/**
+ * Battles two users
+ */
 if(isset($_GET['battle'])){
     $pending_battles = $wpdb->get_results(
         $wpdb->prepare("SELECT * FROM $wpdb->vypsg_pending_battles WHERE id = %d", $_GET['battle'])
@@ -29,6 +32,9 @@ if(isset($_GET['battle'])){
     }
 }
 
+/**
+ * Cancel a battle
+ */
 if(isset($_GET['cancel'])){
 
     $battle = $wpdb->get_results(
@@ -50,12 +56,13 @@ if(isset($_GET['cancel'])){
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
 
-    if(!isset($_GET['return'])){
-        echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/admin.php?page=battle";</script>';
-    }
+    echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/admin.php?page=battle";</script>';
 
 }
 
+/**
+ * Set battle as ready
+ */
 if(isset($_GET['ready'])){
 
     $battle = $wpdb->get_results(
@@ -70,12 +77,13 @@ if(isset($_GET['ready'])){
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $battle[0]->id]);
     }
 
-    if(!isset($_GET['return'])){
-        echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/admin.php?page=battle";</script>';
-    }
+    echo '<script type="text/javascript">document.location = "' . $url . '/wp-admin/admin.php?page=battle";</script>';
 
 }
 
+/**
+ * Create battle
+ */
 if(isset($_POST['battle']) && count($pending_battles) == 0){
 
     $ongoing = $wpdb->get_results(
@@ -100,9 +108,7 @@ if(isset($_POST['battle']) && count($pending_battles) == 0){
         $wpdb->update($wpdb->vypsg_pending_battles, $data, ['id' => $ongoing[0]->id]);
     }
 
-    if(!isset($_GET['return'])){
-        echo '<script type="text/javascript">location.reload(true);</script>';
-    }
+    echo '<script type="text/javascript">location.reload(true);</script>';
 }
 
 if(isset($_POST['battle_user']) && count($pending_battles) == 0){
@@ -125,9 +131,7 @@ if(isset($_POST['battle_user']) && count($pending_battles) == 0){
         );
     }
 
-    if(!isset($_GET['return'])){
-        echo '<script type="text/javascript">location.reload(true);</script>';
-    }
+    echo '<script type="text/javascript">location.reload(true);</script>';
 }
 
 if(isset($_GET['return'])){
@@ -289,6 +293,7 @@ $user_equipment = $wpdb->get_results(
 $equipment = [];
 
 
+//get equipment
 foreach($user_equipment as $indiv){
 
     if(array_key_exists($indiv->item_id, $equipment)){

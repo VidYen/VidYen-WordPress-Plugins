@@ -14,6 +14,9 @@ class Battle{
         $this->battle_id = $battle_id;
     }
 
+    /**
+     * Starts the battle, generates damage
+     */
     public function startBattle(){
 
         $first_wins = 0;
@@ -79,10 +82,16 @@ class Battle{
         }
     }
 
+    /**
+     * Next round by moving the troops closer
+     */
     public function nextRound(){
         $this->range -= 1000;
     }
 
+    /**
+     * Picks person to go first
+     */
     public function pickInitiator()
     {
         $random = (mt_rand() / mt_getrandmax());
@@ -94,6 +103,9 @@ class Battle{
         return 2;
     }
 
+    /**
+     * Inserts winner and loser into db
+     */
     public function finish($winner, $loser){
         global $wpdb;
 
@@ -123,6 +135,9 @@ class Battle{
         }
     }
 
+    /**
+     * If the game is a tie, how to finalize
+     */
     public function tie($first, $second)
     {
         global $wpdb;
@@ -153,6 +168,9 @@ class Battle{
         }
     }
 
+    /**
+     * Generates user damage
+     */
     public function getEquipmentDamage($username)
     {
         global $wpdb;
@@ -197,6 +215,9 @@ class Battle{
         return $damage_total;
     }
 
+    /**
+     * Generates manpower damage
+     */
     public function getManpowerDamage($username)
     {
         global $wpdb;
@@ -241,6 +262,9 @@ class Battle{
         return $damage_total;
     }
 
+    /**
+     * How much equipment a user has left
+     */
     public function getEquipmentLeft($username)
     {
         global $wpdb;
@@ -251,6 +275,9 @@ class Battle{
         return count($user_equipment);
     }
 
+    /**
+     * Destroy equipment based on damage
+     */
     public function destroyEquipment($damage, $username)
     {
         global $wpdb;
@@ -285,6 +312,9 @@ class Battle{
         }
     }
 
+    /**
+     * Destroy manpower based on damage
+     */
     public function destroyManpower($damage, $username)
     {
         global $wpdb;

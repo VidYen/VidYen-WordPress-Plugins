@@ -2,6 +2,9 @@
 /**
  * Shows user individual equipment list.
  */
+if ( ! defined('ABSPATH' ) ) {
+    die();
+}
 
 global $wpdb;
 

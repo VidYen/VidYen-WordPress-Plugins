@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * Creates shortcode for my equipment page
  */

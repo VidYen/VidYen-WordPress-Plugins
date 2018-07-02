@@ -2,6 +2,9 @@
 /**
  * Shows battle log
  */
+if ( ! defined('ABSPATH' ) ) {
+    die();
+}
 
 global $wpdb;
 
