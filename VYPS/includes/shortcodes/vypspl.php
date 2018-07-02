@@ -28,13 +28,15 @@ function vyps_public_log_func() {
 
 	//$number_of_log_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_log" ); //No WHERE needed. All rows. No exceptions
   $number_of_log_rows_query = "SELECT max( id ) FROM ". $table_name_log;  //I'm wondering if a prepare is even needed, but throw it all in.
-  $number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query );
-  $number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query_prepared );
+  //$number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query );
+  //$number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query_prepared );
+  $number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query ); //Ok. I realized that not only prepare() doesn't work it, there is no varialbes needed to sanitize as the table name is actually hard coded.
 
 	//$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
   $number_of_point_rows_query = "SELECT max( id ) FROM ". $table_name_points;  //I'm wondering if a prepare is even needed, but throw it all in.
-  $number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
-  $number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+  //$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
+  //$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+  $number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query ); //Same issue as line 33. No real user input involved. Just server variables.
 
 	//echo '<br>'. $number_of_log_rows; //Some debugging
 	//echo '<br>'. $number_of_point_rows; //More debugging

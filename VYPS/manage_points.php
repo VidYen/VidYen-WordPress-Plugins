@@ -31,7 +31,8 @@ if(current_user_can('install_plugins')){
 		$table_name_users = $wpdb->prefix . 'users';
 
 		//Grab the GET
-		$user_id = ($int) $_GET['edituserpoints'];
+		$user_id = $_GET['edituserpoints'];
+		$user_id = intval($user_id); //Santize the get
 
 		//I'm going to reverse the the order
 		//Two buttons with a add and subtract buttons with two different post values
@@ -91,8 +92,9 @@ if(current_user_can('install_plugins')){
 		//We need the list of the coins. I'm going to move this down the page later.
 		//$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
 		$number_of_point_rows_query = "SELECT max( id ) FROM ". $table_name_points;  //I'm wondering if a prepare is even needed, but throw it all in.
-		$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
-		$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+		//$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
+		//$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+		$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query ); //max(id) is hardcoded therefore no need for prepare()
 
 		//Have to pull the point list as this needed before post is made
 
@@ -182,13 +184,15 @@ if(current_user_can('install_plugins')){
 
 			//$number_of_log_rows = $wpdb->get_var( "SELECT count( id ) FROM $table_name_log"); //We need to go through entire log //NOTE: I'm not sure why I did count(id) and then max(id) as no rows should be deleted in log ever.
 			$number_of_log_rows_query = "SELECT max( id ) FROM ". $table_name_log;  //I'm wondering if a prepare is even needed, but throw it all in.
-		  $number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query );
-		  $number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query_prepared );
+		  //$number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query );
+		  //$number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query_prepared );
+			$number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query ); //max (id) requires no prepare
 
 			//$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No where needed. All rows. No exceptions
 			$number_of_point_rows_query = "SELECT max( id ) FROM ". $table_name_points;  //I'm wondering if a prepare is even needed, but throw it all in.
-			$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
-			$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+			//$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
+			//$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
+			$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query ); //max (id) requires no prepare
 
 			//echo '<br>'. $number_of_log_rows; //Some debugging
 			//echo '<br>'. $number_of_point_rows; //More debugging
@@ -328,7 +332,7 @@ if(current_user_can('install_plugins')){
 		$point_id = $_GET['edit_vyps'];
 
 		//For the preapre and Get validation. A bit overkill I guess, but it's hardened. Also saves some variable renaming
-		$sourcePointID = (int) $point_id;
+		$sourcePointID = intval($point_id); //Some sanitization.
 
 
 		//the $wpdb stuff to find what the current name and icons are
@@ -338,6 +342,8 @@ if(current_user_can('install_plugins')){
 		$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
 		$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $sourcePointID );
 		$sourceName = $wpdb->get_var( $sourceName_query_prepared );
+
+		$point_name = $sourceName; //Code reuse.
 
 		//$icon_url = $wpdb->get_var( "SELECT icon FROM $table_name_points WHERE id= '$point_id'" ); //Grabbing the icon
 		$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";

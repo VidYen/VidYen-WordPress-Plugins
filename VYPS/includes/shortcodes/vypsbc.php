@@ -58,7 +58,7 @@ function vyps_balance_func( $atts ) {
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 	$table_name_points = $wpdb->prefix . 'vyps_points';
 
-	$sourcePointID = $pointID; //reuse of code
+	$sourcePointID = $pointID; //reuse of code //I do not mind $pointID being called $sourcePointID rather than the current versus userID semantic.
 
 	//name and icon
 
@@ -75,7 +75,7 @@ function vyps_balance_func( $atts ) {
 	//balance
 	//$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_vyps_log WHERE user_id = $userID AND points = $pointID"); //Oooh. I love it when I get my variable names the same.
 	$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND points = %d";
-	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $sourcePointID );
+	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $userID, $sourcePointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
 	$balance_points = $wpdb->get_var( $balance_points_query_prepared );
 
 	if ($balance_points == ''){
