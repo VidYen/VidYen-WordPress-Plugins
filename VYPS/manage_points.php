@@ -41,8 +41,8 @@ if(current_user_can('install_plugins')){
 
 		if ( isset($_POST['addpoint']) OR isset($_POST['subpoint']) ){
 
-			//Coerce amount value into double This could go wrong. Might consider doubleval(post) instead
-			$point_amount_post = (double)( $_POST['update_user_point']);
+			//Coerce amount value into double This could go wrong.
+			$point_amount_post = doubleval( $_POST['update_user_point']);
 
 
 			if ( isset($_POST['addpoint']) ){
@@ -63,9 +63,14 @@ if(current_user_can('install_plugins')){
 			//Also points_amount to point_amount. Have to wait till monroe is done and do it simultaneously
 			//And make a whole branch to resolve.
 
+			//Some $_POST sanitization
+			$reason_sanitized = sanitize_text_field($_POST['reason']); //Needs to be made sure nothing weird in that field least admin inject themselves for some unknown reason.
+			$points_sanitized = intval($_POST['points']); //Not to be confused with points_amount.
+
+
 			$data_insert = [
-				'reason' => $_POST['reason'],
-				'points' => $_POST['points'],
+				'reason' => $reason_sanitized,
+				'points' => $points_sanitized,
 				'points_amount' => $point_amount_post,
 				'user_id' => $user_id,
 				'time' => date('Y-m-d H:i:s')

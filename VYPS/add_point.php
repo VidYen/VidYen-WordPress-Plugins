@@ -9,102 +9,92 @@ VYPS_check_if_true_admin(); //VYPS internal admin check
 
 $mesage = '';
 
-//I know what they were doing but have no clue why they did it that way
-//It works and I get no error 
+if(current_user_can('install_plugins')){
 
-//$query = "select * from " . $wpdb->prefix . 'vyps_points';
-//    $query_results = $wpdb->get_results($query);
+	if (isset($_POST['add_point'])) {
 
-//Wait, they are just counting points?
-//Well now that is how they found the amount of points. I would do max id.
-//Also
-//$points = count($query_results);
+		//There is some debate between me and monroe that this field should check for SQL injection.
+		//Although he is right that one should always avoid it, I feel like if you can get to this screen
+		//then the person who would inject stuff into the field already can modify your PHP
+		//If we do need non-admin level people modifying your point system, then we will build and advance cpanel like system
+		//Because you shoulnd't have more than 10 points unless you got some weird ICO exchange going on.
 
-//I have a theory that none of the above is needed.
+		//Point name. Text value
+	    $point_name = sanitize_text_field($_POST['point_name']); //Even though I am in the believe if an admin sql injects himself, we got bigger issues, but this has been sanitized.
 
-	
-if (isset($_POST['add_point'])) {
-	
-	//There is some debate between me and monroe that this field should check for SQL injection.
-	//Although he is right that one should always avoid it, I feel like if you can get to this screen
-	//then the person who would inject stuff into the field already can modify your PHP
-	//If we do need non-admin level people modifying your point system, then we will build and advance cpanel like system
-	//Because you shoulnd't have more than 10 points unless you got some weird ICO exchange going on.
-	
-	//Point name. Text value
-    $point_name = sanitize_text_field($_POST['point_name']); //Even though I am in the believe if an admin sql injects himself, we got bigger issues, but this has been sanitized.
-	
-	//The icon. I'm suprised this works so well
-    $point_icon_url = media_handle_upload('point_icon_url',0); 
+		//The icon. I'm suprised this works so well
+	    $point_icon_url = media_handle_upload('point_icon_url',0);
 
-	//$point = $_POST['point'];
-	//The below comment out was not done by me. The Above was. -Felty
-	//$icon=$_FILES['point_icon_url']['name'];
+		//$point = $_POST['point'];
+		//The below comment out was not done by me. The Above was. -Felty
+		//$icon=$_FILES['point_icon_url']['name'];
 
-    $icon = wp_get_attachment_url( $point_icon_url );
-    $table_name_points = $wpdb->prefix . 'vyps_points';
-	
-    $data = [
-        'name' => $point_name,
-        'icon' => $icon,
-        'time' => date('Y-m-d H:i:s')
-    ];
-    $data_id = $wpdb->insert($table_name_points , $data);
+	    $icon = wp_get_attachment_url( $point_icon_url );
+	    $table_name_points = $wpdb->prefix . 'vyps_points';
 
-    //'points' => $point,
-    $message = "Added successfully.";
-	
-	//Always echo no exceptions!
-	echo "<script>window.location.href=\"admin.php?page=vyps_points_list\";</script>";
+	    $data = [
+	        'name' => $point_name,
+	        'icon' => $icon,
+	        'time' => date('Y-m-d H:i:s')
+	    ];
+	    $data_id = $wpdb->insert($table_name_points , $data);
 
-    
-}
+	    //'points' => $point,
+	    $message = "Added successfully.";
 
-//I'm kind of annoyed the the original author didn't do a function, but I'm limited for him so...
-//I'll deal with you later. -Felty
+		//Always echo no exceptions!
+		echo "<script>window.location.href=\"admin.php?page=vyps_points_list\";</script>";
 
-echo "
-	<div class=\"wrap\">
-		<h1 id=\"add-new-user\">Add Point</h1>
+
+	}
+
+	//I'm kind of annoyed the the original author didn't do a function, but I'm limited for him so...
+	//I'll deal with you later. -Felty
+
+	echo "
+		<div class=\"wrap\">
+			<h1 id=\"add-new-user\">Add Point</h1>
+		";
+
+	//well that is one way to do a message
+	if(!empty($message)) {
+
+		echo "<div id=\"message\" class=\"updated notice is-dismissible\">
+				<p><strong>$message;.</strong></p>
+				<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
+			</div>";
+	}
+
+	echo "
+
+		<div>
+				<p>Create a new point.</p>
+				<form method=\"post\" name=\"createuser\" id=\"createuser\" class=\"validate\" novalidate=\"novalidate\" enctype=\"multipart/form-data\">
+					<table class=\"form-table\">
+						<tbody>
+							<tr class=\"form-field form-required\">
+								<th scope=\"row\">
+									<label for=\"point_name\">Point Name<span class=\"description\">(required)</span></label>
+								</th>
+								<td>
+									<input name=\"point_name\" type=\"text\" id=\"point_name\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"60\">
+								</td>
+							</tr>
+							<tr class=\"form-field form-required\">
+								<th scope=\"row\">
+									<label for=\"point_icon_url\">Point Icon url<span class=\"description\">(required)</span></label>
+								</th>
+								<td>
+									<input name=\"point_icon_url\" type=\"file\" id=\"point_icon_url\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<p class=\"submit\">
+					<input type=\"submit\" name=\"add_point\" id=\"add_point\" class=\"button button-primary\" value=\"Add New Point\">
+				</p>
+			</form>
+		</div>
 	";
 
-//well that is one way to do a message
-if(!empty($message)) {
-	
-	echo "<div id=\"message\" class=\"updated notice is-dismissible\">
-			<p><strong>$message;.</strong></p>
-			<button type=\"button\" class=\"notice-dismiss\"><span class=\"screen-reader-text\">Dismiss this notice.</span></button>
-		</div>";
 }
-		
-echo "	
-
-	<div>
-			<p>Create a new point.</p>
-			<form method=\"post\" name=\"createuser\" id=\"createuser\" class=\"validate\" novalidate=\"novalidate\" enctype=\"multipart/form-data\">
-				<table class=\"form-table\">
-					<tbody>
-						<tr class=\"form-field form-required\">
-							<th scope=\"row\">
-								<label for=\"point_name\">Point Name<span class=\"description\">(required)</span></label>
-							</th>
-							<td>
-								<input name=\"point_name\" type=\"text\" id=\"point_name\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"60\">
-							</td>
-						</tr>        
-						<tr class=\"form-field form-required\">
-							<th scope=\"row\">
-								<label for=\"point_icon_url\">Point Icon url<span class=\"description\">(required)</span></label>
-							</th>
-							<td>
-								<input name=\"point_icon_url\" type=\"file\" id=\"point_icon_url\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\">
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<p class=\"submit\">
-				<input type=\"submit\" name=\"add_point\" id=\"add_point\" class=\"button button-primary\" value=\"Add New Point\">
-			</p>
-		</form>
-	</div>
-";
