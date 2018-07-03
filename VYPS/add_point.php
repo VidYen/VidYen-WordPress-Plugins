@@ -68,13 +68,13 @@ if(current_user_can('install_plugins')){
 	echo "
 
 		<div>
-				<p>Create a new point.</p>
+				<p>Create a new point type:</p>
 				<form method=\"post\" name=\"createuser\" id=\"createuser\" class=\"validate\" novalidate=\"novalidate\" enctype=\"multipart/form-data\">
 					<table class=\"form-table\">
 						<tbody>
 							<tr class=\"form-field form-required\">
 								<th scope=\"row\">
-									<label for=\"point_name\">Point Name<span class=\"description\">(required)</span></label>
+									<label for=\"point_name\">Point Name: <span class=\"description\">(required)</span></label>
 								</th>
 								<td>
 									<input name=\"point_name\" type=\"text\" id=\"point_name\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"60\">
@@ -82,7 +82,7 @@ if(current_user_can('install_plugins')){
 							</tr>
 							<tr class=\"form-field form-required\">
 								<th scope=\"row\">
-									<label for=\"point_icon_url\">Point Icon url<span class=\"description\">(required)</span></label>
+									<label for=\"point_icon_url\">Point Icon url: <span class=\"description\">(required)</span></label>
 								</th>
 								<td>
 									<input name=\"point_icon_url\" type=\"file\" id=\"point_icon_url\" value=\"\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\">
