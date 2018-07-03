@@ -1,14 +1,31 @@
 <?php
 
-function check_equipment_errors( $name, $description, $icon, $point_type, $point_cost, $point_sell, $manpower,
-                                $manpower_use, $speed_modifier, $morale_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
-                                $entrenchment, $support, $faction, $model_year, $edit )
-{
+function check_equipment_errors(
+    $name,
+    $description,
+    $icon,
+    $point_type,
+    $point_cost,
+    $point_sell,
+    $manpower,
+                                $manpower_use,
+    $speed_modifier,
+    $morale_modifier,
+    $combat_range,
+    $soft_attack,
+    $hard_attack,
+    $armor,
+                                $entrenchment,
+    $support,
+    $faction,
+    $model_year,
+    $edit
+) {
     global $wpdb;
 
     $error = "";
 
-    switch(true){
+    switch (true) {
         case empty($name):
             $error = "Your equipment must have a title.";
             break;
@@ -49,35 +66,70 @@ function check_equipment_errors( $name, $description, $icon, $point_type, $point
         $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE name=%s", $name)
     );
 
-    if ( !$edit && count( $duplicate ) ) {
+    if (!$edit && count($duplicate)) {
         $error = "You are trying to insert equipment that already exists.";
     }
 
     return $error;
 }
 
-function create_equipment( $name, $description, $icon, $point_type_id, $point_cost, $point_sell, $manpower,
-                        $manpower_use, $speed_modifier, $morale_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
-                        $entrenchment, $support, $faction, $model_year, $edit = false)
-{
+function create_equipment(
+    $name,
+    $description,
+    $icon,
+    $point_type_id,
+    $point_cost,
+    $point_sell,
+    $manpower,
+                        $manpower_use,
+    $speed_modifier,
+    $morale_modifier,
+    $combat_range,
+    $soft_attack,
+    $hard_attack,
+    $armor,
+                        $entrenchment,
+    $support,
+    $faction,
+    $model_year,
+    $edit = false
+) {
     global $wpdb;
-    $error = check_equipment_errors( $name, $description, $icon, $point_type_id, $point_cost, $point_sell, $manpower,
-        $manpower_use, $speed_modifier, $morale_modifier, $combat_range, $soft_attack, $hard_attack, $armor,
-        $entrenchment, $support, $faction, $model_year, $edit );
+    $error = check_equipment_errors(
+        $name,
+        $description,
+        $icon,
+        $point_type_id,
+        $point_cost,
+        $point_sell,
+        $manpower,
+        $manpower_use,
+        $speed_modifier,
+        $morale_modifier,
+        $combat_range,
+        $soft_attack,
+        $hard_attack,
+        $armor,
+        $entrenchment,
+        $support,
+        $faction,
+        $model_year,
+        $edit
+    );
 
-    if ( ! empty( $error ) ) {
+    if (! empty($error)) {
         return $error;
     }
 
-    if(empty($armor)){
+    if (empty($armor)) {
         $armor = 1;
     }
 
-    if(empty($entrenchment)){
+    if (empty($entrenchment)) {
         $entrenchment = 1;
     }
 
-    if(empty($model_year)){
+    if (empty($model_year)) {
         $model_year = 1970;
     }
 

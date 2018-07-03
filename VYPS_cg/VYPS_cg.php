@@ -8,11 +8,11 @@
   License: GPLv2 or later
  */
 
-if ( ! defined('ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     die();
 }
 
-if( ! class_exists('VYPS' ) ) {
+if (! class_exists('VYPS')) {
     class VYPS
     {
         public function __construct()
@@ -38,10 +38,9 @@ if( ! class_exists('VYPS' ) ) {
         //build extra menus
         private function includes()
         {
-            include_once plugin_dir_path( __file__ ) . '/includes/menu-page.php';
-            include_once plugin_dir_path( __file__ ) . '/includes/cg-shortcode.php';
+            include_once plugin_dir_path(__file__) . '/includes/menu-page.php';
+            include_once plugin_dir_path(__file__) . '/includes/cg-shortcode.php';
         }
-
     }
 
     $vidyen = new VYPS();
@@ -55,9 +54,9 @@ function vypsg_activate()
     global $wpdb;
 
     //add ability for admins to manage vidyen
-    $role = get_role( 'administrator' );
-    if ( ! $role->has_cap( 'manage_vidyen' ) ) {
-        $role->add_cap( 'manage_vidyen' );
+    $role = get_role('administrator');
+    if (! $role->has_cap('manage_vidyen')) {
+        $role->add_cap('manage_vidyen');
     }
 
     $charset_collate = $wpdb->get_charset_collate();
@@ -113,14 +112,14 @@ function vypsg_activate()
       PRIMARY KEY  (id)
     ) $charset_collate;";
 
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-    dbDelta( $table['vypsg_equipment'] );
-    dbDelta( $table['vypsg_tracking'] );
-    dbDelta( $table['vypsg_battles'] );
-    dbDelta( $table['vypsg_pending_battles'] );
+    dbDelta($table['vypsg_equipment']);
+    dbDelta($table['vypsg_tracking']);
+    dbDelta($table['vypsg_battles']);
+    dbDelta($table['vypsg_pending_battles']);
 }
-register_activation_hook(__FILE__, 'vypsg_activate' );
+register_activation_hook(__FILE__, 'vypsg_activate');
 
 
 /**
@@ -136,8 +135,6 @@ function vypsg_deactivate()
      * prefixed with $wpdb->prefix from the database
      */
     $table_name_log = $wpdb->prefix . 'vypsg_battles';
-    $wpdb->query( "DROP TABLE IF EXISTS $table_name_log" );
-
-
+    $wpdb->query("DROP TABLE IF EXISTS $table_name_log");
 }
-register_deactivation_hook(__FILE__, 'vypsg_deactivate' );
+register_deactivation_hook(__FILE__, 'vypsg_deactivate');

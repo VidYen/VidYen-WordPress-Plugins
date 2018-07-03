@@ -2,17 +2,17 @@
 /**
  * This creates the admin view to create and delete equipment
  */
-if ( ! defined('ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
     die();
 }
 
 //check if user has permission
-if ( ! current_user_can('manage_vidyen' ) ) {
-    die( 'Access Denied' );
+if (! current_user_can('manage_vidyen')) {
+    die('Access Denied');
 }
 
 //delete equipment
-if ( ! empty($_GET['delete_equipment'] ) ) {
+if (! empty($_GET['delete_equipment'])) {
     $total = $wpdb->delete(
         $wpdb->vypsg_equipment,
         array(
@@ -20,7 +20,7 @@ if ( ! empty($_GET['delete_equipment'] ) ) {
         )
     );
 
-    if ( $total ) {
+    if ($total) {
         echo "<div class=\"notice notice-error is-dismissible\">";
         echo    "<p><strong>Equipment has been deleted.</strong></p>";
         echo "</div>";
@@ -29,43 +29,53 @@ if ( ! empty($_GET['delete_equipment'] ) ) {
 
 $show_previous = false;
 //if submitted
-if ( ! empty($_POST['submit'] ) ) {
+if (! empty($_POST['submit'])) {
     check_admin_referer('vyps_add-equipment');
 
     include_once __DIR__ . '/../includes/manage-equipment.php';
 
-    if ( $_POST['submit'] === "Create Equipment" ) {
-
-        if ( ! function_exists( 'wp_handle_upload' ) ) {
-            require_once( ABSPATH . 'wp-admin/includes/file.php' );
+    if ($_POST['submit'] === "Create Equipment") {
+        if (! function_exists('wp_handle_upload')) {
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
         }
 
         //upload icon file
-        $movefile = wp_handle_upload( $_FILES['equipment_icon'], array( 'test_form' => FALSE ) );
+        $movefile = wp_handle_upload($_FILES['equipment_icon'], array( 'test_form' => false ));
 
         $error = "";
-        if ( isset($movefile['error'] ) ) {
+        if (isset($movefile['error'])) {
             $error = $movefile['error'];
         }
 
         //creates equipment
-        if ( empty( $error ) ) {
-            $error = create_equipment( $_POST['equipment_name'], $_POST['equipment_description'], $movefile['url'],
-                $_POST['equipment_point_type_id'], $_POST['equipment_point_cost'], $_POST['equipment_point_sell'],
-                $_POST['equipment_manpower'], $_POST['equipment_manpower_use'], $_POST['equipment_speed_modifier'],
-                $_POST['equipment_combat_range'], $_POST['equipment_soft_attack'], $_POST['equipment_hard_attack'],
-                $_POST['equipment_speed_modifier'], $_POST['equipment_armor'], $_POST['equipment_entrenchment'],
-                $_POST['equipment_support'], $_POST['equipment_faction'], $_POST['equipment_model_year'] );
+        if (empty($error)) {
+            $error = create_equipment(
+                $_POST['equipment_name'],
+                $_POST['equipment_description'],
+                $movefile['url'],
+                $_POST['equipment_point_type_id'],
+                $_POST['equipment_point_cost'],
+                $_POST['equipment_point_sell'],
+                $_POST['equipment_manpower'],
+                $_POST['equipment_manpower_use'],
+                $_POST['equipment_speed_modifier'],
+                $_POST['equipment_combat_range'],
+                $_POST['equipment_soft_attack'],
+                $_POST['equipment_hard_attack'],
+                $_POST['equipment_speed_modifier'],
+                $_POST['equipment_armor'],
+                $_POST['equipment_entrenchment'],
+                $_POST['equipment_support'],
+                $_POST['equipment_faction'],
+                $_POST['equipment_model_year']
+            );
         }
 
-        if ( empty( $error ) ) {
-
+        if (empty($error)) {
             echo "<div class=\"notice notice-success is-dismissible\">";
             echo "<p><strong>Equipment successfully added.</strong></p>";
             echo "</div>";
-
         } else {
-
             echo "<div class=\"notice notice-error is-dismissible\">";
             echo "<p><strong>$error</strong></p>";
             echo "</div>";
@@ -73,32 +83,45 @@ if ( ! empty($_POST['submit'] ) ) {
         }
 
         //if not creating, then edit
-    } else if ( $_POST['submit'] === "Finish Edit" ) {
-
-        if ( ! function_exists( 'wp_handle_upload' ) ) {
-            require_once( ABSPATH . 'wp-admin/includes/file.php' );
+    } elseif ($_POST['submit'] === "Finish Edit") {
+        if (! function_exists('wp_handle_upload')) {
+            require_once(ABSPATH . 'wp-admin/includes/file.php');
         }
 
         //upload icon file
-        $movefile = wp_handle_upload( $_FILES['equipment_icon'], array( 'test_form' => FALSE ) );
+        $movefile = wp_handle_upload($_FILES['equipment_icon'], array( 'test_form' => false ));
 
         $error = "";
-        if ( isset($movefile['error'] ) ) {
+        if (isset($movefile['error'])) {
             $error = $movefile['error'];
         }
 
         //creates equipment
-        if ( empty( $error ) ) {
-            $error = create_equipment( $_POST['equipment_name'], $_POST['equipment_description'], $movefile['url'],
-                $_POST['equipment_point_type_id'], $_POST['equipment_point_cost'], $_POST['equipment_point_sell'],
-                $_POST['equipment_manpower'], $_POST['equipment_manpower_use'], $_POST['equipment_speed_modifier'],
-                $_POST['equipment_combat_range'], $_POST['equipment_soft_attack'], $_POST['equipment_hard_attack'],
-                $_POST['equipment_speed_modifier'], $_POST['equipment_armor'], $_POST['equipment_entrenchment'],
-                $_POST['equipment_support'], $_POST['equipment_faction'], $_POST['equipment_model_year'], true );
+        if (empty($error)) {
+            $error = create_equipment(
+                $_POST['equipment_name'],
+                $_POST['equipment_description'],
+                $movefile['url'],
+                $_POST['equipment_point_type_id'],
+                $_POST['equipment_point_cost'],
+                $_POST['equipment_point_sell'],
+                $_POST['equipment_manpower'],
+                $_POST['equipment_manpower_use'],
+                $_POST['equipment_speed_modifier'],
+                $_POST['equipment_combat_range'],
+                $_POST['equipment_soft_attack'],
+                $_POST['equipment_hard_attack'],
+                $_POST['equipment_speed_modifier'],
+                $_POST['equipment_armor'],
+                $_POST['equipment_entrenchment'],
+                $_POST['equipment_support'],
+                $_POST['equipment_faction'],
+                $_POST['equipment_model_year'],
+                true
+            );
         }
 
-        if ( empty( $error ) ) {
-
+        if (empty($error)) {
             echo "<div class=\"notice notice-success is-dismissible\">";
             echo "<p><strong>Equipment successfully added.</strong></p>";
             echo "</div>";
@@ -112,20 +135,16 @@ if ( ! empty($_POST['submit'] ) ) {
                     '%d'
                 )
             );
-
         } else {
-
             echo "<div class=\"notice notice-error is-dismissible\">";
             echo "<p><strong>$error</strong></p>";
             echo "</div>";
-
         }
-
     }
 }
 
 //select old data if editing
-if ( ! empty( $_GET['edit_equipment'] ) ) {
+if (! empty($_GET['edit_equipment'])) {
     $edit_equipment = $wpdb->get_results(
         $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $_GET['edit_equipment'])
     );
@@ -136,10 +155,12 @@ $systems = $wpdb->get_results(
 );
 
 //has css for card
-wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' );
+wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css'), '', '1.0.5');
 
 ?>
-<?php if(!empty($text)) { echo '<!-- Last Action --><div id="message" class="updated fade">'.removeslashes($text).'</div>'; } ?>
+<?php if (!empty($text)) {
+    echo '<!-- Last Action --><div id="message" class="updated fade">'.removeslashes($text).'</div>';
+} ?>
 <form method="post" id="equipment" enctype="multipart/form-data" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
     <?php wp_nonce_field('vyps_add-equipment'); ?>
     <div class="wrap">
@@ -159,10 +180,12 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                 <!-- equipment icon -->
                 <th width="10%" scope="row" valign="top" title="The picture that represents the equipment."><?php _e('Icon', 'vidyen') ?></th>
                 <td width="40%">
-                    <?php if(!empty($_GET['edit_equipment'])) { ?>
+                    <?php if (!empty($_GET['edit_equipment'])) {
+    ?>
                         <input type="hidden" name="edit_equipment" value="<?= $_GET['edit_equipment'] ?>"/>
                         <img height="16" width="16" src="<?= $edit_equipment[0]->icon ?>"/>
-                    <?php } ?>
+                    <?php
+} ?>
                     <input type="file" required name="equipment_icon" accept="image/*"/>
                 </td>
                 <!-- morale number -->
@@ -239,11 +262,15 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                 <th width="10%" scope="row" valign="top"><?php _e('Support', 'vidyen') ?></th>
                 <td width="40%">
                     <?php
-                        if(!empty($_GET['edit_equipment'])){
+                        if (!empty($_GET['edit_equipment'])) {
                             ?>
                             <select name="equipment_support">
-                                <option value="1" <?php if($edit_equipment[0]->support == '1'){ ?> selected="selected" <?php } ?>>Yes</option>
-                                <option value="0" <?php if($edit_equipment[0]->support == '0'){ ?> selected="selected" <?php } ?>>No</option>
+                                <option value="1" <?php if ($edit_equipment[0]->support == '1') {
+                                ?> selected="selected" <?php
+                            } ?>>Yes</option>
+                                <option value="0" <?php if ($edit_equipment[0]->support == '0') {
+                                ?> selected="selected" <?php
+                            } ?>>No</option>
                             </select>
                             <?php
                         } else {
@@ -269,9 +296,9 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
             </tr>
         </table>
         <p>
-            <input type="submit" name="submit" value="<?php empty($_GET['edit_equipment'] ) ? _e('Create Equipment', 'vidyen') : _e('Finish Edit', 'vidyen'); ?>"  class="button-primary" />
+            <input type="submit" name="submit" value="<?php empty($_GET['edit_equipment']) ? _e('Create Equipment', 'vidyen') : _e('Finish Edit', 'vidyen'); ?>"  class="button-primary" />
             &nbsp;&nbsp;
-            <?php if(!empty($_GET['edit_equipment'])) : ?>
+            <?php if (!empty($_GET['edit_equipment'])) : ?>
                 <input type="hidden" name="edit" value="<?= $_GET['edit_equipment'] ?>"/>
                 <a type="button" value="<?php _e('Cancel', 'vidyen'); ?>" class="button-secondary" href="?page=<?= $_GET['page']?>">Cancel</a>
             <?php endif; ?>
@@ -283,7 +310,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
 
 <?php
     //shows existing equipment
-    $data = $wpdb->get_results("SELECT * FROM $wpdb->vypsg_equipment ORDER BY id DESC" );
+    $data = $wpdb->get_results("SELECT * FROM $wpdb->vypsg_equipment ORDER BY id DESC");
 ?>
 <div class="wrap">
     <h2><?php _e('Manage Equipment', 'vidyen'); ?></h2>
@@ -318,7 +345,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css' ), '', '1.0.5' 
                         $wpdb->prepare("SELECT * FROM $wpdb->vyps_points WHERE id=%d", $d->point_type_id)
                     );
 
-                    if($d->support == 1){
+                    if ($d->support == 1) {
                         $d->support = 'Yes';
                     } else {
                         $d->support = 'No';
