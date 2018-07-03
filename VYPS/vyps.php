@@ -238,15 +238,14 @@ function vyps_points_parent_menu_page() {
 	//Static text for the base plugin
 	echo
 	"<h1>VidYen Point System Base Plugin</h1>
-	<p>VYPS allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.</p>
-	<p>This is a multipart system similar to WooCommerce as it intends to allow WordPress administrators to create points for monetization and rewards into other system.</p>
-	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To clean you WPDB, use the VYPS Uninstall plugin if you really need to do a clean install.</p>
+	<p>VYPS allows you to gamify monetization by giving your users a reason to turn off adblockers in return for rewards and recognition.</p>
+	<p>This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards in monetization systems.</p>
+	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To drop your VYOS tables from the WPDB, use the VYPS Uninstall plugin to do a clean install.</p>
 	<br>
 	<h2>Base Plugin Instructions</h2>
-	<p>Add points put navigating to the Add Point list.</p>
-	<p>To modify or see a users current point balance go to the users panel and use the context menu by edit information under &quot;Edit Points&quot;.</p>
-	<p>To see a log of all user transactions, go to &quot;All Point Adjustments&quot; in the VidYen Points menu.</p>
-
+	<p>Add points by navigating to the Add Points menu.</p>
+	<p>To modify or see a user’s current point balance, go to the Users panel and use the context menu by &quot;Edit User Information&quot; under &quot;Edit Points&quot;.</p>
+	<p>To see a log of all user transactions, go to &quot;Point Log&quot; in the VidYen Points menu.</p>
 	";
 
 	/* This is the credits.php which only needs to be modified in the base to show on all addon plugins
@@ -313,62 +312,6 @@ function vyps_register_custom_user_column_view($value, $column_name, $user_id) {
 
 add_action('manage_users_columns', 'vyps_register_custom_user_column');
 add_action('manage_users_custom_column', 'vyps_register_custom_user_column_view', 10, 3);
-
-//Hrm... The below appararently did not break anything when commented out
-//Need to check user profiles as I do recall it was the last thing that broke
-//Trying to elimintated as much $_POST as possible for input
-
-/* I am curious to what happens if we comment all this out */
-
-/*
-
-if (isset($_POST['updateusers'])) {
-
-	global $wpdb;
-	$table = $wpdb->prefix . 'vyps_points_log';
-	$data = [
-		'points' => $_POST['points'],
-		'user_id' => $_POST['updateusers'],
-		'time' => date('Y-m-d H:i:s')
-	];
-
-
-	$wpdb->update($table, $data, ['user_id' => $_POST['updateusers']]);
-
-	$message = "Updated successfully.";
-} else {
-
-	function save_custom_user_profile_fields_points($user_id) {
-		//Turns out this blows up the admin account
-	   // again do this only if you can
-		if (!current_user_can('manage_options'))
-			return false;
-
-	}
-
-add_action('user_register', 'save_custom_user_profile_fields_points');
-add_action('profile_update', 'save_custom_user_profile_fields_points');
-}
-
-*/
-
-//Ok what happens if we comment it all out
-
-/*
-function save_custom_user_profile_fields_points($user_id) {
-		//Turns out this blows up the admin account
-	   // again do this only if you can
-		if (!current_user_can('manage_options'))
-			return false;
-
-}
-
-add_action('user_register', 'save_custom_user_profile_fields_points');
-add_action('profile_update', 'save_custom_user_profile_fields_points');
-
-
-*/
-
 
 //BTW this was all original from orion (Are they ever getting the daily login). I have no clue what cgc_ub_action_links stands for but I know what it does. I'll call it something more informative.
 function vyps_user_menu_action_links($actions, $user_object) {
