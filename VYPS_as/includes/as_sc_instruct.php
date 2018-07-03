@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * Simple credits file to update the list so it doesn't have to be updated every time
   */
 
@@ -13,11 +13,9 @@
 	<p><b>[vyps-as-redeem pub=113812 profile=13246 api=typekeyhere pid=1 payout=750]</b></p>
 	<p>All attributes must be set for this to function. There is no interface and is up to the site admin to add shortcode to a page or button. Future versions will include a better interface.</p>
 	<p><b>[vyps-as-redeem-btn pub=113812 profile=13246 api=typekeyhere pid=1 payout=750]</b></p>
-	<p>Using the btn shortcode will just have a redemption function that calls the function without having to create seperate pages.</p>
+	<p>Using the btn shortcode will just have a redemption function that calls the function without having to create separate pages.</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
 *  According to WP standards it's not needed.
 */
-
-
