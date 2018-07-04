@@ -41,6 +41,16 @@ if(current_user_can('install_plugins')){
 
 		if ( isset($_POST['addpoint']) OR isset($_POST['subpoint']) ){
 
+			//The POST buttons should feed a NONCE in and it should check and get mad if not.
+			$vyps_nonce_check = $_POST['vypsnoncepost'];
+			if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) ) {
+					// This nonce is not valid.
+					die( 'Security check' );
+			} else {
+					// The nonce was valid.
+					// Do stuff here.
+			}
+
 			//Coerce amount value into double This could go wrong.
 			$point_amount_post = doubleval( $_POST['update_user_point']);
 
@@ -125,6 +135,8 @@ if(current_user_can('install_plugins')){
 
 		//$drop_down_list_data now contains all the point types that exist and can be thrown at the form
 
+		//NONCE Checking
+		$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
 
 		//The table where they enter information
 		$manage_points_menu_tbl = "
@@ -158,6 +170,7 @@ if(current_user_can('install_plugins')){
 						</tr>
 					</table>
 					<p class=\"submit\">
+						<input type=\"hidden\" name=\"vypsnoncepost\" id=\"vypsnoncepost\" value=\"$vyps_nonce_check\" />
 						<input type=\"submit\" name=\"addpoint\" id=\"addpoint\" class=\"button button-primary\" value=\"Add Points\">
 						<input type=\"submit\" name=\"subpoint\" id=\"subpoint\" class=\"button button-primary\" value=\"Subtract Points\">
 					</p>
@@ -476,7 +489,7 @@ if(current_user_can('install_plugins')){
 
 		global $wpdb;
 
-		//Only need the poitns list.
+		//Only need the poitns vyps_points_add.
 		$table_name_points = $wpdb->prefix . 'vyps_points';
 
 		//and numbers of rows (i feel maybe this should be outside rather than called twice, but what if  sometimes the if doesn't need to call either?
@@ -506,9 +519,6 @@ if(current_user_can('install_plugins')){
 			*/
 
 			$point_id_data = $x_for_count; //Throwing this in this way rather than rechecking the table.
-
-
-
 
 			//Need the siteurl and such
 			$edit_rename_url = site_url() . '/wp-admin/admin.php?page=vyps_points_list&edit_vyps=' . $point_id_data;

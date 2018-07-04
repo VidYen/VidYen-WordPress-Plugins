@@ -315,7 +315,10 @@ add_action('manage_users_custom_column', 'vyps_register_custom_user_column_view'
 
 //BTW this was all original from orion (Are they ever getting the daily login). I have no clue what cgc_ub_action_links stands for but I know what it does. I'll call it something more informative.
 function vyps_user_menu_action_links($actions, $user_object) {
-    $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_points_list&edituserpoints=$user_object->ID") . "'>" . __('Edit Points') . "</a>";
+
+		//Ok. The nonce.
+		$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
+    $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_points_list&edituserpoints=$user_object->ID&_wpnonce=$vyps_nonce_check") . "'>" . __('Edit Points') . "</a>";
     return $actions;
 }
 

@@ -9,9 +9,22 @@ VYPS_check_if_true_admin(); //VYPS internal admin check
 
 $mesage = '';
 
+
+
 if(current_user_can('install_plugins')){
 
 	if (isset($_POST['add_point'])) {
+
+
+		//As the post is the only thing that edits data, I suppose this is the best place to the noce
+		$vyps_nonce_check = $_POST['vypsnoncepost'];
+		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) ) {
+		    // This nonce is not valid.
+		    die( 'Security check' );
+		} else {
+		    // The nonce was valid.
+		    // Do stuff here.
+		}
 
 		//There is some debate between me and monroe that this field should check for SQL injection.
 		//Although he is right that one should always avoid it, I feel like if you can get to this screen
@@ -65,6 +78,9 @@ if(current_user_can('install_plugins')){
 			</div>";
 	}
 
+	//Adding a nonce to the post
+	$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
+
 	echo "
 
 		<div>
@@ -91,6 +107,7 @@ if(current_user_can('install_plugins')){
 						</tbody>
 					</table>
 					<p class=\"submit\">
+					<input type=\"hidden\" name=\"vypsnoncepost\" id=\"vypsnoncepost\" value=\"$vyps_nonce_check\" />
 					<input type=\"submit\" name=\"add_point\" id=\"add_point\" class=\"button button-primary\" value=\"Add New Point\">
 				</p>
 			</form>
