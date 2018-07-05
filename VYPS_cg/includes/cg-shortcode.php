@@ -152,7 +152,8 @@ add_shortcode('cg-my-equipment', 'cg_my_equipment');
 function cg_buy_equipment($params = array())
 {
     global $wpdb;
-    $url = site_url();
+    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+    $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" .$_SERVER['HTTP_HOST'] . $uri_parts[0];
 
     $return = "";
     $data = $wpdb->get_results("SELECT * FROM $wpdb->vypsg_equipment ORDER BY id DESC");
@@ -277,7 +278,8 @@ function cg_battle_log($params = array())
         $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE winner=%s or loser=%s ORDER BY id DESC", wp_get_current_user()->user_login, wp_get_current_user()->user_login )
     );
 
-    $url = site_url();
+    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+    $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" .$_SERVER['HTTP_HOST'] . $uri_parts[0];
 
     if (!isset($_GET['view_log'])) {
         $return = "
@@ -315,7 +317,7 @@ function cg_battle_log($params = array())
             $params["return_log"] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";;
 
             $new_query_string = http_build_query($params);
-            $log_url = $url . '/?' . $new_query_string;
+            $log_url = $url . '?' . $new_query_string;
 
             $return .= "
                 <tr>
@@ -569,7 +571,9 @@ function cg_battle($params = array())
         $return_url = urldecode($_GET['return_battle']);
         echo '<script type="text/javascript">document.location = "' . $return_url . '";</script>';
     }
-    $url = site_url();
+
+    $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
+    $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" .$_SERVER['HTTP_HOST'] . $uri_parts[0];
 
     if(!isset($_GET['view_army'])){
         $return = "
@@ -634,7 +638,7 @@ function cg_battle($params = array())
                     $params["return_army_log"] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";;
 
                     $new_query_string = http_build_query($params);
-                    $battle_url = $url . '/?' . $new_query_string;
+                    $battle_url = $url . '?' . $new_query_string;
 
                     $return .= "<td><a href=\"$battle_url\" class=\"button-secondary\">View Opponent Army</a></td>";
                 } else {
@@ -649,7 +653,7 @@ function cg_battle($params = array())
                         $params["return_battle"] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";;
 
                         $new_query_string = http_build_query($params);
-                        $battle_url = $url . '/?' . $new_query_string;
+                        $battle_url = $url . '?' . $new_query_string;
 
                         $params = $_GET;
                         unset($params["cancel"]);
@@ -657,7 +661,7 @@ function cg_battle($params = array())
                         $params["return_battle"] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";;
 
                         $new_query_string = http_build_query($params);
-                        $cancel_url = $url . '/?' . $new_query_string;
+                        $cancel_url = $url . '?' . $new_query_string;
 
                         $return .= "<td>
                                                 <a href=\"$battle_url\"
@@ -679,7 +683,7 @@ function cg_battle($params = array())
                         $params["return_battle"] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";;
 
                         $new_query_string = http_build_query($params);
-                        $battle_url = $url . '/?' . $new_query_string;
+                        $battle_url = $url . '?' . $new_query_string;
 
                         $return .="
                                             <td>
@@ -694,7 +698,7 @@ function cg_battle($params = array())
                     $params["return_battle"] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";;
 
                     $new_query_string = http_build_query($params);
-                    $cancel_url = $url . '/?' . $new_query_string;
+                    $cancel_url = $url . '?' . $new_query_string;
 
 
                     $return .= "<td>
