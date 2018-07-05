@@ -66,9 +66,13 @@ function vyps_simple_miner_func($atts) {
   $sm_user = $sm_siteUID . $current_user_id;
   $hiveUser = $sm_siteUID . $current_user_id;
 
-  if ($sm_site_key = '5y8ys1vO4guiyggOblimkt46sAOWDc8z') {
+  if ($sm_site_key == '5y8ys1vO4guiyggOblimkt46sAOWDc8z') {
 
     $site_warning = "<br><br><b>You appear to have not set a site key. Hashes are going to VidYen, not your site!</b><br><br>";
+
+  } else {
+
+    $site_warning = '';
 
   }
 
