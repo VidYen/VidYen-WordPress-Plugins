@@ -1,8 +1,6 @@
 <?php
-/*
-	VIDYEN Points Transfer Table Shortcode
 
- */
+//VIDYEN Points Transfer Table Shortcode
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 

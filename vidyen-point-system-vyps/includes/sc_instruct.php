@@ -1,7 +1,7 @@
 <?php
-/*
- * Simple credits file to update the list so it doesn't have to be updated every time
-  */
+
+//Simple credits file to update the list so it doesn't have to be updated every time
+
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 

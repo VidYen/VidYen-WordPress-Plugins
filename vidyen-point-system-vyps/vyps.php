@@ -233,7 +233,7 @@ function vyps_admin_log() {
 function vyps_points_parent_menu_page() {
 
 	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
-	echo '<br><br><img src="' . plugins_url( '../VYPS/images/logo.png', __FILE__ ) . '" > ';
+	echo '<br><br><img src="' . plugins_url( '../vidyen-point-system-vyps/images/logo.png', __FILE__ ) . '" > ';
 
 	//Static text for the base plugin
 	echo
@@ -254,8 +254,8 @@ function vyps_points_parent_menu_page() {
 	*  I added the ../ to make it work in my case though.
 	*/
 
-	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/sc_instruct.php');
-	include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/credits.php');
+	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/sc_instruct.php');
+	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/credits.php');
 
 }
 
@@ -326,12 +326,12 @@ add_filter('user_row_actions', 'vyps_user_menu_action_links', 10, 2);
 
 /*** SHORTCODE INCLUDES IN BASE ***/
 
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspl.php'); //Point Log
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypsbc.php'); //Balance shortcode
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
-include( plugin_dir_path( __FILE__ ) . '../VYPS/includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
+include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspl.php'); //Point Log
+include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypsbc.php'); //Balance shortcode
+include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update
+include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
+include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
+include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
+include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
 
 /*** End of Shortcode Includes ***/

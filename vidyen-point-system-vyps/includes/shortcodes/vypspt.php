@@ -1,12 +1,7 @@
 <?php
-/*
-  Plugin Name: VYPS Point Transfer Addon
-  Description: Allows users to transfer VYPS point type to another at different rates.
-  Version: 0.0.05
-  Author: VidYen, LLC
-  Author URI: https://vidyen.com/
-  License: GPLv2 or later
- */
+
+//Old pointransfer code
+
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
