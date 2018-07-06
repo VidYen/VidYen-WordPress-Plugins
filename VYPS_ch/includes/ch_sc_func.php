@@ -1,13 +1,6 @@
 <?php
-/*
-  Plugin Name: VYPS Coinhive Addon
-  Plugin URI: http://vyps.org
-  Description: Adds Coinhive API to the VYPS so you can award points based on hashes mined to your users
-  Version: 0.0.26
-  Author: VidYen, LLC
-  Author URI: https://vidyen.com/
-  License: GPLv2 or later
- */
+
+//Shortcode itself.
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 

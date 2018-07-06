@@ -1,11 +1,10 @@
 <?php
-/*
-   This menu shows when user does not have VYPS base installed for some odd reason. They should know, but sometimes you never know.
- */
 
- if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+//This menu shows when user does not have VYPS base installed for some odd reason. They should know, but sometimes you never know.
 
- add_action('admin_menu', 'vyps_ch_menu'); //Note dropping the number so I think it should sort alpha
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+add_action('admin_menu', 'vyps_ch_menu'); //Note dropping the number so I think it should sort alpha
 
 /* Create the menu if VYPS not installed */
 
