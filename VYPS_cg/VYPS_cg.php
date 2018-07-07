@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: VidYen Point System Game Plugin
-  Description: Spend points by playing games. [cg-my-equipment], [cg-buy-equipment], [cg-battle-log], [cg-battle]
+  Description: Spend points by playing games. [cg-my-equipment], [cg-buy-equipment], [cg-battle-log], [cg-battle-log-all], [cg-battle]
   Version: 0.0.10
   Author: VidYen, LLC
   Author URI: https://vidyen.com/
@@ -39,7 +39,11 @@ if (! class_exists('VYPS')) {
         private function includes()
         {
             include_once plugin_dir_path(__file__) . '/includes/menu-page.php';
-            include_once plugin_dir_path(__file__) . '/includes/cg-shortcode.php';
+            include_once plugin_dir_path(__file__) . '/includes/shortcodes/battle-log-shortcode.php';
+            include_once plugin_dir_path(__file__) . '/includes/shortcodes/battle-log-all-shortcode.php';
+            include_once plugin_dir_path(__file__) . '/includes/shortcodes/battle-shortcode.php';
+            include_once plugin_dir_path(__file__) . '/includes/shortcodes/buy-equipment-shortcode.php';
+            include_once plugin_dir_path(__file__) . '/includes/shortcodes/my-equipment-shortcode.php';
         }
     }
 
@@ -106,8 +110,6 @@ function vypsg_activate()
       id MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
       user_one VARCHAR(255) NOT NULL,
       user_two VARCHAR(255),
-      user_one_accept INTEGER(1), /* 0 = declines, 1 = accepts */
-      user_two_accept INTEGER(1), /* 0 = declines, 1 = accepts */
       battled INTEGER(1) DEFAULT 0,
       PRIMARY KEY  (id)
     ) $charset_collate;";
