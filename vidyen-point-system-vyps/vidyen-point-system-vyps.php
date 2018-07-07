@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
 Description:  VidYen Point System [VYPS] allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-Version:      00.02.03
+Version:      00.02.06
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -103,9 +103,17 @@ function vyps_points_menu() {
     add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
 
+/*** Menu Includes ***/
+
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/as_menu.php'); //Adscend menu 400 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/ch_menu.php'); //Coinhive menu 430 order
+
+/*** End of Menu Includes ***/
+
+//Below is the admin log function that I intend to move to includes eventually.
 function vyps_admin_log() {
 
-    global $wpdb;
+  global $wpdb;
 	$table_name_points = $wpdb->prefix . 'vyps_points';
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 	$table_name_users = $wpdb->prefix . 'users';
@@ -240,7 +248,7 @@ function vyps_points_parent_menu_page() {
 	"<h1>VidYen Point System Base Plugin</h1>
 	<p>VYPS allows you to gamify monetization by giving your users a reason to turn off adblockers in return for rewards and recognition.</p>
 	<p>This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards in monetization systems.</p>
-	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To drop your VYOS tables from the WPDB, use the VYPS Uninstall plugin to do a clean install.</p>
+	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To drop your VYPS tables from the WPDB, use the VYPS Uninstall plugin to do a clean install.</p>
 	<br>
 	<h2>Base Plugin Instructions</h2>
 	<p>Add points by navigating to the Add Points menu.</p>
@@ -326,12 +334,16 @@ add_filter('user_row_actions', 'vyps_user_menu_action_links', 10, 2);
 
 /*** SHORTCODE INCLUDES IN BASE ***/
 
-include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspl.php'); //Point Log
-include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypsbc.php'); //Balance shortcode
-include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update
-include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
-include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
-include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
-include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
+//It has dawned on me that the ../vidyen-point-etc may not be needed actually?
+
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspl.php'); //Point Log
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc.php'); //Balance shortcode
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the Coinhive in.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsas.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
 
 /*** End of Shortcode Includes ***/

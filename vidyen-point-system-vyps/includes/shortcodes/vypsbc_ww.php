@@ -1,9 +1,6 @@
 <?php
-/*
 
-	WW Balance update. NOW WITH ICON.
-
- */
+//WW Balance update. NOW WITH ICON.
 
 /* LIST FUCNTION SHORTCODE
 *  Because an admin might just want a full list without messing around with
