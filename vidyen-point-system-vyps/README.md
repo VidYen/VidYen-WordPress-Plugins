@@ -27,7 +27,7 @@ No. In order to prevent a more open and fair system, admins can only change the 
 
 =Can I delete a point transaction?=
 
-No. In order to have a system similar tp (but not) a blockchain, to decrease a users balance you must have a negative transaction of that point type so everyone can see in the log that it happened.
+No. In order to have a system similar to (but not) a blockchain, to decrease a user's balance you must have a negative transaction of that point type so everyone can see in the log that it happened.
 
 =Can I use point types I create with VYPS to give credit to users on WooCommerce?=
 
@@ -39,7 +39,7 @@ As, WooCommerce Wallet already has a feature to transfer between users, we did n
 
 =Can people buy points directly through WooCommerce?=
 
-No. It was not intended as an RMT or an virtual currency exchange, but if we get enough demand for it, it wouldn't be too hard in theory. You could simply sell a lot of points in WooCommerce and then manually add them through the admin panel for now.
+No. It was not intended as an RMT or a virtual currency exchange, but if we get enough demand for it, it wouldn't be too hard in theory. You could simply sell a lot of points in WooCommerce and then manually add them through the admin panel for now.
 
 == Changelog ==
 
@@ -63,4 +63,4 @@ Point transfer exchange shortcodes.
 WordPress based RNG game
 Leaderboard
 Better public log system
-Online game API transfer system (Word of Tanks API etc)
+Online game API transfer system (Word of Tanks API etc.)
