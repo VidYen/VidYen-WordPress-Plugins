@@ -1,6 +1,6 @@
 === VidYen Point System ===
 Contributors: vidyen
-Donate link: https://vidyen.com
+Donate link: https://www.vidyen.com/donate/
 Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet
 Requires at least: 4.9.5
 Tested up to: 4.97
@@ -40,6 +40,15 @@ As, WooCommerce Wallet already has a feature to transfer between users, we did n
 =Can people buy points directly through WooCommerce?=
 
 No. It was not intended as an RMT or a virtual currency exchange, but if we get enough demand for it, it wouldn't be too hard in theory. You could simply sell a lot of points in WooCommerce and then manually add them through the admin panel for now.
+
+== Screenshots ==
+
+1. Create your own point types with their own name and icon.
+2. You can name the point type anything you would like and use any image that makes a good icon.
+3. Admins can manually edit point transactions of their users through the WordPress user panel.
+4. Using the point transfer shortcodes, users can transfer points on their own to other points or to WooCommerce credit.
+5. Using the Coinhive simple miner shortcode, users can "Mine to Pay" for items on your WooCommerce store
+6. Using the Adscend plugin, users can watch videos ads and do other activities to earn points and credit as well.
 
 == Changelog ==
 
