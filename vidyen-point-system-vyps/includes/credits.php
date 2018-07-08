@@ -6,14 +6,11 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
  echo "<br><br>
-	<h2>Here is a list of our other addons that go along with this system on our <a href=\"https://www.vidyen.com/vyps/\" target=\"_blank\">web site</a>:</h2>
-	<p>VYPS AdScend Addon</p>
-	<p>VYPS Coinhive Addon</p>
-	<br><br>
-	<h2>Coming Soon</h2>
-	<p>VYPS Combat Game</p>
+	<h2>Please vist us for more development work at <a href=\"https://www.vidyen.com/vyps/\" target=\"_blank\">VidYen.com</a></h2>
+	<h2>Coming Soon:</h2>
+	<p>Combat Game</p>
 	<p>Leaderboard Addon</p>
-	<p>VYPS CoinFlip Addon</p>
+	<p>CoinFlip Addon</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.

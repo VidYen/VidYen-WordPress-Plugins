@@ -61,7 +61,7 @@ function vyps_simple_miner_func($atts) {
 
   if ($sm_site_key == '5y8ys1vO4guiyggOblimkt46sAOWDc8z') {
 
-    $site_warning = "<br><br><b>You appear to have not set a site key. Hashes are going to VidYen, not your site!</b><br><br>";
+    $site_warning = "<tr><td><b>You appear to have not set a site key. Hashes are going to VidYen, not your site!</b></td></tr>";
 
   } else {
 
@@ -71,22 +71,32 @@ function vyps_simple_miner_func($atts) {
 
 	if (isset($_POST["consent"]) AND is_user_logged_in() ){ // Just checking if they clicked conset and are logged in case something dumb happened.
 
-		$simple_miner_output = $site_warning . "
-			<script src=\"https://authedmine.com/lib/simple-ui.min.js\" async></script>
-			<div class=\"coinhive-miner\"
-				style=\"width: 256px; height: 310px\"
-				data-key=\"$sm_site_key\"
-				data-threads=\"$sm_threads\"
-				data-throttle=\"$sm_throttle\"
-				data-user=\"$sm_user\"
-				>
-				<em>Loading... You may have an adblocker on or javascript turned off.</em>
-				</div>
-				<br>
-				<form method=\"post\">
-					<input type=\"hidden\" value=\"\" name=\"redeem\"/>
-				<input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
-				</form>";
+    //Ok. Something needs to be in the $redeem_ouput to satisfy my OCD
+    $redeem_output = "<tr><td>Click the button above to convert the total hashes into points.</td></tr>"; //putting this in a table
+
+		$simple_miner_output = "
+    <table>
+      $site_warning
+      <tr><td>
+        <script src=\"https://authedmine.com/lib/simple-ui.min.js\" async></script>
+        <div class=\"coinhive-miner\"
+          style=\"width: 256px; height: 310px\"
+          data-key=\"$sm_site_key\"
+          data-threads=\"$sm_threads\"
+          data-throttle=\"$sm_throttle\"
+          data-user=\"$sm_user\"
+          >
+          <em>Loading... You may have an adblocker on or javascript turned off.</em>
+          </div>
+      </td>
+      <tr><td>
+        <form method=\"post\">
+          <input type=\"hidden\" value=\"\" name=\"redeem\"/>
+        <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
+        </form>
+      </td></tr>
+      $redeem_output
+    </table>";
 
 
 	} elseif (isset($_POST["redeem"]) AND is_user_logged_in()) { //see if post button is redeem and logged in.
@@ -172,24 +182,32 @@ function vyps_simple_miner_func($atts) {
         $balance = 0; //I remembered if it gets returned a blank should be made a zero.
       }
 
-			$redeem_output = "<br><br>$balance Coinhive hashes redeemed.<br><br>";
+			$redeem_output = "<tr><td>$balance Coinhive hashes redeemed.</td></tr>"; //putting this in a table
 
-      $simple_miner_output = $site_warning . "
-        <script src=\"https://authedmine.com/lib/simple-ui.min.js\" async></script>
-        <div class=\"coinhive-miner\"
-          style=\"width: 256px; height: 310px\"
-          data-key=\"$sm_site_key\"
-          data-threads=\"$sm_threads\"
-          data-throttle=\"$sm_throttle\"
-          data-user=\"$sm_user\"
-          >
-          <em>Loading... You may have an adblocker on or javascript turned off.</em>
-          </div>
-          <br>
+      //Fix this into table with output as I don't like miner move but also needs to be someplace uniform
+      $simple_miner_output = "
+      <table>
+        $site_warning
+        <tr><td>
+          <script src=\"https://authedmine.com/lib/simple-ui.min.js\" async></script>
+          <div class=\"coinhive-miner\"
+            style=\"width: 256px; height: 310px\"
+            data-key=\"$sm_site_key\"
+            data-threads=\"$sm_threads\"
+            data-throttle=\"$sm_throttle\"
+            data-user=\"$sm_user\"
+            >
+            <em>Loading... You may have an adblocker on or javascript turned off.</em>
+            </div>
+        </td>
+        <tr><td>
           <form method=\"post\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
           <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
-          </form>" . $redeem_output;
+          </form>
+        </td></tr>
+        $redeem_output
+      </table>";
 
 
 	} else {
