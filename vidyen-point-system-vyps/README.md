@@ -23,11 +23,11 @@ The goal is to allow you to have your users do all sorts of activities that can 
 
 =Can I delete point types=
 
-No. In order to prevent a more open and fair system, admins can only change the name and icon of the points rather than allowing the wiping of entire balances. You can simply change the name and then remove all possibility of users interacting with that point type going forward. You cannot wipe the history though.
+No. In order to make a more open and fair system, admins can only change the name and icon of the points rather than allowing the wiping of entire balances. You can simply change the name and then remove all possibility of users interacting with that point type going forward. You cannot wipe the history though.
 
 =Can I delete a point transaction?=
 
-No. In order to have a system similar to (but not) a blockchain, to decrease a user's balance you must have a negative transaction of that point type so everyone can see in the log that it happened.
+No. In order to have a system similar to a blockchain or a bank ledger, to decrease a user's balance you must have a negative transaction of that point type so everyone can see in the log that the change happened and that there is a history that everyone can see.
 
 =Can I use point types I create with VYPS to give credit to users on WooCommerce?=
 
@@ -35,18 +35,18 @@ Yes. You can install WooCommerce Wallet and use the point transfer shortcode to 
 
 =Can users transfer points between themselves=
 
-As, WooCommerce Wallet already has a feature to transfer between users, we did not add that feature for VYPS points directly. If there is a demand, it can be added though.
+As WooCommerce Wallet already has a feature to transfer between users, we did not add that feature for VYPS points directly. If there is a demand, it can be added though.
 
 =Can people buy points directly through WooCommerce?=
 
-No. It was not intended as an RMT or a virtual currency exchange, but if we get enough demand for it, it wouldn't be too hard in theory. You could simply sell a lot of points in WooCommerce and then manually add them through the admin panel for now.
+No. It was not intended as an RMT or a virtual currency exchange, but if we get enough demand for it, it would not be too hard to add in theory. In the meantime, you could simply sell points in WooCommerce as a virtual item and then manually add them through the admin panel.
 
 == Screenshots ==
 
 1. Create your own point types with their own name and icon.
-2. You can name the point type anything you would like and use any image that makes a good icon.
-3. Admins can manually edit point transactions of their users through the WordPress user panel.
-4. Using the point transfer shortcodes, users can transfer points on their own to other points or to WooCommerce credit.
+2. You can name the point type anything you would like and use any image that would make a good icon.
+3. Admins can manually add point transactions for their users through the WordPress user panel.
+4. Using the point transfer shortcodes, users can exchange points at various rates to other points or WooCommerce credit.
 5. Using the Coinhive simple miner shortcode, users can "Mine to Pay" for items on your WooCommerce store
 6. Using the Adscend plugin, users can watch videos ads and do other activities to earn points and credit as well.
 
