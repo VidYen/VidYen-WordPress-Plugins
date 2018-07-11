@@ -52,6 +52,13 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.02.09 =
+
+Database fix :NOTE: It says less than 10 active installation on official so I'm taking a gamble that no one needs their tables upgraded. If I'm wrong reach out via support.
+Otherwise you need a fresh install to upgrade.
+Added Threshold Raffle, but no documentation as is Alpha testing. Shortcode is as such: [vyps-tr spid=3 dpid=3 samount=1000 damount=10000 tickets=10]
+Otherwise a ton of fixes to the database calls making it more readable.
+
 = 00.02.06 =
 
 Added support for Adscend and Coinhive API Tracking
