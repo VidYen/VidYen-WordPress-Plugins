@@ -151,32 +151,47 @@ function vyps_point_threshold_raffle_func( $atts ) {
 	//SELECT icon FROM $table_name_points WHERE id= '$destinationPointID'
 	$game_id_query = "SELECT count(vyps_meta_id) FROM ". $table_name_log . " WHERE vyps_meta_id = %s";
 	$game_id_query_prepared = $wpdb->prepare( $game_id_query, $game_id );
-	$game_id_count = $wpdb->get_var( $game_id_query_prepared );
+	$game_id_count = $wpdb->get_var( $game_id_query_prepared ); //You know. Is get_var the best for getting counts? Meh. It seems to work.
 
 
 	//If the game count is zero. Means its not in the database so we need to set meta count to 1;
 	if ($game_id_count == 0) {
 
-		$vyps_meta_order = 0; //Well this should a thing.
-		$vyps_meta_count = 1; //I suppose there could be a game zero? But not really a need.
+		$vyps_meta_subid1 = 1; //Starting at one. So shouldn't matter.
+		$vyps_meta_subid2 = 1; //Starts at one as well, but there will always be n + 1 in the end for rows for the winning result transaction... Actually. Huh
+		$tickets_left = $ticket_threshold; //Ok. This is off by one, because I need this to
+		$current_ticket_count = 0; //Zero because we start at 1
+		$current_game_count = 0; //No games?
 
 	} else {
 
-		//This is all vyps_meta_count stuff. Meta order is a sub of that. In theory, one does not have to follow my order rules as the meta can be for anything.
-		//I could go into a rant about how meta_order and meta_count are the same and should use soemthing more generic in both cases like meta_alpha meta_omega
-		//But people would get confused I suppose with references that have to be interepeted. In theory it all has to be interpeted.
-		//I have no clue what it could be so have to check. And this isn't really a count other than a overall count of how many games happened.
-		$vyps_meta_max_query = "SELECT max(vyps_meta_count) FROM ". $table_name_log . " WHERE vyps_meta_id = %s";
-		$vyps_meta_max_prepared = $wpdb->prepare( $vyps_meta_max_query, $game_id );
-		$vyps_meta_max = $wpdb->get_var( $vyps_meta_max_prepared );
+		$vyps_meta_data = "rafflebuy";
+		//Going to check for the subid (as we know that if there is a game count it put one in)
+		$vyps_meta_subid1_max_query = "SELECT max(vyps_meta_subid1) FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_data = %s";
+		$vyps_meta_subid1_max_prepared = $wpdb->prepare( $vyps_meta_subid1_max_query, $game_id, $vyps_meta_data ); //I realized that I can only need to look at rows that are rafflebuys. If rows = threshold, then we done with that game.
+		$vyps_meta_subid1_max = $wpdb->get_var( $vyps_meta_subid1_max_prepared );
 
-		//How we know the meta max we need to count how many there are
-		$count_meta_max_query = "SELECT count(vyps_meta_id) FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_count = %d"; //Huh making real use of the prepare here.
-		$count_meta_max_query_prepared = $wpdb->prepare( $count_meta_max_query, $game_id, $vyps_meta_max );
-		$count_meta_max = $wpdb->get_var( $count_meta_max_query_prepared );
+		//Originally, I was doing min and counting down, but I realized I was being dumb with trying to keep track of two incremental numbers going in opposite directions
+		$vyps_meta_subid2_max_query = "SELECT max(vyps_meta_subid2) FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s" ;
+		$vyps_meta_subid2_max_prepared = $wpdb->prepare( $vyps_meta_subid2_max_query, $game_id, $vyps_meta_subid1_max, $vyps_meta_data );
+		$vyps_meta_subid2_max = $wpdb->get_var( $vyps_meta_subid2_max_prepared );
 
-		//So. What we have done above is call the meta count max to figure out what the game count is at... the order is... maybe i should use subid1 and subid2
-		//Neither count nor order is being used the way they should be by their nomenclature. Enough philosophical discussion with myself. More doing.
+		//We need to get the tickets left. We can simply get that by seeing what the last game row was and pull it. I'm going to use subid2 for this
+		//We don't need to get a count since its a counting one
+		$current_game_count = $vyps_meta_subid1_max; //Well its just the last one whatevers of subid1. It doesn't change as much as subid 2 though.
+		$current_ticket_count = $vyps_meta_subid2_max;
+		$tickets_left = $ticket_threshold - $current_ticket_count; //Better not get an off by one.
+
+		//Ok this would be a good place to check if the subid2 = threshold which means new row next game
+		if ( $vyps_meta_subid2_max == $ticket_threshold){
+
+			$current_game_count = $current_game_count + 1; //I will beat this FOBO
+			$current_ticket_count = 0; //Zero because we start at 1 Heeee! This better work.
+			$tickets_left = $ticket_threshold; //This needs to also be made the same as it has no clue where to look.
+
+		}
+
+
 
 	}
 
@@ -204,7 +219,8 @@ function vyps_point_threshold_raffle_func( $atts ) {
 		$results_message = "Press button to buy raffle ticket.";
 
 
-
+		//Here is the catch. If the post is not pushed. Then this return will fire. Kicks us out. And no operations will happen.
+		//A bit round about I suppose.
 		return "<table id=\"$btn_name\">
 					<tr>
 						<td><div align=\"center\">Ticket Price</div></td>
@@ -291,22 +307,19 @@ function vyps_point_threshold_raffle_func( $atts ) {
 	//Btw I'm 75% sure putting in VYPS meta count this way will make it constant until the win.
 	//Could be terribly wrong though
 
-	//Needed to check if there were tickets remaining because I didn't realize it was double posting.
-	//Might have hosed my test database.
-	//They clicked the button so need to subtract one... However...
-	$tickets_left = $tickets_left - 1; //Meh. If you load without a post it doesn't subtract, but if you load with a post it needs to subtract 1 because it happened. Got it?
+	$current_ticket_count = $current_ticket_count + 1; //Ah now I know why to start at zero. Actually some of that I don't think we need. Just a few bytes wasted I guess.
 
-	if ($tickets_left > 0) {
+	$tickets_left = $ticket_threshold - $current_ticket_count; //Well. Good as place as any to check the tickets left.
 
-		$data = [
+	$data = [
 				'reason' => $reason,
 				'point_id' => $PointType,
 				'points_amount' => $amount,
 				'user_id' => $user_id,
 				'vyps_meta_id' => $game_id,
 				'vyps_meta_data' => 'rafflebuy',
-				'vyps_meta_count' => $current_vyps_count,
-				'vyps_meta_order' => $tickets_left, //Might be weird but the meta order might need a plug one?
+				'vyps_meta_subid1' => $current_game_count,
+				'vyps_meta_subid2' => $current_ticket_count,
 				'time' => date('Y-m-d H:i:s')
 				];
 		$wpdb->insert($table_log, $data);
@@ -316,13 +329,17 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 		$results_message = "Success. Tickets bought at: ". date('Y-m-d H:i:s');
 
-	} elseif ($tickets_left == 0) {
+	//Ok I wrapped my head around where I am having the off by one error.
+	//So if the post happens when tickets are left is 1. That means that is the last ticket and there needs to be a row made with a 0 entry for subid2?
+
+	if ($current_ticket_count == $ticket_threshold) {
 
 		//the code that runs when there are no more tickets left. which means the person bought the last one.
+		//In theory on the buying of the last ticket the winner is found at the same time.
 
 		//Find the winner
 
-		$winning_ticket = mt_rand(1,$ticket_threshold); //In theory the ticket threshold should always be an integer sooo... One of those tickets should hav wonder+
+		$winning_ticket = mt_rand(1,$ticket_threshold) . "won!"; //In theory the ticket threshold should always be an integer sooo... One of those tickets should hav wonder+
 
 		/* Ok. Now we put the destination points in. Reason should stay the same */
 
@@ -331,9 +348,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 		$PointType = $destinationPointID; //Originally this was a table call, but seems easier this way
 
 
-
-		//See what I did with the $current_vyps_count... Only posts when there is a win and the kicks up the notch.
-		$current_vyps_count= $vyps_meta_count; //Seems like it should not be simple.
+   //Note sure if it matters witht the tickets left part.
 
 		$data = [
 				'reason' => $reason,
@@ -342,8 +357,8 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				'user_id' => $user_id,
 				'vyps_meta_id' => $game_id,
 				'vyps_meta_data' => $winning_ticket,
-				'vyps_meta_count' => $current_vyps_count,
-				'vyps_meta_order' => $tickets_left,
+				'vyps_meta_subid1' => $current_game_count,
+				'vyps_meta_subid2' => $current_ticket_count,
 				'time' => date('Y-m-d H:i:s')
 				];
 		$wpdb->insert($table_log, $data);
@@ -375,10 +390,6 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				</table>";
 
 	}
-
-	//$tickets_left = $tickets_left -1; //This is where we need to subtract it. //check this if doesn't work.
-
-	$tickets_left = $tickets_left - 1; //Meh. If you load without a post it doesn't subtract, but if you load with a post it needs to subtract 1 because it happened. Got it?
 
 	return "<table id=\"$btn_name\">
 				<tr>
