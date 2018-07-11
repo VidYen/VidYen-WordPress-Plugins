@@ -35,35 +35,32 @@ function VYPS_check_if_true_admin(){
 
 register_activation_hook(__FILE__, 'vyps_points_install');
 
+//Install the SQL tables for VYPS.
 function vyps_points_install() {
+
     global $wpdb;
 
-    $table_name = $wpdb->prefix . 'vyps_points';
-
-    $charset_collate = $wpdb->get_charset_collate();
+		//I have no clue why this is needed. I should learn, but I wasn't the original author. -Felty
+		$charset_collate = $wpdb->get_charset_collate();
 
 		//NOTE: I have the mind to make mediumint to int, but I wonder if you get 8 million log transactios that you should consider another solution than VYPS.
-		//If it happens to someone, I'll make an enteprise version.
-		//points varchar(11) NOT NULL,
 
-    $sql = "CREATE TABLE {$table_name} (
+		//vyps_points table creation
+    $table_name_points = $wpdb->prefix . 'vyps_points';
+
+    $sql = "CREATE TABLE {$table_name_points} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		name tinytext NOT NULL,
 		icon text NOT NULL,
-
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
 
-    $table_name = $wpdb->prefix . 'vyps_points_log';
+		//vyps_points_log. Notice how I loath th keep variable names the same in recycled code.
+		//Visualization people. It's better for code to be ineffecient but readable than efficient and unreadable.
+    $table_name_points_log = $wpdb->prefix . 'vyps_points_log';
 
-	/* As number_format() seems to solve most of the display problems I have added .16 decimals
-	*  so it doesn't screw up everything. That said. I will need to test on fresh copy and so on
-	*  to make sure it installs without blowing up
-	*/
-	//points varchar(11) NOT NULL,
-
-    $sql .= "CREATE TABLE {$table_name} (
+    $sql .= "CREATE TABLE {$table_name_points_log} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
                 reason varchar(128) NOT NULL,
                 user_id mediumint(9) NOT NULL,
@@ -83,6 +80,8 @@ function vyps_points_install() {
 
     dbDelta($sql);
 }
+
+//adding menues
 add_action('admin_menu', 'vyps_points_menu');
 
 function vyps_points_menu() {
@@ -305,17 +304,14 @@ function vyps_register_custom_user_column($columns) {
 function vyps_register_custom_user_column_view($value, $column_name, $user_id) {
     $user_info = get_userdata($user_id);
     global $wpdb;
-    $query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by points, user_id having user_id = '{$user_id}'";
+    $query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by point_id, user_id having user_id = '{$user_id}'";
     $row_data = $wpdb->get_results($query_row);
 
-//    echo "<pre>";
-//    print_r($row_data);
-//    die;
-
+		//I need to update this eventually. I realized I didn't fix this, but its only calling non-user input data from the WPDB. I still don't like the -> in fact I hate -> calls
     $points = '';
     if (!empty($row_data)) {
         foreach($row_data as $type){
-            $query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->point_id}'";
+            $query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->points}'";
             $row_data2 = $wpdb->get_row($query_for_name);
             $points .= '<b>' . $type->sum . '</b> ' . $row_data2->name. '<br>';
         }
@@ -355,6 +351,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //W
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the Coinhive in.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsas.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
-//include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
 
 /*** End of Shortcode Includes ***/
