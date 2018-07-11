@@ -268,7 +268,7 @@ function vyps_adscend_redeem_func( $atts ) {
       //Insert into the vyps_points_log table. My OCD is getting upset at the plural. But I don't think most users will even know.
       $data = [
 					'reason' => $reason,
-					'points' => $pointID,
+					'point_id' => $pointID,
 					'points_amount' => $amount,
 					'user_id' => $user_id,
 					'time' => date('Y-m-d H:i:s')

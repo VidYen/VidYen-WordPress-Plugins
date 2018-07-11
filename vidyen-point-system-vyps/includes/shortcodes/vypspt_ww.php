@@ -171,7 +171,7 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 	//Ok. Now we get balance. If it is not enough for the spend variable, we tell them that and return out. NO EXCEPTIONS
 
 	//$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $sourcePointID");
-  $balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND points = %d";
+  $balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
   $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $sourcePointID );
   $balance_points = $wpdb->get_var( $balance_points_query_prepared );
 
@@ -227,7 +227,7 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 
 	$data = [
 			'reason' => $reason,
-			'points' => $PointType,
+			'point_id' => $PointType,
 			'points_amount' => $amount,
 			'user_id' => $user_id,
 			'time' => date('Y-m-d H:i:s')

@@ -227,7 +227,7 @@ function vyps_point_transfer_tbl_func( $atts ) {
 
 	$data = [
 			'reason' => $reason,
-			'points' => $PointType,
+			'point_id' => $PointType,
 			'points_amount' => $amount,
 			'user_id' => $user_id,
 			'time' => date('Y-m-d H:i:s')
@@ -242,7 +242,7 @@ function vyps_point_transfer_tbl_func( $atts ) {
 
 	$data = [
 			'reason' => $reason,
-			'points' => $PointType,
+			'point_id' => $PointType,
 			'points_amount' => $amount,
 			'user_id' => $user_id,
 			'time' => date('Y-m-d H:i:s')

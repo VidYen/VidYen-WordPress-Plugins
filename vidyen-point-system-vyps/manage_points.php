@@ -80,7 +80,7 @@ if(current_user_can('install_plugins')){
 
 			$data_insert = [
 				'reason' => $reason_sanitized,
-				'points' => $points_sanitized,
+				'point_id' => $points_sanitized,
 				'points_amount' => $point_amount_post,
 				'user_id' => $user_id,
 				'time' => date('Y-m-d H:i:s')
@@ -273,8 +273,8 @@ if(current_user_can('install_plugins')){
 				$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $user_id_data );
 				$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
 
-				//$point_id_data = $wpdb->get_var( "SELECT points FROM $table_name_log WHERE id= '$x_for_count'" );
-				$point_id_data_query = "SELECT points FROM ". $table_name_log . " WHERE id = %d";
+				//$point_id_data = $wpdb->get_var( "SELECT point_id FROM $table_name_log WHERE id= '$x_for_count'" );
+				$point_id_data_query = "SELECT point_id FROM ". $table_name_log . " WHERE id = %d";
 				$point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
 				$point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
 

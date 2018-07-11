@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
 Description:  VidYen Point System [VYPS] allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-Version:      00.02.06
+Version:      00.02.09
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -42,12 +42,16 @@ function vyps_points_install() {
 
     $charset_collate = $wpdb->get_charset_collate();
 
+		//NOTE: I have the mind to make mediumint to int, but I wonder if you get 8 million log transactios that you should consider another solution than VYPS.
+		//If it happens to someone, I'll make an enteprise version.
+		//points varchar(11) NOT NULL,
+
     $sql = "CREATE TABLE {$table_name} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		name tinytext NOT NULL,
 		icon text NOT NULL,
-		points varchar(11) NOT NULL,
+
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
 
@@ -57,15 +61,21 @@ function vyps_points_install() {
 	*  so it doesn't screw up everything. That said. I will need to test on fresh copy and so on
 	*  to make sure it installs without blowing up
 	*/
+	//points varchar(11) NOT NULL,
 
     $sql .= "CREATE TABLE {$table_name} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-                reason tinytext NOT NULL,
+                reason varchar(128) NOT NULL,
                 user_id mediumint(9) NOT NULL,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-		points varchar(11) NOT NULL,
+		point_id varchar(11) NOT NULL,
                 points_amount double(64, 0) NOT NULL,
                 adjustment varchar(100) NOT NULL,
+								vyps_meta_id varchar(64) NOT NULL,
+								vyps_meta_data varchar(128) NOT NULL,
+								vyps_meta_amount double(64,0) NOT NULL,
+								vyps_meta_subid1 mediumint(9) NOT NULL,
+								vyps_meta_subid2 mediumint(9) NOT NULL,
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
 
@@ -185,7 +195,7 @@ function vyps_admin_log() {
     $user_name_data = $wpdb->get_var( $user_name_data_query_prepared );
 
     //$point_id_data = $wpdb->get_var( "SELECT points FROM $table_name_log WHERE id= '$x_for_count'" );
-    $point_id_data_query = "SELECT points FROM ". $table_name_log . " WHERE id = %d";
+    $point_id_data_query = "SELECT point_id FROM ". $table_name_log . " WHERE id = %d";
     $point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
     $point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
 
@@ -305,7 +315,7 @@ function vyps_register_custom_user_column_view($value, $column_name, $user_id) {
     $points = '';
     if (!empty($row_data)) {
         foreach($row_data as $type){
-            $query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->points}'";
+            $query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->point_id}'";
             $row_data2 = $wpdb->get_row($query_for_name);
             $points .= '<b>' . $type->sum . '</b> ' . $row_data2->name. '<br>';
         }
@@ -345,5 +355,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //W
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the Coinhive in.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsas.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
+//include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
 
 /*** End of Shortcode Includes ***/

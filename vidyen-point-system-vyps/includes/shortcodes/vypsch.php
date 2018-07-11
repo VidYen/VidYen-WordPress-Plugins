@@ -171,7 +171,7 @@ function vyps_simple_miner_func($atts) {
         //Inserting Coin Hive row.
 				$data = [
 						'reason' => $reason,
-						'points' => $pointType,
+						'point_id' => $pointType,
 						'points_amount' => $amount,
 						'user_id' => $user_id,
 						'time' => date('Y-m-d H:i:s')
