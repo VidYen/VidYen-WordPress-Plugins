@@ -339,7 +339,15 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 		//Find the winner
 
-		$winning_ticket = mt_rand(1,$ticket_threshold) . "won!"; //In theory the ticket threshold should always be an integer sooo... One of those tickets should hav wonder+
+		$winning_ticket = mt_rand(1,$ticket_threshold); //In theory the ticket threshold should always be an integer sooo... One of those tickets should hav wonder+
+
+
+		$vyps_meta_data = "rafflebuy";
+
+		//I'm going to be really surprised if the query works on the first try. Basically we find the user id of the ticket owner that one (it should be already inserted into the table)
+		$vyps_winning_user_id_query = "SELECT user_id FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s AND vyps_meta_subid2 = %d" ;
+		$vyps_winning_user_id_prepared = $wpdb->prepare( $vyps_winning_user_id_query, $game_id, $vyps_meta_subid1_max, $vyps_meta_data, $winning_ticket );
+		$vyps_winning_user_id = $wpdb->get_var( $vyps_winning_user_id_prepared );
 
 		/* Ok. Now we put the destination points in. Reason should stay the same */
 
@@ -350,11 +358,13 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
    //Note sure if it matters witht the tickets left part.
 
+	 $reason = "Raffle Ticket Win";
+
 		$data = [
 				'reason' => $reason,
 				'point_id' => $PointType,
 				'points_amount' => $amount,
-				'user_id' => $user_id,
+				'user_id' => $vyps_winning_user_id,
 				'vyps_meta_id' => $game_id,
 				'vyps_meta_data' => $winning_ticket,
 				'vyps_meta_subid1' => $current_game_count,
@@ -363,7 +373,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				];
 		$wpdb->insert($table_log, $data);
 
-		$results_message = "You won the pot on: ". date('Y-m-d H:i:s');
+		$results_message = "The user $vyps_winning_user_id won with ticket $winning_ticket : ". date('Y-m-d H:i:s');
 		//for now i'm just going to see if this works before adding RNG
 
 		//Meh I need a butom button!, but I sort of need to change the table a bit rather than reuse it.
