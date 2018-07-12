@@ -47,7 +47,7 @@ function cg_my_equipment($params = array())
 
             $data_insert = [
                 'reason' => 'Selling item',
-                'points' => $equipment[0]->point_type_id,
+                'point_id' => $equipment[0]->point_type_id,
                 'points_amount' => $equipment[0]->point_sell,
                 'user_id' => get_current_user_id(),
                 'time' => date('Y-m-d H:i:s')
