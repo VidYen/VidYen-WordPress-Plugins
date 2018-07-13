@@ -359,6 +359,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
    //Note sure if it matters witht the tickets left part.
 
 	 $reason = "Raffle Ticket Win";
+	 $vyps_meta_data = "rafflewin";
 
 		$data = [
 				'reason' => $reason,
@@ -366,9 +367,10 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				'points_amount' => $amount,
 				'user_id' => $vyps_winning_user_id,
 				'vyps_meta_id' => $game_id,
-				'vyps_meta_data' => $winning_ticket,
+				'vyps_meta_data' => $vyps_meta_data,
 				'vyps_meta_subid1' => $current_game_count,
 				'vyps_meta_subid2' => $current_ticket_count,
+				'vyps_meta_subid3' => $winning_ticket,
 				'time' => date('Y-m-d H:i:s')
 				];
 		$wpdb->insert($table_log, $data);
