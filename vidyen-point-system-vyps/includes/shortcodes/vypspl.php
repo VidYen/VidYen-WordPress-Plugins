@@ -134,7 +134,7 @@ function vyps_public_log_func() {
 	}
 
 	//The page output
-	echo "
+	return "
 		<div class=\"wrap\">
 			$page_header_text
 			<table class=\"wp-list-table widefat fixed striped users\">
