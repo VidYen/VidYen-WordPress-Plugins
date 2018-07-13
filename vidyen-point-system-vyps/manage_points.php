@@ -51,8 +51,8 @@ if(current_user_can('install_plugins')){
 					// Do stuff here.
 			}
 
-			//Coerce amount value into double This could go wrong.
-			$point_amount_post = doubleval( $_POST['update_user_point']);
+			//Coerce amount value into float This could go wrong.
+			$point_amount_post = floatval( $_POST['update_user_point']);
 
 
 			if ( isset($_POST['addpoint']) ){
