@@ -1,4 +1,5 @@
 <?php
+
 /*
   Plugin Name: VidYen Point System Game Plugin
   Description: Spend points by playing games. [cg-my-equipment], [cg-buy-equipment], [cg-battle-log], [cg-battle-log-all], [cg-battle]

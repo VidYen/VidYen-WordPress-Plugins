@@ -98,7 +98,7 @@ function cg_my_equipment($params = array())
             ";
 
     foreach ($equipment as $single) {
-        $nonce = wp_nonce_field( 'vyps-nonce-'.$single['id'] );
+        $nonce = wp_nonce_field( 'vyps-nonce-'.$single['item'] );
         $return .= "
                 <tr id=\"log-1\">
                     <td>

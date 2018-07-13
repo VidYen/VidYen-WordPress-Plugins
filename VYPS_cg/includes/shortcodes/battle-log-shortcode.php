@@ -33,7 +33,6 @@ function cg_battle_log($params = array())
             </thead>
             <tbody data-wp-lists=\"list:log\">
             ";
-
         foreach ($logs as $log) {
             $opponent = "";
             $outcome = "Lost";
@@ -75,7 +74,7 @@ function cg_battle_log($params = array())
                 ";
         }
 
-        if (empty($logs)) {
+        if (!count($logs)) {
             $return .= "<tr>
                     <td colspan=\"4\">You have no battles .</td>
                 </tr>";
