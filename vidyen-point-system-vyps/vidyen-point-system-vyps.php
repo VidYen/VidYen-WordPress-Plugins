@@ -312,7 +312,7 @@ function vyps_register_custom_user_column_view($value, $column_name, $user_id) {
     $points = '';
     if (!empty($row_data)) {
         foreach($row_data as $type){
-            $query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->points}'";
+            $query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->point_id}'";
             $row_data2 = $wpdb->get_row($query_for_name);
             $points .= '<b>' . $type->sum . '</b> ' . $row_data2->name. '<br>';
         }

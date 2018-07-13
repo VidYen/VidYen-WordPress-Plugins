@@ -52,6 +52,10 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.03.03 =
+
+Emergency hotfix with users panel. Nothing to see here.
+
 = 00.02.09 =
 
 Database fix :NOTE: It says less than 10 active installation on official so I'm taking a gamble that no one needs their tables upgraded. If I'm wrong reach out via support.
