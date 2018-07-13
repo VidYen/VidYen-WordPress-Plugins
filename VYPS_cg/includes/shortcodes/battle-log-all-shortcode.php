@@ -8,16 +8,15 @@ function cg_battle_log_all($params = array())
 
     global $wpdb;
     $logs = $wpdb->get_results(
-        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles" )
+        "SELECT * FROM $wpdb->vypsg_battles"
     );
-
     $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2);
     $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" .$_SERVER['HTTP_HOST'] . $uri_parts[0];
 
     if (!isset($_GET['view_log'])) {
         $return = "
         <div class=\"wrap\">
-        <h2>Battle Log</h2>
+        <h2>All Battle Log</h2>
         <table class=\"wp-list-table widefat fixed striped users\">
             <thead>
             <tr>
@@ -62,7 +61,7 @@ function cg_battle_log_all($params = array())
                         $outcome
                     </td>
                     <td>
-                        <a class=\"button-secondary\" href=\"$log_url\">View Loses</a>
+                        <a class=\"button - secondary\" href=\"$log_url\">View Loses</a>
                     </td>
     
                 </tr>
@@ -81,7 +80,8 @@ function cg_battle_log_all($params = array())
             <tfoot>
             <tr>
                 <th scope=\"col\" class=\"manage-column column-name\">Id</th>
-                <th scope=\"col\" class=\"manage-column column-name\">Opponent</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Person One</th>
+                <th scope=\"col\" class=\"manage-column column-name\">Person Two</th>
                 <th scope=\"col\" class=\"manage-column column-name\">Outcome</th>
                 <th scope=\"col\" class=\"manage-column column-name\">View Loses</th>
             </tr>
