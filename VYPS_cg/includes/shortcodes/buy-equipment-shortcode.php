@@ -19,7 +19,7 @@ function cg_buy_equipment($params = array())
 
         if (!empty($item)) {
             $table_name_log = $wpdb->prefix . 'vyps_points_log';
-            $balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND points = %d";
+            $balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
             $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, get_current_user_id(), $item[0]->point_type_id );
             $balance_points = $wpdb->get_var( $balance_points_query_prepared );
 
