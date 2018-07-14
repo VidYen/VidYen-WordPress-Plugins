@@ -39,6 +39,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<p>Shows a generic \"You are not logged in.\" message when user is not logged in.</p>
 	<p><b>[vyps-lg message=\"Hey foo! You need to log in.\"]</b></p>
 	<p>Allows custom message by admin when setting up the awareness message.</p>
+  <h2>Threshold Raffle</h2>
+  <p>Rather than a timed raffle, you can have users buy ticks to play an RNG game for the pot. This gets around the issue of one user having to spend months to earn their way to large dollar amount items on your WooCommerce store.</p>
+  <p><b>[vyps-tr spid=3 dpid=3 samount=1000 damount=10000 tickets=10]</b></p>
+  <p>It is the same setup as the Point Transfer but it is fine have ticket purchases and payout with the same poin type. The samount is ticket price, with damount with the pot payout, and tickets how many tickets are in the game. You can make this odd or even if you like. When the last ticket is sold, a random number of the ticket range is picked and the owner of that ticket is awarded the pot.</p>
+  <p><b>[vyps-tr-log spid=3 dpid=3 samount=1000 damount=10000 tickets=10]</b></p>
+  <p>This is an optional log of the raffle so users can see who bought which ticket number and how many. Users can also see the ticket purchases on public log. NOTE: The attributes must be set for the same as the game as it is possible to run multiple games with different point, payout, and total amount of ticket numbers. That way you can have several pages with different games.</p>
+  <p>Also note, there is no pagnation as of yet (coming soon) and we would recommend not running a 10,000 ticket game unless you do not show the log.</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.

@@ -47,7 +47,7 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 				'tickets' => '0',
 				'damount' => '0',
 				'rows' => '20',
-		), $atts, 'vyps-tr' );
+		), $atts, 'vyps-tr-log' );
 
 	$sourcePointID = $atts['spid'];
 	$destinationPointID = $atts['dpid'];
@@ -123,8 +123,6 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 	$display_name_label = "Name";
 	$ticket_number_label = "Ticket Number";
 
-
-
 	//Header output is also footer output if you have not noticed.
 	//Also isn't it nice you can edit the format directly instead it all in the array?
 	$header_output = "
@@ -168,8 +166,6 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 		//I cut down the need for the data because really all you need is the date, name of person, and the ticket number. You should already know the damn price.
 		//Also we already know the ticket number as it's the x for count (unless I go some FOBO thing going on)
 
-
-
 		$current_row_output = "
 			<tr>
 				<td>$date_data</td>
@@ -178,11 +174,48 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 			</tr>
 				";
 
-		//Compile into row output.
-		$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
 
-	}
+			//We can identify the winner if they exist. So is threshold is number of tickets
+			if ($ticket_threshold == $number_of_ticket_rows ) {
 
+				$vyps_meta_data_win = 'rafflewin';
+				//we know there is a winner in the list so we check each time
+				$winner_query = "SELECT vyps_meta_subid3 FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s";
+				$winner_query_prepared = $wpdb->prepare( $winner_query, $btn_name, $number_of_log_rows, $vyps_meta_data_win ); //Yeah this is a 4 dimensional query. Also rafflebuy is hardcoded which might be questionable
+				$winner = $wpdb->get_var( $winner_query_prepared );
+
+				//So we have the id. So...
+
+				if ($x_for_count == $winner ) {
+
+					//We just make everything bold. Note. We had to call table ticket something else least the loop get mad at us for getting turned into a string.
+
+					$current_row_output = "
+						<tr>
+							<td><b>$date_data</b></td>
+							<td><b>$display_name_data</b></td>
+							<td><b>$x_for_count (winning ticket)</b></td>
+						</tr>
+							";
+
+						//I needed a spot to overwrite the header in case we had a finalized game. I probaly should change the wording.
+						$page_header_text = "
+							<h1 class=\"wp-heading-inline\">Last Game Ticket Purchases</h1>
+								";
+
+				}
+			//Second if close.
+			}
+
+
+
+
+
+
+	//Compile into row output.
+	$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
+
+}
 	//The page output
 	return "
 		<div class=\"wrap\">

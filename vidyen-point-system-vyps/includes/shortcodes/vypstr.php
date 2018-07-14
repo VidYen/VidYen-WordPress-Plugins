@@ -106,6 +106,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 	global $wpdb;
 	$table_name_points = $wpdb->prefix . 'vyps_points';
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
+	$table_name_users = $wpdb->prefix . 'users';
 
 	/* Just doing some table calls to get point names and icons. Can you put icons in buttons? Hrm... */
 
@@ -234,7 +235,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 							</div>
 						</td>
 						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
-						<td><div align=\"center\">Tickets left: $tickets_left</div></td>
+						<td><div align=\"center\">$tickets_left of $ticket_threshold Left</div></td>
 					</tr>
 					<tr>
 						<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
@@ -277,7 +278,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 							</div>
 						</td>
 						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
-						<td><div align=\"center\">Tickets left: $tickets_left</div></td>
+						<td><div align=\"center\">$tickets_left of $ticket_threshold Left</div></td>
 					</tr>
 					<tr>
 						<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
@@ -327,7 +328,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 		//The below should only be run if there is a winner. which means we should only fire if the game games left = 1
 		//Yeah counting at zero, but this fires it means there was one ticket left so there should be no more as this is exectuting
 
-		$results_message = "Success. Tickets bought at: ". date('Y-m-d H:i:s');
+		$results_message = "Success. Ticket bought at: ". date('Y-m-d H:i:s');
 
 	//Ok I wrapped my head around where I am having the off by one error.
 	//So if the post happens when tickets are left is 1. That means that is the last ticket and there needs to be a row made with a 0 entry for subid2?
@@ -348,6 +349,11 @@ function vyps_point_threshold_raffle_func( $atts ) {
 		$vyps_winning_user_id_query = "SELECT user_id FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s AND vyps_meta_subid2 = %d" ;
 		$vyps_winning_user_id_prepared = $wpdb->prepare( $vyps_winning_user_id_query, $game_id, $vyps_meta_subid1_max, $vyps_meta_data, $winning_ticket );
 		$vyps_winning_user_id = $wpdb->get_var( $vyps_winning_user_id_prepared );
+
+		//I want the display_name to make it look nice because of OCD. Will only be used on message
+		$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
+		$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $vyps_winning_user_id );
+		$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
 
 		/* Ok. Now we put the destination points in. Reason should stay the same */
 
@@ -375,7 +381,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				];
 		$wpdb->insert($table_log, $data);
 
-		$results_message = "The user $vyps_winning_user_id won with ticket $winning_ticket : ". date('Y-m-d H:i:s');
+		$results_message = "The user $display_name_data won with ticket $winning_ticket : ". date('Y-m-d H:i:s');
 		//for now i'm just going to see if this works before adding RNG
 
 		//Meh I need a butom button!, but I sort of need to change the table a bit rather than reuse it.
@@ -394,7 +400,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 							</div>
 						</td>
 						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
-						<td><div align=\"center\">Tickets left: 0</div></td>
+						<td><div align=\"center\">0 of $ticket_threshold Left</div></td>
 					</tr>
 					<tr>
 						<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
@@ -416,7 +422,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 						</div>
 					</td>
 					<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
-					<td><div align=\"center\">Tickets left: $tickets_left</div></td>
+					<td><div align=\"center\">$tickets_left of $ticket_threshold Left</div></td>
 				</tr>
 				<tr>
 					<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>

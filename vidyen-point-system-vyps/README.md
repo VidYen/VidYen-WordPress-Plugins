@@ -52,9 +52,17 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.03.06 =
+
+Official release of Threshold Raffle Game via shortcode. (Yes you can use Coinhive to do a RNG raffle now)
+See VYPS menu page instruction on how to implement.
+Minor fixes to formatting.
+Prep for Public Log Pagination system.
+
 = 00.03.03 =
 
-Emergency hotfix with users panel. Nothing to see here.
+Emergency hotfix with WP users panel. Nothing to see here.
+Some minor security updates with POST catches.
 
 = 00.02.09 =
 
@@ -80,7 +88,7 @@ Point transfer exchange shortcodes.
 
 == Future Plans ==
 
-WordPress based RNG game
+WordPress based combat game
 Leaderboard
 Better public log system
 Online game API transfer system (Word of Tanks API etc.)
