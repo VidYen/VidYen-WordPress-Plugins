@@ -52,6 +52,11 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.03.09 =
+Added pagnation to the public log as it was getting cumbersome on our own test server. ex: [vyps-pl rows=25 bootstrap=yes]
+Minor bug fixes.
+Prep for public balances and leaderboards.
+
 = 00.03.06 =
 
 Official release of Threshold Raffle Game via shortcode. (Yes you can use Coinhive to do a RNG raffle now)
@@ -90,5 +95,5 @@ Point transfer exchange shortcodes.
 
 WordPress based combat game
 Leaderboard
-Better public log system
+Downloadable public log
 Online game API transfer system (Word of Tanks API etc.)

@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<h2>Coming Soon:</h2>
 	<p>Combat Game</p>
 	<p>Leaderboard Addon</p>
-	<p>CoinFlip Addon</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.

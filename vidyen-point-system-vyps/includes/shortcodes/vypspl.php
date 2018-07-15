@@ -9,13 +9,30 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Main Public Log shortcode function */
 
-function vyps_public_log_func() {
+function vyps_public_log_func( $atts ) {
 
 	/* Technically users don't have to be logged in
 	* Should litterally be the log the admin sees
 	* I don't care. Tell users to not put personal identificable
 	* information in their user name (referred to PID in the health care industry)
 	*/
+
+	//Shortcode stuff
+	//I'm going to eventually have site admins set logs for activities like reason etc and the meta fields, but for now.
+	$atts = shortcode_atts(
+		array(
+				'pid' => '0',
+				'reason' => '0',
+				'rows' => 50,
+				'bootstrap' => 'no',
+				'userid' => '0',
+		), $atts, 'vyps-pl' );
+
+	$pointID = $atts['pid'];
+	$reason = $atts['reason'];
+	$table_row_limit = $atts['rows']; //50 by default
+	$user_id = $atts['userid'];
+	$boostrap_on = $atts['bootstrap'];
 
 	global $wpdb;
 	$table_name_points = $wpdb->prefix . 'vyps_points';
@@ -28,24 +45,21 @@ function vyps_public_log_func() {
 
 	//$number_of_log_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_log" ); //No WHERE needed. All rows. No exceptions
   $number_of_log_rows_query = "SELECT max( id ) FROM ". $table_name_log;  //I'm wondering if a prepare is even needed, but throw it all in.
-  //$number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query );
-  //$number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query_prepared );
   $number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query ); //Ok. I realized that not only prepare() doesn't work it, there is no varialbes needed to sanitize as the table name is actually hard coded.
+
+	$amount_of_pages = ceil($number_of_log_rows / $table_row_limit); //So we know how many rows and we divide it by whatever it is and round up if not even as means maybe like one extra item over?
 
 	//$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No WHERE needed. All rows. No exceptions
   $number_of_point_rows_query = "SELECT max( id ) FROM ". $table_name_points;  //I'm wondering if a prepare is even needed, but throw it all in.
-  //$number_of_point_rows_query_prepared = $wpdb->prepare( $number_of_point_rows_query );
-  //$number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query_prepared );
   $number_of_point_rows = $wpdb->get_var( $number_of_point_rows_query ); //Same issue as line 33. No real user input involved. Just server variables.
 
-	//echo '<br>'. $number_of_log_rows; //Some debugging
-	//echo '<br>'. $number_of_point_rows; //More debugging
-
+	//This will be set by the rows atts above eventually
 	$begin_row = 1;
 	$end_row = ''; //Eventually will have admin ability to filter how many rows they see as after 1000 may be intensive
 
 	/* Although normally against totally going programatic. Since I know I'm going to reuse this for the public log I'm going to put the headers into variables */
 	/* For public log the user_name should be display name and no need to see the UID and PID */
+	$transaction_id = "Transaction ID";
 	$date_label = "Date";
 	$display_name_label = "Display Name";
 	$user_id_label = "UID";
@@ -54,11 +68,22 @@ function vyps_public_log_func() {
 	$amount_label = "Amount";
 	$reason_label = "Adjustment Reason";
 
+	//this code below checks the gets and determines the page nation
+	if (isset($_GET['action'])){
+
+		$page_number = intval(htmlspecialchars($_GET['action']));
+
+	} else{
+
+		$page_number = 1; //Well... Always first.
+
+	}
 
 	//Header output is also footer output if you have not noticed.
 	//Also isn't it nice you can edit the format directly instead it all in the array?
 	$header_output = "
 			<tr>
+				<th>$transaction_id</th>
 				<th>$date_label</th>
 				<th>$display_name_label</th>
 				<th>$point_type_label</th>
@@ -67,19 +92,67 @@ function vyps_public_log_func() {
 			</tr>
 	";
 
+	$page_button_output = ''; //Needs a define
+
+	if ($boostrap_on == 'yes' OR $boostrap_on == 'YES' OR $boostrap_on =='Yes'){
+		//Ok. Just going to loop for nubmer of pages.
+		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
+
+			$page_button = "<li><a href=\"?action=$p_for_count\">$p_for_count</a></li>";
+
+			$page_button_output = $page_button_output . $page_button;
+			//end for
+		}
+
+		$page_button_row_output = "
+			<ul class=\"pagination\">
+				$page_button_output
+			</ul>";
+		//end of bootstrap if
+
+	} else {
+
+		//this meeans we got no boostrap so it's just links.
+		//Ok. Just going to loop for nubmer of pages.
+		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
+
+			$page_button = "<a href=\"?action=$p_for_count\">$p_for_count</a>&nbsp;|&nbsp;";
+
+			$page_button_output = $page_button_output . $page_button;
+			//end for
+		}
+
+		$page_button_row_output = "
+			<div class=\"pagination\">
+				$page_button_output
+			</div>";
+		//end of non bootstrap else
+
+	}
 
 
-
-	//Because the shorcode version won't have this
+	//Because the shortcode version won't have this
+	//	<h1 class=\"wp-heading-inline\">Public Point Log</h1> this was commented out. I don't think it was needed as admin can put any text in they want.
 	$page_header_text = "
-		<h1 class=\"wp-heading-inline\">All Point Adjustments</h1>
-		<h2>Point Log</h2>
-	";
+			$page_button_row_output
+			";
 
 	//this is what it's goint to be called
 	$table_output = "";
 
-	for ($x_for_count = $number_of_log_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
+	//Ok I got logic here that I think will work. the > will always be $table_range_stop = $number_of_log_rows - ($number_of_log_rows - $table_row_limit ) or $current_rows_output number.
+	//OLD: for ($x_for_count = $number_of_log_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) {
+	$table_range_start = $number_of_log_rows -( $table_row_limit * ( $page_number - 1 )); //Hrm... This doesn't seem like it will work.
+	$table_range_stop = $number_of_log_rows - ($table_row_limit * $page_number); //I'm thinking oddly here but this should be higher.
+
+	//Ok a catch stop for pages with more than 0 items
+	if ( $table_range_stop < 1 ){
+
+				$table_range_stop = 1; //If we go below 1, then just hard floor it at 1 as no 0 or negative transaction numbers exists.
+	}
+
+	//The number of log rows will always but correct but its the starting point and end points that will change.
+	for ($x_for_count = $table_range_start; $x_for_count >= $table_range_stop; $x_for_count = $x_for_count - 1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
 
 		//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
 		$date_data_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
@@ -120,6 +193,7 @@ function vyps_public_log_func() {
 
 		$current_row_output = "
 			<tr>
+				<td>$x_for_count</td>
 				<td>$date_data</td>
 				<td>$display_name_data</td>
 				<td>$point_type_data</td>
@@ -136,12 +210,15 @@ function vyps_public_log_func() {
 	//The page output
 	return "
 		<div class=\"wrap\">
+			<h2 style=\"text-align:center\">Page $page_number</h2>
 			$page_header_text
 			<table class=\"wp-list-table widefat fixed striped users\">
 				$header_output
 				$table_output
 				$header_output
 			</table>
+			$page_button_row_output
+			<h2 style=\"text-align:center\">Page $page_number</h2>
 		</div>
 	";
 
