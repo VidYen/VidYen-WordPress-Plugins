@@ -1,9 +1,12 @@
 <?php
 
-//Copy of the public log file
-
-
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+//Copy of the public log file
+//Public balance also functions as leader board
+//Curtis made a good leaderboard, but I wrote this from scratch as I needed less arrays and more customization like icons etc. Also I solved the rank problem.
+//There is a feature I want to add that shows spending into WooWallet, but I realized it may be undeeded and I'd want to do a different short for that all together
+//Either for a expenditure balance or a WW balance itself.
 
 /* Added prepare() to all SQL SELECT calls 7.1.2018 */
 
@@ -60,6 +63,17 @@ function vyps_public_balance_func( $atts ) {
 	$begin_row = 1;
 	$end_row = ''; //Eventually will have admin ability to filter how many rows they see as after 1000 may be intensive
 
+	//Because I'm OCD, I want the icons.
+	//$sourceName = $wpdb->get_var( "SELECT name FROM $table_vyps_points WHERE id= '$sourcePointID'" );
+	$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $pointID );
+	$sourceName = $wpdb->get_var( $sourceName_query_prepared );
+
+	//$sourceIcon = $wpdb->get_var( "SELECT icon FROM $table_vyps_points WHERE id= '$sourcePointID'" );
+	$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
+	$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $pointID );
+	$sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
+
 	/* Although normally against totally going programatic. Since I know I'm going to reuse this for the public log I'm going to put the headers into variables */
 	/* For public log the user_name should be display name and no need to see the UID and PID */
 	$transaction_id = "Transaction ID";
@@ -89,12 +103,13 @@ function vyps_public_balance_func( $atts ) {
 			<tr>
 				<th>$rank_label</th>
 				<th>$display_name_label</th>
-				<th>$amount_label</th>
+				<th>$sourceName</th>
 			</tr>
 	";
 
 	$page_button_output = ''; //Needs a define
 
+	/* don't need this for now, but will add back in laters
 	if ($boostrap_on == 'yes' OR $boostrap_on == 'YES' OR $boostrap_on =='Yes'){
 		//Ok. Just going to loop for nubmer of pages.
 		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
@@ -131,12 +146,16 @@ function vyps_public_balance_func( $atts ) {
 
 	}
 
+	*/
+
 
 	//Because the shortcode version won't have this
 	//	<h1 class=\"wp-heading-inline\">Public Point Log</h1> this was commented out. I don't think it was needed as admin can put any text in they want.
+	/* turning this off for now.
 	$page_header_text = "
 			$page_button_row_output
 			";
+	*/
 
 	//this is what it's goint to be called
 	$table_output = "";
@@ -154,8 +173,34 @@ function vyps_public_balance_func( $atts ) {
 
 	$prior_amount = 0; //I'm throwing this in before the for as had to be initialized somewhere and if you need to mess with it, it's close by.
 
+	//NOTE: I was thinking to myself, one could just do a loop given you know how many users there are, but then, find the order of which one is the max.
+	//But I feel like this could be fixed with concatination.
+	//Perhaps a find and replace function.
+
+	//I realized we need to get the order of the users. Throw it into an array like  users 1 = 3rd place etc user 2 = 1st place etc
+	//And rather than using the x_for_count for the user_id, istead use it fror the rank order (which meants we should maybe do another count method? or not, we could jsut put ranks on top arbitrarily)
+
+	$rank_order_array = 0;
+	//This shouldn't be too hard in theory. It's not going to be get gar though. Probaly column and feed into array.
+	//$rank_order_array_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d GROUP BY user_id ORDER BY sum(points_amount)"; //This should list users by their sum and order them into an array.
+	$rank_order_array_query = "SELECT user_id FROM ". $table_name_log . " WHERE point_id = %d GROUP BY user_id ORDER BY sum(points_amount)"; //actually isn't that more useful to rank user_id by rank?
+	$rank_order_array_query_prepared = $wpdb->prepare( $rank_order_array_query, $pointID );
+	$rank_order_array = $wpdb->get_col( $rank_order_array_query_prepared ); //Hrm... The vypspb.php is the first time I did a column call as I hate arrays. But here we are.
+	$rank_order_array_count = count($rank_order_array); //This maybe useful to know how mnay we had in the rank. Actually why don't we make the for loop use it. Saves us a lot of time.
+
+	//return $rank_order_array_count; // What is this?
+
+	$rank_order_array_count = $rank_order_array_count -1; //Need to start from 0, so down 1.
+
+	//return "The count is ". $rank_order_array_count . "<br>" . $rank_order_array['0'] . "<br>". $rank_order_array['1'] . "<br>". $rank_order_array['2'] . "<br>" . $rank_order_array['3'] . "<br>". $rank_order_array['4']; //testing this. //requires 4 users or gives error
+
 	//Ok. We need to just do an $x_for_count for just all the users. I really doubt you will have more than 1000 users. But we will burn that bridge when we get to it.
-	for ($x_for_count = $table_range_start; $x_for_count >= $table_range_stop; $x_for_count = $x_for_count - 1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
+	//for ($x_for_count = $table_range_start; $x_for_count >= $table_range_stop; $x_for_count = $x_for_count - 1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
+	for ($x_for_count = $rank_order_array_count; $x_for_count >= 0; $x_for_count = $x_for_count - 1 ) { //Let's just use the order array count. How many users could their possibly be?
+
+		//NOTE: In this method, the $x_for_count is not the actual user id but the rank of the top. To align the user ID, we need to pull it from array.
+
+		$current_ranked_user_id = $rank_order_array[ $x_for_count ]; //It feels like it shoulnd't be that easy beating my head over this for the past 48 hours.
 
 		//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
 		/*
@@ -175,7 +220,7 @@ function vyps_public_balance_func( $atts ) {
 		//This is needed as we need the user name
 		//$display_name_data = $wpdb->get_var( "SELECT display_name FROM $table_name_users WHERE id= '$user_id_data'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
 		$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
-		$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $x_for_count );
+		$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $current_ranked_user_id );
 		$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
 
 
@@ -195,10 +240,11 @@ function vyps_public_balance_func( $atts ) {
 		$point_type_data = $wpdb->get_var( $point_type_data_query_prepared );
 		*/
 
+		//there needs to be a rank() function soemwhere.
 		//We do need this.
 		//$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count'" );
     $amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
-    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $x_for_count, $pointID ); //pulling this from the shortcode atts, by default its 1. Technically it won't work without a coin, but *shrugs*
+    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $current_ranked_user_id, $pointID ); //pulling this from the shortcode atts, by default its 1. Technically it won't work without a coin, but *shrugs*
     $amount_data = $wpdb->get_var( $amount_data_query_prepared );
 
 		$amount_data = intval($amount_data); //need to set this a int and if it's zero then ignore the output. BTW I should put less than, but I think negative numbers and zeroes have their place
@@ -210,13 +256,14 @@ function vyps_public_balance_func( $atts ) {
 
 		} else {
 
-			$current_amount = $amount_data; //Saving this for comparison. As we know this row is valid we only need to change variable now.
-
+			//$current_amount = $amount_data; //Saving this for comparison. As we know this row is valid we only need to change variable now.
+			$display_rank_data = ($rank_order_array_count - $x_for_count) + 1; //Normies don't count start counting at zero.
+			$amount_data = number_format($amount_data); //because I like commas
 			$current_row_output = "
 				<tr>
-					<td>$x_for_count</td>
+					<td>$display_rank_data</td>
 					<td>$display_name_data</td>
-					<td>$amount_data</td>
+					<td><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $amount_data</td>
 				</tr>
 					";
 		}
@@ -237,6 +284,9 @@ function vyps_public_balance_func( $atts ) {
 		//After it to determine if $table_output = $table_output . $current_row_output; vs $table_output = $current_row_output . $table_output;  Seems stupidly obvious
 		//Now that I think about its o don't have to deal with arrays or loops within loops. Cells in leaderboards interlinked.
 
+		$table_output = $table_output . $current_row_output; //Output row
+
+		/* this is no longer needed
 		if ( $display_name_data == '' ){
 
 			//Nothing really need to happen here (I suppose I could do =!). I have this here as I have a feeling I might need it later rather than just a =!
@@ -260,9 +310,11 @@ function vyps_public_balance_func( $atts ) {
 		//End of checking for blank display name.
 		}
 
+		*/
+
 
 	}
-
+	/* Old page output
 	//The page output
 	return "
 		<div class=\"wrap\">
@@ -277,6 +329,20 @@ function vyps_public_balance_func( $atts ) {
 			<h2 style=\"text-align:center\">Page $page_number</h2>
 		</div>
 	";
+	*/
+
+	//simple tables for now.
+	return "
+		<div class=\"wrap\">
+			<table class=\"wp-list-table widefat fixed striped users\">
+				$header_output
+				$table_output
+				$header_output
+			</table>
+		</div>
+	";
+
+
 
 }
 
