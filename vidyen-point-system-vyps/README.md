@@ -1,7 +1,7 @@
 === VidYen Point System ===
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
-Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet
+Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet, rewards, reward, WooCommerce
 Requires at least: 4.9.5
 Tested up to: 4.97
 Requires PHP: 7.0
