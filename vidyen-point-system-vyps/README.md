@@ -52,6 +52,9 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.04.03 =
+Added a public user balance shortcode so other users can be aware of the balances of other users without having to do manual calculations with the log. (Game theory)
+
 = 00.03.09 =
 Added pagnation to the public log as it was getting cumbersome on our own test server. ex: [vyps-pl rows=25 bootstrap=yes]
 Minor bug fixes.
