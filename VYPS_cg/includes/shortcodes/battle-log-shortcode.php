@@ -35,16 +35,16 @@ function cg_battle_log($params = array())
             ";
         foreach ($logs as $log) {
             $opponent = "";
-            $outcome = "Lost";
+            $outcome = "You Lost";
             if ($log->winner == wp_get_current_user()->user_login) {
                 $opponent = $log->loser;
-                $outcome = "Won";
+                $outcome = "You Won";
             } else {
                 $opponent = $log->winner;
             }
 
             if ($log->tie == 1) {
-                $outcome = "Tie";
+                $outcome = "You Tied";
             }
 
             $params = $_GET;
