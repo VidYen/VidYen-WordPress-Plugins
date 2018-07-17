@@ -49,7 +49,7 @@ function cg_battle_log($params = array())
 
             $params = $_GET;
             unset($params["view_log"]);
-            $params["view_log"] = $log->id;
+            $params["view_log"] = $log->battle_id;
             $params["return_log"] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";;
 
             $new_query_string = http_build_query($params);

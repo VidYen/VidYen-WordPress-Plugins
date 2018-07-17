@@ -9,7 +9,7 @@ function cg_my_equipment($params = array())
 
     $return = "";
     $user_equipment = $wpdb->get_results(
-        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s ORDER BY id DESC", wp_get_current_user()->user_login)
+        $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is NULL", wp_get_current_user()->user_login)
     );
 
     //add counting

@@ -1,7 +1,7 @@
 <?php
 
-class Battle
-{
+class Battle{
+
     private $range;
     private $users;
     private $user_first;
@@ -17,13 +17,13 @@ class Battle
     /**
      * Starts the battle, generates damage
      */
-    public function startBattle()
-    {
+    public function startBattle(){
+
         $first_wins = 0;
         $second_wins = 0;
-        for ($i = 0;$i<=5;$i++) {
+        for($i = 0;$i<=5;$i++){
             $start = $this->pickInitiator();
-            if ($start == 1) {
+            if($start == 1){
                 $this->user_first = $this->users[0];
             } else {
                 $this->user_second = $this->users[1];
@@ -35,9 +35,9 @@ class Battle
             $this->destroyEquipment($first_equipment_damage, $this->user_second);
             $this->destroyEquipment($second_equipment_damage, $this->user_first);
 
-            if ($first_equipment_damage > $second_equipment_damage) {
+            if($first_equipment_damage > $second_equipment_damage){
                 $first_wins++;
-            } elseif ($first_equipment_damage < $second_equipment_damage) {
+            } elseif($first_equipment_damage < $second_equipment_damage){
                 $second_wins++;
             } else {
                 $first_wins++;
@@ -48,23 +48,23 @@ class Battle
 
         $this->range = 5000;
 
-        for ($i = 0;$i<=5;$i++) {
+        for($i = 0;$i<=5;$i++){
             $start = $this->pickInitiator();
-            if ($start == 1) {
+            if($start == 1){
                 $this->user_first = $this->users[0];
             } else {
                 $this->user_second = $this->users[1];
             }
 
-            $first_equipment_damage = (int)(rand(.9, 1)*$this->getManpowerDamage($this->user_first));
-            $second_equipment_damage = (int)(rand(.9, 1)*$this->getManpowerDamage($this->user_second));
+            $first_equipment_damage = (int)(rand(.9,1)*$this->getManpowerDamage($this->user_first));
+            $second_equipment_damage = (int)(rand(.9,1)*$this->getManpowerDamage($this->user_second));
 
             $this->destroyManpower($first_equipment_damage, $this->user_second);
             $this->destroyManpower($second_equipment_damage, $this->user_first);
 
-            if ($first_equipment_damage > $second_equipment_damage) {
+            if($first_equipment_damage > $second_equipment_damage){
                 $first_wins++;
-            } elseif ($first_equipment_damage < $second_equipment_damage) {
+            } elseif($first_equipment_damage < $second_equipment_damage){
                 $second_wins++;
             } else {
                 $first_wins++;
@@ -73,11 +73,11 @@ class Battle
             $this->nextRound();
         }
 
-        if ($first_wins > $second_wins) {
+        if($first_wins > $second_wins){
             $this->finish($this->user_first, $this->user_second);
-        } elseif ($first_wins < $second_wins) {
+        } elseif($first_wins < $second_wins){
             $this->finish($this->user_second, $this->user_first);
-        } else {
+        } else{
             $this->tie($this->user_first, $this->user_second);
         }
     }
@@ -85,8 +85,7 @@ class Battle
     /**
      * Next round by moving the troops closer
      */
-    public function nextRound()
-    {
+    public function nextRound(){
         $this->range -= 1000;
     }
 
@@ -97,7 +96,7 @@ class Battle
     {
         $random = (mt_rand() / mt_getrandmax());
 
-        if ($random <= .5) {
+        if($random <= .5){
             return 1;
         }
 
@@ -107,15 +106,14 @@ class Battle
     /**
      * Inserts winner and loser into db
      */
-    public function finish($winner, $loser)
-    {
+    public function finish($winner, $loser){
         global $wpdb;
 
         $battles = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE battle_id=%d", $this->battle_id)
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE battle_id=%d", $this->battle_id )
         );
 
-        if (count($battles) == 0) {
+        if(count($battles) == 0){
             $wpdb->insert(
                 $wpdb->vypsg_battles,
                 array(
@@ -145,10 +143,10 @@ class Battle
         global $wpdb;
 
         $battles = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE battle_id=%d", $this->battle_id)
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles WHERE battle_id=%d", $this->battle_id )
         );
 
-        if (count($battles) == 0) {
+        if(count($battles) == 0){
             $wpdb->insert(
                 $wpdb->vypsg_battles,
                 array(
@@ -177,21 +175,22 @@ class Battle
     {
         global $wpdb;
         $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY id DESC", $username)
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY id DESC", $username )
         );
 
         //add counting
         $equipment = [];
 
-        foreach ($user_equipment as $indiv) {
-            if (array_key_exists($indiv->item_id, $equipment)) {
+        foreach($user_equipment as $indiv){
+
+            if(array_key_exists($indiv->item_id, $equipment)){
                 $equipment[$indiv->item_id]['amount'] += 1;
             } else {
                 $new = $wpdb->get_results(
-                    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d and combat_range >= %d", $indiv->item_id, $this->range)
+                    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d and combat_range >= %d", $indiv->item_id, $this->range )
                 );
 
-                if (!empty($new)) {
+                if(!empty($new)){
                     $equipment[$indiv->item_id]['item'] = $indiv->item_id;
                     $equipment[$indiv->item_id]['amount'] = 1;
                     $equipment[$indiv->item_id]['name'] = $new[0]->name;
@@ -200,15 +199,16 @@ class Battle
                     $equipment[$indiv->item_id]['entrenchment'] = $new[0]->entrenchment;
                     $equipment[$indiv->item_id]['armor'] = $new[0]->armor;
                 }
+
             }
         }
 
         $damage_total = 0;
-        foreach ($equipment as $indiv) {
+        foreach($equipment as $indiv){
             $damage_total += $indiv['hard_attack'] * $indiv['amount'];
         }
 
-        if ($damage_total < 0) {
+        if($damage_total < 0){
             $damage_total = 0;
         }
 
@@ -222,21 +222,22 @@ class Battle
     {
         global $wpdb;
         $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and combat_range >= $this->range and battle_id is null ORDER BY id DESC", $username)
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and combat_range >= $this->range and battle_id is null ORDER BY id DESC", $username )
         );
 
         //add counting
         $equipment = [];
 
-        foreach ($user_equipment as $indiv) {
-            if (array_key_exists($indiv->item_id, $equipment)) {
+        foreach($user_equipment as $indiv){
+
+            if(array_key_exists($indiv->item_id, $equipment)){
                 $equipment[$indiv->item_id]['amount'] += 1;
             } else {
                 $new = $wpdb->get_results(
-                    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d and combat_range >= %d", $indiv->item_id, $range)
+                    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d and combat_range >= %d", $indiv->item_id, $range )
                 );
 
-                if (!empty($new)) {
+                if(!empty($new)){
                     $equipment[$indiv->item_id]['item'] = $indiv->item_id;
                     $equipment[$indiv->item_id]['amount'] = 1;
                     $equipment[$indiv->item_id]['name'] = $new[0]->name;
@@ -245,15 +246,16 @@ class Battle
                     $equipment[$indiv->item_id]['entrenchment'] = $new[0]->entrenchment;
                     $equipment[$indiv->item_id]['armor'] = $new[0]->armor;
                 }
+
             }
         }
 
         $damage_total = 0;
-        foreach ($equipment as $indiv) {
+        foreach($equipment as $indiv){
             $damage_total += $indiv['soft_attack'] * $indiv['amount'];
         }
 
-        if ($damage_total < 0) {
+        if($damage_total < 0){
             $damage_total = 0;
         }
 
@@ -267,7 +269,7 @@ class Battle
     {
         global $wpdb;
         $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY id DESC", $username)
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null", $username )
         );
 
         return count($user_equipment);
@@ -280,25 +282,25 @@ class Battle
     {
         global $wpdb;
         $count = 0;
-        while (true) {
-            if ($count == 10) {
+        while(true){
+            if($count == 10){
                 break;
             }
-            $count++;
-            if ($damage <= 0 || $this->getEquipmentLeft($username) == 0) {
+
+            if($damage <= 0 || $this->getEquipmentLeft($username) == 0){
                 break;
             }
 
             $user_equipment = $wpdb->get_results(
-                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY RAND()", $username)
+                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY RAND()", $username )
             );
 
             $equipment = $wpdb->get_results(
-                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $user_equipment[0]->item_id)
+                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $user_equipment[0]->item_id )
             );
 
-            if (isset($equipment[0]->entrenchment)) {
-                if ($equipment[0]->entrenchment == 0) {
+            if(isset($equipment[0]->entrenchment)){
+                if($equipment[0]->entrenchment == 0){
                     $equipment[0]->entrenchment = 1;
                 }
 
@@ -306,6 +308,7 @@ class Battle
 
                 $data = array('battle_id' => $this->battle_id);
                 $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
+                $count++;
             }
         }
     }
@@ -318,25 +321,25 @@ class Battle
         global $wpdb;
 
         $count = 0;
-        while (true) {
-            if ($count == 100) {
+        while(true){
+            if($count == 100){
                 break;
             }
             $count++;
-            if ($damage <= 0 || $this->getEquipmentLeft($username) == 0) {
+            if($damage <= 0 || $this->getEquipmentLeft($username) == 0){
                 break;
             }
 
             $user_equipment = $wpdb->get_results(
-                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY RAND()", $username)
+                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY RAND()", $username )
             );
 
             $equipment = $wpdb->get_results(
-                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $user_equipment[0]->item_id)
+                $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $user_equipment[0]->item_id )
             );
 
-            if (isset($equipment[0]->entrenchment)) {
-                if ($equipment[0]->entrenchment == 0) {
+            if(isset($equipment[0]->entrenchment)){
+                if($equipment[0]->entrenchment == 0){
                     $equipment[0]->entrenchment = 1;
                 }
 
