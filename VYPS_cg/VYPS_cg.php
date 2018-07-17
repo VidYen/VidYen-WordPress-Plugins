@@ -94,6 +94,7 @@ function vypsg_activate()
       item_id VARCHAR(255) NOT NULL,
       username VARCHAR(25) NOT NULL,
       battle_id MEDIUMINT(9), /* what battle it was lost in */
+      captured_from VARCHAR(25), /* if captured, where from */
       PRIMARY KEY  (id)
     ) $charset_collate;";
 

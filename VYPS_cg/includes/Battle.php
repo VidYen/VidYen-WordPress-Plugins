@@ -222,7 +222,7 @@ class Battle{
     {
         global $wpdb;
         $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and combat_range >= $this->range and battle_id is null ORDER BY id DESC", $username )
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id is null ORDER BY id DESC", $username )
         );
 
         //add counting
