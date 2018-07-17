@@ -234,7 +234,7 @@ class Battle{
                 $equipment[$indiv->item_id]['amount'] += 1;
             } else {
                 $new = $wpdb->get_results(
-                    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d and combat_range >= %d", $indiv->item_id, $range )
+                    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d and combat_range >= %d", $indiv->item_id, $this->range )
                 );
 
                 if(!empty($new)){
