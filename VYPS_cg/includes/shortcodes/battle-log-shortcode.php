@@ -97,14 +97,19 @@ function cg_battle_log($params = array())
         return $return;
     } else {
         $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and battle_id = %d ORDER BY id DESC", wp_get_current_user()->user_login, $_GET['view_log'])
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and (battle_id = %d or captured_id = %d) ORDER BY id DESC", wp_get_current_user()->user_login, $_GET['view_log'], $_GET['view_log'])
         );
 
+        echo var_dump($user_equipment);
         //add counting
         $equipment = [];
-
+        $captured = 0;
 
         foreach ($user_equipment as $indiv) {
+            if(!is_null($indiv->captured_id)){
+                $captured++;
+            }
+
             if (array_key_exists($indiv->item_id, $equipment)) {
                 $equipment[$indiv->item_id]['amount'] += 1;
             } else {
@@ -159,13 +164,24 @@ function cg_battle_log($params = array())
                 ";
         }
 
-        if (empty($equipment)) {
+        if (empty($equipment) && $captured == 0) {
             $return .= "
                     <tr>
                         <td colspan=\"4\">No equipment was lost.</td>
                     </tr>
                 ";
         }
+
+        if($captured > 0){
+            $return .= "
+                  <tr>
+                    <td colspan='4'>
+                        You captured {$captured} piece(s) of equipment.
+                    </td>
+                </tr>
+                ";
+        }
+
         $return .= "
                         </tbody>
             <tfoot>

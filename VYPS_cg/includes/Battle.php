@@ -32,8 +32,8 @@ class Battle{
             $first_equipment_damage = (int)(((float)((rand(90, 100))) / 100)*$this->getEquipmentDamage($this->user_first));
             $second_equipment_damage = (int)(((float)((rand(90, 100))) / 100)*(float)$this->getEquipmentDamage($this->user_second));
 
-            $this->destroyEquipment($first_equipment_damage, $this->user_second);
-            $this->destroyEquipment($second_equipment_damage, $this->user_first);
+            $this->destroyEquipment($first_equipment_damage, $this->user_second, $this->user_first);
+            $this->destroyEquipment($second_equipment_damage, $this->user_first, $this->user_second);
 
             if($first_equipment_damage > $second_equipment_damage){
                 $first_wins++;
@@ -278,7 +278,7 @@ class Battle{
     /**
      * Destroy equipment based on damage
      */
-    public function destroyEquipment($damage, $username)
+    public function destroyEquipment($damage, $username, $opposition)
     {
         global $wpdb;
         $count = 0;
@@ -306,8 +306,16 @@ class Battle{
 
                 $damage -= ($equipment[0]->armor*$equipment[0]->entrenchment);
 
-                $data = array('battle_id' => $this->battle_id);
-                $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
+                $random = (mt_rand() / mt_getrandmax());
+
+                if($random <= .5){
+                    $data = array('captured_from' => $user_equipment[0]->id, 'username' => $opposition, 'captured_id' => $this->battle_id);
+                    $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
+                } else {
+                    $data = array('battle_id' => $this->battle_id);
+                    $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
+                }
+
                 $count++;
             }
         }

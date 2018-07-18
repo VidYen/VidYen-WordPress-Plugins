@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 /**
  * Creates shortcode for battle log page
@@ -91,26 +94,58 @@ function cg_battle_log_all($params = array())
     ";
         return $return;
     } else {
-        $user_equipment = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE battle_id = %d ORDER BY id DESC", $_GET['view_log'])
+        $battle = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_battles battle_id where battle_id = %d", $_GET['view_log'])
+        );
+
+        $user_equipment_one = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username = %s and (battle_id = %d or captured_id = %d) ORDER BY id DESC", $battle[0]->winner, $_GET['view_log'], $_GET['view_log'])
+        );
+
+        $user_equipment_two = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username = %s and (battle_id = %d or captured_id = %d) ORDER BY id DESC", $battle[0]->loser, $_GET['view_log'], $_GET['view_log'])
         );
 
         //add counting
-        $equipment = [];
+        $equipment_one = [];
+        $equipment_two = [];
 
+        $captured_one = 0;
+        $captured_two = 0;
 
-        foreach ($user_equipment as $indiv) {
-            if (array_key_exists($indiv->item_id, $equipment)) {
-                $equipment[$indiv->item_id]['amount'] += 1;
+        foreach ($user_equipment_one as $indiv) {
+            if(!is_null($indiv->captured_id)){
+                $captured_one++;
+            }
+            if (array_key_exists($indiv->item_id, $equipment_one)) {
+                $equipment_one[$indiv->item_id]['amount'] += 1;
             } else {
                 $new = $wpdb->get_results(
                     $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $indiv->item_id)
                 );
 
-                $equipment[$indiv->item_id]['item'] = $indiv->item_id;
-                $equipment[$indiv->item_id]['amount'] = 1;
-                $equipment[$indiv->item_id]['name'] = $new[0]->name;
-                $equipment[$indiv->item_id]['icon'] = $new[0]->icon;
+                $equipment_one[$indiv->item_id]['item'] = $indiv->item_id;
+                $equipment_one[$indiv->item_id]['amount'] = 1;
+                $equipment_one[$indiv->item_id]['name'] = $new[0]->name;
+                $equipment_one[$indiv->item_id]['icon'] = $new[0]->icon;
+            }
+        }
+
+        foreach ($user_equipment_two as $indiv) {
+            if(!is_null($indiv->captured_id)){
+                $captured_two++;
+            }
+            if (array_key_exists($indiv->item_id, $equipment_two)) {
+                $equipment_two[$indiv->item_id]['amount'] += 1;
+            } else {
+                $new = $wpdb->get_results(
+                    $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $indiv->item_id)
+                );
+
+                $equipment_two[$indiv->item_id]['item'] = $indiv->item_id;
+                $equipment_two[$indiv->item_id]['amount'] = 1;
+                $equipment_two[$indiv->item_id]['name'] = $new[0]->name;
+                $equipment_two[$indiv->item_id]['icon'] = $new[0]->icon;
             }
         }
 
@@ -129,6 +164,9 @@ function cg_battle_log_all($params = array())
                 </th>
                 <th scope=\"col\" class=\"manage-column column-primary\">
                     <span>Name</span>
+                </th>   
+                <th scope=\"col\" class=\"manage-column column-primary\">
+                    <span>Username</span>
                 </th>
                 <th scope=\"col\" class=\"manage-column column-primary\">
                     <span>Amount</span>
@@ -138,11 +176,14 @@ function cg_battle_log_all($params = array())
             <tbody id=\"the-list\" data-wp-lists=\"list:log\">
             ";
 
-        foreach ($equipment as $single) {
+        foreach ($equipment_one as $single) {
             $return .= "
                   <tr id=\"log-1\">
                     <td>
                         <img width=\"42\" src=\"{$single['icon']}\"/>
+                    </td>
+                    <td>
+                        {$battle[0]->winner}
                     </td>
                     <td>
                         {$single['name']}
@@ -154,13 +195,52 @@ function cg_battle_log_all($params = array())
                 ";
         }
 
-        if (empty($equipment)) {
+        foreach ($equipment_two as $single) {
+            $return .= "
+                  <tr id=\"log-1\">
+                    <td>
+                        <img width=\"42\" src=\"{$single['icon']}\"/>
+                    </td>
+                    <td>
+                        {$battle[0]->loser}
+                    </td>
+                    <td>
+                        {$single['name']}
+                    </td>
+                    <td>
+                        {$single['amount']}
+                    </td>
+                </tr>
+                ";
+        }
+
+        if (empty($equipment_one) && empty($equipment_two)) {
             $return .= "
                     <tr>
                         <td colspan=\"4\">No equipment was lost.</td>
                     </tr>
                 ";
         }
+
+        if($captured_one > 0){
+            $return .= "
+                  <tr>
+                    <td colspan='4'>
+                        {$battle[0]->winner} captured {$captured_one} piece(s) of equipment.
+                    </td>
+                </tr>
+                ";
+        }
+
+        if($captured_two > 0){
+            $return .= "
+                  <tr>
+                    <td colspan='4'>
+                        {$battle[0]->loser} captured {$captured_two} piece(s) of equipment.
+                    </td>
+                </tr>";
+        }
+
         $return .= "
                         </tbody>
             <tfoot>
@@ -170,6 +250,9 @@ function cg_battle_log_all($params = array())
                 </th>
                 <th scope=\"col\" class=\"manage-column column-primary\">
                     <span>Name</span>
+                </th>
+                <th scope=\"col\" class=\"manage-column column-primary\">
+                    <span>Username</span>
                 </th>
                 <th scope=\"col\" class=\"manage-column column-primary\">
                     <span>Amount</span>
