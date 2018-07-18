@@ -23,19 +23,14 @@ Current Plugins
 
 I need to finish labeling what the folders more professionally but here is what I have:
 
-VYPS_as = VYPS Adscend
-
-VYPS_base = The base plugin required for all plugins to work
+vidyen-point-system-vyps = The folder on WordPress.org release
 
 VYPS_cf = CoinFlip game
 
-VYPS_ch = Coinhive plugin
+VYPS_cg = Combat Game (in progress)
 
 VYPS_un = Uninstall plugin
 
-VYPS_wr = Weighted Raffle (not funcitonal)
-
-VYPS_ww = WooWallet shortcode
 
 About and Support
 --------
