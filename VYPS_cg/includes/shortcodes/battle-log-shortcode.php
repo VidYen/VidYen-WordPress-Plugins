@@ -100,7 +100,6 @@ function cg_battle_log($params = array())
             $wpdb->prepare("SELECT * FROM $wpdb->vypsg_tracking WHERE username=%s and (battle_id = %d or captured_id = %d) ORDER BY id DESC", wp_get_current_user()->user_login, $_GET['view_log'], $_GET['view_log'])
         );
 
-        echo var_dump($user_equipment);
         //add counting
         $equipment = [];
         $captured = 0;
