@@ -117,7 +117,8 @@ if (! empty($_POST['submit'])) {
                 $_POST['equipment_support'],
                 $_POST['equipment_faction'],
                 $_POST['equipment_model_year'],
-                true
+                true,
+                $_POST['equipment_id']
             );
         }
 
@@ -163,6 +164,7 @@ wp_enqueue_style('vidyen-admin', plugins_url('VYPS_cg/admin.css'), '', '1.0.5');
 } ?>
 <form method="post" id="equipment" enctype="multipart/form-data" action="<?php echo admin_url('admin.php?page='.plugin_basename(__FILE__)); ?>">
     <?php wp_nonce_field('vyps_add-equipment'); ?>
+    <?php if(!empty($_GET['edit_equipment'])) { ?> <input type="hidden" value="<?= $_GET['edit_equipment'] ?>" name="equipment_id"/> <?php } ?>
     <div class="wrap">
         <h2><?php _e('Create Equipment', 'vidyen'); ?></h2>
         <table class="form-table">

@@ -81,18 +81,19 @@ function create_equipment(
     $point_cost,
     $point_sell,
     $manpower,
-                        $manpower_use,
+    $manpower_use,
     $speed_modifier,
     $morale_modifier,
     $combat_range,
     $soft_attack,
     $hard_attack,
     $armor,
-                        $entrenchment,
+    $entrenchment,
     $support,
     $faction,
     $model_year,
-    $edit = false
+    $edit = false,
+    $old_id = 0
 ) {
     global $wpdb;
     $error = check_equipment_errors(
@@ -176,6 +177,12 @@ function create_equipment(
             '%d',
         )
     );
+
+    $new_id = $wpdb->insert_id;
+    if($edit == true){
+        $data = array('item_id' => $new_id);
+        $wpdb->update($wpdb->vypsg_tracking, $data, ['item_id' => $old_id]);
+    }
 
     return $error;
 }
