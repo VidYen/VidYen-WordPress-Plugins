@@ -23,6 +23,7 @@ function cg_battle($params = array())
             $battle = new Battle(5000, [$pending_battles[0]->user_one, $pending_battles[0]->user_two], $pending_battles[0]->id);
             $battle->startBattle();
         }
+        echo '<script type="text/javascript">document.location = document.location;</script>';
     }
 
     /**

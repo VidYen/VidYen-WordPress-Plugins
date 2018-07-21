@@ -59,8 +59,8 @@ class Battle{
             $first_equipment_damage = (int)(rand(.9,1)*$this->getManpowerDamage($this->user_first));
             $second_equipment_damage = (int)(rand(.9,1)*$this->getManpowerDamage($this->user_second));
 
-            $this->destroyManpower($first_equipment_damage, $this->user_second);
-            $this->destroyManpower($second_equipment_damage, $this->user_first);
+            $this->destroyManpower($first_equipment_damage, $this->user_second, $this->user_first);
+            $this->destroyManpower($second_equipment_damage, $this->user_first, $this->user_second);
 
             if($first_equipment_damage > $second_equipment_damage){
                 $first_wins++;
@@ -308,7 +308,7 @@ class Battle{
 
                 $random = (mt_rand() / mt_getrandmax());
 
-                if($random <= .5){
+                if($random <= .5 || $equipment[0]->support){
                     $data = array('captured_from' => $user_equipment[0]->id, 'username' => $opposition, 'captured_id' => $this->battle_id);
                     $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
                 } else {
@@ -324,7 +324,7 @@ class Battle{
     /**
      * Destroy manpower based on damage
      */
-    public function destroyManpower($damage, $username)
+    public function destroyManpower($damage, $username, $opposition)
     {
         global $wpdb;
 
@@ -353,8 +353,15 @@ class Battle{
 
                 $damage -= ($equipment[0]->armor*$equipment[0]->entrenchment);
 
-                $data = array('battle_id' => $this->battle_id);
-                $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
+                if($equipment[0]->support){
+                    $data = array('captured_from' => $user_equipment[0]->id, 'username' => $opposition, 'captured_id' => $this->battle_id);
+                    $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
+                } else {
+                    $data = array('battle_id' => $this->battle_id);
+                    $wpdb->update($wpdb->vypsg_tracking, $data, ['id' => $user_equipment[0]->id]);
+                }
+
+
             }
         }
     }
