@@ -102,15 +102,14 @@ function cg_battle_log($params = array())
 
         //add counting
         $equipment = [];
-        $captured = 0;
 
         foreach ($user_equipment as $indiv) {
-            if(!is_null($indiv->captured_id)){
-                $captured++;
-            }
 
             if (array_key_exists($indiv->item_id, $equipment)) {
                 $equipment[$indiv->item_id]['amount'] += 1;
+                if(!is_null($indiv->captured_id)){
+                    $equipment[$indiv->item_id]['captured']++;
+                }
             } else {
                 $new = $wpdb->get_results(
                     $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $indiv->item_id)
@@ -120,6 +119,11 @@ function cg_battle_log($params = array())
                 $equipment[$indiv->item_id]['amount'] = 1;
                 $equipment[$indiv->item_id]['name'] = $new[0]->name;
                 $equipment[$indiv->item_id]['icon'] = $new[0]->icon;
+                if(!is_null($indiv->captured_id)){
+                    $equipment[$indiv->item_id]['captured'] = 1;
+                } else {
+                    $equipment[$indiv->item_id]['captured'] = 0;
+                }
             }
         }
 
@@ -157,27 +161,17 @@ function cg_battle_log($params = array())
                         {$single['name']}
                     </td>
                     <td>
-                        {$single['amount']}
+                        {$single['amount']} Lost, {$single['captured']} Captured
                     </td>
                 </tr>
                 ";
         }
 
-        if (empty($equipment) && $captured == 0) {
+        if (empty($equipment)) {
             $return .= "
                     <tr>
                         <td colspan=\"4\">No equipment was lost.</td>
                     </tr>
-                ";
-        }
-
-        if($captured > 0){
-            $return .= "
-                  <tr>
-                    <td colspan='4'>
-                        You captured {$captured} piece(s) of equipment.
-                    </td>
-                </tr>
                 ";
         }
 

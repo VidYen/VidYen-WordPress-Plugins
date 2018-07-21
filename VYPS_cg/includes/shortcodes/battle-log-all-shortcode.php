@@ -110,15 +110,13 @@ function cg_battle_log_all($params = array())
         $equipment_one = [];
         $equipment_two = [];
 
-        $captured_one = 0;
-        $captured_two = 0;
-
         foreach ($user_equipment_one as $indiv) {
-            if(!is_null($indiv->captured_id)){
-                $captured_one++;
-            }
+
             if (array_key_exists($indiv->item_id, $equipment_one)) {
                 $equipment_one[$indiv->item_id]['amount'] += 1;
+                if(!is_null($indiv->captured_id)){
+                    $equipment_one[$indiv->item_id]['captured']++;
+                }
             } else {
                 $new = $wpdb->get_results(
                     $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $indiv->item_id)
@@ -128,15 +126,21 @@ function cg_battle_log_all($params = array())
                 $equipment_one[$indiv->item_id]['amount'] = 1;
                 $equipment_one[$indiv->item_id]['name'] = $new[0]->name;
                 $equipment_one[$indiv->item_id]['icon'] = $new[0]->icon;
+                if(!is_null($indiv->captured_id)){
+                    $equipment_one[$indiv->item_id]['captured'] = 1;
+                } else {
+                    $equipment_one[$indiv->item_id]['captured'] = 0;
+                }
             }
         }
 
         foreach ($user_equipment_two as $indiv) {
-            if(!is_null($indiv->captured_id)){
-                $captured_two++;
-            }
+
             if (array_key_exists($indiv->item_id, $equipment_two)) {
                 $equipment_two[$indiv->item_id]['amount'] += 1;
+                if(!is_null($indiv->captured_id)){
+                    $equipment_two[$indiv->item_id]['captured']++;
+                }
             } else {
                 $new = $wpdb->get_results(
                     $wpdb->prepare("SELECT * FROM $wpdb->vypsg_equipment WHERE id=%d", $indiv->item_id)
@@ -146,6 +150,11 @@ function cg_battle_log_all($params = array())
                 $equipment_two[$indiv->item_id]['amount'] = 1;
                 $equipment_two[$indiv->item_id]['name'] = $new[0]->name;
                 $equipment_two[$indiv->item_id]['icon'] = $new[0]->icon;
+                if(!is_null($indiv->captured_id)){
+                    $equipment_two[$indiv->item_id]['captured'] = 1;
+                } else {
+                    $equipment_two[$indiv->item_id]['captured'] = 0;
+                }
             }
         }
 
@@ -189,7 +198,7 @@ function cg_battle_log_all($params = array())
                         {$single['name']}
                     </td>
                     <td>
-                        {$single['amount']}
+                        {$single['amount']} Lost, {$single['captured']} Captured
                     </td>
                 </tr>
                 ";
@@ -208,7 +217,7 @@ function cg_battle_log_all($params = array())
                         {$single['name']}
                     </td>
                     <td>
-                        {$single['amount']}
+                        {$single['amount']} Lost, {$single['captured']} Captured
                     </td>
                 </tr>
                 ";
@@ -220,25 +229,6 @@ function cg_battle_log_all($params = array())
                         <td colspan=\"4\">No equipment was lost.</td>
                     </tr>
                 ";
-        }
-
-        if($captured_one > 0){
-            $return .= "
-                  <tr>
-                    <td colspan='4'>
-                        {$battle[0]->winner} captured {$captured_one} piece(s) of equipment.
-                    </td>
-                </tr>
-                ";
-        }
-
-        if($captured_two > 0){
-            $return .= "
-                  <tr>
-                    <td colspan='4'>
-                        {$battle[0]->loser} captured {$captured_two} piece(s) of equipment.
-                    </td>
-                </tr>";
         }
 
         $return .= "
