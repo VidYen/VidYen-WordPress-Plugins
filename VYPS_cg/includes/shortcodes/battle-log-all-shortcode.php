@@ -66,7 +66,7 @@ function cg_battle_log_all($params = array())
                     <td>
                         <a class=\"button - secondary\" href=\"$log_url\">View Loses</a>
                     </td>
-    
+
                 </tr>
                 ";
         }
@@ -169,16 +169,19 @@ function cg_battle_log_all($params = array())
             <thead>
             <tr>
                 <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Icon</span>
+                    <span>Equipment</span>
                 </th>
                 <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Name</span>
-                </th>   
-                <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Username</span>
+                    <span>Equipment Name</span>
                 </th>
                 <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Amount</span>
+                    <span>Lost</span>
+                </th>
+                <th scope=\"col\" class=\"manage-column column-primary\">
+                    <span>Captured</span>
+                </th>
+                <th scope=\"col\" class=\"manage-column column-primary\">
+                    <span>User Name</span>
                 </th>
             </tr>
             </thead>
@@ -192,13 +195,16 @@ function cg_battle_log_all($params = array())
                         <img width=\"42\" src=\"{$single['icon']}\"/>
                     </td>
                     <td>
-                        {$battle[0]->winner}
-                    </td>
-                    <td>
                         {$single['name']}
                     </td>
                     <td>
-                        {$single['amount']} Lost, {$single['captured']} Captured
+                        {$single['amount']} Lost
+                    </td>
+                    <td>
+                        {$single['captured']} Captured
+                    </td>
+                    <td>
+                        {$battle[0]->winner}
                     </td>
                 </tr>
                 ";
@@ -211,13 +217,16 @@ function cg_battle_log_all($params = array())
                         <img width=\"42\" src=\"{$single['icon']}\"/>
                     </td>
                     <td>
-                        {$battle[0]->loser}
-                    </td>
-                    <td>
                         {$single['name']}
                     </td>
                     <td>
-                        {$single['amount']} Lost, {$single['captured']} Captured
+                        {$single['amount']} Lost
+                    </td>
+                    <td>
+                        {$single['captured']} Captured
+                    </td>
+                    <td>
+                        {$battle[0]->loser}
                     </td>
                 </tr>
                 ";
@@ -235,18 +244,21 @@ function cg_battle_log_all($params = array())
                         </tbody>
             <tfoot>
             <tr>
-                <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Icon</span>
-                </th>
-                <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Name</span>
-                </th>
-                <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Username</span>
-                </th>
-                <th scope=\"col\" class=\"manage-column column-primary\">
-                    <span>Amount</span>
-                </th>
+              <th scope=\"col\" class=\"manage-column column-primary\">
+                  <span>Equipment</span>
+              </th>
+              <th scope=\"col\" class=\"manage-column column-primary\">
+                  <span>Equipment Name</span>
+              </th>
+              <th scope=\"col\" class=\"manage-column column-primary\">
+                  <span>Lost</span>
+              </th>
+              <th scope=\"col\" class=\"manage-column column-primary\">
+                  <span>Captured</span>
+              </th>
+              <th scope=\"col\" class=\"manage-column column-primary\">
+                  <span>User Name</span>
+              </th>
             </tr>
             </tfoot>
         </table>
