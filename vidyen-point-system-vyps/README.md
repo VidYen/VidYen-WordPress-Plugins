@@ -1,7 +1,7 @@
 === VidYen Point System ===
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
-Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet, rewards, reward, WooCommerce
+Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet, rewards, reward, WooCommerce, rewards site, monero, XMR, raffle
 Requires at least: 4.9.5
 Tested up to: 4.97
 Requires PHP: 7.0
@@ -9,15 +9,15 @@ Stable tag: 4.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-VidYen Point System [VYPS] allows you to gamify monetization by giving your users a reason to turn off adblockers in return for rewards and recognition.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media and Coinhive as methods to monetize a site and allows users to purchase items off a WooCommerce store with points earned from doing those activities.
 
 == Description ==
 
-This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards in monetization systems. The key problem with existing advertising models and Coinhive plugins is that they do not track activity by users in a quantifiable way (or at all) so users have no self interest in doing those activities for the owner of the WordPress site. By showing users they are earning points and that by either gaining recognition or some type of reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content.
+This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
-This plugin allows you to create points and assign them to users based off monetization activities such as Adscend advertising or Coinhive mining via those systems API.
+Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend advertising or Coinhive mining via those systems API. It is similar to normal rewards sites, where users watch ads to redeem items or you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
-The goal is to allow you to have your users do all sorts of activities that can be used in games and to purchase items on WooCommerce.
+There are plans to include other monetization systems as well as well as more games and other activities for site users. Keep watching!
 
 == Frequently Asked Questions ==
 
