@@ -9,11 +9,11 @@ Stable tag: 4.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media and Coinhive as methods to monetize a site and allows users to purchase items off a WooCommerce store with points earned from doing those activities.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress via Adscend Media or Coinhive monetization.
 
 == Description ==
 
-This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media and Coinhive as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities. This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
 Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising or Coinhive mining API. It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
