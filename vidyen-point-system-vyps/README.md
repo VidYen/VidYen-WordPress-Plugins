@@ -9,7 +9,7 @@ Stable tag: 4.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress via Adscend Media or Coinhive monetization.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress using Adscend Media or Coinhive monetization.
 
 == Description ==
 
