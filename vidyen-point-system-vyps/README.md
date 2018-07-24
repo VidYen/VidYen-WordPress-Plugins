@@ -13,11 +13,11 @@ The VidYen Point System [VYPS] allows you to create your own rewards site on Wor
 
 == Description ==
 
-This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
+This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
-Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend advertising or Coinhive mining via those systems API. It is similar to normal rewards sites, where users watch ads to redeem items or you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
+Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising or Coinhive mining API. It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
-There are plans to include other monetization systems as well as well as more games and other activities for site users. Keep watching!
+There are plans to include other monetization systems with more games and other activities for site users. Keep watching!
 
 == Frequently Asked Questions ==
 
