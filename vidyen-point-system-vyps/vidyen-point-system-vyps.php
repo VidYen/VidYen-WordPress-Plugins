@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
 Description:  VidYen Point System [VYPS] allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-Version:      00.04.03
+Version:      00.04.06
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -355,4 +355,5 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsas.php'); //Roll
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256.php'); //VYPS webminerpool shortcode
 /*** End of Shortcode Includes ***/
