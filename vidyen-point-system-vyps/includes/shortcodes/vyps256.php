@@ -30,10 +30,10 @@ function vyps_vy256_solver_func($atts) {
 
   $atts = shortcode_atts(
   array(
-      'skey' => '5y8ys1vO4guiyggOblimkt46sAOWDc8z',
+      'wallet' => '',
       'pkey' => 'A6YSYjxSpS0NY6sZiBbtV6qdx4006Ypw',
       'pid' => 0,
-      'suid' => 'default',
+      'pool' => 'moneroocean.stream',
       'threads' => '1',
       'throttle' => '90',
   ), $atts, 'vyps-256' );
@@ -49,19 +49,19 @@ function vyps_vy256_solver_func($atts) {
 
   //NOTE: Where we are going we don't need $wpdb
 
-  $sm_site_key = $atts['skey'];
+  $sm_site_key = $atts['wallet'];
   $hiveKey = $atts['pkey'];
-  $sm_siteUID = $atts['suid'];
+  $mining_pool = $atts['pool'];
   $sm_threads = $atts['threads'];
   $sm_throttle = $atts['throttle'];
   $pointID = $atts['pid'];
   $current_user_id = get_current_user_id();
-  $sm_user = $sm_siteUID . $current_user_id;
-  $hiveUser = $sm_siteUID . $current_user_id;
+  //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
+  //$hiveUser = $sm_siteUID . $current_user_id; //not needed since not using CH API
 
-  if ($sm_site_key == '5y8ys1vO4guiyggOblimkt46sAOWDc8z') {
+  if ($sm_site_key == '') {
 
-    $site_warning = "<tr><td><b>You appear to have not set a site key. Hashes are going to VidYen, not your site!</b></td></tr>";
+    return "Error: Wallet address not set. This is required!";
 
   } else {
 
@@ -69,92 +69,102 @@ function vyps_vy256_solver_func($atts) {
 
   }
 
-	if (isset($_POST["consent"]) AND is_user_logged_in() ){ // Just checking if they clicked conset and are logged in case something dumb happened.
+  //Ok. I feel that having double the mining output code is annoying when its the same. We are going to make this global and the code should never be client until its client
+  //Ok. Something needs to be in the $redeem_ouput to satisfy my OCD
+  $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem Hashes\" when you want to receive points.</td></tr>"; //putting this in a table
 
-    //Ok. Something needs to be in the $redeem_ouput to satisfy my OCD
-    $redeem_output = "<tr><td>Click the button above to convert the total hashes into points.</td></tr>"; //putting this in a table
+  //Get the url for the solver
+  $vy256_solver_folder_url = plugins_url( 'js/solver/', __FILE__ );
+  //$vy256_solver_url = plugins_url( 'js/solver/miner.js', __FILE__ ); //Ah it was the worker.
 
-    //Get the url for the solver
-    $vy256_solver_folder_url = plugins_url( 'js/solver/', __FILE__ );
-    //$vy256_solver_url = plugins_url( 'js/solver/miner.js', __FILE__ ); //Ah it was the worker.
+  //Need to take the shortcode out. I could be wrong. Just rip out 'shortcodes/'
+  $vy256_solver_folder_url = str_replace('shortcodes/', '', $vy256_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
+  $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
+  $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
 
-    //Need to take the shortcode out. I could be wrong. Just rip out 'shortcodes/'
-    $vy256_solver_folder_url = str_replace('shortcodes/', '', $vy256_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
-    $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
-    $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
+  //Ok some issues we need to know the path to the js file so will have to ess with that.
+  $simple_miner_output = "
+  <table>
+    $site_warning
+    <tr><td>
+      <div>
+        <textarea rows=\"4\" cols=\"50\" id=\"texta\"></textarea>
+      </div>
+      <div>
+        <button id=\"startb\" onclick=\"start()\">Start Mining</button>
+      </div>
+      <script>var newWorker = new Worker(\"$vy256_solver_worker_url\");</script>
+      <script src=\"$vy256_solver_js_url\"></script>
+      <script>
 
-    //Ok some issues we need to know the path to the js file so will have to ess with that.
-		$simple_miner_output = "
-    <table>
-      $site_warning
-      <tr><td>
-        <div>
-          <textarea rows=\"4\" cols=\"50\" id=\"texta\"></textarea>
-        </div>
-        <div>
-          <button id=\"startb\" onclick=\"start()\">Start mining!</button>
-        </div>
-        <script>var newWorker = new Worker(\"$vy256_solver_worker_url\");</script>
-        <script src=\"$vy256_solver_js_url\"></script>
-        <script>
+        function start() {
 
-          function start() {
-
-            document.getElementById(\"startb\").disabled = true; // disable button
-
+          document.getElementById(\"startb\").disabled = true; // disable button
 
 
-            /* start mining, use a local server */
-            server = \"wss://www.vy256.com:8181\";
 
-            startMining(\"moneroocean.stream\",
-              \"48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a\");
+          /* start mining, use a local server */
+          server = \"wss://www.vy256.com:8181\";
 
-            /* keep us updated */
+          startMining(\"$mining_pool\",
+            \"$sm_site_key\");
+          throttleMiner = $sm_throttle;
 
-            addText(\"Connecting...\");
+          /* keep us updated */
 
-            setInterval(function () {
-              // for the definition of sendStack/receiveStack, see miner.js
-              while (sendStack.length > 0) addText((sendStack.pop()));
-              while (receiveStack.length > 0) addText((receiveStack.pop()));
-              addText(\"calculated \" + totalhashes + \" hashes.\");
-            }, 2000);
+          addText(\"Connecting to VY256 pool...\");
 
-          }
+          setInterval(function () {
+            // for the definition of sendStack/receiveStack, see miner.js
+            while (sendStack.length > 0) addText((sendStack.pop()));
+            while (receiveStack.length > 0) addText((receiveStack.pop()));
+            addText(\"calculated \" + totalhashes + \" hashes.\");
+          }, 2000);
 
-          /* helper function to put text into the text field.  */
+        }
 
-          function addText(obj) {
+        /* helper function to put text into the text field.  */
 
-            var elem = document.getElementById(\"texta\");
-            elem.value += \"[\" + new Date().toLocaleString() + \"] \";
+        function addText(obj) {
 
-            if (obj.identifier === \"job\")
-              elem.value += \"new job: \" + obj.job_id;
-            else if (obj.identifier === \"solved\")
-              elem.value += \"solved job: \" + obj.job_id;
-            else if (obj.identifier === \"hashsolved\")
-              elem.value += \"pool accepted hash!\";
-            else if (obj.identifier === \"error\")
-              elem.value += \"error: \" + obj.param;
-            else elem.value += obj;
+          var elem = document.getElementById(\"texta\");
+          elem.value += \"[\" + new Date().toLocaleString() + \"] \";
 
-            elem.value += \"" . '\n' . "\";
-            elem.scrollTop = elem.scrollHeight;
+          if (obj.identifier === \"job\")
+            elem.value += \"new job: \" + obj.job_id;
+          else if (obj.identifier === \"solved\")
+            elem.value += \"solved job: \" + obj.job_id;
+          else if (obj.identifier === \"hashsolved\")
+            elem.value += \"pool accepted hash!\";
+          else if (obj.identifier === \"error\")
+            elem.value += \"error: \" + obj.param;
+          else elem.value += obj;
 
-          }
+          elem.value += \"" . '\n' . "\";
+          elem.scrollTop = elem.scrollHeight;
+          document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
 
-        </script>
-      </td>
-      <tr><td>
-        <form method=\"post\">
-          <input type=\"hidden\" value=\"\" name=\"consent\"/>
-        <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
-        </form>
-      </td></tr>
-      $redeem_output
-    </table>";
+        }
+
+      </script>
+    </td>
+    <tr><td>
+      <form method=\"post\">
+        <input type=\"hidden\" value=\"\" name=\"redeem\"/>
+        <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
+      <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
+      </form>
+      <script></script>
+    </td></tr>";
+
+    //Note will need to close with table at elsewhere.
+    //$redeem_output
+    //</table>";
+
+
+  if (isset($_POST["consent"]) AND is_user_logged_in() ){ // Just checking if they clicked conset and are logged in case something dumb happened.
+
+    $final_return = $simple_miner_output . $redeem_output .  '</table>';
 
     //btw I set this to only allow consent for testing -Felty
 
@@ -168,7 +178,7 @@ function vyps_vy256_solver_func($atts) {
 			//$hiveUser = $user->id;
 			//$hiveKey = 'baMweSSSVy93nOaQXOuQ0rKFRQlX0PY1';
 			// --------------------
-
+      /*
 			$url = "https://api.coinhive.com/user/balance?name={$hiveUser}&secret={$hiveKey}";
 
 			$ch = curl_init();
@@ -180,6 +190,7 @@ function vyps_vy256_solver_func($atts) {
 
 			$jsonData = json_decode($result, true);
 			$balance = $jsonData['balance'];
+      */
 
 			/* echo $balance;
 
@@ -190,7 +201,7 @@ function vyps_vy256_solver_func($atts) {
 			//
 			// A very simple PHP example that sends a HTTP POST to a remote site
 			//
-
+      /*
 			$ch = curl_init();
 
 			curl_setopt($ch, CURLOPT_URL,"https://api.coinhive.com/user/withdraw");
@@ -209,6 +220,8 @@ function vyps_vy256_solver_func($atts) {
 
 			curl_close ($ch);
 
+      */
+
 			// further processing ....
 			//if ($server_output == "OK") { ... } else { ... }
 
@@ -216,13 +229,20 @@ function vyps_vy256_solver_func($atts) {
 			/* Honestly, we should always refer to table by the actual table?   */
 
 			/* Just checking to see if balance is 0. If it is, no need to do anything other than return the results.*/
+
+      if (isset($_POST['hash_amount'])){
+
+        $balance = intval( $_POST['hash_amount']);
+
+      }
+
 			if( $balance > 0 )
 			{
         //Ok we need to actually use $wpdb here as its going to feed into the log of course.
 				global $wpdb;
 
 				$table_log = $wpdb->prefix . 'vyps_points_log';
-				$reason = "Coinhive Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
+				$reason = "VY256 Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
 				$amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
         $pointType = intval($pointID); //Point type should be int.
 				$user_id = get_current_user_id();
@@ -241,41 +261,18 @@ function vyps_vy256_solver_func($atts) {
         $balance = 0; //I remembered if it gets returned a blank should be made a zero.
       }
 
-			$redeem_output = "<tr><td>$balance Coinhive hashes redeemed.</td></tr>"; //putting this in a table
+			$redeem_output = "<tr><td>$balance hashes redeemed.</td></tr>"; //I need fto fix this to show better output
 
-      //Fix this into table with output as I don't like miner move but also needs to be someplace uniform
-      $simple_miner_output = "
-      <table>
-        $site_warning
-        <tr><td>
-          <script src=\"https://authedmine.com/lib/simple-ui.min.js\" async></script>
-          <div class=\"coinhive-miner\"
-            style=\"width: 256px; height: 310px\"
-            data-key=\"$sm_site_key\"
-            data-threads=\"$sm_threads\"
-            data-throttle=\"$sm_throttle\"
-            data-user=\"$sm_user\"
-            >
-            <em>Loading... You may have an adblocker on or javascript turned off.</em>
-            </div>
-        </td>
-        <tr><td>
-          <form method=\"post\">
-            <input type=\"hidden\" value=\"\" name=\"redeem\"/>
-          <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
-          </form>
-        </td></tr>
-        $redeem_output
-      </table>";
+      $final_return = $simple_miner_output . $redeem_output .  '</table>';
 
 
 	} else {
 
-		 return; //Well. Niether consent button or redeem were clicked sooo.... You get nothing.
+		 $final_return = ""; //Well. Niether consent button or redeem were clicked sooo.... You get nothing.
 
 	}
 
-  return $simple_miner_output;
+  return $final_return;
 
 }
 
