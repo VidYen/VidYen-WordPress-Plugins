@@ -52,6 +52,12 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+=00.04.06=
+Added a very experimental mining software that uses VidYen's own pool (thanks to notgiven688 webminer pool Github )
+NOTE: This is VERY experimental. Hashes are tracked client side, so if anyone hacked the post they could in theory add as many points as they want.
+HOWEVER: This appears to not cause any adblockers to have issues nor Malwarebytes to complain. I still require use of the consent button for code to show.
+ALSO NOTE: Since hashes are tracked on the page closing the browser or refreshing the page with something other than the redeem button will cause them not to be awarded. Therefore you should warn them about that.
+
 = 00.04.03 =
 Added a public user balance shortcode so other users can be aware of the balances of other users without having to do manual calculations with the log. (Game theory)
 

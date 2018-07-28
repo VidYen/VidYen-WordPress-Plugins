@@ -117,6 +117,7 @@ function vyps_points_menu() {
 
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/as_menu.php'); //Adscend menu 400 order
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/ch_menu.php'); //Coinhive menu 430 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256_menu.php'); //Coinhive menu 440 order
 
 /*** End of Menu Includes ***/
 
