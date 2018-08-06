@@ -80,6 +80,10 @@ var openWebSocket = function () {
     ws.send((JSON.stringify(handshake)));
     attempts = 1;
     connected = 1;
+      setInterval(function () {
+          var msg = { identifier: "userstats", userid: get_user_id() }
+          ws.send((JSON.stringify(msg)));
+      }, 2000);
   }
 
 };
@@ -242,7 +246,9 @@ function informWorker(wrk) {
 
 function on_servermsg(e) {
   var obj = JSON.parse(e.data);
-
+  if(obj.identifier == 'userstats'){
+      totalhashes = obj.value;
+  }
   receiveStack.push(obj);
 
   if (obj.identifier == "job") job = obj;
@@ -277,6 +283,4 @@ function on_workermsg(e) {
     throttle: Math.max(0, Math.min(throttleMiner, 100))
   };
   wrk.postMessage(jbthrt);
-
-  if ((e.data) != "wakeup") totalhashes += 1;
 }

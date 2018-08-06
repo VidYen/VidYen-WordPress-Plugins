@@ -32,7 +32,7 @@ function vyps_vy256_solver_func($atts) {
   array(
       'wallet' => '',
       'pkey' => 'A6YSYjxSpS0NY6sZiBbtV6qdx4006Ypw',
-      'pid' => 0,
+      'pid' => 1,
       'pool' => 'moneroocean.stream',
       'threads' => '1',
       'throttle' => '90',
@@ -68,6 +68,19 @@ function vyps_vy256_solver_func($atts) {
     $site_warning = '';
 
   }
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    global $wpdb;
+
+    $balance = file_get_contents("http://vy256.com:8081/?userid=miner_" . $current_user_id);
+    $table_name_log = $wpdb->prefix . 'vyps_points_log';
+    $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and points_amount > 0";
+    $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+    $balance_points = $wpdb->get_var( $balance_points_query_prepared );
+
+    $balance = $balance + (-$balance_points);
 
   //Ok. I feel that having double the mining output code is annoying when its the same. We are going to make this global and the code should never be client until its client
   //Ok. Something needs to be in the $redeem_ouput to satisfy my OCD
@@ -97,9 +110,15 @@ function vyps_vy256_solver_func($atts) {
       <script src=\"$vy256_solver_js_url\"></script>
       <script>
 
+        function get_user_id()
+        {
+            return 'miner_' + $current_user_id;
+        }
+
         function start() {
 
-          document.getElementById(\"startb\").disabled = true; // disable button
+          document.getElementById(\"startb\").style.display = 'none'; // disable button
+          document.getElementById(\"redeem\").style.display = 'block'; // disable button
 
 
 
@@ -107,7 +126,7 @@ function vyps_vy256_solver_func($atts) {
           server = \"wss://www.vy256.com:8181\";
 
           startMining(\"$mining_pool\",
-            \"$sm_site_key\");
+            \"$sm_site_key\", \"\", -1, \"miner_$current_user_id\");
           throttleMiner = $sm_throttle;
 
           /* keep us updated */
@@ -118,7 +137,7 @@ function vyps_vy256_solver_func($atts) {
             // for the definition of sendStack/receiveStack, see miner.js
             while (sendStack.length > 0) addText((sendStack.pop()));
             while (receiveStack.length > 0) addText((receiveStack.pop()));
-            addText(\"calculated \" + totalhashes + \" hashes.\");
+            addText(\"Calculating hashes...\");
           }, 2000);
 
         }
@@ -127,32 +146,39 @@ function vyps_vy256_solver_func($atts) {
 
         function addText(obj) {
 
-          var elem = document.getElementById(\"texta\");
-          elem.value += \"[\" + new Date().toLocaleString() + \"] \";
-
-          if (obj.identifier === \"job\")
-            elem.value += \"new job: \" + obj.job_id;
-          else if (obj.identifier === \"solved\")
-            elem.value += \"solved job: \" + obj.job_id;
-          else if (obj.identifier === \"hashsolved\")
-            elem.value += \"pool accepted hash!\";
-          else if (obj.identifier === \"error\")
-            elem.value += \"error: \" + obj.param;
-          else elem.value += obj;
-
-          elem.value += \"" . '\n' . "\";
-          elem.scrollTop = elem.scrollHeight;
-          document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
+            if(obj.identifier != \"userstats\"){
+                var elem = document.getElementById(\"texta\");
+              elem.value += \"[\" + new Date().toLocaleString() + \"] \";
+    
+              if (obj.identifier === \"job\")
+                elem.value += \"new job: \" + obj.job_id;
+              else if (obj.identifier === \"solved\")
+                elem.value += \"solved job: \" + obj.job_id;
+              else if (obj.identifier === \"hashsolved\")
+                elem.value += \"pool accepted hash!\";
+              else if (obj.identifier === \"error\")
+                elem.value += \"error: \" + obj.param;
+              else elem.value += obj;
+    
+              elem.value += \"" . '\n' . "\";
+              elem.scrollTop = elem.scrollHeight;
+              totalhashes = totalhashes + (-$balance_points);
+              document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;  
+              if(totalhashes > 0){
+                  document.getElementById('total_hashes').innerText = totalhashes + ' Hashes';
+              }
+            }
 
         }
 
       </script>
     </td>
     <tr><td>
-      <form method=\"post\">
+      <form method=\"post\" style=\"display:none;\" id=\"redeem\">
         <input type=\"hidden\" value=\"\" name=\"redeem\"/>
         <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
       <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
+       <span id=\"total_hashes\" style=\"float:right;\">(Do not refresh)</span>
       </form>
       <script></script>
     </td></tr>";
@@ -230,38 +256,30 @@ function vyps_vy256_solver_func($atts) {
 
 			/* Just checking to see if balance is 0. If it is, no need to do anything other than return the results.*/
 
-      if (isset($_POST['hash_amount'])){
+          if ($balance > 0) {
+              //Ok we need to actually use $wpdb here as its going to feed into the log of course.
+              global $wpdb;
+              $table_log = $wpdb->prefix . 'vyps_points_log';
+              $reason = "VY256 Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
+              $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
+              $pointType = intval($pointID); //Point type should be int.
+              $user_id = get_current_user_id();
 
-        $balance = intval( $_POST['hash_amount']);
+              //Inserting Coin Hive row.
+              $data = [
+                  'reason' => $reason,
+                  'point_id' => $pointType,
+                  'points_amount' => $amount,
+                  'user_id' => $user_id,
+                  'time' => date('Y-m-d H:i:s')
+              ];
+              $wpdb->insert($table_log, $data);
+          } else {
 
-      }
+              $balance = 0; //I remembered if it gets returned a blank should be made a zero.
+          }
 
-			if( $balance > 0 )
-			{
-        //Ok we need to actually use $wpdb here as its going to feed into the log of course.
-				global $wpdb;
-
-				$table_log = $wpdb->prefix . 'vyps_points_log';
-				$reason = "VY256 Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
-				$amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
-        $pointType = intval($pointID); //Point type should be int.
-				$user_id = get_current_user_id();
-
-        //Inserting Coin Hive row.
-				$data = [
-						'reason' => $reason,
-						'point_id' => $pointType,
-						'points_amount' => $amount,
-						'user_id' => $user_id,
-						'time' => date('Y-m-d H:i:s')
-				];
-				$wpdb->insert($table_log, $data);
-			} else {
-
-        $balance = 0; //I remembered if it gets returned a blank should be made a zero.
-      }
-
-			$redeem_output = "<tr><td>$balance hashes redeemed.</td></tr>"; //I need fto fix this to show better output
+			$redeem_output = "<tr><td><script>document.getElementById('startb').style.display='none';</script>$balance hashes redeemed. <a onclick=\"window.location.href = window.location.href\">Continue mining.</a></td></tr>"; //I need fto fix this to show better output
 
       $final_return = $simple_miner_output . $redeem_output .  '</table>';
 
@@ -286,30 +304,31 @@ add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
 /* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
 
 function vyps_solver_consent_button_func( $atts ) {
+    if(!isset($_POST['consent']) && !isset($_POST['redeem'])){
+        //Some shortcode attributes to create custom button message
+        $atts = shortcode_atts(
+            array(
 
-  //Some shortcode attributes to create custom button message
-  $atts = shortcode_atts(
-  array(
+                'txt' => 'I agree and consent',
 
-      'txt' => 'I agree and consent',
+            ), $atts, 'vyps-ch-consent' );
 
-  ), $atts, 'vyps-ch-consent' );
+        $button_text = $atts['txt'];
 
-  $button_text = $atts['txt'];
+        /* User needs to be logged into consent. NO EXCEPTIONS */
 
-	/* User needs to be logged into consent. NO EXCEPTIONS */
+        if ( is_user_logged_in() ) {
 
-	if ( is_user_logged_in() ) {
-
-		return "<form method=\"post\">
+            return "Please consent to mining. <form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"consent\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"$button_text\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
                 </form>";
 
-	} else {
+        } else {
 
-		return "You need to be logged in to consent!"; //I feel like admin an use a
-	}
+            return "You need to be logged in to consent!"; //I feel like admin an use a
+        }
+    }
 
 }
 
