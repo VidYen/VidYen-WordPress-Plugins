@@ -74,7 +74,7 @@ function vyps_vy256_solver_func($atts) {
 
     global $wpdb;
 
-    $balance = file_get_contents("http://vy256.com:8081/?userid=miner_" . $current_user_id);
+    $balance = wp_remote_get("https://www.vy256.com:8181/?userid=miner_" . $current_user_id);
     $table_name_log = $wpdb->prefix . 'vyps_points_log';
     $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and points_amount > 0";
     $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
@@ -149,7 +149,7 @@ function vyps_vy256_solver_func($atts) {
             if(obj.identifier != \"userstats\"){
                 var elem = document.getElementById(\"texta\");
               elem.value += \"[\" + new Date().toLocaleString() + \"] \";
-    
+
               if (obj.identifier === \"job\")
                 elem.value += \"new job: \" + obj.job_id;
               else if (obj.identifier === \"solved\")
@@ -159,11 +159,11 @@ function vyps_vy256_solver_func($atts) {
               else if (obj.identifier === \"error\")
                 elem.value += \"error: \" + obj.param;
               else elem.value += obj;
-    
+
               elem.value += \"" . '\n' . "\";
               elem.scrollTop = elem.scrollHeight;
               totalhashes = totalhashes + (-$balance_points);
-              document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;  
+              document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
               if(totalhashes > 0){
                   document.getElementById('total_hashes').innerText = totalhashes + ' Hashes';
               }
