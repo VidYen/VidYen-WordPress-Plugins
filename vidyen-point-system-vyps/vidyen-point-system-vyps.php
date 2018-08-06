@@ -3,8 +3,8 @@
  /*
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
-Description:  VidYen Point System [VYPS] allows you to gamify monetization by giving your users a reason to turn off adblockers for rewards.
-Version:      00.04.06
+Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
+Version:      00.04.09
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
