@@ -31,7 +31,7 @@ function vyps_vy256_solver_func($atts) {
   $atts = shortcode_atts(
   array(
       'wallet' => '',
-      'pkey' => 'A6YSYjxSpS0NY6sZiBbtV6qdx4006Ypw',
+      'site' => '',
       'pid' => 1,
       'pool' => 'moneroocean.stream',
       'threads' => '1',
@@ -50,7 +50,7 @@ function vyps_vy256_solver_func($atts) {
   //NOTE: Where we are going we don't need $wpdb
 
   $sm_site_key = $atts['wallet'];
-  $hiveKey = $atts['pkey'];
+  $siteName = $atts['site'];
   $mining_pool = $atts['pool'];
   $sm_threads = $atts['threads'];
   $sm_throttle = $atts['throttle'];
@@ -59,9 +59,9 @@ function vyps_vy256_solver_func($atts) {
   //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
   //$hiveUser = $sm_siteUID . $current_user_id; //not needed since not using CH API
 
-  if ($sm_site_key == '') {
+  if ($sm_site_key == '' AND $siteName == '') {
 
-    return "Error: Wallet address not set. This is required!";
+    return "Error: Wallet address and site name not set. This is required!";
 
   } else {
 
@@ -74,7 +74,8 @@ function vyps_vy256_solver_func($atts) {
 
     global $wpdb;
 
-    $balance = wp_remote_get("https://www.vy256.com:8181/?userid=miner_" . $current_user_id);
+    $balance = wp_remote_get("https://www.vy256.com:8181/?userid=" . $siteName . "_" . $current_user_id);
+    //return "Here is the balance: " . $balance; //Still errors
     $table_name_log = $wpdb->prefix . 'vyps_points_log';
     $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and points_amount > 0";
     $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
