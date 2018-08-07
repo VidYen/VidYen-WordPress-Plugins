@@ -32,7 +32,7 @@ function vyps_vy256_solver_func($atts) {
         array(
             'wallet' => '',
             'site' => '',
-            'pid' => 0,
+            'pid' => 1,
             'pool' => 'moneroocean.stream',
             'threads' => '1',
             'throttle' => '90',
@@ -76,8 +76,9 @@ function vyps_vy256_solver_func($atts) {
     global $wpdb;
     //return "http://vy256.com:8081/?userid=" . $miner_id;
     $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
-    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
-    $balance =  intval(wp_remote_retrieve_response_message( $remote_response ));
+    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) )['body'];
+    $balance =  intval($remote_response);
+
     //return "Here is the balance: " . $balance[0]; //Still errors
     $table_name_log = $wpdb->prefix . 'vyps_points_log';
     $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and points_amount > 0";
@@ -260,7 +261,6 @@ function vyps_vy256_solver_func($atts) {
         /* Honestly, we should always refer to table by the actual table?   */
 
         /* Just checking to see if balance is 0. If it is, no need to do anything other than return the results.*/
-
         if ($balance > 0) {
             //Ok we need to actually use $wpdb here as its going to feed into the log of course.
             global $wpdb;
