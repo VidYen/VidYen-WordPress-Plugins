@@ -117,7 +117,7 @@ function vyps_vy256_solver_func($atts) {
 
         function get_user_id()
         {
-            return $miner_id;
+            return \"$miner_id\";
         }
 
         function start() {
