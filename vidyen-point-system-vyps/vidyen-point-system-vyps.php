@@ -1,340 +1,360 @@
 <?php
 
-//Shortcode itself.
+ /*
+Plugin Name:  VidYen Point System [VYPS]
+Plugin URI:   http://vyps.org
+Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
+Version:      00.04.09
+Author:       VidYen, LLC
+Author URI:   https://vidyen.com/
+License:      GPLv2
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+*/
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//NOTE: This is the shortcode we need to use going forward
-//NOTE: Also, going forward there will be no simple miner you can display without consent button. Sorry. Not. Sorry.
+//Ok. I'm adding a custom fuction to the VYPS plugin. It's put on pages where, you just want to straight kick people out if they aren't admins.
+//Similar to the login check, but the admins. This will put put on all pages that only admins should be able to see but not the shortcodes results.
 
-function vyps_vy256_solver_func($atts) {
+function VYPS_check_if_true_admin(){
 
-    //Ok. Some shortcode defaults. Thread and throttle are optional
-    //but I'm not going to let people start at 100% unless they mean it.
-    //So by default the miner starts with 1 thread at 10% and the users
-    //Can crank it up if they want.
-    //ALso I'm putting in VidYen's test server API keys as defaults
-    //But I will put a warning that you did not set the keys but you are
-    //earning VidYen hashes directly. I mean you can do that, but...
-    //I try not to question the "Why would?" scenarios these days.
-    //-Felty
+	//I'm going to be a little lenient and if you can edit users maybe you should be able to edit their point since you can just
+	//Change roles at that point. May reconsider.
+	if( current_user_can('install_plugin') OR current_user_can('edit_users') ){
 
+		//echo "You good!"; //Debugging
+		return;
 
-    //I felt it easier to just check if user is logged in and just do nothing at that point.
-    //Admins can use the VYPS login check to warn people they need to be logged in.
-    if ( ! is_user_logged_in() ){
+	} else {
 
-        return;
+		echo "<br><br>You need true administrator rights to see this page!"; //Debugging
+		exit; //Might be a better solution to iform before exit like an echo before hand, but well....
+	}
 
-    }
+}
 
-    $atts = shortcode_atts(
-        array(
-            'wallet' => '',
-            'site' => '',
-            'pid' => 0,
-            'pool' => 'moneroocean.stream',
-            'threads' => '1',
-            'throttle' => '90',
-        ), $atts, 'vyps-256' );
+register_activation_hook(__FILE__, 'vyps_points_install');
 
-    //Error out if the PID wasn't set as it doesn't work otherwise.
-    //In theory they still need to consent, but no Coinhive code will be displayed
-    //until the site admin fixes it. I suppose in theory one could set a negative number -Felty
-    if ($atts['pid'] == 0){
-
-        return "ADMIN ERROR: Point ID not set!";
-
-    }
-
-    //NOTE: Where we are going we don't need $wpdb
-
-    $sm_site_key = $atts['wallet'];
-    $siteName = $atts['site'];
-    $mining_pool = $atts['pool'];
-    $sm_threads = $atts['threads'];
-    $sm_throttle = $atts['throttle'];
-    $pointID = $atts['pid'];
-    $current_user_id = get_current_user_id();
-    $miner_id = 'miner_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
-    //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
-    //$hiveUser = $sm_siteUID . $current_user_id; //not needed since not using CH API
-
-    if ($sm_site_key == '' AND $siteName == '') {
-
-        return "Error: Wallet address and site name not set. This is required!";
-
-    } else {
-
-        $site_warning = '';
-
-    }
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+//Install the SQL tables for VYPS.
+function vyps_points_install() {
 
     global $wpdb;
-    //return "http://vy256.com:8081/?userid=" . $miner_id;
-    $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
-    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
-    $balance =  intval(wp_remote_retrieve_response_message( $remote_response ));
-    //return "Here is the balance: " . $balance[0]; //Still errors
-    $table_name_log = $wpdb->prefix . 'vyps_points_log';
-    $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and points_amount > 0";
-    $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
-    $balance_points = $wpdb->get_var( $balance_points_query_prepared );
-    $balance_points = intval($balance_points);
 
-    $balance = $balance + (-$balance_points);
+		//I have no clue why this is needed. I should learn, but I wasn't the original author. -Felty
+		$charset_collate = $wpdb->get_charset_collate();
 
-    //Ok. I feel that having double the mining output code is annoying when its the same. We are going to make this global and the code should never be client until its client
-    //Ok. Something needs to be in the $redeem_ouput to satisfy my OCD
-    $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem Hashes\" when you want to receive points.</td></tr>"; //putting this in a table
+		//NOTE: I have the mind to make mediumint to int, but I wonder if you get 8 million log transactios that you should consider another solution than VYPS.
 
-    //Get the url for the solver
-    $vy256_solver_folder_url = plugins_url( 'js/solver/', __FILE__ );
-    //$vy256_solver_url = plugins_url( 'js/solver/miner.js', __FILE__ ); //Ah it was the worker.
+		//vyps_points table creation
+    $table_name_points = $wpdb->prefix . 'vyps_points';
 
-    //Need to take the shortcode out. I could be wrong. Just rip out 'shortcodes/'
-    $vy256_solver_folder_url = str_replace('shortcodes/', '', $vy256_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
-    $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
-    $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
+    $sql = "CREATE TABLE {$table_name_points} (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		name tinytext NOT NULL,
+		icon text NOT NULL,
+		PRIMARY KEY  (id)
+        ) {$charset_collate};";
 
-    //Ok some issues we need to know the path to the js file so will have to ess with that.
-    $simple_miner_output = "
-  <table>
-    $site_warning
-    <tr><td>
-      <div>
-        <textarea rows=\"4\" cols=\"50\" id=\"texta\"></textarea>
-      </div>
-      <div>
-        <button id=\"startb\" onclick=\"start()\">Start Mining</button>
-      </div>
-      <script>var newWorker = new Worker(\"$vy256_solver_worker_url\");</script>
-      <script src=\"$vy256_solver_js_url\"></script>
-      <script>
+		//vyps_points_log. Notice how I loath th keep variable names the same in recycled code.
+		//Visualization people. It's better for code to be ineffecient but readable than efficient and unreadable.
+    $table_name_points_log = $wpdb->prefix . 'vyps_points_log';
 
-        function get_user_id()
-        {
-            return \"$miner_id\";
+    $sql .= "CREATE TABLE {$table_name_points_log} (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+                reason varchar(128) NOT NULL,
+                user_id mediumint(9) NOT NULL,
+		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		point_id varchar(11) NOT NULL,
+                points_amount double(64, 0) NOT NULL,
+                adjustment varchar(100) NOT NULL,
+								vyps_meta_id varchar(64) NOT NULL,
+								vyps_meta_data varchar(128) NOT NULL,
+								vyps_meta_amount double(64,0) NOT NULL,
+								vyps_meta_subid1 mediumint(9) NOT NULL,
+								vyps_meta_subid2 mediumint(9) NOT NULL,
+								vyps_meta_subid3 mediumint(9) NOT NULL,
+		PRIMARY KEY  (id)
+        ) {$charset_collate};";
+
+    require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I am concerned that this used ABSPATH rather than the normie WP methods
+
+    dbDelta($sql);
+}
+
+//adding menues
+add_action('admin_menu', 'vyps_points_menu');
+
+function vyps_points_menu() {
+
+    $parent_page_title = "VidYen Point System";
+    $parent_menu_title = 'VYPS';
+    $capability = 'manage_options';
+    $parent_menu_slug = 'vyps_points';
+    $parent_function = 'vyps_points_parent_menu_page';
+    add_menu_page($parent_page_title, $parent_menu_title, $capability, $parent_menu_slug, $parent_function);
+
+    $page_title = "Manage Points";
+    $menu_title = 'Points List';
+    $menu_slug = 'vyps_points_list';
+    $function = 'vyps_points_sub_menu_page';
+    add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
+
+    $page_title = "Add Point";
+    $menu_title = 'Add Point';
+    $menu_slug = 'vyps_points_add';
+    $function = 'vyps_points_add_sub_menu_page';
+    add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
+
+    $page_title = "Point Log";
+    $menu_title = 'Point Log';
+    $menu_slug = 'admin_log';
+    $function = 'vyps_admin_log';
+    add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
+}
+
+/*** Menu Includes ***/
+
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/as_menu.php'); //Adscend menu 400 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/ch_menu.php'); //Coinhive menu 430 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256_menu.php'); //Coinhive menu 440 order
+
+/*** End of Menu Includes ***/
+
+//Below is the admin log function that I intend to move to includes eventually.
+function vyps_admin_log() {
+
+  global $wpdb;
+	$table_name_points = $wpdb->prefix . 'vyps_points';
+	$table_name_log = $wpdb->prefix . 'vyps_points_log';
+	$table_name_users = $wpdb->prefix . 'users';
+
+	//BTW the number of IDs should always match the number of rows, NO EXCEPTIONS. If it doesn't it means the admin deleted a row
+	//And that is against the psuedo-blockchain philosophy. //Also it dawned on me I can rewrite the public log here.
+
+	$number_of_log_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_log" ); //No where needed. All rows. No exceptions
+	$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No where needed. All rows. No exceptions
+
+	//echo '<br>'. $number_of_log_rows; //Some debugging
+	//echo '<br>'. $number_of_point_rows; //More debugging
+
+	$begin_row = 1;
+	$end_row = ''; //Eventually will have admin ability to filter how many rows they see as after 1000 may be intensive
+
+	/* Although normally against totally going programatic. Since I know I'm going to reuse this for the public log I'm going to put the headers into variables */
+
+	$date_label = "Date";
+	$user_name_label = "User Name";
+	$user_id_label = "UID";
+	$point_type_label = "Point Type";
+	$point_id_label = "PID";
+	$amount_label = "Amount";
+	$reason_label = "Adjustment Reason";
+
+
+	//Header output is also footer output if you have not noticed.
+	//Also isn't it nice you can edit the format directly instead it all in the array?
+	$header_output = "
+			<tr>
+				<th>$date_label</th>
+				<th>$user_name_label</th>
+				<th>$user_id_label</th>
+				<th>$point_type_label</th>
+				<th>$point_id_label</th>
+				<th>$amount_label</th>
+				<th>$reason_label</th>
+			</tr>
+	";
+
+
+
+
+	//Because the shorcode version won't have this
+	$page_header_text = "
+		<h1 class=\"wp-heading-inline\">All Point Adjustments</h1>
+		<h2>Point Log</h2>
+	";
+
+	//this is what it's goint to be called
+	$table_output = "";
+
+	for ($x_for_count = $number_of_log_rows; $x_for_count > 0; $x_for_count = $x_for_count -1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
+
+    //$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
+    $date_data_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
+    $date_data_query_prepared = $wpdb->prepare( $date_data_query, $x_for_count );
+    $date_data = $wpdb->get_var( $date_data_query_prepared );
+
+    //$user_id_data = $wpdb->get_var( "SELECT user_id FROM $table_name_log WHERE id= '$x_for_count'" );
+    $user_id_data_query = "SELECT user_id FROM ". $table_name_log . " WHERE id = %d";
+    $user_id_data_query_prepared = $wpdb->prepare( $user_id_data_query, $x_for_count );
+    $user_id_data = $wpdb->get_var( $user_id_data_query_prepared );
+
+    //$user_name_data = $wpdb->get_var( "SELECT user_login FROM $table_name_users WHERE id= '$user_id_data'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
+    $user_name_data_query = "SELECT user_login FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
+    $user_name_data_query_prepared = $wpdb->prepare( $user_name_data_query, $user_id_data );
+    $user_name_data = $wpdb->get_var( $user_name_data_query_prepared );
+
+    //$point_id_data = $wpdb->get_var( "SELECT points FROM $table_name_log WHERE id= '$x_for_count'" );
+    $point_id_data_query = "SELECT point_id FROM ". $table_name_log . " WHERE id = %d";
+    $point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
+    $point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
+
+    //$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id_data'" );
+    $point_type_data_query = "SELECT name FROM ". $table_name_points . " WHERE id = %d";
+    $point_type_data_query_prepared = $wpdb->prepare( $point_type_data_query, $point_id_data );
+    $point_type_data = $wpdb->get_var( $point_type_data_query_prepared );
+
+    //$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count'" );
+    $amount_data_query = "SELECT points_amount FROM ". $table_name_log . " WHERE id = %d";
+    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $x_for_count );
+    $amount_data = $wpdb->get_var( $amount_data_query_prepared );
+
+    //$reason_data = $wpdb->get_var( "SELECT reason FROM $table_name_log WHERE id= '$x_for_count'" );
+    $reason_data_query = "SELECT reason FROM ". $table_name_log . " WHERE id = %d";
+    $reason_data_query_prepared = $wpdb->prepare( $reason_data_query, $x_for_count );
+    $reason_data = $wpdb->get_var( $reason_data_query_prepared );
+
+
+		$current_row_output = "
+			<tr>
+				<td>$date_data</td>
+				<td>$user_name_data</td>
+				<td>$user_id_data</td>
+				<td>$point_type_data</td>
+				<td>$point_id_data</td>
+				<td>$amount_data</td>
+				<td>$reason_data</td>
+			</tr>
+				";
+
+		//Compile into row output.
+		$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
+
+	}
+
+	//The page output
+	echo "
+		<div class=\"wrap\">
+			$page_header_text
+			<table class=\"wp-list-table widefat fixed striped users\">
+				$header_output
+				$table_output
+				$header_output
+			</table>
+		</div>
+	";
+
+}
+
+/* Main page informational page. Includes shortcodes, advertistments etc */
+
+function vyps_points_parent_menu_page() {
+
+	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
+	echo '<br><br><img src="' . plugins_url( '../vidyen-point-system-vyps/images/logo.png', __FILE__ ) . '" > ';
+
+	//Static text for the base plugin
+	echo
+	"<h1>VidYen Point System Base Plugin</h1>
+	<p>VYPS allows you to gamify monetization by giving your users a reason to turn off adblockers in return for rewards and recognition.</p>
+	<p>This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards in monetization systems.</p>
+	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To drop your VYPS tables from the WPDB, use the VYPS Uninstall plugin to do a clean install.</p>
+	<br>
+	<h2>Base Plugin Instructions</h2>
+	<p>Add points by navigating to the Add Points menu.</p>
+	<p>To modify or see a user’s current point balance, go to the Users panel and use the context menu by &quot;Edit User Information&quot; under &quot;Edit Points&quot;.</p>
+	<p>To see a log of all user transactions, go to &quot;Point Log&quot; in the VidYen Points menu.</p>
+	";
+
+	/* This is the credits.php which only needs to be modified in the base to show on all addon plugins
+	*  Credit for this fix goes to skotperez off stack exchange for his answer on Nov 2, 2016
+	*  https://stackoverflow.com/questions/32177667/include-a-php-file-in-another-php-file-wordpress-plugin
+	*  I added the ../ to make it work in my case though.
+	*/
+
+	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/sc_instruct.php');
+	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/credits.php');
+
+}
+
+function vyps_points_sub_menu_page() {
+    global $wpdb;
+    require plugin_dir_path(__FILE__) . 'manage_points.php';
+}
+
+function vyps_points_add_sub_menu_page() {
+    global $wpdb;
+    require plugin_dir_path(__FILE__) . 'add_point.php';
+}
+
+add_action('show_user_profile', 'custom_user_profile_fields_points');
+add_action('edit_user_profile', 'custom_user_profile_fields_points');
+add_action("user_new_form", "custom_user_profile_fields_points");
+
+//start add new column points in user table
+//BTW I prefixed the next two functions with vyps_ as I have a feeling that might be used by other plugins
+//Since it was generic
+
+function vyps_register_custom_user_column($columns) {
+    $columns['points'] = 'Points';
+    return $columns;
+}
+
+/* The next function is important to show the points in the user table */
+
+function vyps_register_custom_user_column_view($value, $column_name, $user_id) {
+    $user_info = get_userdata($user_id);
+    global $wpdb;
+    $query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by point_id, user_id having user_id = '{$user_id}'";
+    $row_data = $wpdb->get_results($query_row);
+
+		//I need to update this eventually. I realized I didn't fix this, but its only calling non-user input data from the WPDB. I still don't like the -> in fact I hate -> calls
+    $points = '';
+    if (!empty($row_data)) {
+        foreach($row_data as $type){
+            $query_for_name = "select * from {$wpdb->prefix}vyps_points where id= '{$type->point_id}'";
+            $row_data2 = $wpdb->get_row($query_for_name);
+            $points .= '<b>' . $type->sum . '</b> ' . $row_data2->name. '<br>';
         }
-
-        function start() {
-
-          document.getElementById(\"startb\").style.display = 'none'; // disable button
-          document.getElementById(\"redeem\").style.display = 'block'; // disable button
-
-
-
-          /* start mining, use a local server */
-          server = \"wss://www.vy256.com:8181\";
-
-          startMining(\"$mining_pool\",
-            \"$sm_site_key\", \"\", -1, \"$miner_id\");
-          throttleMiner = $sm_throttle;
-
-          /* keep us updated */
-
-          addText(\"Connecting to VY256 pool...\");
-
-          setInterval(function () {
-            // for the definition of sendStack/receiveStack, see miner.js
-            while (sendStack.length > 0) addText((sendStack.pop()));
-            while (receiveStack.length > 0) addText((receiveStack.pop()));
-            addText(\"Calculating hashes...\");
-          }, 2000);
-
-        }
-
-        /* helper function to put text into the text field.  */
-
-        function addText(obj) {
-
-            if(obj.identifier != \"userstats\"){
-                var elem = document.getElementById(\"texta\");
-              elem.value += \"[\" + new Date().toLocaleString() + \"] \";
-
-              if (obj.identifier === \"job\")
-                elem.value += \"new job: \" + obj.job_id;
-              else if (obj.identifier === \"solved\")
-                elem.value += \"solved job: \" + obj.job_id;
-              else if (obj.identifier === \"hashsolved\")
-                elem.value += \"pool accepted hash!\";
-              else if (obj.identifier === \"error\")
-                elem.value += \"error: \" + obj.param;
-              else elem.value += obj;
-
-              elem.value += \"" . '\n' . "\";
-              elem.scrollTop = elem.scrollHeight;
-              totalhashes = totalhashes + (-$balance_points);
-              document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
-              if(totalhashes > 0){
-                  document.getElementById('total_hashes').innerText = totalhashes + ' Hashes';
-              }
-            }
-
-        }
-
-      </script>
-    </td>
-    <tr><td>
-      <form method=\"post\" style=\"display:none;\" id=\"redeem\">
-        <input type=\"hidden\" value=\"\" name=\"redeem\"/>
-        <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
-      <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
-       <span id=\"total_hashes\" style=\"float:right;\">(Do not refresh)</span>
-      </form>
-      <script></script>
-    </td></tr>";
-
-    //Note will need to close with table at elsewhere.
-    //$redeem_output
-    //</table>";
-
-
-    if (isset($_POST["consent"]) AND is_user_logged_in() ){ // Just checking if they clicked conset and are logged in case something dumb happened.
-
-        $final_return = $simple_miner_output . $redeem_output .  '</table>';
-
-        //btw I set this to only allow consent for testing -Felty
-
-    } elseif (isset($_POST["redeem"]) AND is_user_logged_in()) { //see if post button is redeem and logged in.
-
-        //Ok. Actually not setting PID to something doesn't matter for mining.
-        //However, when you try to redeem, its a big issue if you don't know which point you are redeeming to.
-
-        //Copied and pasted from the old VidYen.com code
-        // fetch from DB
-        //$hiveUser = $user->id;
-        //$hiveKey = 'baMweSSSVy93nOaQXOuQ0rKFRQlX0PY1';
-        // --------------------
-        /*
-              $url = "https://api.coinhive.com/user/balance?name={$hiveUser}&secret={$hiveKey}";
-
-              $ch = curl_init();
-              curl_setopt($ch, CURLOPT_URL, $url);
-              curl_setopt($ch, CURLOPT_HEADER, 0);
-              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-              $result = curl_exec($ch);
-              curl_close($ch);
-
-              $jsonData = json_decode($result, true);
-              $balance = $jsonData['balance'];
-        */
-
-        /* echo $balance;
-
-        $hostBalance = $unbalance + ($unbalance - $balance);
-
-        echo $hostBalance; */
-
-        //
-        // A very simple PHP example that sends a HTTP POST to a remote site
-        //
-        /*
-              $ch = curl_init();
-
-              curl_setopt($ch, CURLOPT_URL,"https://api.coinhive.com/user/withdraw");
-              curl_setopt($ch, CURLOPT_POST, 1);
-              curl_setopt($ch, CURLOPT_POSTFIELDS,
-                  "name={$hiveUser}&amount={$balance}&secret={$hiveKey}");
-
-              // in real life you should use something like:
-              // curl_setopt($ch, CURLOPT_POSTFIELDS,
-              //          http_build_query(array('postvar1' => 'value1')));
-
-              // receive server response ...
-              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-              $server_output = curl_exec ($ch);
-
-              curl_close ($ch);
-
-        */
-
-        // further processing ....
-        //if ($server_output == "OK") { ... } else { ... }
-
-        /* OK. Pulling log table to post return to it. What could go wrong? */
-        /* Honestly, we should always refer to table by the actual table?   */
-
-        /* Just checking to see if balance is 0. If it is, no need to do anything other than return the results.*/
-
-        if ($balance > 0) {
-            //Ok we need to actually use $wpdb here as its going to feed into the log of course.
-            global $wpdb;
-            $table_log = $wpdb->prefix . 'vyps_points_log';
-            $reason = "VY256 Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
-            $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
-            $pointType = intval($pointID); //Point type should be int.
-            $user_id = get_current_user_id();
-
-            //Inserting Coin Hive row.
-            $data = [
-                'reason' => $reason,
-                'point_id' => $pointType,
-                'points_amount' => $amount,
-                'user_id' => $user_id,
-                'time' => date('Y-m-d H:i:s')
-            ];
-            $wpdb->insert($table_log, $data);
-        } else {
-
-            $balance = 0; //I remembered if it gets returned a blank should be made a zero.
-        }
-
-        $redeem_output = "<tr><td><script>document.getElementById('startb').style.display='none';</script>$balance hashes redeemed. <a onclick=\"window.location.href = window.location.href\">Continue mining.</a></td></tr>"; //I need fto fix this to show better output
-
-        $final_return = $simple_miner_output . $redeem_output .  '</table>';
-
-
     } else {
-
-        $final_return = ""; //Well. Niether consent button or redeem were clicked sooo.... You get nothing.
-
+        $points = '';
     }
 
-    return $final_return;
-
+    if ($column_name == 'points')
+        return $points;
+    return $value;
 }
 
-/* Telling WP to use function for shortcode for sm-consent*/
+add_action('manage_users_columns', 'vyps_register_custom_user_column');
+add_action('manage_users_custom_column', 'vyps_register_custom_user_column_view', 10, 3);
 
-add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
+//BTW this was all original from orion (Are they ever getting the daily login). I have no clue what cgc_ub_action_links stands for but I know what it does. I'll call it something more informative.
+function vyps_user_menu_action_links($actions, $user_object) {
 
-
-
-/* Shortcode for the API call to create a lot entry */
-/* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
-
-function vyps_solver_consent_button_func( $atts ) {
-    if(!isset($_POST['consent']) && !isset($_POST['redeem'])){
-        //Some shortcode attributes to create custom button message
-        $atts = shortcode_atts(
-            array(
-
-                'txt' => 'I agree and consent',
-
-            ), $atts, 'vyps-ch-consent' );
-
-        $button_text = $atts['txt'];
-
-        /* User needs to be logged into consent. NO EXCEPTIONS */
-
-        if ( is_user_logged_in() ) {
-
-            return "Please consent to mining. <form method=\"post\">
-                <input type=\"hidden\" value=\"\" name=\"consent\"/>
-                <input type=\"submit\" class=\"button-secondary\" value=\"$button_text\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
-                </form>";
-
-        } else {
-
-            return "You need to be logged in to consent!"; //I feel like admin an use a
-        }
-    }
-
+		//Ok. The nonce.
+		$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
+    $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_points_list&edituserpoints=$user_object->ID&_wpnonce=$vyps_nonce_check") . "'>" . __('Edit Points') . "</a>";
+    return $actions;
 }
 
-add_shortcode( 'vyps-256-consent', 'vyps_solver_consent_button_func');
+add_filter('user_row_actions', 'vyps_user_menu_action_links', 10, 2);
+
+/*** SHORTCODE INCLUDES IN BASE ***/
+
+//It has dawned on me that the ../vidyen-point-etc may not be needed actually?
+
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspl.php'); //Point Log
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc.php'); //Balance shortcode
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the Coinhive in.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsas.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256.php'); //VYPS webminerpool shortcode
+/*** End of Shortcode Includes ***/
