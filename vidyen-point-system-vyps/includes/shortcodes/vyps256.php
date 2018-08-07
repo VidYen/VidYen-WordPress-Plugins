@@ -74,13 +74,16 @@ function vyps_vy256_solver_func($atts) {
     error_reporting(E_ALL);
 
     global $wpdb;
-
-    $balance = wp_remote_get("https://www.vy256.com:8181/?userid=" . $miner_id);
-    //return "Here is the balance: " . $balance; //Still errors
+    //return "http://vy256.com:8081/?userid=" . $miner_id;
+    $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
+    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
+    $balance =  intval(wp_remote_retrieve_response_message( $remote_response ));
+    //return "Here is the balance: " . $balance[0]; //Still errors
     $table_name_log = $wpdb->prefix . 'vyps_points_log';
     $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and points_amount > 0";
     $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
     $balance_points = $wpdb->get_var( $balance_points_query_prepared );
+    $balance_points = intval($balance_points);
 
     $balance = $balance + (-$balance_points);
 
