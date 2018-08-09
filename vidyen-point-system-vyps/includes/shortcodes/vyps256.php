@@ -56,7 +56,7 @@ function vyps_vy256_solver_func($atts) {
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
     $current_user_id = get_current_user_id();
-    $miner_id = 'miner_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
+
     //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
     //$hiveUser = $sm_siteUID . $current_user_id; //not needed since not using CH API
 
@@ -74,19 +74,34 @@ function vyps_vy256_solver_func($atts) {
     error_reporting(E_ALL);
 
     global $wpdb;
-    //return "http://vy256.com:8081/?userid=" . $miner_id;
+    //return "http://vy256.com:8081/?userid=" . $miner_id; //Testing
+    /* Below removing until know if need to move it back.
+    $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
+    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) )['body'];
+    $balance =  intval($remote_response);
+    */
+    //return "Here is the balance: " . $balance[0]; //Still errors
+    $table_name_log = $wpdb->prefix . 'vyps_points_log';
+    //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
+    $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s"; //Ok we find the id of the last VY256 mining
+    $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining" ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+    $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
+
+    $miner_id = 'worker_' . $current_user_id . '_' . $last_transaction_id. '_' . $sm_site_key . '_' . $siteName;
+
+    //Ok. Some thoughts. We are making the last transaction id in the system. Which means it updates if they redeem. Hah. I fixed my own problem. Hope this works. WCCW
+    //I think Monroe needs the existing for his code to work, but not sure so leaving this here.
+
     $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
     $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) )['body'];
     $balance =  intval($remote_response);
 
-    //return "Here is the balance: " . $balance[0]; //Still errors
-    $table_name_log = $wpdb->prefix . 'vyps_points_log';
-    $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and points_amount > 0";
-    $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
-    $balance_points = $wpdb->get_var( $balance_points_query_prepared );
-    $balance_points = intval($balance_points);
 
-    $balance = $balance + (-$balance_points);
+
+
+    //$balance = $balance + (-$balance_points); //NOTE: it occured to me this might not work in situations where an admin starts a new site or wipes his data and vy256 retains there (or we wipe ours by accident). Let me test something a do a test.
+
+    //NOTE NOTE I have decided that the above method is a bit much considering our server could mess up too and we should see what the current hash is at that point and see if its less than the old one... Perhaps this is where we date stamp interface
 
     //Ok. I feel that having double the mining output code is annoying when its the same. We are going to make this global and the code should never be client until its client
     //Ok. Something needs to be in the $redeem_ouput to satisfy my OCD
@@ -168,7 +183,7 @@ function vyps_vy256_solver_func($atts) {
 
               elem.value += \"" . '\n' . "\";
               elem.scrollTop = elem.scrollHeight;
-              totalhashes = totalhashes + (-$balance_points);
+              totalhashes = totalhashes;
               document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
               if(totalhashes > 0){
                   document.getElementById('total_hashes').innerText = totalhashes + ' Hashes';
