@@ -26,12 +26,6 @@ if(current_user_can('install_plugins')){
 		    // Do stuff here.
 		}
 
-		//There is some debate between me and monroe that this field should check for SQL injection.
-		//Although he is right that one should always avoid it, I feel like if you can get to this screen
-		//then the person who would inject stuff into the field already can modify your PHP
-		//If we do need non-admin level people modifying your point system, then we will build and advance cpanel like system
-		//Because you shoulnd't have more than 10 points unless you got some weird ICO exchange going on.
-
 		//Point name. Text value
 	    $point_name = sanitize_text_field($_POST['point_name']); //Even though I am in the believe if an admin sql injects himself, we got bigger issues, but this has been sanitized.
 
