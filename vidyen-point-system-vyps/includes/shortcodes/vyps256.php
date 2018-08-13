@@ -34,7 +34,7 @@ function vyps_vy256_solver_func($atts) {
             'site' => '',
             'pid' => 1,
             'pool' => 'moneroocean.stream',
-            'threads' => '1',
+            'threads' => '5',
             'throttle' => '90',
         ), $atts, 'vyps-256' );
 
@@ -94,7 +94,12 @@ function vyps_vy256_solver_func($atts) {
 
     $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
     $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) )['body'];
-    $balance =  intval($remote_response);
+    if(array_key_exists('headers', $remote_response)){
+        $balance =  intval($remote_response['body']);
+    } else {
+        $balance = 0;
+        echo 'Error connecting to retrieve points.';
+    }
 
 
 
