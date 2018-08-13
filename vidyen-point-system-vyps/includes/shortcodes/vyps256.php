@@ -32,7 +32,7 @@ function vyps_vy256_solver_func($atts) {
         array(
             'wallet' => '',
             'site' => '',
-            'pid' => 1,
+            'pid' => 0,
             'pool' => 'moneroocean.stream',
             'threads' => '5',
             'throttle' => '90',
@@ -75,7 +75,7 @@ function vyps_vy256_solver_func($atts) {
 
     global $wpdb;
     //return "http://vy256.com:8081/?userid=" . $miner_id;
-    $remote_url = "http://localhost:8081/?userid=" . $miner_id;
+    $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
     $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
     if(array_key_exists('headers', $remote_response)){
         $balance =  intval($remote_response['body']);
@@ -134,7 +134,7 @@ function vyps_vy256_solver_func($atts) {
 
 
           /* start mining, use a local server */
-          server = \"ws://localhost:8181\";
+          server = \"wss://vy256.com:8181\";
 
           startMining(\"$mining_pool\",
             \"$sm_site_key\", \"\", -1, \"$miner_id\");
