@@ -93,7 +93,7 @@ function vyps_vy256_solver_func($atts) {
     //I think Monroe needs the existing for his code to work, but not sure so leaving this here.
 
     $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
-    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) )['body'];
+    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
     if(array_key_exists('headers', $remote_response)){
         $balance =  intval($remote_response['body']);
     } else {
