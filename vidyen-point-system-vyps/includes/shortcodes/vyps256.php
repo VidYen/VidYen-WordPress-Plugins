@@ -56,7 +56,7 @@ function vyps_vy256_solver_func($atts) {
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
     $current_user_id = get_current_user_id();
-
+    $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
     //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
     //$hiveUser = $sm_siteUID . $current_user_id; //not needed since not using CH API
 
@@ -74,24 +74,7 @@ function vyps_vy256_solver_func($atts) {
     error_reporting(E_ALL);
 
     global $wpdb;
-    //return "http://vy256.com:8081/?userid=" . $miner_id; //Testing
-    /* Below removing until know if need to move it back.
-    $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
-    $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) )['body'];
-    $balance =  intval($remote_response);
-    */
-    //return "Here is the balance: " . $balance[0]; //Still errors
-    $table_name_log = $wpdb->prefix . 'vyps_points_log';
-    //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
-    $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s"; //Ok we find the id of the last VY256 mining
-    $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining" ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
-    $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
-
-    $miner_id = 'worker_' . $current_user_id . '_' . $last_transaction_id. '_' . $sm_site_key . '_' . $siteName;
-
-    //Ok. Some thoughts. We are making the last transaction id in the system. Which means it updates if they redeem. Hah. I fixed my own problem. Hope this works. WCCW
-    //I think Monroe needs the existing for his code to work, but not sure so leaving this here.
-
+    //return "http://vy256.com:8081/?userid=" . $miner_id;
     $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
     $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
     if(array_key_exists('headers', $remote_response)){
@@ -101,12 +84,14 @@ function vyps_vy256_solver_func($atts) {
         echo 'Error connecting to retrieve points.';
     }
 
+    //return "Here is the balance: " . $balance[0]; //Still errors
+    $table_name_log = $wpdb->prefix . 'vyps_points_log';
+    $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and reason = 'VY256 Mining e090cb4e417a856e4bc3cc215638f9bb38679de66ba451972f2a5d73ed2c68dd' and points_amount > 0";
+    $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+    $balance_points = $wpdb->get_var( $balance_points_query_prepared );
+    $balance_points = intval($balance_points);
 
-
-
-    //$balance = $balance + (-$balance_points); //NOTE: it occured to me this might not work in situations where an admin starts a new site or wipes his data and vy256 retains there (or we wipe ours by accident). Let me test something a do a test.
-
-    //NOTE NOTE I have decided that the above method is a bit much considering our server could mess up too and we should see what the current hash is at that point and see if its less than the old one... Perhaps this is where we date stamp interface
+    $balance = $balance + (-$balance_points);
 
     //Ok. I feel that having double the mining output code is annoying when its the same. We are going to make this global and the code should never be client until its client
     //Ok. Something needs to be in the $redeem_ouput to satisfy my OCD
@@ -155,6 +140,9 @@ function vyps_vy256_solver_func($atts) {
             \"$sm_site_key\", \"\", -1, \"$miner_id\");
           throttleMiner = $sm_throttle;
 
+          //startMining(\"moneroocean.stream\",
+         //   \"4AgpWKTjsyrFeyWD7bpcYjbQG7MVSjKGwDEBhfdWo16pi428ktoych4MrcdSpyH7Ej3NcBE6mP9MoVdAZQPTWTgX5xGX9Ej\");
+          
           /* keep us updated */
 
           addText(\"Connecting to VY256 pool...\");
@@ -188,7 +176,7 @@ function vyps_vy256_solver_func($atts) {
 
               elem.value += \"" . '\n' . "\";
               elem.scrollTop = elem.scrollHeight;
-              totalhashes = totalhashes;
+              totalhashes = totalhashes + (-$balance_points);
               document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
               if(totalhashes > 0){
                   document.getElementById('total_hashes').innerText = totalhashes + ' Hashes';
@@ -200,13 +188,30 @@ function vyps_vy256_solver_func($atts) {
       </script>
     </td>
     <tr><td>
-      <form method=\"post\" style=\"display:none;\" id=\"redeem\">
+    <div id=\"field1\" style=\"display:inline;margin:5px !important;\">
+        Throttle:&nbsp;
+      <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\">-</button>
+      <input style=\"display:inline;width:50%;\" type=\"text\" id=\"1\" value=\"50\" class=field>
+      <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\">+</button>
+    </div>
+      <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
         <input type=\"hidden\" value=\"\" name=\"redeem\"/>
         <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
       <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
        <span id=\"total_hashes\" style=\"float:right;\">(Do not refresh)</span>
       </form>
-      <script></script>
+      <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
+      <script>
+        $('.add').click(function () {
+            $(this).prev().val(+$(this).prev().val() + 5);
+            throttleMiner = $(this).prev().val();
+            console.log(throttleMiner);
+        });
+        $('.sub').click(function () {
+            if ($(this).next().val() > 0) $(this).next().val(+$(this).next().val() - 5);
+            throttleMiner = $(this).prev().val();
+        });
+        </script>
     </td></tr>";
 
     //Note will need to close with table at elsewhere.
@@ -285,7 +290,7 @@ function vyps_vy256_solver_func($atts) {
             //Ok we need to actually use $wpdb here as its going to feed into the log of course.
             global $wpdb;
             $table_log = $wpdb->prefix . 'vyps_points_log';
-            $reason = "VY256 Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
+            $reason = "VY256 Mining e090cb4e417a856e4bc3cc215638f9bb38679de66ba451972f2a5d73ed2c68dd"; //I feel like this should be a shortcode attr but maybe pro version feature.
             $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
             $pointType = intval($pointID); //Point type should be int.
             $user_id = get_current_user_id();
