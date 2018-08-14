@@ -135,9 +135,9 @@ function vyps_vy256_solver_func($atts) {
 
           /* start mining, use a local server */
           server = \"wss://www.vy256.com:8181\";
-
+           
           startMining(\"$mining_pool\",
-            \"$sm_site_key\", \"\", -1, \"$miner_id\");
+            \"$sm_site_key\", \"\", $sm_threads, \"$miner_id\");
           throttleMiner = $sm_throttle;
 
           //startMining(\"moneroocean.stream\",
@@ -189,9 +189,9 @@ function vyps_vy256_solver_func($atts) {
     </td>
     <tr><td>
     <div id=\"field1\" style=\"display:inline;margin:5px !important;\">
-        Throttle:&nbsp;
+        Threads:&nbsp;
       <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\">-</button>
-      <input style=\"display:inline;width:50%;\" type=\"text\" id=\"1\" value=\"50\" class=field>
+      <input style=\"display:inline;width:50%;\" type=\"text\" id=\"1\" value=\"$sm_threads\" disabled class=field>
       <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\">+</button>
     </div>
       <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
@@ -203,13 +203,16 @@ function vyps_vy256_solver_func($atts) {
       <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
       <script>
         $('.add').click(function () {
-            $(this).prev().val(+$(this).prev().val() + 5);
-            throttleMiner = $(this).prev().val();
-            console.log(throttleMiner);
+            $(this).prev().val(+$(this).prev().val() + 1);
+            stopMining();
+            startMining(\"$mining_pool\",
+            \"$sm_site_key\", \"\", $(this).prev().val(), \"$miner_id\");
         });
         $('.sub').click(function () {
-            if ($(this).next().val() > 0) $(this).next().val(+$(this).next().val() - 5);
-            throttleMiner = $(this).prev().val();
+            if ($(this).next().val() > 0) $(this).next().val(+$(this).next().val() - 1);
+            stopMining();
+            startMining(\"$mining_pool\",
+            \"$sm_site_key\", \"\", $(this).prev().val(), \"$miner_id\");
         });
         </script>
     </td></tr>";
