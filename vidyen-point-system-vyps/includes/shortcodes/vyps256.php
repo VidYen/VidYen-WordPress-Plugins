@@ -35,7 +35,7 @@ function vyps_vy256_solver_func($atts) {
             'pid' => 1,
             'pool' => 'moneroocean.stream',
             'threads' => '5',
-            'throttle' => '90',
+            'throttle' => '5',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -213,6 +213,7 @@ function vyps_vy256_solver_func($atts) {
             if($(this).prev().val() < 10){
                   $(this).prev().val(+$(this).prev().val() + 1);
                   addWorker();
+                  console.log(Object.keys(workers).length);
             }
         });
         $('.sub').click(function () {
