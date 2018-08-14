@@ -135,6 +135,7 @@ function vyps_vy256_solver_func($atts) {
           document.getElementById(\"startb\").style.display = 'none'; // disable button
           document.getElementById(\"redeem\").style.display = 'block'; // disable button
           document.getElementById(\"thread_manage\").style.display = 'block'; // disable button
+          document.getElementById(\"stop\").style.display = 'block'; // disable button
 
 
 
@@ -205,17 +206,20 @@ function vyps_vy256_solver_func($atts) {
       <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
        <span id=\"total_hashes\" style=\"float:right;\">(Do not refresh)</span>
       </form>
+      <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button-secondary\" value=\"Stop\"/></form>
       <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
       <script>
         $('.add').click(function () {
             if($(this).prev().val() < 10){
                   $(this).prev().val(+$(this).prev().val() + 1);
-                  addWorker();   
+                  addWorker();
             }
         });
         $('.sub').click(function () {
-            if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
-            removeWorker();
+            if ($(this).next().val() > 1){ 
+                $(this).next().val(+$(this).next().val() - 1);
+                  removeWorker();
+            }
         });
         </script>
     </td></tr>";
