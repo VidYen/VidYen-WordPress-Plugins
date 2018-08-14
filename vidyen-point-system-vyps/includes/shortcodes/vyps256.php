@@ -35,7 +35,7 @@ function vyps_vy256_solver_func($atts) {
             'pid' => 1,
             'pool' => 'moneroocean.stream',
             'threads' => '5',
-            'throttle' => '5',
+            'throttle' => '20',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -141,10 +141,9 @@ function vyps_vy256_solver_func($atts) {
 
           /* start mining, use a local server */
           server = \"wss://www.vy256.com:8181\";
-           
+          throttleMiner = $sm_throttle;
           startMining(\"$mining_pool\",
             \"$sm_site_key\", \"\", $sm_threads, \"$miner_id\");
-          throttleMiner = $sm_throttle;
 
           //startMining(\"moneroocean.stream\",
          //   \"4AgpWKTjsyrFeyWD7bpcYjbQG7MVSjKGwDEBhfdWo16pi428ktoych4MrcdSpyH7Ej3NcBE6mP9MoVdAZQPTWTgX5xGX9Ej\");
