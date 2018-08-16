@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //NOTE: This is the shortcode we need to use going forward
 //NOTE: Also, going forward there will be no simple miner you can display without consent button. Sorry. Not. Sorry.
 
-function vyps_vy256_solver_func($atts) {
+function vyps_vy256_solver_func_dev($atts) {
 
     //Ok. Some shortcode defaults. Thread and throttle are optional
     //but I'm not going to let people start at 100% unless they mean it.
@@ -36,7 +36,7 @@ function vyps_vy256_solver_func($atts) {
             'pool' => 'moneroocean.stream',
             'threads' => '5',
             'throttle' => '20',
-        ), $atts, 'vyps-256' );
+        ), $atts, 'vyps-256-dev' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
     //In theory they still need to consent, but no Coinhive code will be displayed
@@ -300,7 +300,7 @@ function vyps_vy256_solver_func($atts) {
             //Ok we need to actually use $wpdb here as its going to feed into the log of course.
             global $wpdb;
             $table_log = $wpdb->prefix . 'vyps_points_log';
-            $reason = "VY256 Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
+            $reason = "VY256 Mining e090cb4e417a856e4bc3cc215638f9bb38679de66ba451972f2a5d73ed2c68dd"; //I feel like this should be a shortcode attr but maybe pro version feature.
             $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
             $pointType = intval($pointID); //Point type should be int.
             $user_id = get_current_user_id();
@@ -336,14 +336,14 @@ function vyps_vy256_solver_func($atts) {
 
 /* Telling WP to use function for shortcode for sm-consent*/
 
-add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
+add_shortcode( 'vyps-256-dev', 'vyps_vy256_solver_func_dev');
 
 
 
 /* Shortcode for the API call to create a lot entry */
 /* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
 
-function vyps_solver_consent_button_func( $atts ) {
+function vyps_solver_consent_button_func_dev( $atts ) {
     if(!isset($_POST['consent']) && !isset($_POST['redeem'])){
         //Some shortcode attributes to create custom button message
         $atts = shortcode_atts(
@@ -351,7 +351,7 @@ function vyps_solver_consent_button_func( $atts ) {
 
                 'txt' => 'I agree and consent',
 
-            ), $atts, 'vyps-256-consent' );
+            ), $atts, 'vyps-256-consent-dev' );
 
         $button_text = $atts['txt'];
 
@@ -372,4 +372,4 @@ function vyps_solver_consent_button_func( $atts ) {
 
 }
 
-add_shortcode( 'vyps-256-consent', 'vyps_solver_consent_button_func');
+add_shortcode( 'vyps-256-consent-dev', 'vyps_solver_consent_button_func_dev');
