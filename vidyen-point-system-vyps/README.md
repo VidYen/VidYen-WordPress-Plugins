@@ -13,7 +13,7 @@ The VidYen Point System [VYPS] allows you to create your own rewards site on Wor
 
 == Description ==
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media and Coinhive as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities. This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Coinhive, and our own VY256 miner (non adblock version) as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities. This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
 Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising or Coinhive mining API. It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
@@ -52,7 +52,13 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
-=00.04.06=
+= 00.04.09 =
+Major VY256 update! NOW with server side hash tracking so users can't edit HTML to get more points.
+Still needs more work such as throttle and CPU control, but under Windows 10 usually only takes up 10% and can be increased by using more than one browser profile.
+Pays to any wallet and mines to any of the listed supported pools that do XMR.
+And some various bug fixes and testing.
+
+= 00.04.06 =
 Added a very experimental mining software that uses VidYen's own pool (thanks to notgiven688 webminer pool Github )
 NOTE: This is VERY experimental. Hashes are tracked client side, so if anyone hacked the post they could in theory add as many points as they want.
 HOWEVER: This appears to not cause any adblockers to have issues nor Malwarebytes to complain. I still require use of the consent button for code to show.
