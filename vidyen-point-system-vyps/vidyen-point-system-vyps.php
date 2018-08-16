@@ -357,4 +357,5 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Thre
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256.php'); //VYPS webminerpool shortcode
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_dev.php'); //VYPS webminerpool shortcode
 /*** End of Shortcode Includes ***/
