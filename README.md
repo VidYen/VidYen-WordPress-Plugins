@@ -25,11 +25,11 @@ I need to finish labeling what the folders more professionally but here is what 
 
 vidyen-point-system-vyps = The folder on WordPress.org release
 
-VYPS_cf = CoinFlip game
-
-VYPS_cg = Combat Game (in progress)
-
 VYPS_un = Uninstall plugin
+
+Extras
+--------
+There is a VYPS combat came in another repo if you want to test.
 
 
 About and Support
