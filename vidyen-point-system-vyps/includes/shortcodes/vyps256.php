@@ -7,6 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //NOTE: This is the shortcode we need to use going forward
 //NOTE: Also, going forward there will be no simple miner you can display without consent button. Sorry. Not. Sorry.
 
+/*** Function to create teh VY245 miner***/
+//I have an internal debate whether to call it vyminer, but I'm avoiding the term miner in code.
+
 function vyps_vy256_solver_func($atts) {
 
     //Ok. Some shortcode defaults. Thread and throttle are optional
@@ -57,8 +60,6 @@ function vyps_vy256_solver_func($atts) {
     $pointID = $atts['pid'];
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
-    //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
-    //$hiveUser = $sm_siteUID . $current_user_id; //not needed since not using CH API
 
     if ($sm_site_key == '' AND $siteName == '') {
 
@@ -69,24 +70,27 @@ function vyps_vy256_solver_func($atts) {
         $site_warning = '';
 
     }
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
+
+    //NOTE: Turning off Oclin's error reporting
+    //ini_set('display_errors', 1);
+    //ini_set('display_startup_errors', 1);
+    //error_reporting(E_ALL);
 
     global $wpdb;
-    //return "http://vy256.com:8081/?userid=" . $miner_id;
+
+    //Using WP functions
     $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
     $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
     if(array_key_exists('headers', $remote_response)){
         $balance =  intval($remote_response['body']);
     } else {
         $balance = 0;
-        echo 'Error connecting to retrieve points.';
+        return 'Error connecting to VY256.com to retrieve points.'; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
     }
 
     //return "Here is the balance: " . $balance[0]; //Still errors
     $table_name_log = $wpdb->prefix . 'vyps_points_log';
-    $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and reason = 'VY256 Mining e090cb4e417a856e4bc3cc215638f9bb38679de66ba451972f2a5d73ed2c68dd' and points_amount > 0";
+    $balance_points_query = "SELECT COALESCE(sum(points_amount), 0) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d and reason = 'VY256 Mining' and points_amount > 0"; //If we need a number it does into meta columns. Otherwise the log shows the reason which do not want it very long to mess up table width
     $balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $pointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
     $balance_points = $wpdb->get_var( $balance_points_query_prepared );
     $balance_points = intval($balance_points);
@@ -237,60 +241,7 @@ function vyps_vy256_solver_func($atts) {
 
     } elseif (isset($_POST["redeem"]) AND is_user_logged_in()) { //see if post button is redeem and logged in.
 
-        //Ok. Actually not setting PID to something doesn't matter for mining.
-        //However, when you try to redeem, its a big issue if you don't know which point you are redeeming to.
-
-        //Copied and pasted from the old VidYen.com code
-        // fetch from DB
-        //$hiveUser = $user->id;
-        //$hiveKey = 'baMweSSSVy93nOaQXOuQ0rKFRQlX0PY1';
-        // --------------------
-        /*
-              $url = "https://api.coinhive.com/user/balance?name={$hiveUser}&secret={$hiveKey}";
-
-              $ch = curl_init();
-              curl_setopt($ch, CURLOPT_URL, $url);
-              curl_setopt($ch, CURLOPT_HEADER, 0);
-              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-              $result = curl_exec($ch);
-              curl_close($ch);
-
-              $jsonData = json_decode($result, true);
-              $balance = $jsonData['balance'];
-        */
-
-        /* echo $balance;
-
-        $hostBalance = $unbalance + ($unbalance - $balance);
-
-        echo $hostBalance; */
-
-        //
-        // A very simple PHP example that sends a HTTP POST to a remote site
-        //
-        /*
-              $ch = curl_init();
-
-              curl_setopt($ch, CURLOPT_URL,"https://api.coinhive.com/user/withdraw");
-              curl_setopt($ch, CURLOPT_POST, 1);
-              curl_setopt($ch, CURLOPT_POSTFIELDS,
-                  "name={$hiveUser}&amount={$balance}&secret={$hiveKey}");
-
-              // in real life you should use something like:
-              // curl_setopt($ch, CURLOPT_POSTFIELDS,
-              //          http_build_query(array('postvar1' => 'value1')));
-
-              // receive server response ...
-              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-              $server_output = curl_exec ($ch);
-
-              curl_close ($ch);
-
-        */
-
-        // further processing ....
-        //if ($server_output == "OK") { ... } else { ... }
+        //NOTE: Removed the old Coinhive code that was commented out
 
         /* OK. Pulling log table to post return to it. What could go wrong? */
         /* Honestly, we should always refer to table by the actual table?   */
@@ -305,7 +256,7 @@ function vyps_vy256_solver_func($atts) {
             $pointType = intval($pointID); //Point type should be int.
             $user_id = get_current_user_id();
 
-            //Inserting Coin Hive row.
+            //Insertiung the mining row
             $data = [
                 'reason' => $reason,
                 'point_id' => $pointType,
@@ -319,7 +270,7 @@ function vyps_vy256_solver_func($atts) {
             $balance = 0; //I remembered if it gets returned a blank should be made a zero.
         }
 
-        $redeem_output = "<tr><td><script>document.getElementById('startb').style.display='none';</script>$balance hashes redeemed. <a onclick=\"window.location.href = window.location.href\">Continue mining.</a></td></tr>"; //I need fto fix this to show better output
+        $redeem_output = "<tr><td>$balance hashes redeemed.</td></tr>"; //I need fto fix this to show better output. Also I have no idea why the javascript was there, but we will see when I test. Ere we go!
 
         $final_return = $simple_miner_output . $redeem_output .  '</table>';
 
@@ -339,9 +290,7 @@ function vyps_vy256_solver_func($atts) {
 add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
 
 
-
-/* Shortcode for the API call to create a lot entry */
-/* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
+/*** Function to create the consent button ***/
 
 function vyps_solver_consent_button_func( $atts ) {
     if(!isset($_POST['consent']) && !isset($_POST['redeem'])){
@@ -349,7 +298,7 @@ function vyps_solver_consent_button_func( $atts ) {
         $atts = shortcode_atts(
             array(
 
-                'txt' => 'I agree and consent',
+                'text' => 'I agree and consent',
 
             ), $atts, 'vyps-256-consent' );
 
@@ -359,14 +308,16 @@ function vyps_solver_consent_button_func( $atts ) {
 
         if ( is_user_logged_in() ) {
 
-            return "Please consent to mining. <form method=\"post\">
+            //Why would you need two texts for consent message?
+            return "<form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"consent\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"$button_text\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
                 </form>";
 
         } else {
 
-            return "You need to be logged in to consent!"; //I feel like admin an use a
+            return;
+            //return "You need to be logged in to consent!"; //Admin's can use the LG short code if needed
         }
     }
 
