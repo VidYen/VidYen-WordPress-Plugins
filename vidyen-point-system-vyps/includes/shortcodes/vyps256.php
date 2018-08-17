@@ -268,7 +268,7 @@ function vyps_vy256_solver_func($atts) {
                     else if (obj.identifier === \"hashsolved\")
                       elem.value += \"Pool accepted hash! Points awarded!\";
                     else if (obj.identifier === \"error\")
-                      elem.value += \"Failure: \" + obj.param;
+                      elem.value += \"Alert: \" + obj.param;
                     else elem.value += obj;
 
                     elem.value += \"" . '\n' . "\";

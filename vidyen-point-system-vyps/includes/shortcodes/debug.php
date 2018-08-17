@@ -43,3 +43,11 @@ function vyps_debug_func(){
 }
 
 add_shortcode( 'vyps-debug', 'vyps_debug_func');
+
+function vyps_hw_func (){
+
+  return "Hello world";
+
+}
+
+add_shortcode( 'vyps-hw', 'vyps_hw_func');
