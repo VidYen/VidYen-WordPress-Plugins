@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //$remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
 
+//NOTE: Comment starts here
+/*
 function vyps_debug_wp_remote_func(){
 
   //wp_remote_get
@@ -84,3 +86,7 @@ function vyps_hw_func(){
 }
 
 add_shortcode( 'vyps-hw', 'vyps_hw_func');
+
+*/
+
+//NOTE: Comment ends here.

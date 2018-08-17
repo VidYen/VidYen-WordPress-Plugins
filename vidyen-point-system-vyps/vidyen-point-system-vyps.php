@@ -344,7 +344,7 @@ add_filter('user_row_actions', 'vyps_user_menu_action_links', 10, 2);
 
 //It has dawned on me that the ../vidyen-point-etc may not be needed actually?
 
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/debug.php'); //We got so complicated needed to help users troubleshoot server errors
+//include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/debug.php'); //We got so complicated needed to help users troubleshoot server errors. Left off when not needed but will make more detailed later.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspl.php'); //Point Log
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc.php'); //Balance shortcode
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update
