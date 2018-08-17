@@ -56,7 +56,7 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 Major VY256 update! NOW with server side hash tracking!
 Does not appear to have problems with uBlock, Brave, or Malwarebytes (Still requires consent!)
 Needs more work such as throttle and CPU control, but under Windows 10 usually only takes up 10% and can be increased by using more than one browser profile.
-Pays to any wallet and currently works with MoneroOcean.stream pool.
+Pays to any wallet and currently works with MoneroOcean.stream pool (more pools incoming).
 And some various bug fixes and testing.
 
 = 00.04.06 =
