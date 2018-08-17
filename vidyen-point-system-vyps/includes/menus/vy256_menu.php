@@ -82,6 +82,7 @@ function vyps_vy256_sub_menu_page() {
     <p>For anyone who is trying this, we want to thank you for testing and that please let us know if you have any problems!</p>
     <p>Keep in mind that both we and the pools do take some fees, but it is generally way less than Coinhives 20% and depending on the pool you can get a smaller minimum payout.</p>
     <p>Our code is open source so if you want to run your own version, just go to our github and grab the code.</p>
+    <p>There have been reports that some WP do not accept wp_remote_get to our server and we are currently investigating. We've tried two hosting providers and seems to work for us on both.</p>
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
     <p>Yes, we have an issue with pools where MO seems to be the best one to use. Will fix soon. But that pool works for now and will have to test each pool to see if works with algo.<p>".
