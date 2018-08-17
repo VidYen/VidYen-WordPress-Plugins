@@ -118,6 +118,8 @@ function vyps_vy256_solver_func($atts) {
         $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName . $last_transaction_id;
 
         //Using WP functions
+
+        /* Live fix to see if url why and if the array key exists
         $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
         if(array_key_exists('headers', $remote_response)){
@@ -126,6 +128,12 @@ function vyps_vy256_solver_func($atts) {
             $balance = 0;
             return 'Error connecting to VY256.com! Server maybe offline? Contact VidYen.com admin!'; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
         }
+
+        */
+
+        $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
+        $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
+        $balance =  intval($remote_response['body']);
 
         //OK we are going to check to see if balance is >0 and if it is... We need to immediatly redeem and restart count.
 
