@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      00.04.09.07
+Version:      00.04.09.08
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -344,6 +344,7 @@ add_filter('user_row_actions', 'vyps_user_menu_action_links', 10, 2);
 
 //It has dawned on me that the ../vidyen-point-etc may not be needed actually?
 
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/debug.php'); //We got so complicated needed to help users troubleshoot server errors
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspl.php'); //Point Log
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc.php'); //Balance shortcode
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc_ww.php'); //Balance for woowallet as the built in one annoys me with refresh update

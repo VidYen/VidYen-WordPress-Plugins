@@ -83,7 +83,9 @@ function vyps_vy256_sub_menu_page() {
     <p>Keep in mind that both we and the pools do take some fees, but it is generally way less than Coinhives 20% and depending on the pool you can get a smaller minimum payout.</p>
     <p>Our code is open source so if you want to run your own version, just go to our github and grab the code.</p>
     <h2>Supported pool list:</h2>
-    <p>xmrpool.eu</p>
+    <p>moneroocean.stream</p>
+    <p>Yes, we have an issue with pools where MO seems to be the best one to use. Will fix soon. But that pool works for now and will have to test each pool to see if works with algo.<p>".
+    /*<p>xmrpool.eu</p>
     <p>moneropool.com</p>
     <p>monero.crypto-pool.fr</p>
     <p>monerohash.com</p>
@@ -125,7 +127,7 @@ function vyps_vy256_sub_menu_page() {
     <p>trtl.flashpool.club</p>
     <p>etn.spacepools.org</p>
     <p>etn.nanopool.org</p>
-    <p>etn.hashvault.pro</p>
+    <p>etn.hashvault.pro</p>*/ "
   </div>
     ";
 
