@@ -53,8 +53,9 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 == Changelog ==
 
 = 00.04.09 =
-Major VY256 update! NOW with server side hash tracking so users can't edit HTML to get more points.
-Still needs more work such as throttle and CPU control, but under Windows 10 usually only takes up 10% and can be increased by using more than one browser profile.
+Major VY256 update! NOW with server side hash tracking!
+Does not appear to have problems with uBlock, Brave, or Malwarebytes (Still requires consent!)
+Needs more work such as throttle and CPU control, but under Windows 10 usually only takes up 10% and can be increased by using more than one browser profile.
 Pays to any wallet and mines to any of the listed supported pools that do XMR.
 And some various bug fixes and testing.
 
@@ -68,7 +69,7 @@ ALSO NOTE: Since hashes are tracked on the page closing the browser or refreshin
 Added a public user balance shortcode so other users can be aware of the balances of other users without having to do manual calculations with the log. (Game theory)
 
 = 00.03.09 =
-Added pagnation to the public log as it was getting cumbersome on our own test server. ex: [vyps-pl rows=25 bootstrap=yes]
+Added pagination to the public log as it was getting cumbersome on our own test server. ex: [vyps-pl rows=25 bootstrap=yes]
 Minor bug fixes.
 Prep for public balances and leaderboards.
 
