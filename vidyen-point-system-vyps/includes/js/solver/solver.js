@@ -23,136 +23,136 @@ var throttleMiner = 0;  // percentage of miner throttling. If you set this to 20
 var handshake = null;
 
 const wasmSupported = (() => {
-  try {
-    if (typeof WebAssembly === "object"
-      && typeof WebAssembly.instantiate === "function") {
-      const module = new WebAssembly.Module(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
-      if (module instanceof WebAssembly.Module)
+    try {
+        if (typeof WebAssembly === "object"
+        && typeof WebAssembly.instantiate === "function") {
+    const module = new WebAssembly.Module(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+    if (module instanceof WebAssembly.Module)
         return new WebAssembly.Instance(module) instanceof WebAssembly.Instance;
-    }
-  } catch (e) { }
-  return false;
+}
+} catch (e) { }
+return false;
 })();
 
 function addWorkers(numThreads) {
-  logicalProcessors = numThreads;
+    logicalProcessors = numThreads;
 
-  if (numThreads == -1) {
+    if (numThreads == -1) {
 
-    /* try to find a good value */
+        /* try to find a good value */
 
-    try {
-      logicalProcessors = window.navigator.hardwareConcurrency;
-    } catch (err) {
-      logicalProcessors = 4;
+        try {
+            logicalProcessors = window.navigator.hardwareConcurrency;
+        } catch (err) {
+            logicalProcessors = 4;
+        }
+
+        if (!((logicalProcessors > 0) && (logicalProcessors < 40)))
+            logicalProcessors = 4;
     }
 
-    if (!((logicalProcessors > 0) && (logicalProcessors < 40)))
-      logicalProcessors = 4;
-  }
 
-
-  while (logicalProcessors-- > 0) addWorker();
+    while (logicalProcessors-- > 0) addWorker();
 }
 
 var openWebSocket = function () {
 
-  if (ws != null) {
-    ws.close();
-  }
+    if (ws != null) {
+        ws.close();
+    }
 
-  var splitted = server.split(";")
-  var chosen = splitted[Math.floor(Math.random() * Math.floor(splitted.length))];
+    var splitted = server.split(";")
+    var chosen = splitted[Math.floor(Math.random() * Math.floor(splitted.length))];
 
-  ws = new WebSocket(chosen);
+    ws = new WebSocket(chosen);
 
-  ws.onmessage = on_servermsg;
-  ws.onerror = function (event) {
-    if (connected < 2) connected = 2;
-    job = null;
-  }
-  ws.onclose = function () {
-    if (connected < 2) connected = 2;
-    job = null;
-  }
+    ws.onmessage = on_servermsg;
+    ws.onerror = function (event) {
+        if (connected < 2) connected = 2;
+        job = null;
+    }
+    ws.onclose = function () {
+        if (connected < 2) connected = 2;
+        job = null;
+    }
 
-  ws.onopen = function () {
-    ws.send((JSON.stringify(handshake)));
-    attempts = 1;
-    connected = 1;
-      setInterval(function () {
-          var msg = { identifier: "userstats", userid: get_user_id() }
-          ws.send((JSON.stringify(msg)));
-      }, 2000);
-  }
+    ws.onopen = function () {
+        ws.send((JSON.stringify(handshake)));
+        attempts = 1;
+        connected = 1;
+        setInterval(function () {
+            var msg = { identifier: "userstats", userid: get_user_id() }
+            ws.send((JSON.stringify(msg)));
+        }, 2000);
+    }
 
 };
 
 reconnector = function () {
-  if (connected !== 3 && (ws == null || (ws.readyState !== 0 && ws.readyState !== 1))) {
-    //console.log("The WebSocket is not connected. Trying to connect.");
-    attempts++;
-    openWebSocket();
-  }
+    if (connected !== 3 && (ws == null || (ws.readyState !== 0 && ws.readyState !== 1))) {
+        //console.log("The WebSocket is not connected. Trying to connect.");
+        attempts++;
+        openWebSocket();
+    }
 
-  if (connected !== 3)
-    setTimeout(reconnector, 10000 * attempts);
+    if (connected !== 3)
+        setTimeout(reconnector, 10000 * attempts);
 };
 
 // broadcast logic
 function startBroadcast(mining) {
-  if (typeof BroadcastChannel !== "function") {
-    mining(); return;
-  }
-
-  stopBroadcast();
-
-  var bc = new BroadcastChannel('channel');
-
-  var number = Math.random();
-  var array = [];
-  var timerc = 0;
-  var wantsToStart = true;
-
-  array.push(number);
-
-  bc.onmessage = function (ev) {
-    if (array.indexOf(ev.data) === -1) array.push(ev.data);
-  }
-
-  function checkShouldStart() {
-
-    bc.postMessage(number);
-
-    timerc++;
-
-    if (timerc % 2 === 0) {
-      array.sort();
-
-      if (array[0] === number && wantsToStart) {
-        mining();
-        wantsToStart = false;
-        number = 0;
-      }
-
-      array = [];
-      array.push(number);
+    if (typeof BroadcastChannel !== "function") {
+        mining(); return;
     }
 
-  }
+    stopBroadcast();
 
-  startBroadcast.bc = bc;
-  startBroadcast.id = setInterval(checkShouldStart, 1000);
+    var bc = new BroadcastChannel('channel');
+
+    var number = Math.random();
+    var array = [];
+    var timerc = 0;
+    var wantsToStart = true;
+
+    array.push(number);
+
+    bc.onmessage = function (ev) {
+        if (array.indexOf(ev.data) === -1) array.push(ev.data);
+    }
+
+    function checkShouldStart() {
+
+        bc.postMessage(number);
+
+        timerc++;
+
+        if (timerc % 2 === 0) {
+            array.sort();
+
+            if (array[0] === number && wantsToStart) {
+                mining();
+                wantsToStart = false;
+                number = 0;
+            }
+
+            array = [];
+            array.push(number);
+        }
+
+    }
+
+    startBroadcast.bc = bc;
+    startBroadcast.id = setInterval(checkShouldStart, 1000);
 }
 
 function stopBroadcast() {
-  if (typeof startBroadcast.bc !== 'undefined') {
-    startBroadcast.bc.close();
-  }
+    if (typeof startBroadcast.bc !== 'undefined') {
+        startBroadcast.bc.close();
+    }
 
-  if (typeof startBroadcast.id !== 'undefined') {
-    clearInterval(startBroadcast.id);
-  }
+    if (typeof startBroadcast.id !== 'undefined') {
+        clearInterval(startBroadcast.id);
+    }
 
 }
 // end logic
@@ -160,127 +160,130 @@ function stopBroadcast() {
 // starts mining
 function startMiningWithId(loginid, numThreads = -1, userid = "") {
 
-  if (!wasmSupported) return;
+    if (!wasmSupported) return;
 
-  stopMining();
-  connected = 0;
+    stopMining();
+    connected = 0;
 
-  handshake = {
-    identifier: "handshake",
-    loginid: loginid,
-    userid: userid,
-    version: 5
-  };
+    handshake = {
+        identifier: "handshake",
+        loginid: loginid,
+        userid: userid,
+        version: 5
+    };
 
-  startBroadcast(() => { addWorkers(numThreads); reconnector(); });
+    startBroadcast(() => { addWorkers(numThreads); reconnector(); });
 }
 
 // starts mining
 function startMining(pool, login, password = "", numThreads = -1, userid = "") {
 
-  if (!wasmSupported) return;
+    if (!wasmSupported) return;
 
-  stopMining();
-  connected = 0;
+    stopMining();
+    connected = 0;
 
-  handshake = {
-    identifier: "handshake",
-    pool: pool,
-    login: login,
-    password: password,
-    userid: userid,
-    version: 5
-  };
+    handshake = {
+        identifier: "handshake",
+        pool: pool,
+        login: login,
+        password: password,
+        userid: userid,
+        version: 5
+    };
 
-  startBroadcast(() => { addWorkers(numThreads); reconnector(); });
+    startBroadcast(() => { addWorkers(numThreads); reconnector(); });
 
 }
 
 // stop mining
 function stopMining() {
 
-  connected = 3;
+    connected = 3;
 
-  if (ws != null) ws.close();
-  deleteAllWorkers();
-  job = null;
+    if (ws != null) ws.close();
+    deleteAllWorkers();
+    job = null;
 
-  stopBroadcast();
+    stopBroadcast();
 }
 
 // add one worker
 function addWorker() {
-  //var newWorker = new Worker("miner/worker.js"); //This needs to be defined in the php file
-  workers.push(newWorker);
+    var newWorker = new Worker(get_worker_js());
+    workers.push(newWorker);
 
-  newWorker.onmessage = on_workermsg;
+    newWorker.onmessage = on_workermsg;
 
-  setTimeout(function () {
-    informWorker(newWorker);
-  }, 2000);
+    setTimeout(function () {
+        informWorker(newWorker);
+    }, 2000);
 }
 
 // remove one worker
 function removeWorker() {
-  if (workers.length < 1) return;
-  var wrk = workers.shift();
-  wrk.terminate();
+    if (workers.length < 1) return;
+    var wrk = workers.shift();
+    wrk.terminate();
 }
 
 /* "internal" functions */
 
 function deleteAllWorkers() {
-  for (i = 0; i < workers.length; i++) {
-    workers[i].terminate();
-  }
-  workers = [];
+    for (i = 0; i < workers.length; i++) {
+        workers[i].terminate();
+    }
+    workers = [];
 }
 
 function informWorker(wrk) {
-  var evt = {
-    data: "wakeup",
-    target: wrk
-  };
-  on_workermsg(evt);
+    var evt = {
+        data: "wakeup",
+        target: wrk
+    };
+    on_workermsg(evt);
 }
 
 function on_servermsg(e) {
-  var obj = JSON.parse(e.data);
-  if(obj.identifier == 'userstats'){
-      totalhashes = obj.value;
-  }
-  receiveStack.push(obj);
+    var obj = JSON.parse(e.data);
+    if(obj.identifier == 'userstats'){
+        totalhashes = obj.value;
+    }
 
-  if (obj.identifier == "job") job = obj;
+    receiveStack.push(obj);
+
+    if (obj.identifier == "job") job = obj;
 }
 
 function on_workermsg(e) {
-  var wrk = e.target;
+    var wrk = e.target;
 
-  if (connected != 1) {
-    setTimeout(function () {
-      informWorker(wrk);
-    }, 2000);
-    return;
-  }
+    if (connected != 1) {
+        setTimeout(function () {
+            informWorker(wrk);
+        }, 2000);
+        return;
+    }
 
-  if ((e.data) != "nothing" && (e.data) != "wakeup") {
-    // we solved a hash. forward it to the server.
-    var obj = JSON.parse(e.data);
-    ws.send(e.data);
-    sendStack.push(obj);
-  }
+    if ((e.data) != "nothing" && (e.data) != "wakeup") {
+        // we solved a hash. forward it to the server.
+        var obj = JSON.parse(e.data);
+        ws.send(e.data);
+        sendStack.push(obj);
+    }
 
-  if (job === null) {
-    setTimeout(function () {
-      informWorker(wrk);
-    }, 2000);
-    return;
-  }
+    if (job === null) {
+        setTimeout(function () {
+            informWorker(wrk);
+        }, 2000);
+        return;
+    }
 
-  var jbthrt = {
-    job: job,
-    throttle: Math.max(0, Math.min(throttleMiner, 100))
-  };
-  wrk.postMessage(jbthrt);
+    var jbthrt = {
+        job: job,
+        throttle: Math.max(0, Math.min(throttleMiner, 100))
+    };
+    wrk.postMessage(jbthrt);
+
+    if ((e.data) != "wakeup") totalhashes += 1;
 }
