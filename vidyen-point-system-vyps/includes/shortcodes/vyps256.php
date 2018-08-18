@@ -79,6 +79,9 @@ function vyps_vy256_solver_func($atts) {
 
       global $wpdb;
 
+      //loading the graphic url
+      $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/vyworker_large.gif'; //Small version
+
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';
       $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s"; //Ok we find the id of the last VY256 mining
@@ -150,6 +153,7 @@ function vyps_vy256_solver_func($atts) {
         $site_warning
         <tr><td>
           <div>
+          <img src=\"$VYPS_worker_url\"><br>
           </div>
 
           <script>
@@ -222,7 +226,7 @@ function vyps_vy256_solver_func($atts) {
             }
 
           </script>
-        </td></tr>
+
             <style>
             .loader {
                 border: 16px solid #f3f3f3; /* Light grey */
@@ -251,6 +255,7 @@ function vyps_vy256_solver_func($atts) {
         }, 500);
     </script>
     </center>
+    </td></tr>
     <tr>
        <td>
          <div>
