@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //NOTE: This is the shortcode we need to use going forward
 //NOTE: Also, going forward there will be no simple miner you can display without consent button. Sorry. Not. Sorry.
 
-function vyps_vy256_solver_func_dev($atts) {
+function vyps_vy256_solver_func($atts) {
 
     //Ok. Some shortcode defaults. Thread and throttle are optional
     //but I'm not going to let people start at 100% unless they mean it.
@@ -34,9 +34,9 @@ function vyps_vy256_solver_func_dev($atts) {
             'site' => '',
             'pid' => 1,
             'pool' => 'moneroocean.stream',
-            'threads' => '5',
-            'throttle' => '20',
-        ), $atts, 'vyps-256-dev' );
+            'threads' => '10',
+            'throttle' => '40',
+        ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
     //In theory they still need to consent, but no Coinhive code will be displayed
@@ -112,12 +112,17 @@ function vyps_vy256_solver_func_dev($atts) {
     $site_warning
     <tr><td>
       <div>
-        <textarea rows=\"4\" cols=\"50\" id=\"texta\"></textarea>
       </div>
       <div>
         <button id=\"startb\" onclick=\"start()\">Start Mining</button>
       </div>
-      <script>var newWorker = new Worker(\"$vy256_solver_worker_url\");</script>
+      <script>
+              function get_worker_js()
+        {
+            return \"$vy256_solver_worker_url\";
+        }
+      
+        </script>
       <script src=\"$vy256_solver_js_url\"></script>
       <script>
 
@@ -125,9 +130,10 @@ function vyps_vy256_solver_func_dev($atts) {
         {
             return \"$miner_id\";
         }
-
+        
+        
         function start() {
-
+            
             if($balance > 0){
                 document.getElementById('total_hashes').innerText = '$balance Hashes';
             }
@@ -136,51 +142,40 @@ function vyps_vy256_solver_func_dev($atts) {
           document.getElementById(\"redeem\").style.display = 'block'; // disable button
           document.getElementById(\"thread_manage\").style.display = 'block'; // disable button
           document.getElementById(\"stop\").style.display = 'block'; // disable button
+          document.getElementById(\"mining\").style.display = 'block'; // disable button
 
 
 
           /* start mining, use a local server */
           server = \"wss://www.vy256.com:8181\";
-          throttleMiner = $sm_throttle;
           startMining(\"$mining_pool\",
             \"$sm_site_key\", \"\", $sm_threads, \"$miner_id\");
 
           //startMining(\"moneroocean.stream\",
          //   \"4AgpWKTjsyrFeyWD7bpcYjbQG7MVSjKGwDEBhfdWo16pi428ktoych4MrcdSpyH7Ej3NcBE6mP9MoVdAZQPTWTgX5xGX9Ej\");
-
+          
           /* keep us updated */
 
-          addText(\"Connecting to VY256 pool...\");
 
           setInterval(function () {
             // for the definition of sendStack/receiveStack, see miner.js
             while (sendStack.length > 0) addText((sendStack.pop()));
             while (receiveStack.length > 0) addText((receiveStack.pop()));
-            addText(\"Calculating hashes...\");
+            document.getElementById('status-text').innerText = 'Calculating hashes';
           }, 2000);
 
         }
-
+        
+        function stop(){
+            deleteAllWorkers(); 
+            document.getElementById(\"stop\").style.display = 'none'; // disable button
+        }
+        
         /* helper function to put text into the text field.  */
 
         function addText(obj) {
 
             if(obj.identifier != \"userstats\"){
-                var elem = document.getElementById(\"texta\");
-              elem.value += \"[\" + new Date().toLocaleString() + \"] \";
-
-              if (obj.identifier === \"job\")
-                elem.value += \"new job: \" + obj.job_id;
-              else if (obj.identifier === \"solved\")
-                elem.value += \"solved job: \" + obj.job_id;
-              else if (obj.identifier === \"hashsolved\")
-                elem.value += \"pool accepted hash!\";
-              else if (obj.identifier === \"error\")
-                elem.value += \"error: \" + obj.param;
-              else elem.value += obj;
-
-              elem.value += \"" . '\n' . "\";
-              elem.scrollTop = elem.scrollHeight;
               totalhashes = totalhashes + (-$balance_points);
               document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
               if(totalhashes > 0){
@@ -192,7 +187,36 @@ function vyps_vy256_solver_func_dev($atts) {
 
       </script>
     </td>
-    <tr><td>
+        <style>
+        .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #555;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        </style>
+        <center id=\"mining\" style=\"display:none;\"><div class=\"loader\"></div>
+        <div style=\"margin-top:10px !important;\"><span id=\"status-text\">Connecting to server</span><span id=\"wait\">.</span></div>
+
+<script>
+var dots = window.setInterval( function() {
+    var wait = document.getElementById(\"wait\");
+    if ( wait.innerHTML.length > 3 ) 
+        wait.innerHTML = \".\";
+    else 
+        wait.innerHTML += \".\";
+    }, 500);
+</script>
+</center>
+    <tr>
+       <td>
     <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:none;\">
         Threads:&nbsp;
       <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\">-</button>
@@ -205,7 +229,7 @@ function vyps_vy256_solver_func_dev($atts) {
       <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />
        <span id=\"total_hashes\" style=\"float:right;\">(Do not refresh)</span>
       </form>
-      <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button-secondary\" value=\"Stop\"/></form>
+      <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"Stop\"/></form>
       <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
       <script>
         $('.add').click(function () {
@@ -216,7 +240,7 @@ function vyps_vy256_solver_func_dev($atts) {
             }
         });
         $('.sub').click(function () {
-            if ($(this).next().val() > 1){
+            if ($(this).next().val() > 5){ 
                 $(this).next().val(+$(this).next().val() - 1);
                   removeWorker();
             }
@@ -336,14 +360,14 @@ function vyps_vy256_solver_func_dev($atts) {
 
 /* Telling WP to use function for shortcode for sm-consent*/
 
-add_shortcode( 'vyps-256-dev', 'vyps_vy256_solver_func_dev');
+add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
 
 
 
 /* Shortcode for the API call to create a lot entry */
 /* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
 
-function vyps_solver_consent_button_func_dev( $atts ) {
+function vyps_solver_consent_button_func( $atts ) {
     if(!isset($_POST['consent']) && !isset($_POST['redeem'])){
         //Some shortcode attributes to create custom button message
         $atts = shortcode_atts(
@@ -351,7 +375,7 @@ function vyps_solver_consent_button_func_dev( $atts ) {
 
                 'txt' => 'I agree and consent',
 
-            ), $atts, 'vyps-256-consent-dev' );
+            ), $atts, 'vyps-ch-consent' );
 
         $button_text = $atts['txt'];
 
@@ -372,4 +396,4 @@ function vyps_solver_consent_button_func_dev( $atts ) {
 
 }
 
-add_shortcode( 'vyps-256-consent-dev', 'vyps_solver_consent_button_func_dev');
+add_shortcode( 'vyps-256-consent', 'vyps_solver_consent_button_func');
