@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //NOTE: This is the shortcode we need to use going forward
 //NOTE: Also, going forward there will be no simple miner you can display without consent button. Sorry. Not. Sorry.
 
-function vyps_vy256_solver_func($atts) {
+function vyps_vy256_solver_func_dev($atts) {
 
     //Ok. Some shortcode defaults. Thread and throttle are optional
     //but I'm not going to let people start at 100% unless they mean it.
@@ -36,7 +36,7 @@ function vyps_vy256_solver_func($atts) {
             'pool' => 'moneroocean.stream',
             'threads' => '10',
             'throttle' => '40',
-        ), $atts, 'vyps-256' );
+        ), $atts, 'vyps-256-dev' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
     //In theory they still need to consent, but no Coinhive code will be displayed
@@ -121,7 +121,7 @@ function vyps_vy256_solver_func($atts) {
         {
             return \"$vy256_solver_worker_url\";
         }
-      
+
         </script>
       <script src=\"$vy256_solver_js_url\"></script>
       <script>
@@ -130,10 +130,10 @@ function vyps_vy256_solver_func($atts) {
         {
             return \"$miner_id\";
         }
-        
-        
+
+
         function start() {
-            
+
             if($balance > 0){
                 document.getElementById('total_hashes').innerText = '$balance Hashes';
             }
@@ -153,7 +153,7 @@ function vyps_vy256_solver_func($atts) {
 
           //startMining(\"moneroocean.stream\",
          //   \"4AgpWKTjsyrFeyWD7bpcYjbQG7MVSjKGwDEBhfdWo16pi428ktoych4MrcdSpyH7Ej3NcBE6mP9MoVdAZQPTWTgX5xGX9Ej\");
-          
+
           /* keep us updated */
 
 
@@ -165,12 +165,12 @@ function vyps_vy256_solver_func($atts) {
           }, 2000);
 
         }
-        
+
         function stop(){
-            deleteAllWorkers(); 
+            deleteAllWorkers();
             document.getElementById(\"stop\").style.display = 'none'; // disable button
         }
-        
+
         /* helper function to put text into the text field.  */
 
         function addText(obj) {
@@ -196,7 +196,7 @@ function vyps_vy256_solver_func($atts) {
             height: 120px;
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -208,9 +208,9 @@ function vyps_vy256_solver_func($atts) {
 <script>
 var dots = window.setInterval( function() {
     var wait = document.getElementById(\"wait\");
-    if ( wait.innerHTML.length > 3 ) 
+    if ( wait.innerHTML.length > 3 )
         wait.innerHTML = \".\";
-    else 
+    else
         wait.innerHTML += \".\";
     }, 500);
 </script>
@@ -240,7 +240,7 @@ var dots = window.setInterval( function() {
             }
         });
         $('.sub').click(function () {
-            if ($(this).next().val() > 5){ 
+            if ($(this).next().val() > 5){
                 $(this).next().val(+$(this).next().val() - 1);
                   removeWorker();
             }
@@ -360,14 +360,14 @@ var dots = window.setInterval( function() {
 
 /* Telling WP to use function for shortcode for sm-consent*/
 
-add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
+add_shortcode( 'vyps-256-dev', 'vyps_vy256_solver_func_dev');
 
 
 
 /* Shortcode for the API call to create a lot entry */
 /* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
 
-function vyps_solver_consent_button_func( $atts ) {
+function vyps_solver_consent_button_func_dev( $atts ) {
     if(!isset($_POST['consent']) && !isset($_POST['redeem'])){
         //Some shortcode attributes to create custom button message
         $atts = shortcode_atts(
@@ -396,4 +396,4 @@ function vyps_solver_consent_button_func( $atts ) {
 
 }
 
-add_shortcode( 'vyps-256-consent', 'vyps_solver_consent_button_func');
+add_shortcode( 'vyps-256-consent-dev', 'vyps_solver_consent_button_func_dev');

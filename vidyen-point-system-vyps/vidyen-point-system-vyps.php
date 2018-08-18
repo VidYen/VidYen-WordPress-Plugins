@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      00.04.09.12
+Version:      00.04.10.04
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -358,5 +358,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Thre
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256.php'); //VYPS webminerpool shortcode
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_dev.php'); //VYPS webminerpool shortcode
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_dev.php'); //Developement version
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_debug.php'); //Debug version that shows output. Does not throttle btw
 /*** End of Shortcode Includes ***/
