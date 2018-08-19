@@ -48,9 +48,15 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 3. Admins can manually add point transactions for their users through the WordPress user panel.
 4. Using the point transfer shortcodes, users can exchange points at various rates to other points or WooCommerce credit.
 5. Using the Coinhive simple miner shortcode, users can "Mine to Pay" for items on your WooCommerce store
-6. Using the Adscend plugin, users can watch videos ads and do other activities to earn points and credit as well.
+6. Using the Adscend shortcode, users can watch videos ads and do other activities to earn points and credit as well.
+7. Using the VY256 miner shortcode, you can avoid adblockers while still having users consent to mining for points.
 
 == Changelog ==
+
+= 00.04.10 =
+
+Another VY256 miner update. NOW with CPU control!
+Also fancy graphical interface update. The old version still exists under vyps-256-debug shortcode.
 
 = 00.04.09 =
 Major VY256 update! NOW with server side hash tracking!

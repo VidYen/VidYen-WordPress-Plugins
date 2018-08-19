@@ -44,10 +44,10 @@ function vyps_vy256_sub_menu_page() {
     <h1>VYPS VY256 Simple Miner (BETA) User Tracking API Shortcodes</h1>
     <p>This is a simple browser miner that uses VidYen's VY256 pool. The UI, better hash tracking, and performance will be updated as development progresses.</p>
     <p>This pool runs through vy256.com server and is in development mode which means the server may crash or be down at anytime. Please contact us through support if you have problems.</p>
-    <p>This allows you to use a local miner on WordPress that by passes adblock or other software. That said, you should always explain what this is and I've required the consent buttons by default.</p>
-    <p>Currently there is no throttle and thread control. On Windows 10 this can only use 10% per browser thread. (You can create multiple Chrome profiles or use another browser)</p>
+    <p>This allows you to use a local miner on WordPress that by passes adblock or other AV software. That said, you should always explain what this is and I've required the consent buttons by default.</p>
+    <p>There is now a cpu control. It is not as percise as Coinhive, but it allows you to know use 100% by cranking it up to 6 (It's possible to lock up your computer with two browsers open at 10 so I'm leaving a cap on it) or you can turn it to 0 to pause. Note the hash updates sometimes come in waves as it has to go from your client's browser to our stratum to the pool and then back each time.</p>
     <p>The benefit however, is that this version does not require any account like Coinhive. AND as far as my testing goes, does not get blocked by uBLock or Brave. Also Malwarebytes never complained in premium mode (unlike Coinhive). That alone makes the low CPU worth it, but we are working on getting code better.</p>
-    <p>You need to have a viable Monero XMR wallet and a pool you like to use. I have found <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> good for the most part and set it as default.</p>
+    <p>You need to have a viable Monero XMR wallet and currently only supports <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> for the pool. We are working on getting other versions up and running.</p>
     <p>As far as getting an XMR wallet address, I'd recommend looking at YouTube for more information as there are many options.</p>
     <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain...</p>
     <h2>REMEMBER: USING BROWSER MINING WITHOUT CONSENT OF THE USER IS CONSIDERED NOT ONLY A HOSTILE ACTION BUT ALSO ILLEGAL IN SOME JURISTICTIONS!</h2>
@@ -63,6 +63,7 @@ function vyps_vy256_sub_menu_page() {
     <p><b>Users must be logged in to see any of these shortcode as the intent was to track user effort.</b></p>
     <h1>Shortcodes and Syntax</h1>
     <h2>Consent Button Shortcode</h2>
+    <p>Replace (optional) and (required) with your info.</p>
     <p><b>[vyps-256-consent text=(optional)]</b></p>
     <p>Display the simple miner consent button. You can customize the text on the button by using txt=.To add spaces in the button text, use quotes.</p>
     <h2>VY256 Miner Display and User Tracking Shortcode</h2>
@@ -76,13 +77,15 @@ function vyps_vy256_sub_menu_page() {
     <p>Example:</p>
     <p><b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pool=moneroocean.stream pid=4 throttle=10 site=vidyen] Please consent to mining. [vyps-256-consent]</b></p>
     <p>This will show the miner after the consent button has been clicked.</p>
+    <p><b>[vyps-256-debug wallet=(required) pool=(optional) pid=(required) throttle=(optional) site=(required)]</b></p>
+    <p>A version that shows you behind the scenes if you are trying to troubleshoot the connection.</p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href=\"https://www.vidyen.com/about/\" target=\"_blank\">VidYen About</a> or on our <a href=\"https://wordpress.org/support/plugin/vidyen-point-system-vyps\" target=\"_blank\">WordPress support page</a>.</p>
     <p>If server is down and/or you need assistance immediatly, join the <a href=\"https://discord.gg/m6J92gf\" target=\"_blank\">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)
     <p>For anyone who is trying this, we want to thank you for testing and that please let us know if you have any problems!</p>
     <p>Keep in mind that both we and the pools do take some fees, but it is generally way less than Coinhives 20% and depending on the pool you can get a smaller minimum payout.</p>
     <p>Our code is open source so if you want to run your own version, just go to our github and grab the code.</p>
-    <p>There have been reports that some WP do not accept wp_remote_get to our server and we are currently investigating. We've tried two hosting providers and seems to work for us on both.</p>
+    <p>For this to work properly you need PHP curl and wp_remote_get enabled on your server and the following ports: 8081, 8181, 8282 open on your server. (I plan to have a failover server eventually dedicated to issues like this -Felty)</p>
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
     <p>Yes, we have an issue with pools where MO seems to be the best one to use. Will fix soon. But that pool works for now and will have to test each pool to see if works with algo.<p>".

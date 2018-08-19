@@ -130,6 +130,8 @@ function vyps_vy256_solver_func($atts) {
 
           $redeem_output = "<tr><td>$balance hashes redeemed.</td></tr>"; //if there is any blance is gets redeemed.
 
+          $balance = 0; //This should be set to zero at this point.
+
       } else {
 
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
@@ -277,7 +279,7 @@ function vyps_vy256_solver_func($atts) {
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
             $('.add').click(function () {
-                if($(this).prev().val() < 10){
+                if($(this).prev().val() < 6){
                       $(this).prev().val(+$(this).prev().val() + 1);
                       addWorker();
                       console.log(Object.keys(workers).length);
@@ -330,7 +332,7 @@ function vyps_solver_consent_button_func( $atts ) {
 
         if ( is_user_logged_in() ) {
 
-            return "Please consent to mining. <form method=\"post\">
+            return "<form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"consent\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"$button_text\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
                 </form>";
