@@ -53,6 +53,12 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.04.11 =
+
+Threshold raffle had header updates
+
+
+
 = 00.04.10 =
 
 Another VY256 miner update. NOW with CPU control!
