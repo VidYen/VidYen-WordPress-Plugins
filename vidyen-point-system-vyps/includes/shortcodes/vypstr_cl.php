@@ -138,7 +138,7 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 
 	//Because the shorcode version won't have this
 	$page_header_text = "
-		<h1 class=\"wp-heading-inline\">Current Game Ticket Purchases</h1>
+		<h1 class=\"wp-heading-inline\">Current Game</h1>
 		";
 
 	//this is what it's goint to be called
@@ -200,7 +200,7 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 
 						//I needed a spot to overwrite the header in case we had a finalized game. I probaly should change the wording.
 						$page_header_text = "
-							<h1 class=\"wp-heading-inline\">Last Game Ticket Purchases</h1>
+							<h1 class=\"wp-heading-inline\">Last Game</h1>
 								";
 
 				}
