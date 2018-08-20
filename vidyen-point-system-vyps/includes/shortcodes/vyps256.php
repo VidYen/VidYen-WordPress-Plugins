@@ -218,7 +218,6 @@ function vyps_vy256_solver_func($atts) {
             function addText(obj) {
 
                 if(obj.identifier != \"userstats\"){
-                  totalhashes = totalhashes;
                   document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
                   if(totalhashes > 0){
                       document.getElementById('total_hashes').innerText = totalhashes + ' Hashes';
