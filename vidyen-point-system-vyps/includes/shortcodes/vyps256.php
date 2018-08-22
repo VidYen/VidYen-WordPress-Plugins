@@ -64,21 +64,19 @@ function vyps_vy256_solver_func($atts) {
 
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
     //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
-    $cloud_server_name =
-      array(
-          '0' = 'vy256.com',
-          '1' = 'cloud.vy256.com',
-          '2' = '127.0.0.1',
-          '3' = 'error'
+    $cloud_server_name = array(
+          '0' => 'vy256.com',
+          '1' => 'cloud.vy256.com',
+          '2' => '127.0.0.1',
+          '3' => 'error'
     );
 
 
-    $cloud_server_port =
-      array(
-          '0' = '8081',
-          '1' = '42198',
-          '2' = '8282',
-          '3' = 'error'
+    $cloud_server_port = array(
+          '0' => '8081',
+          '1' => '42198',
+          '2' => '8282',
+          '3' => 'error'
     );
 
 
