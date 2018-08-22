@@ -119,7 +119,7 @@ function vyps_vy256_solver_func($atts) {
 
       //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
       //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
-      for ($x_for_count = $first_cloud_server; $x_for_count < 4 ) { //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
+      for ($x_for_count = $first_cloud_server; $x_for_count < 4; $x_for_count++ ) { //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
 
         $remote_url = "http://" . $cloud_server_name[$x_for_count] . ":" . $cloud_server_port[$x_for_count]  ."/?userid=" . $miner_id;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
@@ -133,7 +133,7 @@ function vyps_vy256_solver_func($atts) {
             //NOTE: Used server will always be on port 8181. The hash tracking will be on other ports depending.
             $used_server = $cloud_server_name[$x_for_count];
 
-        } elseif  $cloud_server_name[$x_for_count] == 'error' {
+        } elseif ( $cloud_server_name[$x_for_count] == 'error' ) {
 
             //The last server will be error which means it tried all the servers.
 
@@ -141,8 +141,6 @@ function vyps_vy256_solver_func($atts) {
 
             return 'Unable to establish connection with any VY256 server! Contact VidYen.com admin!'; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
         }
-
-        $x_for_count = $x_for_count + 1;
 
       }
 
