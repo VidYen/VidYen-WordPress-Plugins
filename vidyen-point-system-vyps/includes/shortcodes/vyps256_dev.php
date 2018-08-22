@@ -75,7 +75,7 @@ function vyps_vy256_solver_func_dev($atts) {
 
     global $wpdb;
     //return "http://vy256.com:8081/?userid=" . $miner_id;
-    $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
+    $remote_url = "http://vy256.com:42198/?userid=" . $miner_id;
     $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
     if(array_key_exists('headers', $remote_response)){
         $balance =  intval($remote_response['body']);
