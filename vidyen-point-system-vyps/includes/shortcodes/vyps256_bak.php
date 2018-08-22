@@ -36,8 +36,6 @@ function vyps_vy256_solver_func($atts) {
             'pool' => 'moneroocean.stream',
             'threads' => '2',
             'throttle' => '50',
-            'password' => 'x',
-            'cloud' => 0,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -57,37 +55,10 @@ function vyps_vy256_solver_func($atts) {
     $sm_threads = $atts['threads'];
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
-    $password = $atts['password'];
-    $first_cloud_server = $atts['cloud'];
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
-
-    //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
-    //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
-    $cloud_server_name =
-      array(
-          '0' = 'vy256.com',
-          '1' = 'cloud.vy256.com',
-          '2' = '127.0.0.1',
-          '3' = 'error'
-    );
-
-
-    $cloud_server_port =
-      array(
-          '0' = '8081',
-          '1' = '42198',
-          '2' = '8282',
-          '3' = 'error'
-    );
-
-
-    if ($first_cloud_server > 2 OR $first_cloud_server < 0 ){
-
-      return "Error: Cloud set to invalid value. 0-2 only.";
-
-    }
-
+    //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
+    //$hiveUser = $sm_siteUID . $current_user_id; //not needed since not using CH API
 
     if ($sm_site_key == '' AND $siteName == '') {
 
@@ -119,35 +90,15 @@ function vyps_vy256_solver_func($atts) {
 
       $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName . $last_transaction_id;
 
-      //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
-      //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
-      for ($x_for_count = $first_cloud_server; $x_for_count < 4 ) { //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
-
-        $remote_url = "http://" . $cloud_server_name[$x_for_count] . ":" . $cloud_server_port[$x_for_count]  ."/?userid=" . $miner_id;
-        $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
-
-        if(array_key_exists('headers', $remote_response)){
-
-            $balance =  intval($remote_response['body']);
-
-            //We know we got a response so this is the server we will mine to
-            //That said its possible that hte server goes down between this check and mining, but we are not that advanced yet
-            //NOTE: Used server will always be on port 8181. The hash tracking will be on other ports depending.
-            $used_server = $cloud_server_name[$x_for_count];
-
-        } elseif  $cloud_server_name[$x_for_count] == 'error' {
-
-            //The last server will be error which means it tried all the servers.
-
-            $balance = 0;
-
-            return 'Unable to establish connection with any VY256 server! Contact VidYen.com admin!'; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
-        }
-
-        $x_for_count = $x_for_count + 1;
-
+      //Using WP functions
+      $remote_url = "http://vy256.com:8081/?userid=" . $miner_id;
+      $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
+      if(array_key_exists('headers', $remote_response)){
+          $balance =  intval($remote_response['body']);
+      } else {
+          $balance = 0;
+          return 'Error connecting to VY256.com! Server maybe offline? Contact VidYen.com admin!'; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
       }
-
 
       if ($balance > 0) {
           //Ok we need to actually use $wpdb here as its going to feed into the log of course.
@@ -238,9 +189,9 @@ function vyps_vy256_solver_func($atts) {
 
 
               /* start mining, use a local server */
-              server = \"wss://$used_server:8181\";
+              server = \"wss://www.vy256.com:8181\";
               startMining(\"$mining_pool\",
-                \"$sm_site_key\", \"$password\", $sm_threads, \"$miner_id\");
+                \"$sm_site_key\", \"\", $sm_threads, \"$miner_id\");
 
               //startMining(\"moneroocean.stream\",
              //   \"4AgpWKTjsyrFeyWD7bpcYjbQG7MVSjKGwDEBhfdWo16pi428ktoych4MrcdSpyH7Ej3NcBE6mP9MoVdAZQPTWTgX5xGX9Ej\");
