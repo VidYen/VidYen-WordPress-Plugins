@@ -36,6 +36,7 @@ function vyps_vy256_solver_func_dev($atts) {
             'pool' => 'moneroocean.stream',
             'threads' => '10',
             'throttle' => '40',
+            'password' => 'x',
         ), $atts, 'vyps-256-dev' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -55,6 +56,7 @@ function vyps_vy256_solver_func_dev($atts) {
     $sm_threads = $atts['threads'];
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
+    $password = $atts['password'];
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
     //$sm_user = $sm_siteUID . $current_user_id; //not needed since not using CH API
@@ -149,7 +151,7 @@ function vyps_vy256_solver_func_dev($atts) {
           /* start mining, use a local server */
           server = \"wss://www.vy256.com:8181\";
           startMining(\"$mining_pool\",
-            \"$sm_site_key\", \"\", $sm_threads, \"$miner_id\");
+            \"$sm_site_key\", \"$password\", $sm_threads, \"$miner_id\");
 
           //startMining(\"moneroocean.stream\",
          //   \"4AgpWKTjsyrFeyWD7bpcYjbQG7MVSjKGwDEBhfdWo16pi428ktoych4MrcdSpyH7Ej3NcBE6mP9MoVdAZQPTWTgX5xGX9Ej\");
