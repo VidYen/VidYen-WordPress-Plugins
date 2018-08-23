@@ -67,16 +67,15 @@ function vyps_vy256_solver_func($atts) {
     $cloud_server_name = array(
           '0' => 'vy256.com',
           '1' => 'cloud.vy256.com',
-          '2' => '127.0.0.1',
-          '3' => 'error'
+          '2' => 'error'
+
     );
 
 
     $cloud_server_port = array(
-          '0' => '8081',
-          '1' => '42198',
-          '2' => '8282',
-          '3' => 'error'
+          '0' => ':8081',
+          '1' => '',
+          '2' => ':error'
     );
 
 
@@ -119,10 +118,12 @@ function vyps_vy256_solver_func($atts) {
 
       //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
       //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
-      for ($x_for_count = $first_cloud_server; $x_for_count < 4; $x_for_count++ ) { //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
+      for ($x_for_count = $first_cloud_server; $x_for_count < 4; $x_for_count = $x_for_count +1 ) { //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
 
-        $remote_url = "http://" . $cloud_server_name[$x_for_count] . ":" . $cloud_server_port[$x_for_count]  ."/?userid=" . $miner_id;
+        $remote_url = "http://" . $cloud_server_name[$x_for_count] . $cloud_server_port[$x_for_count]  ."/?userid=" . $miner_id;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
+
+        //return $remote_url; //debugging
 
         if(array_key_exists('headers', $remote_response)){
 
