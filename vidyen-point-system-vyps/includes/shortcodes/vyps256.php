@@ -132,6 +132,7 @@ function vyps_vy256_solver_func($atts) {
             //That said its possible that hte server goes down between this check and mining, but we are not that advanced yet
             //NOTE: Used server will always be on port 8181. The hash tracking will be on other ports depending.
             $used_server = $cloud_server_name[$x_for_count];
+            $x_for_count = 5; //Well. Need to escape out.
 
         } elseif ( $cloud_server_name[$x_for_count] == 'error' ) {
 
@@ -139,7 +140,7 @@ function vyps_vy256_solver_func($atts) {
 
             $balance = 0;
 
-            return 'Unable to establish connection with any VY256 server! Contact VidYen.com admin!'; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
+            return "Unable to establish connection with any VY256 server! Contact VidYen.com admin!<!--$remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
         }
 
       }
