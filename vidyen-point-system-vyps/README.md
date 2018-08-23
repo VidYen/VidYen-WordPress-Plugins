@@ -55,9 +55,11 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 = 00.04.11 =
 
-Threshold raffle had header updates
-
-
+Moved hash and mining server to cloud.vy254.com
+No only uses port 80 so less problems with WordPress servers that cannot curl call on custom ports.
+Also added in ability for rollover servers, but no need for now.
+On server side can spoll from instances if there is an outage on the VY256 miner.
+Threshold raffle had header updates.
 
 = 00.04.10 =
 
