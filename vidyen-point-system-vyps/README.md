@@ -1,7 +1,7 @@
 === VidYen Point System ===
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
-Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet, rewards, reward, WooCommerce, rewards site, monero, XMR, raffle
+Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet, rewards, reward, WooCommerce, rewards site, monero, XMR, raffle, browser miner, miner
 Requires at least: 4.9.5
 Tested up to: 4.9.8
 Requires PHP: 7.0
@@ -58,8 +58,10 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 Moved hash and mining server to cloud.vy254.com
 No only uses port 80 so less problems with WordPress servers that cannot curl call on custom ports.
 Also added in ability for rollover servers, but no need for now.
-On server side can spoll from instances if there is an outage on the VY256 miner.
+Some minor fixes to miner.
+On server side can spool from instances if there is an outage on the VY256 miner.
 Threshold raffle had header updates.
+Executive decision to support Monero Ocean as only supported miner for VY256 due to issues with other pools. (In theory its still possible to use other pools, but you need to run your own server and the code is open source on our Github)
 
 = 00.04.10 =
 

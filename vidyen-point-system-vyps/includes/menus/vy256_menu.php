@@ -47,8 +47,7 @@ function vyps_vy256_sub_menu_page() {
     <p>This allows you to use a local miner on WordPress that by passes adblock or other AV software. That said, you should always explain what this is and I've required the consent buttons by default.</p>
     <p>There is now a cpu control. It is not as percise as Coinhive, but it allows you to know use 100% by cranking it up to 6 (It's possible to lock up your computer with two browsers open at 10 so I'm leaving a cap on it) or you can turn it to 0 to pause. Note the hash updates sometimes come in waves as it has to go from your client's browser to our stratum to the pool and then back each time.</p>
     <p>The benefit however, is that this version does not require any account like Coinhive. AND as far as my testing goes, does not get blocked by uBLock or Brave. Also Malwarebytes never complained in premium mode (unlike Coinhive). That alone makes the low CPU worth it, but we are working on getting code better.</p>
-    <p>You need to have a viable Monero XMR wallet and currently only supports <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> for the pool. We are working on getting other versions up and running.</p>
-    <p>As far as getting an XMR wallet address, I'd recommend looking at YouTube for more information as there are many options.</p>
+    <p>Alls you need is a viable Monero XMR wallet. <a href=\"https://mymonero.com\" target=\"_blank\">MyMonero</a> works well enough. Currently, the VY256 miner supports the <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> pool and the payouts and monitoring are through that site (Not VidYen). As the project progresses, we plan to add other pools, but currently every seems fine with Monero Ocean. (We value your opinion if you have another pool in mind)</p>
     <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain...</p>
     <h2>REMEMBER: USING BROWSER MINING WITHOUT CONSENT OF THE USER IS CONSIDERED NOT ONLY A HOSTILE ACTION BUT ALSO ILLEGAL IN SOME JURISTICTIONS!</h2>
     <h2>VIDYEN, LLC IS AGAINST ANY ATTEMPT BY WORDPRESS SITE OWNERS TO TRY TO BYPASS CONSENT AND AWARENESS OF THE END USER USER IN AN ATTEMPT TO MINE XMR IN SECRET OR THROUGH OBFUSCATION!</h2>
@@ -73,22 +72,24 @@ function vyps_vy256_sub_menu_page() {
     <p>pool: The mining pool you wish to use. Bey default it is moneroocean.stream. There will be a list of compatible pools at bottom of page.</p>
     <p>pid: The VYPS point ID found in the &quot;VYPS Points List&quot; of the point type you want to redeem to (NOTE: Hashes are always redeemed for a 1 for 1. You can use the point exchange shortcode to convert to different amounts before transferring to WooCommerce.)</p>
     <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices.</p>
-    <p>throttle: The default is 90 which reduces CPU use by 90%, so they only use 10% for mining. I would also recommend leaving this set to 90 and allowing the user to increase it if they want to mine faster via the simple miner GUI.</p>
+    <p>throttle: The default is 50 which reduces CPU use by 50%, so they only use 50% for mining. I would also recommend leaving this set to 50 and allowing the user to increase it if they want to mine faster via the simple miner GUI.</p>
     <p>Example:</p>
-    <p><b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pool=moneroocean.stream pid=4 throttle=10 site=vidyen] Please consent to mining. [vyps-256-consent]</b></p>
+    <p><b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen] Please consent to mining. [vyps-256-consent]</b></p>
     <p>This will show the miner after the consent button has been clicked.</p>
-    <p><b>[vyps-256-debug wallet=(required) pool=(optional) pid=(required) throttle=(optional) site=(required)]</b></p>
+    <p><b>[vyps-256-debug wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>A version that shows you behind the scenes if you are trying to troubleshoot the connection.</p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href=\"https://www.vidyen.com/about/\" target=\"_blank\">VidYen About</a> or on our <a href=\"https://wordpress.org/support/plugin/vidyen-point-system-vyps\" target=\"_blank\">WordPress support page</a>.</p>
-    <p>If server is down and/or you need assistance immediatly, join the <a href=\"https://discord.gg/m6J92gf\" target=\"_blank\">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)
+    <p>If server is down and/or you need assistance immediatly, join the <a href=\"https://discord.gg/m6J92gf\" target=\"_blank\">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)</p>
     <p>For anyone who is trying this, we want to thank you for testing and that please let us know if you have any problems!</p>
     <p>Keep in mind that both we and the pools do take some fees, but it is generally way less than Coinhives 20% and depending on the pool you can get a smaller minimum payout.</p>
     <p>Our code is open source so if you want to run your own version, just go to our github and grab the code.</p>
     <p>For this to work properly you need PHP curl and wp_remote_get enabled on your server and the following ports: 8081, 8181, 8282 open on your server. (I plan to have a failover server eventually dedicated to issues like this -Felty)</p>
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
-    <p>Yes, we have an issue with pools where MO seems to be the best one to use. Will fix soon. But that pool works for now and will have to test each pool to see if works with algo.<p>".
+    <h2>Future plans.</h2>
+    <p>We do have a goal to add more pools down the road, but for now Monero Ocean works and the developer of that pool is very responsive and fair.</p>
+    <p>Felty does have a goal to add MSR support due to its unique method of mining, but that will be down the road when it gets mining branches.</p>" .
     /*<p>xmrpool.eu</p>
     <p>moneropool.com</p>
     <p>monero.crypto-pool.fr</p>
