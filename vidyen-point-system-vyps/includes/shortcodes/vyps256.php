@@ -65,10 +65,14 @@ function vyps_vy256_solver_func($atts) {
 
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
     //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
+    //I added cadia.vy256.com as a last stand. I realized if I'm switching servers cadia needs to be ready to stand.
+    //NOTE: Cadia stands.
+    
     $cloud_server_name = array(
           '0' => 'cloud.vy256.com',
           '1' => 'vy256.com',
-          '2' => 'error',
+          '2' => 'cadia.vy256.com',
+          '3' => 'error',
           '7' => '127.0.0.1'
 
     );
@@ -77,7 +81,8 @@ function vyps_vy256_solver_func($atts) {
     $cloud_server_port = array(
           '0' => '',
           '1' => ':8081',
-          '2' => ':error',
+          '2' => '',
+          '3' => ':error',
           '7' => ':8282'
     );
 
@@ -87,7 +92,7 @@ function vyps_vy256_solver_func($atts) {
 
     }
 
-    elseif ($first_cloud_server > 1 OR $first_cloud_server < 0 ){
+    elseif ($first_cloud_server > 2 OR $first_cloud_server < 0 ){
 
       return "Error: Cloud set to invalid value. 0-1 only.";
 
