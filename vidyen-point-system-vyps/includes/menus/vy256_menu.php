@@ -66,7 +66,7 @@ function vyps_vy256_sub_menu_page() {
     <p><b>[vyps-256-consent text=(optional)]</b></p>
     <p>Display the simple miner consent button. You can customize the text on the button by using txt=.To add spaces in the button text, use quotes.</p>
     <h2>VY256 Miner Display and User Tracking Shortcode</h2>
-    <p><b>[vyps-256 wallet=(required) pool=(optional) pid=(required) throttle=(optional) site=(required)]</b></p>
+    <p><b>[vyps-256 wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>This will display the simple miner after the button on the consent shortcode has been pressed.</p>
     <p>wallet: Your XMR wallet.</p>
     <p>pool: The mining pool you wish to use. Bey default it is moneroocean.stream. There will be a list of compatible pools at bottom of page.</p>
@@ -84,7 +84,8 @@ function vyps_vy256_sub_menu_page() {
     <p>For anyone who is trying this, we want to thank you for testing and that please let us know if you have any problems!</p>
     <p>Keep in mind that both we and the pools do take some fees, but it is generally way less than Coinhives 20% and depending on the pool you can get a smaller minimum payout.</p>
     <p>Our code is open source so if you want to run your own version, just go to our github and grab the code.</p>
-    <p>For this to work properly you need PHP curl and wp_remote_get enabled on your server and the following ports: 8081, 8181, 8282 open on your server. (I plan to have a failover server eventually dedicated to issues like this -Felty)</p>
+    <p>In the most recent update we now use port 80 on http://cloud.vy256.com so you should no longer have to worry about your server blocking random ports. That said you still need curl installed on PHP.</p>
+    <p>If cloud.vy256.com is down you can always set the shortcode attribute to cloud=1 to and open port 8081 on your server to use the backup.</p>
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
     <h2>Future plans.</h2>
