@@ -37,6 +37,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <p><b>[vyps-pt-ww spid=1 samount=100000 damount=0.010]</b></p>
 	<p>Creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode needs requires both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function.
 	It is assumed that you are going straight to WooWallet so there is no need to set dpid, but you still need to set damount.</p>
+  <h2>Point Transfer with Two Inputs</h2>
+  <p><b>[vyps-pt-two firstid=1 secondid=2 outputid=3 firstamount=1 secondamount=1 outputamount=2]</b></p>
+  <p>There was a need for game like situations where points were to be combined to create items. In this case, you can combine two points of the same or differeing values into a third point of the amount you decide.</p>
 	<h2>Login Awareness Shortcode</h2>
 	<p>Other plugins do this, but made this one provides a quick way to let users know they are not logged in and therefore cannot interact with VYPS.</p>
 	<p><b>[vyps-lg]</b></p>

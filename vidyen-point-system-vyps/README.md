@@ -53,6 +53,11 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.04.12 =
+
+Added new shortcode for point transfer using two inputs. [vyps-pt-two]
+Small revisions to poitn transfer wording.
+
 = 00.04.11 =
 
 Moved hash and mining server to cloud.vy254.com
