@@ -237,17 +237,17 @@ function vyps_point_exchange_func( $atts ) {
 		//Four possible scenarios, both are enough, both are not enough, first is not enough, second is not enough
 		//NOTE: Now we are adding the other scenario that the time is not enough, but that check will be run above.
 
-		if ( $pt_fAmount > $f_balance_points AND $pt_sAmount > $s_balance_points ) {
+		if ( $pt_fAmount > $f_balance_points AND $pt_sAmount > $s_balance_points AND $pt_fAmount != 0 ) {
 
 			$results_message = "You need $f_need_points $f_sourceName and $s_need_points $s_sourceName more to transfer!";
 
-		} elseif ( $pt_fAmount > $f_balance_points ) {
+		} elseif ( $pt_fAmount > $f_balance_points AND $pt_fAmount != 0 ) {
 
-			$results_message = "Not enough $f_sourceName! You need and $f_need_points more.";
+			$results_message = "Not enough $f_sourceName! You need $f_need_points more.";
 
-		} elseif ( $pt_sAmount > $s_balance_points ) {
+		} elseif ( $pt_sAmount > $s_balance_points AND $pt_sAmount != 0 ) {
 
-			$results_message = "Not enough $s_sourceName! You need and $s_need_points more.";
+			$results_message = "Not enough $s_sourceName! You need $s_need_points more.";
 
 		} elseif ( $time_left_seconds > 0 ) {
 
