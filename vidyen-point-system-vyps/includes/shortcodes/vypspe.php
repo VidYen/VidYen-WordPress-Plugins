@@ -19,6 +19,7 @@ function vyps_point_exchange_func( $atts ) {
 				'firstamount' => '0',
 				'secondamount' => '0',
 				'outputamount' => '0',
+				'days' => '0',
 				'hours' => '0',
 				'minutes' => '0'
 		), $atts, 'vyps-pe' );
@@ -29,21 +30,26 @@ function vyps_point_exchange_func( $atts ) {
 	$pt_sAmount = $atts['samount'];
 	$pt_dAmount = $atts['damount'];
 	*/
-
+	$current_user_id = get_current_user_id(); //This needs to go here as we are checking the time way before then.
 	$firstPointID = $atts['firstid'];
 	$secondPointID = $atts['secondid'];
 	$destinationPointID = $atts['outputid'];
 	$pt_fAmount = $atts['firstamount']; //I'm going to be the first to say, I'm am not proud of my naming conventions. Gods know if I ever get amnesia and have to fix my own code, I will be highly displeased. -Felty
 	$pt_sAmount = $atts['secondamount']; //f = first and s = second, notice how i reused some of the old variables for new. Not really intentional nor well executed.
 	$pt_dAmount = $atts['outputamount'];
+	$time_days = $atts['days'];
 	$time_hours = $atts['hours'];
 	$time_minutes = $atts['minutes'];
 
+	//Now to get the raw seconds. This is important. 24 * 60 * 60 = 86400, 3600 seconds in an hour etc. We are not doing months unless you want to do my 28 day suggestion with 13 months.
+	$time_left_seconds = 0; //Just in case there was no transfer inbound to have this variable set.
+	$time_seconds = ($time_days * 86400) + ($time_hours * 3600) + ($time_minutes * 60);
+
 	//The usual suspects check to see if admin has set their short codes right.
 	//Ok I'm lazy here, but the admins should know which of the three they did not set.
-	if ( $pt_fAmount == 0 OR $pt_dAmount == 0) {
+	if ( $pt_dAmount == 0) {
 
-		return "Admin Error: A required amount was 0! Please set all three.";
+		return "Admin Error: Output amount set to 0. Please set.";
 
 	}
 
@@ -52,6 +58,13 @@ function vyps_point_exchange_func( $atts ) {
 	if ( $firstPointID == 0 OR $destinationPointID == 0) {
 
 		return "Admin Error: A required id was set to 0! Please set all three.";
+
+	}
+
+	if ($time_seconds < 0 ) {
+
+		//I feel like this should be not needed but I feel that it would blow up one of my ifs down below catastrophically
+		return "Admin Error: You have a negative time somewhere.";
 
 	}
 
@@ -141,7 +154,51 @@ function vyps_point_exchange_func( $atts ) {
 	//As my coding skills have improved greatly in the past 2 months I am redoing this next bit to be more modernized
 	//But I am still strapped for time, so I'm not going back to apply the updates to the old exchanged
 
+	//NOTE: Time check.
+	//I'm putting this here as you might want to know you still have time before you can click the button before you click the button
+	//Should only check if we have a time check in 'teh' short codes
+	//No miliseconds. I'm not sorry.
+	if ($time_seconds > 0 ){
+
+		$last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND vyps_meta_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
+		$last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $current_user_id, $btn_name );
+		$last_transfer = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
+
+		//return $last_transfer; //DEBUG I think there is something going on here that I'm not aware of.
+
+		if ($last_transfer == ''){
+
+			//Well nothing should happen. There was no prior entry. Go ahead and check entries
+
+
+		} else {
+
+			//We now know the id exists so an entry exists so we need ot check its timed
+			$last_posted_time_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
+			$last_posted_time_query_prepared = $wpdb->prepare($last_posted_time_query, $last_transfer ); //The ids should all be unique. In theory and in practice.
+			$last_posted_time = $wpdb->get_var( $last_posted_time_query_prepared ); //Now we know time of the last transaction
+
+			//return $last_posted_time; //DEBUG seeing what the time is.
+
+			$last_posted_time = strtotime($last_posted_time); //Note sure why the 'new' but it was how PHP man suggested to do it
+			//return $last_posted_time;
+			$current_time = date('Y-m-d H:i:s');
+			$current_time = strtotime($current_time);
+			$time_passed = $current_time - $last_posted_time; //I'm just making a big guess here that this will work.
+
+			$time_left_seconds = $time_seconds - $time_passed; //NOTE: if this number is positive it means they still need to wait.
+
+		}
+
+	}
+
 	$results_message = "Press button to transfer.";
+
+	if ( $time_left_seconds > 0 ) {
+
+		$results_message = "You have $time_left_seconds seconds before another transfer.";
+
+	}
 
 	if (isset($_POST[ $btn_name ])){
 
@@ -176,27 +233,6 @@ function vyps_point_exchange_func( $atts ) {
 
 		}
 
-		//NOTE: Time check.
-
-		$last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND vyps_meta_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
-		$last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $current_user_id, $btn_name );
-		$last_transfer = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
-
-		if ($last_transfer == ''){
-
-			//Well nothing should happen
-
-		} else {
-
-			//We now know the id exists so an entry exists so we need ot check its timed
-			$last_posted_time_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
-			$last_posted_time_query_prepared = $wpdb->prepare($last_posted_time_query, $last_transfer ); //The ids should all be unique. In theory and in practice.
-			$last_posted_time = $wpdb->get_var( $last_posted_time_query_prepared ); //Now we know time of the last transaction
-
-			$current_time = date('Y-m-d H:i:s');
-			$time_passed = date_diff( $current_time, $last_posted_time);
-			return $time_passed; //Some DEBUG-ing
-		}
 
 		//Four possible scenarios, both are enough, both are not enough, first is not enough, second is not enough
 		//NOTE: Now we are adding the other scenario that the time is not enough, but that check will be run above.
@@ -212,6 +248,12 @@ function vyps_point_exchange_func( $atts ) {
 		} elseif ( $pt_sAmount > $s_balance_points ) {
 
 			$results_message = "Not enough $s_sourceName! You need and $s_need_points more.";
+
+		} elseif ( $time_left_seconds > 0 ) {
+
+			//This means the timer has not go on long enough
+			//Need some message.
+			$results_message = "You have $time_left_seconds seconds before another transfer.";
 
 		} else {
 
