@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<p>Shows the current <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> if it is installed.</p>
 	<p><b>[vyps-balance-ww-menu]</b></p>
 	<p>Used only if you wish to stick display the My Icon in a menu. This of course does requires you to use a the Shortcodes In Menu Plugin and may have produce unexpected results.</p>
-  <p>Public balance leaderboard</p>
+  <h2>Public balance leaderboard</h2>
   <p><b>[vyps-pb pid=1]</b></p>
   <p>Shows all user's balance of that point type by order of amount and also functions as a leaderboard. PID is not required but will default to pid=1 if not set. Users who had a balance at one time will show up as zero. Otherwise, until a user earns that point type, they will not be on leaderboard for that PID. NOTE: It will show negative balances. This is intended.</p>
   <h2>Point Transfer</h2>
