@@ -35,7 +35,7 @@ function vyps_as_sub_menu_page() {
  <h1>Shortcodes and Syntax</h1>
  <p><b>[vyps-as-watch pub=113812 profile=13246 pid=1]</b></p>
  <p>The above shorcode will put up an Adscend wall using the publisher and profile id. (Those are our test site numbers, replace with yours) The pid is the point ID of course.</p>
- <p>The pid is the pointID number seen on the points list page. This shortcode always requires the user to be logged in and it will always be hardcoded to ID number of the current user.</p>
+ <p>The pid is the pointID number seen on the Point List page. This shortcode always requires the user to be logged in and it will always be hardcoded to ID number of the current user.</p>
  <p>To have a user redeem points through the Adscend API (the points Adscend has said they earned). You need to get your own API off your Adscend wall page. The API key is on the integration page on your offer wall under API/SDK integration.</p>
  <p><b>[vyps-as-redeem pub=113812 profile=13246 api=typekeyhere pid=1 payout=750]</b></p>
  <p>All attributes must be set for this to function. This creates a button site user to click on to have your site talk to the Adscend API and confirm how many points they earned from Adscend.</p>

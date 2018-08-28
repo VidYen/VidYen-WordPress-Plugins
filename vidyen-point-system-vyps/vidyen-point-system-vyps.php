@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      00.04.12.06
+Version:      00.04.13.05
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -95,8 +95,8 @@ function vyps_points_menu() {
     add_menu_page($parent_page_title, $parent_menu_title, $capability, $parent_menu_slug, $parent_function);
 
     $page_title = "Manage Points";
-    $menu_title = 'Points List';
-    $menu_slug = 'vyps_points_list';
+    $menu_title = 'Point List';
+    $menu_slug = 'vyps_point_list';
     $function = 'vyps_points_sub_menu_page';
     add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 
@@ -334,7 +334,7 @@ function vyps_user_menu_action_links($actions, $user_object) {
 
 		//Ok. The nonce.
 		$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
-    $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_points_list&edituserpoints=$user_object->ID&_wpnonce=$vyps_nonce_check") . "'>" . __('Edit Points') . "</a>";
+    $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_point_list&edituserpoints=$user_object->ID&_wpnonce=$vyps_nonce_check") . "'>" . __('Edit Points') . "</a>";
     return $actions;
 }
 
@@ -351,6 +351,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc_ww.php'); //B
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_2in.php'); //Point Transfer with two inputs.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspe.php'); //Point Exchange is going to depreciate all earlier versions of Point Transfer
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the Coinhive in.

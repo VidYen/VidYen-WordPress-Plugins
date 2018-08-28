@@ -8,7 +8,7 @@ $message = '';
 $uploads = wp_upload_dir();
 $upload_path = $uploads['url'];
 
-//This pulls the admin.php?page=vyps_points_list&edituserpoints=3 like options in the URL
+//This pulls the admin.php?page=vyps_point_list&edituserpoints=3 like options in the URL
 
 //Ok. I've decided, that only people that can install the plugin should be able to set the point up.
 //For one, I do not believe anyone but someone who has complete control over the site should do this
@@ -521,7 +521,7 @@ if(current_user_can('install_plugins')){
 			$point_id_data = $x_for_count; //Throwing this in this way rather than rechecking the table.
 
 			//Need the siteurl and such
-			$edit_rename_url = site_url() . '/wp-admin/admin.php?page=vyps_points_list&edit_vyps=' . $point_id_data;
+			$edit_rename_url = site_url() . '/wp-admin/admin.php?page=vyps_point_list&edit_vyps=' . $point_id_data;
 
 			$current_row_output = "
 				<tr>
@@ -584,7 +584,7 @@ if(current_user_can('install_plugins')){
 			<div class=\"wrap\">
 				$vyps_list_header_output
 				<form method=\"get\">
-					<h2 class=\"screen-reader-text\">Points list</h2>
+					<h2 class=\"screen-reader-text\">Point List</h2>
 					<table class=\"wp-list-table widefat fixed striped users\">
 						<thead>
 							$vyps_table_header_footer_output

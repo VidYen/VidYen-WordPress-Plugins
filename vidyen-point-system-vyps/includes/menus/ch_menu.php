@@ -67,7 +67,7 @@ function vyps_coinhive_sub_menu_page() {
     <p>This will display the simple miner after the button on the consent shortcode has been pressed.</p>
     <p>skey: Coinhive Site Key</p>
     <p>pkey: Coinhive Private Key</p>
-    <p>pid: The VYPS point ID found in the &quot;VYPS Points List&quot; of the point type you want to redeem to (NOTE: Hashes are always redeemed for a 1 for 1. You can use the point exchange shortcode to convert to different amounts before transferring to WooCommerce.)</p>
+    <p>pid: The VYPS point ID found in the &quot;VYPS Point List&quot; of the point type you want to redeem to (NOTE: Hashes are always redeemed for a 1 for 1. You can use the point exchange shortcode to convert to different amounts before transferring to WooCommerce.)</p>
     <p>suid: Is the name of the site in case you want to run different miners but use same site key to differentiate users.</p>
     <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices.</p>
     <p>throttle: The default is 90 which reduces CPU use by 90%, so they only use 10% for mining. I would also recommend leaving this set to 90 and allowing the user to increase it if they want to mine faster via the simple miner GUI.</p>

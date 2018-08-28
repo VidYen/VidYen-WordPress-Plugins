@@ -50,7 +50,7 @@ if(current_user_can('install_plugins')){
 	    $message = "Added successfully.";
 
 		//Always echo no exceptions!
-		echo "<script>window.location.href=\"admin.php?page=vyps_points_list\";</script>";
+		echo "<script>window.location.href=\"admin.php?page=vyps_point_list\";</script>";
 
 
 	}

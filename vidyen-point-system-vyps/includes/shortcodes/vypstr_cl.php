@@ -1,6 +1,7 @@
 <?php
 
 //VIDYEN Points Threshold Raffle Shortcode
+//NOTE: This is the log. Not the actual table inserts
 
 
 /* I straight up copied vyps_pt_tbl.php and renamed the functions as raffle system should use the table
