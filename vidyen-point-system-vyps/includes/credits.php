@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<h2>Please vist us for more development work at <a href=\"https://www.vidyen.com/vyps/\" target=\"_blank\">VidYen.com</a></h2>
 	<h2>Coming Soon:</h2>
 	<p>Combat Game</p>
-  <p>Daily Login Rewards</p>
+  <p>Strategy Game</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
