@@ -13,9 +13,11 @@ The VidYen Point System [VYPS] allows you to create your own rewards site on Wor
 
 == Description ==
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Coinhive, and our own VY256 miner (non adblock version) as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities. This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Coinhive, and our own VY256 mineras methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities. This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
-Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising or Coinhive mining API. It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
+Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising, Coinhive mining API, or even the VidYen VY256 Miner (adblock friendly!). It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
+
+Features include leaderboards, raffles, time based transfers and rewards (i.e. daily or weekly rewards), and ways to convert monetization credits into WooCommerce credit to sell items on your site store.
 
 There are plans to include other monetization systems with more games and other activities for site users. Keep watching!
 
@@ -53,10 +55,18 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.04.13 =
+
+Added timed based transfers for minute, hourly, daily, or weekly rewards with [vyps-pe]
+See shortcode instructions for attributes. Can be used for a liquidity gate if required points set to a value instead of 0.
+[vyps-pe] now automatically can do two inputs or not depending if its added in shortcode.
+NOTE: vyps-pe will be depreciating all point transfer methods in future so vyps-pt, vyps-pt-tbl, and vyps-pt-two will all be going away (someday)
+Also removal of the word points in some areas to make the system more generic if admin wanted to make it crypto or game resource related.
+
 = 00.04.12 =
 
 Added new shortcode for point transfer using two inputs. [vyps-pt-two]
-Small revisions to poitn transfer wording.
+Small revisions to point transfer wording.
 
 = 00.04.11 =
 

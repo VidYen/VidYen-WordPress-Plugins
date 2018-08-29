@@ -7,6 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Added prepare() to all SQL SELECT calls 7.1.2018 */
 
+//Oh. Maybe I should put this elsewhere but I have foudn this nifty code off https://stackoverflow.com/questions/8273804/convert-seconds-into-days-hours-minutes-and-seconds
+//So I'm putting it here as a function. Will use elsewhere mayhaps. If so will fix later.
+//NOTE: This is the time converstion
+function vyps_secondsToTime($seconds) {
+    $dtF = new \DateTime('@0');
+    $dtT = new \DateTime("@$seconds");
+    return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes, and %s seconds');
+}
+
 function vyps_point_exchange_func( $atts ) {
 
 	//The shortcode attributes need to come before the button as they determine the button value
@@ -187,6 +196,7 @@ function vyps_point_exchange_func( $atts ) {
 			$time_passed = $current_time - $last_posted_time; //I'm just making a big guess here that this will work.
 
 			$time_left_seconds = $time_seconds - $time_passed; //NOTE: if this number is positive it means they still need to wait.
+			$display_time = vyps_secondsToTime($time_left_seconds); //This converts the seconds left into something more human readable. Master race machines and replicants need not use.
 
 		}
 
@@ -196,7 +206,7 @@ function vyps_point_exchange_func( $atts ) {
 
 	if ( $time_left_seconds > 0 ) {
 
-		$results_message = "You have $time_left_seconds seconds before another transfer.";
+		$results_message = "You have $display_time before another transfer.";
 
 	}
 
@@ -253,7 +263,7 @@ function vyps_point_exchange_func( $atts ) {
 
 			//This means the timer has not go on long enough
 			//Need some message.
-			$results_message = "You have $time_left_seconds seconds before another transfer.";
+			$results_message = "You have $display_time before another transfer.";
 
 		} else {
 
