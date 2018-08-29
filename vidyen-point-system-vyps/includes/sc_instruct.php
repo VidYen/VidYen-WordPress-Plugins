@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<p><b>[vyps-pl]</b></p>
 	<p>Shows the log for every 50 log entries.</p>
   <p><b>[vyps-pl rows=25 bootstrap=yes]</b></p>
-	<p>Setting the rows options will set the amount of rows per page of the transaction log. If you use a bootstrap theme you can turn option on to bootstrap=yes to get bootstrap pagination. NOTE: You can set log rows to something enourage like 1000000, but it may cause the site to slow if you have that many transactions on your VYPS table.</p>
+	<p>Setting the rows options will set the amount of rows per page of the transaction log. If you use a bootstrap theme you can turn option on to bootstrap=yes to get bootstrap pagination. NOTE: You can set log rows to something big, like 1000000, but it may cause the site to slow if you have that many transactions on your VYPS table.</p>
 	<p><b>[vyps-balance pid=# uid=optional icon=optional ]</b></p>
 	<p>Shows the balance of a particular point through shortcode. Replace the # with the corresponding point ID. (Optional) You can set the user ID specifically by setting the uid attribute or if you want to turn off icons by setting to icon=0</p>
 	<p><b>[vyps-balance-ww]</b></p>
@@ -22,28 +22,24 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <h2>Public balance leaderboard</h2>
   <p><b>[vyps-pb pid=1]</b></p>
   <p>Shows all user's balance of that point type by order of amount and also functions as a leaderboard. PID is not required but will default to pid=1 if not set. Users who had a balance at one time will show up as zero. Otherwise, until a user earns that point type, they will not be on leaderboard for that PID. NOTE: It will show negative balances. This is intended.</p>
-  <h2>Point Transfer</h2>
+  <h2>Point Exchange</h2>
 	<p>This plugin needs requires VYPS Base and two point types to function. The intention is to allow a quick and easy way for users to transfer one type of point to another at varying rates.</p>
-	<p><b>[vyps-pt spid=1 dpid=2 samount=100000 damount=100]</b></p>
+	<p><b>[vyps-pe firstid=1 outputid=3 firstamount=1 outputamount=900]</b></p>
 	<p>Function debits points from one point type to another. with in being how many points used to transfer and out as how many points they get in the new point type.</p>
-	<p>The spid is the source pointID and the dpid is the destination seen on the Point List page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
-	<p>The earn attribute is how much currency the user gets in the other point type. The spend attribute is how many VYPS points is are spent.</p>
-	<p>All attributes must be set for this to function. There is no interface and is up to the site admin to add shortcode to a page or button.</p>
-	<p><b>[vyps-pt-btn spid=1 dpid=2 samount=100000 damount=100]</b></p>
-	<p>Does the same except now has built in button and user confirmation rather than a direct page call.</p>
-	<p><b>[vyps-pt-tbl spid=1 dpid=2 samount=100000 damount=100]</b></p>
-	<p>Creates a table interfacesimple UI in a table for the point transfer, which includes an improved  button and better interface including a button, point icons, and feedback. If you do not want to mess with your special layout, use this.</p>
+	<p>The firstid is the source pointID and the outputid is the destination seen on the Point List page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
+	<p>The firstamount attribute is how many points is are spent. The outputamount attribute is how much currency the user gets in the other point type.</p>
+  <h2>Point Transfer with Two Inputs</h2>
+  <p><b>[vyps-pe firstid=1 secondid=2 outputid=3 firstamount=10 secondamount=10 outputamount=20]</b></p>
+  <p>There was a need for game like situations where points were to be combined to create items. In this case, you can combine two points of the same or differeing values into a third point of the amount you decide.</p>
+  <p>All you need to do is add secondid= and secondamount= with values to enable a combination of poitns into the output.</p>
   <h2>Transfer points into WooCommerce Credit</h2>
   <p><b>[vyps-pt-ww spid=1 samount=100000 damount=0.010]</b></p>
 	<p>Creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode needs requires both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function.
 	It is assumed that you are going straight to WooWallet so there is no need to set dpid, but you still need to set damount.</p>
   <h2>Point Exchange and Reward Timers</h2>
-  <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4 ]</b></p>
-  <p>Note: We are going to depreciate all the other PT systems down the road and only have [vyps-pe]. Options include hours= and days=. Time left is in seconds until further notice.</p>
-  <h2>Point Transfer with Two Inputs</h2>
-  <p><b>[vyps-pe firstid=1 secondid=2 outputid=3 firstamount=1 secondamount=1 outputamount=2]</b></p>
-  <p>There was a need for game like situations where points were to be combined to create items. In this case, you can combine two points of the same or differeing values into a third point of the amount you decide.</p>
-	<h2>Login Awareness Shortcode</h2>
+  <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4]</b></p>
+  <p>Options include hours=, days=, minutes=,  </p>
+  <h2>Login Awareness Shortcode</h2>
 	<p>Other plugins do this, but made this one provides a quick way to let users know they are not logged in and therefore cannot interact with VYPS.</p>
 	<p><b>[vyps-lg]</b></p>
 	<p>Shows a generic \"You are not logged in.\" message when user is not logged in.</p>
