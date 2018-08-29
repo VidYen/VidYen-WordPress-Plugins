@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <p><b>[vyps-pt-ww spid=1 samount=100000 damount=0.010]</b></p>
 	<p>Creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode needs requires both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function.
 	It is assumed that you are going straight to WooWallet so there is no need to set dpid, but you still need to set damount.</p>
-  <h2>Point Exchagne and Reward Timers</h2>
+  <h2>Point Exchange and Reward Timers</h2>
   <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4 ]</b></p>
   <p>Note: We are going to depreciate all the other PT systems down the road and only have [vyps-pe]. Options include hours= and days=. Time left is in seconds until further notice.</p>
   <h2>Point Transfer with Two Inputs</h2>
