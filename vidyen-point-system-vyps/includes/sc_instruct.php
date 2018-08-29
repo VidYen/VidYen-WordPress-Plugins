@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<p><b>[vyps-pl]</b></p>
 	<p>Shows the log for every 50 log entries.</p>
   <p><b>[vyps-pl rows=25 bootstrap=yes]</b></p>
-	<p>Setting the rows options will set the amount of rows per page of the transaction log. If you use a bootstrap theme you can turn option on to bootstrap=yes to get boostrap pagnation. NOTE: You can set log rows to something enourage like 1000000, but it may cause the site to slow if you have that many transactions on your VYPS table.</p>
+	<p>Setting the rows options will set the amount of rows per page of the transaction log. If you use a bootstrap theme you can turn option on to bootstrap=yes to get bootstrap pagination. NOTE: You can set log rows to something enourage like 1000000, but it may cause the site to slow if you have that many transactions on your VYPS table.</p>
 	<p><b>[vyps-balance pid=# uid=optional icon=optional ]</b></p>
 	<p>Shows the balance of a particular point through shortcode. Replace the # with the corresponding point ID. (Optional) You can set the user ID specifically by setting the uid attribute or if you want to turn off icons by setting to icon=0</p>
 	<p><b>[vyps-balance-ww]</b></p>
