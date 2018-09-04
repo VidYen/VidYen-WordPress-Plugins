@@ -78,6 +78,8 @@ function vyps_vy256_sub_menu_page() {
     <p>This will show the miner after the consent button has been clicked.</p>
     <p><b>[vyps-256-debug wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>A version that shows you behind the scenes if you are trying to troubleshoot the connection.</p>
+    <h1>Graphics</h1>
+    <p>You can use the shortcode graphic=0 to turn off animated worker or graphic=1 or 2 if you want to select a particular one. Plans for holidays coming soon!</p>    
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href=\"https://www.vidyen.com/about/\" target=\"_blank\">VidYen About</a> or on our <a href=\"https://wordpress.org/support/plugin/vidyen-point-system-vyps\" target=\"_blank\">WordPress support page</a>.</p>
     <p>If server is down and/or you need assistance immediatly, join the <a href=\"https://discord.gg/m6J92gf\" target=\"_blank\">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)</p>

@@ -38,6 +38,7 @@ function vyps_vy256_solver_func($atts) {
             'throttle' => '50',
             'password' => 'x',
             'cloud' => 0,
+            'graphic' => 'rand',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -50,7 +51,7 @@ function vyps_vy256_solver_func($atts) {
     }
 
     //NOTE: Where we are going we don't need $wpdb
-
+    $graphic_choice = $atts['graphic'];
     $sm_site_key = $atts['wallet'];
     $siteName = $atts['site'];
     //$mining_pool = $atts['pool'];
@@ -67,7 +68,7 @@ function vyps_vy256_solver_func($atts) {
     //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
     //I added cadia.vy256.com as a last stand. I realized if I'm switching servers cadia needs to be ready to stand.
     //NOTE: Cadia stands.
-    
+
     $cloud_server_name = array(
           '0' => 'cloud.vy256.com',
           '1' => 'vy256.com',
@@ -86,6 +87,25 @@ function vyps_vy256_solver_func($atts) {
           '7' => ':8282'
     );
 
+    //Here we set the arrays of possible graphics. Eventually this will be a slew of graphis. Maybe holidy day stuff even.
+    $graphic_list = array(
+          '0' => 'vyworker_blank.gif',
+          '1' => 'vyworker_001.gif',
+          '2' => 'vyworker_002.gif',
+    );
+
+    //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
+    if ($graphic_choice == 'rand'){
+
+      $current_graphic = $graphic_list[mt_rand(1,2)];
+
+    } else {
+
+      $current_graphic = $graphic_list[$graphic_choice];
+
+    }
+
+    //NOTE: 7 is the number for if we want to do local host testing. Maybe for Monroe down the road.
     if ($cloud_server_name == 7 ){
 
       //Some debug stuff put in for futre if testing on local host.
@@ -119,7 +139,10 @@ function vyps_vy256_solver_func($atts) {
       global $wpdb;
 
       //loading the graphic url
-      $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/vyworker_large.gif'; //Small version
+      $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/'. $current_graphic; //Now with dynamic images!
+      $VYPS_power_url = plugins_url() . '/vidyen-point-system-vyps/images/powered_by_vyps.png'; //Well it should work out.
+
+      $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\"></a></td></tr>";
 
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';
@@ -353,7 +376,7 @@ function vyps_vy256_solver_func($atts) {
             </script>
         </td></tr>";
 
-      $final_return = $simple_miner_output . $redeem_output .  '</table>';
+      $final_return = $simple_miner_output . $redeem_output . $VYPS_power_row .  '</table>'; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
 
 
     } else {
