@@ -55,6 +55,11 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.04.14 =
+
+Added new VY256 miner graphics. Now goes into rotation between mail or female. See VY256 Miner shortcode page for options.
+And a 'Powered by VYPS' branding. If it bothers anyone feel free to ask for a pro version or you can edit it our yourself (it is all open source you know)
+
 = 00.04.13 =
 
 Added timed based transfers for minute, hourly, daily, or weekly rewards with [vyps-pe]

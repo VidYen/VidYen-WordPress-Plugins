@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   http://vyps.org
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      00.04.13.22
+Version:      00.04.14.02
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
