@@ -97,7 +97,8 @@ function vyps_vy256_solver_func($atts) {
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
     if ($graphic_choice == 'rand'){
 
-      $current_graphic = $graphic_list[mt_rand(1,2)];
+      $rand_choice = mt_rand(1,2);
+      $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
 
     } else {
 
@@ -140,6 +141,7 @@ function vyps_vy256_solver_func($atts) {
 
       //loading the graphic url
       $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/'. $current_graphic; //Now with dynamic images!
+      $VYPS_stat_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/stat_'. $current_graphic; //Stationary version!
       $VYPS_power_url = plugins_url() . '/vidyen-point-system-vyps/images/powered_by_vyps.png'; //Well it should work out.
 
       $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\"></a></td></tr>";
@@ -219,7 +221,7 @@ function vyps_vy256_solver_func($atts) {
 
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-          $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Stop\" when you want to stop the miner and credit for points.</td></tr>";
+          $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem\" when you want to stop and get credit for hashes.</td></tr>";
 
       }
 
@@ -237,7 +239,10 @@ function vyps_vy256_solver_func($atts) {
       <table>
         $site_warning
         <tr><td>
-          <div>
+          <div id=\"waitwork\">
+          <img src=\"$VYPS_stat_worker_url\"><br>
+          </div>
+          <div style=\"display:none;\" id=\"atwork\">
           <img src=\"$VYPS_worker_url\"><br>
           </div>
 
@@ -264,6 +269,8 @@ function vyps_vy256_solver_func($atts) {
                 }
 
               document.getElementById(\"startb\").style.display = 'none'; // disable button
+              document.getElementById(\"waitwork\").style.display = 'none'; // disable button
+              document.getElementById(\"atwork\").style.display = 'block'; // disable button
               document.getElementById(\"redeem\").style.display = 'block'; // disable button
               document.getElementById(\"thread_manage\").style.display = 'block'; // disable button
               document.getElementById(\"stop\").style.display = 'block'; // disable button
@@ -311,23 +318,8 @@ function vyps_vy256_solver_func($atts) {
 
           </script>
 
-            <style>
-            .loader {
-                border: 16px solid #f3f3f3; /* Light grey */
-                border-top: 16px solid #555;
-                border-radius: 50%;
-                width: 120px;
-                height: 120px;
-                animation: spin 1s linear infinite;
-            }
-
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-            </style>
-            <center id=\"mining\" style=\"display:none;\"><div class=\"loader\"></div>
-            <div style=\"margin-top:10px !important;\"><span id=\"status-text\">Connecting to server</span><span id=\"wait\">.</span></div>
+    <center id=\"mining\" style=\"display:none;\">
+    <div style=\"margin-top:10px !important;\"><span id=\"status-text\">Connecting to server</span><span id=\"wait\">.</span></div>
 
     <script>
     var dots = window.setInterval( function() {
@@ -357,7 +349,7 @@ function vyps_vy256_solver_func($atts) {
           <!--<input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
            <span id=\"total_hashes\" style=\"float:right;\">(Do not refresh)</span>
           </form>
-          <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"Redeem Hashes\"/></form>
+          <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"Redeem\"/></form>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
             $('.add').click(function () {
