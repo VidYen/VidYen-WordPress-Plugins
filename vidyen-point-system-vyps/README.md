@@ -58,8 +58,8 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 = 00.04.16 =
 
 Added shortcode so user can store their XMR for the miner share system.
-Added miner shareholders were users can upload their XMR address and based how much they own of a point type they will get their wallet with a weighted roll to be mined too. (A good meta for your users who want to convert other points to mining shareholder to earn actual XMR without having to worry about your site being hacked)
-See VY256 Shortcode instruction for details.
+Added miner shareholders where users can upload their XMR address and based how much they own of a point type they will get their wallet with a weighted roll to be mined too. (A good meta for your users who want to convert other points to mining shareholder to earn actual XMR without having to worry about your site being hacked)
+See VY256 Miner Shortcode instruction page for details.
 
 = 00.04.15 =
 
@@ -68,7 +68,7 @@ Various wording fixes. Proofreading. My one weakness.
 
 = 00.04.14 =
 
-Added new VY256 miner graphics. Now goes into rotation between mail or female. See VY256 Miner shortcode page for options.
+Added new VY256 miner graphics. Now goes into rotation between male or female. See VY256 Miner Shortcode instruction page for options.
 And a 'Powered by VYPS' branding. If it bothers anyone feel free to ask for a pro version or you can edit it our yourself (it is all open source you know)
 
 = 00.04.13 =
