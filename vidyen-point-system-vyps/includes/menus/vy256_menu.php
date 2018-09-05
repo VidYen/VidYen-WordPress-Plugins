@@ -81,8 +81,9 @@ function vyps_vy256_sub_menu_page() {
     <h1>Graphics</h1>
     <p>You can use the shortcode graphic=0 to turn off animated worker or graphic=1 or 2 if you want to select a particular one. Plans for holidays coming soon!</p>
     <h1>Miner Sharing Shortcodes</h1>
+    <p>Mining sharing is a feature used to allow the XMR address by users to be shared for randomly allowing users to mine for other users based on a share of points they own of total. This actually lets miners and even adwatchers to participate in getting faucets to pools by being shareholders in your point system.</p>
     <p><b>[vyps-xmr-wallet]</b></p>
-    <p>This allows users to add their XMR to their user meta for Miner Sharing option with VY256</p>
+    <p>To enable mining sharing, add the shortcode <b>shareholder=1</b>. Replace the 1 with the point id that you want users to be ranked in. The way it works is that there is a weighted change for holder of most points of that type to get their wallet mined to say if one user owned 60% of that point type they would have 60% type to win the display. If no one wins it defaults to the sites wallet. Admins can always be point owners as well so look at leaderboards for fairness. I will make a leader board with percentage of ownership in next update.</p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href=\"https://www.vidyen.com/about/\" target=\"_blank\">VidYen About</a> or on our <a href=\"https://wordpress.org/support/plugin/vidyen-point-system-vyps\" target=\"_blank\">WordPress support page</a>.</p>
     <p>If server is down and/or you need assistance immediatly, join the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)</p>

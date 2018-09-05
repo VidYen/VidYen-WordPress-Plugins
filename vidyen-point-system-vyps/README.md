@@ -58,6 +58,8 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 = 00.04.16 =
 
 Added shortcode so user can store their XMR for the miner share system.
+Added miner shareholders were users can upload their XMR address and based how much they own of a point type they will get their wallet with a weighted roll to be mined too. (A good meta for your users who want to convert other points to mining shareholder to earn actual XMR without having to worry about your site being hacked)
+See VY256 Shortcode instruction for details.
 
 = 00.04.15 =
 
