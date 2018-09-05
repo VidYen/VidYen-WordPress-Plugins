@@ -55,6 +55,10 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.04.16 =
+
+Added shortcode so user can store their XMR for the miner share system.
+
 = 00.04.15 =
 
 Updated VY256 miner to animate when start button is clicked.
