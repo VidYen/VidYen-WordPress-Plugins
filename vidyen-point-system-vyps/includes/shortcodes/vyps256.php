@@ -39,6 +39,7 @@ function vyps_vy256_solver_func($atts) {
             'password' => 'x',
             'cloud' => 0,
             'graphic' => 'rand',
+            'shareholder' => '',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -53,6 +54,7 @@ function vyps_vy256_solver_func($atts) {
     //NOTE: Where we are going we don't need $wpdb
     $graphic_choice = $atts['graphic'];
     $sm_site_key = $atts['wallet'];
+    $sm_site_key_origin = $atts['wallet'];
     $siteName = $atts['site'];
     //$mining_pool = $atts['pool'];
     $mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
@@ -61,6 +63,7 @@ function vyps_vy256_solver_func($atts) {
     $pointID = $atts['pid'];
     $password = $atts['password'];
     $first_cloud_server = $atts['cloud'];
+    $share_holder_status = $atts['shareholder'];
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
 
@@ -139,6 +142,29 @@ function vyps_vy256_solver_func($atts) {
 
       global $wpdb;
 
+      //It is a bit of some SQL reads. Not writes so its not terrible, but unless its needed let's not run the function. If the shareholder is set to 1 or more it should fire
+      if ( $share_holder_status > 0 ){
+
+        $share_holder_pick = vyps_worker_shareholder_pick( $atts ); //I'm 75% sure this works since the shortcode is the same. Calling it after WPDB tho.
+
+        //If pick is 0 it means that house one so wallet remains the same as what it started out with
+        if ($share_holder_pick != 0){
+
+            $key = 'vyps_xmr_wallet'; //This is static. May have MSR wallet someday.
+            $single = TRUE; //Need to to force to not be an array.
+            $user_meta_wallet = get_user_meta( $share_holder_pick, $key, $single );
+
+            //I have the notion that a user may have got points but failed to put in an address. An XMR address is way more than 2 characters
+            if ( strlen($user_meta_wallet)  > 2 ){
+
+              $sm_site_key = $user_meta_wallet; //ok the site key becomes this, but... see below about the issues i had to work around with the note.
+
+            } //strlen check.
+
+        } //Pick check if
+
+      } //Shareholder close
+
       //loading the graphic url
       $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/'. $current_graphic; //Now with dynamic images!
       $VYPS_stat_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/stat_'. $current_graphic; //Stationary version!
@@ -152,7 +178,14 @@ function vyps_vy256_solver_func($atts) {
       $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining" ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
       $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
-      $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName . $last_transaction_id;
+      //NOTE: Ok. Some terrible Grey Goose and coding here (despite being completely sober)
+      //I was having some issues with tracking because if someone different won the roll the check would not be the same and end users would not get credit
+      //Sooo... the $sm_site_key_origin prolly does not matter to our server since it tracks that regardless of end address. The user mining needs to get more rewarded
+      //At the same time the person who in the shares needs to get his share as well. I can't really track that well. Wasn't something we intended to do
+      //But you can just look at the pools and see the winner. I'm not sure if people want their XMR visible to other user.
+      //I will do an unscientific poll. By poll...  I'm going to ask my only known user admin.
+
+      $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
       //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
       //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
@@ -211,7 +244,7 @@ function vyps_vy256_solver_func($atts) {
           $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
           //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
-          $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName . $last_transaction_id;
+          $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
           $redeem_output = "<tr><td>$balance hashes redeemed.</td></tr>"; //if there is any blance is gets redeemed.
 
