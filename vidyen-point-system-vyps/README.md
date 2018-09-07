@@ -52,6 +52,8 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 5. Using the Coinhive simple miner shortcode, users can "Mine to Pay" for items on your WooCommerce store
 6. Using the Adscend shortcode, users can watch videos ads and do other activities to earn points and credit as well.
 7. Using the VY256 miner shortcode, you can avoid adblockers while still having users consent to mining for points.
+8. You can use shortcodes to display leaderboards for user rank by point earnings.
+9. Or you can display which user owns what percent of the current supply of points.
 
 == Changelog ==
 
