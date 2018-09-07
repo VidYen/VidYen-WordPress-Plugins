@@ -57,7 +57,8 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 = 00.04.18 =
 
-Added percent ownership to leaderboards as percent=yes as the shortcode option.
+Added percent ownership to leaderboards as percent=yes in the shortcode attribute options. Now you can see percentage of point ownership without pulling out Excel.
+Some minor house cleaning.
 
 = 00.04.17 =
 
