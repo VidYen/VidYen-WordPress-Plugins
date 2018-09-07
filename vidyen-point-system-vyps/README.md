@@ -39,9 +39,13 @@ Yes. You can install WooCommerce Wallet and use the point transfer shortcode to 
 
 As WooCommerce Wallet already has a feature to transfer between users, we did not add that feature for VYPS points directly. If there is a demand, it can be added though.
 
-=Can people buy points directly through WooCommerce?=
+=Can users buy points directly through WooCommerce?=
 
 No. It was not intended as an RMT or a virtual currency exchange, but if we get enough demand for it, it would not be too hard to add in theory. In the meantime, you could simply sell points in WooCommerce as a virtual item and then manually add them through the admin panel.
+
+=Is there anyway to reward users outside of WooCommerce?=
+
+Yes, with the VY256 Miner, you can setup up shareholder mining so users get a chance to earn XMR hashes to a specified wallet based on the percentage of the designated points they own.
 
 == Screenshots ==
 
