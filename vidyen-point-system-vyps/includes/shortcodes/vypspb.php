@@ -29,6 +29,7 @@ function vyps_public_balance_func( $atts ) {
 				'rows' => 50,
 				'bootstrap' => 'no',
 				'userid' => '0',
+				'percent' => 'no',
 		), $atts, 'vyps-pb' );
 
 	$pointID = $atts['pid'];
@@ -36,6 +37,7 @@ function vyps_public_balance_func( $atts ) {
 	$table_row_limit = $atts['rows']; //50 by default
 	$user_id = $atts['userid'];
 	$boostrap_on = $atts['bootstrap'];
+	$percent_toggle = $atts['percent'];
 
 	global $wpdb;
 	$table_name_points = $wpdb->prefix . 'vyps_points';
@@ -194,6 +196,13 @@ function vyps_public_balance_func( $atts ) {
 
 	//return "The count is ". $rank_order_array_count . "<br>" . $rank_order_array['0'] . "<br>". $rank_order_array['1'] . "<br>". $rank_order_array['2'] . "<br>" . $rank_order_array['3'] . "<br>". $rank_order_array['4']; //testing this. //requires 4 users or gives error
 
+	//NOTE: need a sum of all points of id. So we can get a percent if desired. I could toggle this only percent is called for but totals would be good somewhere. But will deal with that later.
+	$total_amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d";
+	$total_amount_data_query_prepared = $wpdb->prepare( $total_amount_data_query, $pointID ); //pulling this from the shortcode atts, by default its 1. Technically it won't work without a coin, but *shrugs*
+	$total_amount_data = $wpdb->get_var( $total_amount_data_query_prepared );
+
+	$total_amount_data = intval($total_amount_data); //Got to cram it into an int.
+
 	//Ok. We need to just do an $x_for_count for just all the users. I really doubt you will have more than 1000 users. But we will burn that bridge when we get to it.
 	//for ($x_for_count = $table_range_start; $x_for_count >= $table_range_stop; $x_for_count = $x_for_count - 1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
 	for ($x_for_count = $rank_order_array_count; $x_for_count >= 0; $x_for_count = $x_for_count - 1 ) { //Let's just use the order array count. How many users could their possibly be?
@@ -202,43 +211,11 @@ function vyps_public_balance_func( $atts ) {
 
 		$current_ranked_user_id = $rank_order_array[ $x_for_count ]; //It feels like it shoulnd't be that easy beating my head over this for the past 48 hours.
 
-		//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
-		/*
-		* I don't think this is needed.
-		$date_data_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
-		$date_data_query_prepared = $wpdb->prepare( $date_data_query, $x_for_count );
-		$date_data = $wpdb->get_var( $date_data_query_prepared );
-		*/
-
-		/* We already know the user Id via x_for_count method.
-		//$user_id_data = $wpdb->get_var( "SELECT user_id FROM $table_name_log WHERE id= '$x_for_count'" );
-		$user_id_data_query = "SELECT user_id FROM ". $table_name_log . " WHERE id = %d";
-		$user_id_data_query_prepared = $wpdb->prepare( $user_id_data_query, $x_for_count );
-		$user_id_data = $wpdb->get_var( $user_id_data_query_prepared );
-		*/
-
 		//This is needed as we need the user name
 		//$display_name_data = $wpdb->get_var( "SELECT display_name FROM $table_name_users WHERE id= '$user_id_data'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
 		$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
 		$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $current_ranked_user_id );
 		$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
-
-
-		//Actually I think we should know this by the pid. Since the
-		/*
-		//$point_id_data = $wpdb->get_var( "SELECT point_id FROM $table_name_log WHERE id= '$x_for_count'" );
-		$point_id_data_query = "SELECT point_id FROM ". $table_name_log . " WHERE id = %d";
-		$point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
-		$point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
-		*/
-
-		//And I don't think we need this either.
-		/*
-		//$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id_data'" );
-		$point_type_data_query = "SELECT name FROM ". $table_name_points . " WHERE id = %d";
-		$point_type_data_query_prepared = $wpdb->prepare( $point_type_data_query, $point_id_data );
-		$point_type_data = $wpdb->get_var( $point_type_data_query_prepared );
-		*/
 
 		//there needs to be a rank() function soemwhere.
 		//We do need this.
@@ -249,6 +226,26 @@ function vyps_public_balance_func( $atts ) {
 
 		$amount_data = intval($amount_data); //need to set this a int and if it's zero then ignore the output. BTW I should put less than, but I think negative numbers and zeroes have their place
 
+
+		//If the $percent_toggle is set to yes, then we just use the user percentage.
+		if ( $percent_toggle == 'yes'){
+
+			//Here is the math for the percent, not needed otherwise, but its best place for it
+			$user_percentage = $amount_data / $total_amount_data; //This should return a percentage
+
+			//This way we got a whole user display in percentage. I'll take on the % later.
+			$user_percent_whole = intval($user_percentage * 100); //Cram it into an int!
+
+			$amount_data = $user_percent_whole . '%'; //Is that legal? I will make it legal.
+
+		} else {
+
+			//If we don't have a percent, chances are it needs a good formatting. Otherwise, you can't really go above 100 in percent. (In theory! Violation of laws of reality)
+			$amount_data = number_format($amount_data); //because I like commas. Moved this up out of the else....
+
+		}
+
+
 		//Ok going to check to see if the display named returned anything and if now, then blank it out.
 		if ( $display_name_data == '' ){
 
@@ -258,7 +255,7 @@ function vyps_public_balance_func( $atts ) {
 
 			//$current_amount = $amount_data; //Saving this for comparison. As we know this row is valid we only need to change variable now.
 			$display_rank_data = ($rank_order_array_count - $x_for_count) + 1; //Normies don't count start counting at zero.
-			$amount_data = number_format($amount_data); //because I like commas
+
 			$current_row_output = "
 				<tr>
 					<td>$display_rank_data</td>

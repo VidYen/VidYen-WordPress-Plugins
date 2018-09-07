@@ -55,6 +55,10 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 == Changelog ==
 
+= 00.04.18 =
+
+Added percent ownership to leaderboards as percent=yes as the shortcode option.
+
 = 00.04.17 =
 
 Addition of "Powered by VYPS" branding to Coinhive and Adscend portions. Again, if you need a pro-version feel free to reach out.
