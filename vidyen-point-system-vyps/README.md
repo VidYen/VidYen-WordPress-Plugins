@@ -64,6 +64,7 @@ Yes, with the VY256 Miner, you can setup up shareholder mining so users get a ch
 = 00.04.18 =
 
 Added percent ownership to leaderboards as percent=yes in the shortcode attribute options. Now you can see percentage of point ownership without pulling out Excel.
+Update to the VY256 instructions, as needed to be more clear on how to use MoneroOcean.
 Some minor house cleaning.
 
 = 00.04.17 =

@@ -46,26 +46,28 @@ function vyps_vy256_sub_menu_page() {
     <p>This pool runs through vy256.com server and is in development mode which means the server may crash or be down at anytime. Please contact us through support if you have problems.</p>
     <p>This allows you to use a local miner on WordPress that by passes adblock or other AV software. That said, you should always explain what this is and I've required the consent buttons by default.</p>
     <p>There is now a cpu control. It is not as percise as Coinhive, but it allows you to know use 100% by cranking it up to 6 (It's possible to lock up your computer with two browsers open at 10 so I'm leaving a cap on it) or you can turn it to 0 to pause. Note the hash updates sometimes come in waves as it has to go from your client's browser to our stratum to the pool and then back each time.</p>
-    <p>The benefit however, is that this version does not require any account like Coinhive. AND as far as my testing goes, does not get blocked by uBLock or Brave. Also Malwarebytes never complained in premium mode (unlike Coinhive). That alone makes the low CPU worth it, but we are working on getting code better.</p>
-    <p>Alls you need is a viable Monero XMR wallet. <a href=\"https://mymonero.com\" target=\"_blank\">MyMonero</a> works well enough. Currently, the VY256 miner supports the <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> pool and the payouts and monitoring are through that site (Not VidYen). As the project progresses, we plan to add other pools, but currently every seems fine with Monero Ocean. (We value your opinion if you have another pool in mind)</p>
+    <p>The benefit however, is that this version does not require any account like Coinhive. AND as far as my testing goes, does not get blocked by uBLock or Brave. Also Malwarebytes never complained in premium mode (unlike Coinhive). That alone makes the low CPU worth it, but we are working on getting the code better.</p>
+    <p><b>All you need is:</b></p>
+    <p>A viable Monero XMR wallet. <a href=\"https://mymonero.com\" target=\"_blank\">MyMonero</a> works well enough.</p>
+    <p>And access to the <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> pool which only requires the XMR wallet to use.</p>
+    <p>The payouts and monitoring are through MoneroOcean (Not VidYen). As the project progresses, we plan to add other pools, but currently every seems fine with MoneroOcean.</p>
     <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain...</p>
-    <h2>REMEMBER: USING BROWSER MINING WITHOUT CONSENT OF THE USER IS CONSIDERED NOT ONLY A HOSTILE ACTION BUT ALSO ILLEGAL IN SOME JURISTICTIONS!</h2>
-    <h2>VIDYEN, LLC IS AGAINST ANY ATTEMPT BY WORDPRESS SITE OWNERS TO TRY TO BYPASS CONSENT AND AWARENESS OF THE END USER USER IN AN ATTEMPT TO MINE XMR IN SECRET OR THROUGH OBFUSCATION!</h2>
-    <h2>BY USING THESE SHORTCODES ON YOUR WORDPRESS SITE, YOU AGREE TO NOT ONLY MAKE YOUR USERS AWARE OF WHAT YOU ARE DOING, BUT YOU LET THEM KNOW WHAT IMPLICATIONS IT CAN HAVE ON THEIR CPU, ELECTRICTY USE, AND BATTERY USE!</h2>
+    <p><b>REMEMBER: USING BROWSER MINING WITHOUT CONSENT OF THE USER IS CONSIDERED NOT ONLY A HOSTILE ACTION BUT ALSO ILLEGAL IN SOME JURISTICTIONS!</b></p>
+    <p><b>VIDYEN, LLC IS AGAINST ANY ATTEMPT BY WORDPRESS SITE OWNERS TO TRY TO BYPASS CONSENT AND AWARENESS OF THE END USER USER IN AN ATTEMPT TO MINE XMR IN SECRET OR THROUGH OBFUSCATION!</b></p>
+    <p><b>BY USING THESE SHORTCODES ON YOUR WORDPRESS SITE, YOU AGREE TO NOT ONLY MAKE YOUR USERS AWARE OF WHAT YOU ARE DOING, BUT YOU LET THEM KNOW WHAT IMPLICATIONS IT CAN HAVE ON THEIR CPU, ELECTRICTY USE, AND BATTERY USE!</b></p>
     <p>You should make users aware that this may happen in your consent disclaimer.</p>
-    <p>That said, legitimate organizations like <a href=\"https://www.thehopepage.org/\" target=\"_blank\">UNICEF</a> are using browser mining for donations, so like any peice of technology it can be used for both legal and illegal purposes.</p>
     <p>If you are concerned about the issues of having browser miners on your site, we recommend using the Adscend shortcode to use traditional advertisements for site monetization.</p>
     <p>Also, as long as you do not put the VY256 shortcode on your site, it will not expose your users to any code from browser mining as no code is called until the accept button is clicked.</p>
-    <p><b>NOTE:</b> To display the simple miner you need to place the consent button shortcode on your page to create a POST call that the simple miner shortcode will recognize.</p>
     <p>It is up to you to come up with a consent message, but you need to inform the user what browser mining is and what it may do resource- and battery- wise to their device. (Feel free to use the same message that is on the VidYen official page).</p>
     <p><b>The consent and simple miner shortcode must be put on the same page to work!</b></p>
     <p><b>Users must be logged in to see any of these shortcode as the intent was to track user effort.</b></p>
     <h1>Shortcodes and Syntax</h1>
+    <p><b>NOTE:</b> To display the simple miner you need to place the consent button shortcode on your page to create a POST call that the simple miner shortcode will recognize.</p>
     <h2>Consent Button Shortcode</h2>
     <p>Replace (optional) and (required) with your info.</p>
     <p><b>[vyps-256-consent text=(optional)]</b></p>
     <p>Display the simple miner consent button. You can customize the text on the button by using txt=.To add spaces in the button text, use quotes.</p>
-    <h2>VY256 Miner Display and User Tracking Shortcode</h2>
+    <h2>VY256 Miner Display Shortcode</h2>
     <p><b>[vyps-256 wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>This will display the simple miner after the button on the consent shortcode has been pressed.</p>
     <p>wallet: Your XMR wallet.</p>
@@ -73,17 +75,21 @@ function vyps_vy256_sub_menu_page() {
     <p>pid: The VYPS point ID found in the &quot;VYPS Point List&quot; of the point type you want to redeem to (NOTE: Hashes are always redeemed for a 1 for 1. You can use the point exchange shortcode to convert to different amounts before transferring to WooCommerce.)</p>
     <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices.</p>
     <p>throttle: The default is 50 which reduces CPU use by 50%, so they only use 50% for mining. I would also recommend leaving this set to 50 and allowing the user to increase it if they want to mine faster via the simple miner GUI.</p>
-    <p>Example:</p>
-    <p><b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen] Please consent to mining. [vyps-256-consent]</b></p>
+    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen] Please consent to mining. [vyps-256-consent]</b></p>
     <p>This will show the miner after the consent button has been clicked.</p>
     <p><b>[vyps-256-debug wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>A version that shows you behind the scenes if you are trying to troubleshoot the connection.</p>
-    <h1>Graphics</h1>
+    <h2>Graphics</h2>
     <p>You can use the shortcode graphic=0 to turn off animated worker or graphic=1 or 2 if you want to select a particular one. Plans for holidays coming soon!</p>
-    <h1>Miner Sharing Shortcodes</h1>
+    <h2>Miner Sharing</h2>
     <p>Mining sharing is a feature used to allow the XMR address by users to be shared for randomly allowing users to mine for other users based on a share of points they own of total. This actually lets miners and even adwatchers to participate in getting faucets to pools by being shareholders in your point system.</p>
     <p><b>[vyps-xmr-wallet]</b></p>
     <p>To enable mining sharing, add the shortcode <b>shareholder=1</b>. Replace the 1 with the point id that you want users to be ranked in. The way it works is that there is a weighted change for holder of most points of that type to get their wallet mined to say if one user owned 60% of that point type they would have 60% type to win the display. If no one wins it defaults to the sites wallet. Admins can always be point owners as well so look at leaderboards for fairness. I will make a leader board with percentage of ownership in next update.</p>
+    <h1>Payout</h1>
+    <p>The VY256 works in conjuction with the <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> pool as a third party service to handle wallet payouts.</p>
+    <p>The rates of XMR per has is determined by them as well as the minium payouts. An account is not required, but by default the minimum payout is 0.3 XMR and if you wish adjust that you will have to create an account through them.</p>
+    <p>To see your progress towards payout, vist the <a href=\"https://moneroocean.stream/#/dashboard\" target=\"_blank\">dashboard</a> and add your XMR wallet where it says Enter Payment Address at bottom of page. There you can see total hashes, current hash rate, and account option if you wish to change payout rate.</p>
+    <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort.</p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href=\"https://www.vidyen.com/about/\" target=\"_blank\">VidYen About</a> or on our <a href=\"https://wordpress.org/support/plugin/vidyen-point-system-vyps\" target=\"_blank\">WordPress support page</a>.</p>
     <p>If server is down and/or you need assistance immediatly, join the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)</p>
@@ -95,7 +101,7 @@ function vyps_vy256_sub_menu_page() {
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
     <h2>Future plans.</h2>
-    <p>We do have a goal to add more pools down the road, but for now Monero Ocean works and the developer of that pool is very responsive and fair.</p>
+    <p>We do have a goal to add more pools down the road, but for now MoneroOcean works and the developer of that pool is very responsive and fair.</p>
     <p>Felty does have a goal to add MSR support due to its unique method of mining, but that will be down the road when it gets mining branches.</p>" .
     /*<p>xmrpool.eu</p>
     <p>moneropool.com</p>
