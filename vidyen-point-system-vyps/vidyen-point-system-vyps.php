@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      00.04.18.11
+Version:      00.05.01.06
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -364,4 +364,8 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_dev.php'); /
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_debug.php'); //Debug version that shows output. Does not throttle btw
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsxmr_wallet.php'); //Let's user add XMR wallet to usermeta table in WP
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); //Shareholder pick. Is shortcode but used elsewhere
+/*** End of Shortcode Includes ***/
+
+/*** FUNCTION INCLUDES IN BASE ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/vyps_procheck.php'); //Pro checking.
 /*** End of Shortcode Includes ***/

@@ -61,6 +61,11 @@ Yes, with the VY256 Miner, you can setup up shareholder mining so users get a ch
 
 == Changelog ==
 
+= 00.05.01 =
+
+As requested. We are adding functionality for a pro-version to remove the branding on demand. Contact on Facebook for details as it takes time for Envato approval.
+This has little functionality except some built in ground word for new planned function for new functionality such as referrals and custom miner work.
+
 = 00.04.18 =
 
 Added percent ownership to leaderboards as percent=yes in the shortcode attribute options. Now you can see percentage of point ownership without pulling out Excel.

@@ -40,6 +40,7 @@ function vyps_vy256_solver_func($atts) {
             'cloud' => 0,
             'graphic' => 'rand',
             'shareholder' => '',
+            'pro' => '',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -171,6 +172,13 @@ function vyps_vy256_solver_func($atts) {
       $VYPS_power_url = plugins_url() . '/vidyen-point-system-vyps/images/powered_by_vyps.png'; //Well it should work out.
 
       $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\"></a></td></tr>";
+
+      //Procheck here. Do not forget the ==
+      if (vyps_procheck_func($atts) == 1) {
+
+        $VYPS_power_row = ''; //No branding if procheck is correct.
+
+      }
 
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';

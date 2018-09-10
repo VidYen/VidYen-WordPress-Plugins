@@ -111,6 +111,7 @@ function vyps_adscend_redeem_func( $atts ) {
 			'api' => 'z',
 			'pid' => '0',
 			'payout' => '0',
+			'pro' => '',
 		), $atts, 'vyps-as-redeem');
 
 	/* do the normal checks to see if the $atts were set */
@@ -169,6 +170,13 @@ function vyps_adscend_redeem_func( $atts ) {
 	$VYPS_power_url = plugins_url() . '/vidyen-point-system-vyps/images/powered_by_vyps.png'; //Well it should work out.
 
 	$VYPS_power_row = "<br>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\"></a>";
+
+	//Procheck here. Do not forget the ==
+	if (vyps_procheck_func($atts) == 1) {
+
+		$VYPS_power_row = ''; //No branding if procheck is correct.
+
+	}
 
 	if (isset($_POST["redeem"])){
 
