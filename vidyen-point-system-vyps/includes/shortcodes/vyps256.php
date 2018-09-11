@@ -123,7 +123,6 @@ function vyps_vy256_solver_func($atts) {
 
     }
 
-
     if ($sm_site_key == '' AND $siteName == '') {
 
         return "Error: Wallet address and site name not set. This is required!";
@@ -133,6 +132,35 @@ function vyps_vy256_solver_func($atts) {
         $site_warning = '';
 
     }
+
+    //Site validation to make sure the wallet is validate
+
+    //Might as well check to see if wallet is right length
+    $wallet_len = strlen($sm_site_key);
+
+    //Wallets should always be longer than 90 character... 95, but
+    if ($wallet_len < 90 ) {
+
+      return "Error: Wallet address is less than 90 characters!";
+
+    }
+
+    //Checkj the first character
+    $wallet_first_character = substr($sm_site_key, 0, 1);
+
+    if ($wallet_first_character == '4' OR $wallet_first_character == '8') {
+
+      //Nothing shall happen. I would have done != but logic
+
+    } else {
+
+      //report that invalid validate
+      return "Error: Wallet address does not start with 4 or 8 so most likley an invalid XMR address!";
+
+    }
+
+
+
 
     //NOTE: Debugging turned off
     //ini_set('display_errors', 1);
