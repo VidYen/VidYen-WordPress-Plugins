@@ -391,17 +391,12 @@ function vyps_vy256_solver_func($atts) {
                 if(totalhashes < 1){
                     var timeleft = 60;
                     var downloadTimer = setInterval(function(){
-                    timeleft--;
-                    if (timeleft < 10 ){
-                      document.getElementById('total_hashes').innerText = ' 0:0' + timeleft;
-                    }
-                    if (timeleft > 9 ){
+                      timeleft--;
                       document.getElementById('total_hashes').innerText = ' 0:' + timeleft;
-                    }
-                    if(timeleft <= 0)
-                      clearInterval(downloadTimer);
-                    if(totalhashes > 1)
-                      clearInterval(downloadTimer);
+                      if(timeleft <= 0)
+                        clearInterval(downloadTimer);
+                      if(totalhashes > 256)
+                        clearInterval(downloadTimer);
                     },1000);
                 }
 

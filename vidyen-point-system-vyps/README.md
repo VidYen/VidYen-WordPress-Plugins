@@ -67,7 +67,7 @@ VY256 Miner focus:
 Miner (minor) counting bug with saying hashes mined but not mined. (I think I have it fixed?)
 Executive decision to remove the term "hash" to end user on VY256 miner and use whatever the name and icon of the point it pays out to since that is a known. I don't think end users need to know what a hash was and since it counts rejected hashes off the server, they often earn more points than what shows up on MoneroOcean.
 Added a XMR wallet validation check. Your wallet needs to start with a 4 or 8 and be at least 90 characters. Yeah. I know legacy wallets may be shorter, but you should really be generating new wallets every now and then when they update the Monero CLI.
-Added a 0:60 count down timer so that people have a false sense of something happening when the miner revs up. Unless they have a potato, it will show reward points way before then. It goes away as soon as hashes are worked on.
+Added a 0:60 count down timer so that people have a false sense of something happening when the miner revs up. Unless they have a potato, it will show reward points way before then. It goes away as soon as hashes are worked on. Laggy but one day will have a real budget for resolving this.
 
 
 = 00.05.01 =
