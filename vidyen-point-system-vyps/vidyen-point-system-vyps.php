@@ -368,4 +368,5 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); /
 
 /*** FUNCTION INCLUDES IN BASE ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/vyps_procheck.php'); //Pro checking.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/vyps_point_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
 /*** End of Shortcode Includes ***/
