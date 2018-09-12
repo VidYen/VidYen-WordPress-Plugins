@@ -159,9 +159,6 @@ function vyps_vy256_solver_func($atts) {
 
     }
 
-
-
-
     //NOTE: Debugging turned off
     //ini_set('display_errors', 1);
     //ini_set('display_startup_errors', 1);
@@ -207,6 +204,10 @@ function vyps_vy256_solver_func($atts) {
         $VYPS_power_row = ''; //No branding if procheck is correct.
 
       }
+
+      //I'm putting these two here as need to be somewhat global to this function
+      $reward_icon = vyps_point_icon($pointID); //Thank the gods. I keep the variables the same
+      $reward_name = vyps_point_name($pointID); //Oh. My naming conventions are working better these days.
 
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';
@@ -255,6 +256,7 @@ function vyps_vy256_solver_func($atts) {
 
 
       if ($balance > 0) {
+
           //Ok we need to actually use $wpdb here as its going to feed into the log of course.
           global $wpdb;
           $table_log = $wpdb->prefix . 'vyps_points_log';
@@ -282,7 +284,10 @@ function vyps_vy256_solver_func($atts) {
           //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
           $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
-          $redeem_output = "<tr><td>$balance hashes redeemed.</td></tr>"; //if there is any blance is gets redeemed.
+          //Pulling the graphic
+
+
+          $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
 
           $balance = 0; //This should be set to zero at this point.
 
@@ -290,7 +295,7 @@ function vyps_vy256_solver_func($atts) {
 
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-          $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem\" when you want to stop and get credit for hashes.</td></tr>";
+          $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem\" to stop and get work credit in: $reward_icon</td></tr>";
 
       }
 
@@ -333,9 +338,10 @@ function vyps_vy256_solver_func($atts) {
 
             function start() {
 
-                if($balance > 0){
-                    document.getElementById('total_hashes').innerText = '$balance Hashes';
-                }
+              //  This is no longer needed.
+              //  if($balance > 0){
+              //      document.getElementById('total_hashes').innerText = '$reward_icon $balance';
+              //  }
 
               document.getElementById(\"startb\").style.display = 'none'; // disable button
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
@@ -362,7 +368,7 @@ function vyps_vy256_solver_func($atts) {
                 // for the definition of sendStack/receiveStack, see miner.js
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
-                document.getElementById('status-text').innerText = 'Calculating hashes';
+                document.getElementById('status-text').innerText = 'Working on mining rewards';
               }, 2000);
 
             }
@@ -379,8 +385,26 @@ function vyps_vy256_solver_func($atts) {
                 if(obj.identifier != \"userstats\"){
                   document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
                   if(totalhashes > 0){
-                      document.getElementById('total_hashes').innerText = totalhashes + ' Hashes';
+                      document.getElementById('total_hashes').innerText = ' ' + totalhashes;
                   }
+
+                if(totalhashes < 1){
+                    var timeleft = 60;
+                    var downloadTimer = setInterval(function(){
+                    timeleft--;
+                    if (timeleft < 10 ){
+                      document.getElementById('total_hashes').innerText = ' 0:0' + timeleft;
+                    }
+                    if (timeleft > 9 ){
+                      document.getElementById('total_hashes').innerText = ' 0:' + timeleft;
+                    }
+                    if(timeleft <= 0)
+                      clearInterval(downloadTimer);
+                    if(totalhashes > 1)
+                      clearInterval(downloadTimer);
+                    },1000);
+                }
+
                 }
 
             }
@@ -416,7 +440,7 @@ function vyps_vy256_solver_func($atts) {
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
             <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
           <!--<input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
-           <span id=\"total_hashes\" style=\"float:right;\">(Do not refresh)</span>
+           <span id=\"total_hashes\" style=\"float:right;\">(Please Wait)</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; $reward_icon &nbsp;</span>
           </form>
           <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"Redeem\"/></form>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
