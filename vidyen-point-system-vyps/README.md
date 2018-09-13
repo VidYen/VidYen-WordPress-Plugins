@@ -47,6 +47,10 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 Yes, with the VY256 Miner, you can setup up shareholder mining so users get a chance to earn XMR hashes to a specified wallet based on the percentage of the designated points they own.
 
+=My users want their rewards in crypto currency rather than in gift cards and virtual items. Can you add this?=
+
+You do know you can do this yourself by adding a wallet field to a WooCommerce checkout and send the crypto currency manually like a regular eCommerce selling physical goods. Also, you can just setup paper wallets from valid wallet generator site and put a $1 in each of them and save the private keys in txt files so your users can just scrap them when purchased in your WooCommerce store. I cannot believe I am recommending Jaxx, but it works well enough or this if your users are not technical. Or you can put a $5 eBay gift card on your store, and your end users can buy it indirectly.
+
 == Screenshots ==
 
 1. Create your own point types with their own name and icon.
