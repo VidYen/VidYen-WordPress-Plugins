@@ -206,8 +206,11 @@ function vyps_vy256_solver_func($atts) {
       }
 
       //I'm putting these two here as need to be somewhat global to this function
-      $reward_icon = vyps_point_icon($pointID); //Thank the gods. I keep the variables the same
-      $reward_name = vyps_point_name($pointID); //Oh. My naming conventions are working better these days.
+      //NOTE: Any time you see something that says func, its in teh includes/function folder.
+      //Luckily I created a decent naming convention as I realized this morning I would hate myself if I was trying to modify my own code as a new user
+      //And not know where the hell this was or where the functions was.
+      $reward_icon = vyps_point_icon_func($pointID); //Thank the gods. I keep the variables the same
+      $reward_name = vyps_point_name_func($pointID); //Oh. My naming conventions are working better these days.
 
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';

@@ -7,7 +7,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*** POINT NAME FUNCTION ***/
-function vyps_point_name($pointID) {
+function vyps_point_name_func($pointID) {
 
   //The usual suspects to get the sql calls up
   global $wpdb;
@@ -24,7 +24,7 @@ function vyps_point_name($pointID) {
 }
 
 /*** POINT ICON FUNCTION ***/
-function vyps_point_icon($pointID) {
+function vyps_point_icon_func($pointID) {
 
   //The usual suspects to get the sql calls up
   global $wpdb;
