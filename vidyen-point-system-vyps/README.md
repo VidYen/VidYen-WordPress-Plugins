@@ -65,6 +65,11 @@ You do know you can do this yourself by adding a wallet field to a WooCommerce c
 
 == Changelog ==
 
+= 00.05.03 =
+Naming convention changes in function (for those who use the GitHub). Invisible to WordPress repo users.
+Addition of referral system [vyps-refer] shortcode.
+Fixed the [vyps-xmr-wallet] order of operations.
+
 = 00.05.02 =
 
 VY256 Miner focus:

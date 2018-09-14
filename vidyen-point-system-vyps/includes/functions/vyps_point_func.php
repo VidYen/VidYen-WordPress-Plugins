@@ -1,10 +1,11 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+//vyps_point_func.php
 //These are just functions to call the point name and icon to be called later.
 //Simply returns either the point type name or icon url
 //Seem to be doing it a lot so might as well be professional about code now instead of copying and pasting every time
-
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*** POINT NAME FUNCTION ***/
 function vyps_point_name_func($pointID) {

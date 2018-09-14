@@ -26,10 +26,6 @@ function vyps_xmr_wallet_func() {
   //NO WIRE ARRAYS! Only one value at all time. Unless someone messed something up somewhere.
   $single = TRUE;
 
-  //And we have the current wallet. This may not exist or be blank. Also I'm 99.99999999% sure I can't tell if its actually a real XMR address
-  $xmr_wallet = get_user_meta( $user_id, $key, $single );
-
-
   if (isset($_POST['update_wallet'])) {
 
     //As the post is the only thing that edits data, I suppose this is the best place to the noce
@@ -56,6 +52,10 @@ function vyps_xmr_wallet_func() {
     update_user_meta( $user_id, $key, $xmr_wallet );
 
   }
+
+  //NOTE: This should come after the post so it will update before the refresh or otherwise the wallet may be out of date. Remind me to check.
+  //And we have the current wallet. This may not exist or be blank. Also I'm 99.99999999% sure I can't tell if its actually a real XMR address
+  $xmr_wallet = get_user_meta( $user_id, $key, $single );
 
   //Adding a nonce to the post
   $vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
