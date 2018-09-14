@@ -36,6 +36,7 @@ function vyps_is_refer_func() {
 
     //I'm going to check trim it what we pull from meta
     $current_refer_user_id = trim($current_refer, "REFER"); //Tear that string down Mr. Gorbachev!
+    $current_refer_user_id = trim($current_refer, "refer"); //some dummy is going to type it in.
 
     //And then check it if it actually works and that is a users.
     $current_refer_data = get_userdata( $current_refer_user_id ); //This is an array btw. See WP codex for details.
