@@ -66,9 +66,12 @@ You do know you can do this yourself by adding a wallet field to a WooCommerce c
 == Changelog ==
 
 = 00.05.03 =
-Naming convention changes in function (for those who use the GitHub). Invisible to WordPress repo users.
-Addition of referral system [vyps-refer] shortcode.
+
+Addition of referral system [vyps-refer] shortcode to display and enter other user's referral codes.
+To reward people for referrals, add refer=10 on the [vyps-vy256] shortcode to give a 10% point award when the referral of that user uses the miner.
+NOTE: I did not add this to other systems, as I would prefer to shuffle people into using the VY256 miner. You may reach out to me directly through the usual means if you want it for Adscend or Coinhive.
 Fixed the [vyps-xmr-wallet] order of operations.
+Naming convention changes in function (for those who use the GitHub). Invisible to WordPress repository users.
 
 = 00.05.02 =
 

@@ -81,6 +81,9 @@ function vyps_vy256_sub_menu_page() {
     <p>A version that shows you behind the scenes if you are trying to troubleshoot the connection.</p>
     <h2>Graphics</h2>
     <p>You can use the shortcode graphic=0 to turn off animated worker or graphic=1 or 2 if you want to select a particular one. Plans for holidays coming soon!</p>
+    <h2>Referral Mining</h2>
+    <p>You can set option for example refer=10 to give 10% percent mining bonus to their referral code invite. This shortcode accepts whole numbers only and rounds down. In theory, a site admin could set refer=200 to give a 200% mining bonus, but I am not sure why you would as that could be abused.</p>
+    <p>Users can set their referral code with the shortcode <b>[vyps-refer]</b> which should give them a page to give and get their referral code. This is not an automatic system and your users will have to manually add the code. There are plenty of login customization and user account plugins an admin can use to integrate this system with.</p>
     <h2>Miner Sharing</h2>
     <p>Mining sharing is a feature used to allow the XMR address by users to be shared for randomly allowing users to mine for other users based on a share of points they own of total. This actually lets miners and even adwatchers to participate in getting faucets to pools by being shareholders in your point system.</p>
     <p><b>[vyps-xmr-wallet]</b></p>

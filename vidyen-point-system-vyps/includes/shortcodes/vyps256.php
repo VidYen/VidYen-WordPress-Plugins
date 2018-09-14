@@ -40,6 +40,7 @@ function vyps_vy256_solver_func($atts) {
             'cloud' => 0,
             'graphic' => 'rand',
             'shareholder' => '',
+            'refer' => 0,
             'pro' => '',
         ), $atts, 'vyps-256' );
 
@@ -65,6 +66,7 @@ function vyps_vy256_solver_func($atts) {
     $password = $atts['password'];
     $first_cloud_server = $atts['cloud'];
     $share_holder_status = $atts['shareholder'];
+    $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
 
@@ -268,7 +270,7 @@ function vyps_vy256_solver_func($atts) {
           $pointType = intval($pointID); //Point type should be int.
           $user_id = get_current_user_id();
 
-          //Inserting Coin Hive row.
+          //Inserting VY256 hashes AS points! To main users
           $data = [
               'reason' => $reason,
               'point_id' => $pointType,
@@ -277,6 +279,30 @@ function vyps_vy256_solver_func($atts) {
               'time' => date('Y-m-d H:i:s')
           ];
           $wpdb->insert($table_log, $data);
+
+          //OK. Here is if you have a refer rate that it just thorws it at their referrable
+          //I'm not 100% sure that I can let the func behave nice like this. WCCW
+          if ($refer_rate > 0 AND vyps_is_refer_func() != 0 ){
+
+            $reason = "VY256 Mining Referral"; //It shows in the log.
+            $amount = doubleval($balance); //Why do I do a doubleval here again? I think it was something with Wordfence.
+            $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
+            $pointType = intval($pointID); //Point type should be int.
+            $user_id = vyps_is_refer_func(); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
+
+            //Inserting VY256 hashes AS points! To referral user.
+            $data = [
+                'reason' => $reason,
+                'point_id' => $pointType,
+                'points_amount' => $amount,
+                'user_id' => $user_id,
+                'time' => date('Y-m-d H:i:s')
+            ];
+            $wpdb->insert($table_log, $data);
+
+            //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
+            
+          }
 
           //Yeah a bit heavy on the SQL calls but need to check a second time if redeeming on load
           $table_name_log = $wpdb->prefix . 'vyps_points_log';
