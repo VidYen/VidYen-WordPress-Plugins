@@ -2,9 +2,11 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//
+//This function is designed to see if a refer code is actually a reer and return the user id it is FROM
+//AND check to see if it exists (in case invalid or user id was deleted a while back)
+//Also it checks to make sure you aren't putting in yoru own code. NO CHEATING
 
-/*** POINT NAME FUNCTION ***/
+/*** IS REFER FUNCTION ***/
 function vyps_is_refer_func() {
 
   //Side note. I don't think there will be a variable pass in as this will always just ask who is the refer of the current user.

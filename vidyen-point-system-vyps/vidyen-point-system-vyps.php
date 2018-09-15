@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      00.05.03.19
+Version:      00.05.04.01
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -116,8 +116,8 @@ function vyps_points_menu() {
 /*** Menu Includes ***/
 
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/as_menu.php'); //Adscend menu 400 order
-include( plugin_dir_path( __FILE__ ) . 'includes/menus/ch_menu.php'); //Coinhive menu 430 order
-include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256_menu.php'); //Coinhive menu 440 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/ch_menu.php'); //CH menu 430 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256_menu.php'); //CH menu 440 order
 
 /*** End of Menu Includes ***/
 
@@ -134,9 +134,6 @@ function vyps_admin_log() {
 
 	$number_of_log_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_log" ); //No where needed. All rows. No exceptions
 	$number_of_point_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_points" ); //No where needed. All rows. No exceptions
-
-	//echo '<br>'. $number_of_log_rows; //Some debugging
-	//echo '<br>'. $number_of_point_rows; //More debugging
 
 	$begin_row = 1;
 	$end_row = ''; //Eventually will have admin ability to filter how many rows they see as after 1000 may be intensive
@@ -165,9 +162,6 @@ function vyps_admin_log() {
 				<th>$reason_label</th>
 			</tr>
 	";
-
-
-
 
 	//Because the shorcode version won't have this
 	$page_header_text = "
@@ -267,12 +261,6 @@ function vyps_points_parent_menu_page() {
 	<p>To see a log of all user transactions, go to &quot;Point Log&quot; in the VidYen Points menu.</p>
 	";
 
-	/* This is the credits.php which only needs to be modified in the base to show on all addon plugins
-	*  Credit for this fix goes to skotperez off stack exchange for his answer on Nov 2, 2016
-	*  https://stackoverflow.com/questions/32177667/include-a-php-file-in-another-php-file-wordpress-plugin
-	*  I added the ../ to make it work in my case though.
-	*/
-
 	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/sc_instruct.php');
 	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/credits.php');
 
@@ -354,12 +342,12 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_2in.php'); //
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspe.php'); //Point Exchange is going to depreciate all earlier versions of Point Transfer
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the Coinhive in.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the CH in.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsas.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256.php'); //VYPS webminerpool shortcode
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256.php'); //VYPS WMP shortcode
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_dev.php'); //Developement version
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_debug.php'); //Debug version that shows output. Does not throttle btw
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsxmr_wallet.php'); //Let's user add XMR wallet to usermeta table in WP
