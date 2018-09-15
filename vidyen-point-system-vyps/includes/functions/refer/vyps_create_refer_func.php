@@ -14,14 +14,17 @@ function vyps_create_refer_func($user_id) {
   //Which, at least if I am still around, will pull from $current_user_id
   //But it may not be always the case.
 
-  if (is_empty($user_id)){
+  //As was having issues, I thought might as well check to see if the $user_id was an int and actually 1 or greater.
+  //If it isn't either of those. It tis input garbage!
+  if ( !is_int($user_id) OR $user_id < 1 ){
 
     return 0; //If the id had nothing in it, then we just throw out a 0 as it is incorrect. I'd rather work with zero than something else.
 
   }
 
   //Need to add just a bit of non numerical database
-  $user_refer_prep_encode = 'REFER'. $user_id;
+  //$user_refer_prep_encode = 'REFER'. $user_id; //Testing something
+  $user_refer_prep_encode = ($user_id * 256); //Trying something here. Making it less obvious is base64
 
   //From here we use the base64_encode() to ecode out I have no idea what it returns.
   $user_refer = base64_encode($user_refer_prep_encode);

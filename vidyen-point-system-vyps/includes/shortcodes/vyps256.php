@@ -282,26 +282,27 @@ function vyps_vy256_solver_func($atts) {
 
           //OK. Here is if you have a refer rate that it just thorws it at their referrable
           //I'm not 100% sure that I can let the func behave nice like this. WCCW
-          if ($refer_rate > 0 AND vyps_is_refer_func() != 0 ){
+          if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){
 
-            $reason = "VY256 Mining Referral"; //It shows in the log.
+            $reason = "VY256 Mining Referral"; //It shows in the log. NOTE: I am going to keep point exchange and referral seperate in the logs. I'm curious how this plays out. Can count both with an OR. AS and CH will never get a direct refer.
             $amount = doubleval($balance); //Why do I do a doubleval here again? I think it was something with Wordfence.
             $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
             $pointType = intval($pointID); //Point type should be int.
-            $user_id = vyps_is_refer_func(); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
+            $user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
 
-            //Inserting VY256 hashes AS points! To referral user.
+            //Inserting VY256 hashes AS points! To referral user. NOTE: The meta add for 'referral' it's hard coded for now. The PE will use the same.
             $data = [
                 'reason' => $reason,
                 'point_id' => $pointType,
                 'points_amount' => $amount,
                 'user_id' => $user_id,
+                'vyps_meta_data' => 'referral',
                 'time' => date('Y-m-d H:i:s')
             ];
             $wpdb->insert($table_log, $data);
 
             //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
-            
+
           }
 
           //Yeah a bit heavy on the SQL calls but need to check a second time if redeeming on load

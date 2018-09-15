@@ -5,24 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //This function is designed to see if a refer code is actually a reer and return the user id it is FROM
 //AND check to see if it exists (in case invalid or user id was deleted a while back)
 //Also it checks to make sure you aren't putting in yoru own code. NO CHEATING
+//Ok this checks the user id. But not if.
 
 /*** IS REFER FUNCTION ***/
-function vyps_is_refer_func() {
+function vyps_current_refer_func($user_id) {
 
-  //Side note. I don't think there will be a variable pass in as this will always just ask who is the refer of the current user.
-  //Boot user out if not logged in. Like how can we tell who is the refer then?
-  if ( ! is_user_logged_in() ) {
-
-    return; //Not logged in. You see nothing.
-
-  }
-
-  //Get current user Id obviously to figure out who their refer is
-  $user_id = get_current_user_id();
-
-  //I thought about this while. Perhaps I should just use refer, I'm tempted to brand my own software even further
-  //Because I could but then they'd ask for more premium from people who already paid. Either way. The word needs to be static so it can be removed and checked.
-  $user_refer = 'REFER'. $user_id;
+  //NOTE: I went with variable pass. As we needed to check to post to see if it was valid before entering before it pulled the meta.
 
   //This is hardcoded, but the label we are going to cram into the usermeta table
   $key = 'vyps_current_refer';
@@ -36,8 +24,13 @@ function vyps_is_refer_func() {
   //Checking to see if the variable is empty or not
   if (!empty($current_refer)) {
 
+    //Ok we take it back out again and base64_decode() it;
+    //NOTE: I intvaled it because when people put in crap, it still has to be checked. In theory it will force a value that can be divided by 256
+    //But will return a non-user. Unless you have millions of users? Why are you using WordPress then?
+    $current_refer_user_id = (intval(base64_decode($current_refer)) / 256); //Making it a bet less obvious with the base 64, but please don't take me as a security expert -Felty
+
     //I'm going to check trim it what we pull from meta
-    $current_refer_user_id = trim($current_refer, "REFERrefer"); //Tear that string down Mr. Gorbachev! Lower case characters as well
+    //DEBUG //$current_refer_user_id = trim($current_refer, "REFER"); //Tear that string down Mr. Gorbachev! Originally, you could type it in. Now it has to be exact.
 
     //And then check it if it actually works and that is a users.
     $current_refer_data = get_userdata( $current_refer_user_id ); //This is an array btw. See WP codex for details.
@@ -49,11 +42,11 @@ function vyps_is_refer_func() {
       //Or blank but not empty
       return 0;
 
-    } elseif ($user_id == $current_refer_user_id) {
+    } elseif($user_id == $current_refer_user_id) {
 
       return 0; //In case your users thought they'd be cute and set themselves as their own refer.
 
-    } elseif (!empty($current_refer_user_id)) {
+    } elseif(!empty($current_refer_user_id)) {
 
       //This following data call should work. In theory.
       return $current_refer_user_id; //This should be the id that the miner sends to. Pretty much the purpose of this function.

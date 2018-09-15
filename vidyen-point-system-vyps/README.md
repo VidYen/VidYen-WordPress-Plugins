@@ -65,6 +65,13 @@ You do know you can do this yourself by adding a wallet field to a WooCommerce c
 
 == Changelog ==
 
+= 00.05.04 =
+
+Update to the referral system. More difficult that I expected, but it does more checking and validation of codes and uses a hash system rather than the old method.
+NOTE: If your users started using it (all 9 of you), then they will have to re-update the refer code. That said, the new codes are now and hereby forever the same for each user in perpetuity.
+It is also capitalization sensitive. Just tell them to copy and paste it. I am moving the refer log and exchange bonus to next version. I may allow for a GET update for the code from URL, but it is not that important compared to the other things I need to do.
+Also, some minor wording changes to move away from the use of certain words to better words.
+
 = 00.05.03 =
 
 Addition of referral system [vyps-refer] short code to display and enter other user's referral codes.
