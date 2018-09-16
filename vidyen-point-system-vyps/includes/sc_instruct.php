@@ -53,7 +53,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <p><b>[vyps-tr-log spid=3 dpid=3 samount=1000 damount=10000 tickets=10]</b></p>
   <p>This is an optional log of the raffle so users can see who bought which ticket number and how many. Users can also see the ticket purchases on public log. NOTE: The attributes must be set for the same as the game as it is possible to run multiple games with different point, payout, and total amount of ticket numbers. That way you can have several pages with different games.</p>
   <p>Also note, there is no pagnation as of yet (coming soon) and we would recommend not running a 10,000 ticket game unless you do not show the log.</p>
-	";
+  <h2>Referral System</h2>
+  <p>Users can set their referral code with the shortcode <b>[vyps-refer]</b> which should give them a page to give and get their referral code. This is not an automatic system and your users will have to manually add the code. There are plenty of login customization and user account plugins an admin can use to integrate this system with.</p>
+  <p>You can set shortcode option to <b>refer=10</b> in either the [vyps-pe] or [vyps-256] to give 10% percent referral reward to the user who entered their referal code. There will be no forth coming addition to Adscend or Coinhive refer codes, but you can gate those points through the point exchange system easy enough.</p>
+  <p>Currently users cannot see who has the code, but rather the history of the points earned. This is because simply having a referral is useless until someone does somethign with it. Also, I've added a weird gamification system where users can switch user referral codes on the fly. Of course, if the other users can see this activity on the public log if you show it to cause engagement drama and competition to woo other users to their side.</p>
+  <p>The shortcode for earnings history is <b>[vyps-refer-bal pid=4]</b> with 4 being the point id you wish to display. Site admins will have to set the pid for each point type, but the idea is that you don't really need to show all points if you did not intend to do referrals for all of them.</p>
+  ";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
 *  According to WP standards it's not needed.
