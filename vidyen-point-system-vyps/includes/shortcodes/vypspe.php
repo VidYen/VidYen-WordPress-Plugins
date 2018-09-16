@@ -28,6 +28,7 @@ function vyps_point_exchange_func( $atts ) {
 				'firstamount' => '0',
 				'secondamount' => '0',
 				'outputamount' => '0',
+        'refer' => 0,
 				'days' => '0',
 				'hours' => '0',
 				'minutes' => '0'
@@ -46,6 +47,7 @@ function vyps_point_exchange_func( $atts ) {
 	$pt_fAmount = $atts['firstamount']; //I'm going to be the first to say, I'm am not proud of my naming conventions. Gods know if I ever get amnesia and have to fix my own code, I will be highly displeased. -Felty
 	$pt_sAmount = $atts['secondamount']; //f = first and s = second, notice how i reused some of the old variables for new. Not really intentional nor well executed.
 	$pt_dAmount = $atts['outputamount'];
+  $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
 	$time_days = $atts['days'];
 	$time_hours = $atts['hours'];
 	$time_minutes = $atts['minutes'];
@@ -321,6 +323,31 @@ function vyps_point_exchange_func( $atts ) {
 					'vyps_meta_id' => $btn_name
 					];
 			$wpdb->insert($table_log, $data);
+
+      //OK. Here is if you have a refer rate that it just thorws it at their referrable
+      //I'm not 100% sure that I can let the func behave nice like this. WCCW
+      if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){
+
+        $reason = "Point Transfer Referral"; //It feels like this reason is legnth... But I shows that it was a refer rather than someone on your account transferring you points away
+        $amount = doubleval($pt_dAmount); //Why do I do a doubleval here again? I think it was something with Wordfence.
+        $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
+        $refer_user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
+        //NOTE: $PointType was changed from $pointType from the vy256 miner
+        //Inserting VY256 hashes AS points! To referral user. NOTE: The meta_ud for 'refer' and meta_subid1 for the ud of the person who referred them
+        $data = [
+            'reason' => $reason,
+            'point_id' => $PointType,
+            'points_amount' => $amount,
+            'user_id' => $refer_user_id,
+            'vyps_meta_id' => 'refer',
+            'vyps_meta_subid1' => $user_id,
+            'time' => date('Y-m-d H:i:s')
+        ];
+        $wpdb->insert($table_log, $data);
+
+        //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
+
+      }
 
 			$results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
 

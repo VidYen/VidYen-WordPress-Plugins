@@ -288,15 +288,16 @@ function vyps_vy256_solver_func($atts) {
             $amount = doubleval($balance); //Why do I do a doubleval here again? I think it was something with Wordfence.
             $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
             $pointType = intval($pointID); //Point type should be int.
-            $user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
+            $refer_user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
 
-            //Inserting VY256 hashes AS points! To referral user. NOTE: The meta add for 'referral' it's hard coded for now. The PE will use the same.
+            //Inserting VY256 hashes AS points! To referral user. NOTE: The meta_ud for 'refer' and meta_subid1 for the ud of the person who referred them
             $data = [
                 'reason' => $reason,
                 'point_id' => $pointType,
                 'points_amount' => $amount,
-                'user_id' => $user_id,
-                'vyps_meta_data' => 'referral',
+                'user_id' => $refer_user_id,
+                'vyps_meta_id' => 'refer',
+                'vyps_meta_subid1' => $user_id,
                 'time' => date('Y-m-d H:i:s')
             ];
             $wpdb->insert($table_log, $data);
