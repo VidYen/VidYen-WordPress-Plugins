@@ -69,7 +69,7 @@ You do know you can do this yourself by adding a wallet field to a WooCommerce c
 
 More referral system additions.
 Added refer= to the [vyps-pe] system to where if they have a referral code entered it gives them points. This way admins can gate in earnings transfers through point exchanges. NOTE: This does not work on WooWallet transfers. Yet... There is a side plan to roll the WW shortcode into the PE one and use short code attribute to specify.
-Created [vyps-refer-bal] which shows log of the points earned by users referrals. NOTE: This is not who has their codes, but had their code and earned them points at some time in the past.
+Created [vyps-refer-bal] which shows log of the points earned by users referrals. NOTE: This is not who has their codes, but had their code and earned them points at some time in the past. You will have to specify the pid= like you would in the public balance.
 
 = 00.05.04 =
 
