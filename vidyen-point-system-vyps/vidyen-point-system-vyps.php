@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System [VYPS]
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      00.05.05.10
+Version:      00.05.06.07
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -361,5 +361,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/vyps_procheck.php'); 
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/vyps_point_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_current_refer_func.php'); //General function to check if current user has a refer set, is valid, and returns it.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_create_refer_func.php'); //Function to create encode based off user id.
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_is_refer_func.php'); //Function to see if code is a refer. A bit redudant, but have to use it.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_bal_check_func.php'); //Tie in to Dashed Slug's wallet to check if transfer balance is possible
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_move_func.php'); //Function to transfer points between users if points allow.
+
 /*** End of Function Includes ***/

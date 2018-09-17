@@ -31,7 +31,14 @@ function vyps_point_exchange_func( $atts ) {
         'refer' => 0,
 				'days' => '0',
 				'hours' => '0',
-				'minutes' => '0'
+				'minutes' => '0',
+        'symbol' => '',
+        'amount' => 0,
+        'from_user_id' => 0,
+        'to_user_id' => 0,
+        'fee' => 0,
+        'comment' => '',
+        'skip_confirm' => true,
 		), $atts, 'vyps-pe' );
 
 	/* Save this for later
@@ -52,9 +59,26 @@ function vyps_point_exchange_func( $atts ) {
 	$time_hours = $atts['hours'];
 	$time_minutes = $atts['minutes'];
 
-	//Now to get the raw seconds. This is important. 24 * 60 * 60 = 86400, 3600 seconds in an hour etc. We are not doing months unless you want to do my 28 day suggestion with 13 months.
-	$time_left_seconds = 0; //Just in case there was no transfer inbound to have this variable set.
-	$time_seconds = ($time_days * 86400) + ($time_hours * 3600) + ($time_minutes * 60);
+  //Now to get the raw seconds. This is important. 24 * 60 * 60 = 86400, 3600 seconds in an hour etc. We are not doing months unless you want to do my 28 day suggestion with 13 months.
+  $time_left_seconds = 0; //Just in case there was no transfer inbound to have this variable set.
+  $time_seconds = ($time_days * 86400) + ($time_hours * 3600) + ($time_minutes * 60);
+
+  //NOTE: Here are the dashed slug stuff. Let's get everything that needs to be checked.
+  $ds_symbol = $atts['symbol']; //We dod check for this because, if we know its set they are trying to use it.
+  $ds_amount = $atts['amount']; //Need the amount obviously.
+  $ds_bank_user = $atts['from_user_id']; //Bank user has to be set obviousl. Though the desintation will always be current user
+  //Fees and comments don't really have to be set.
+
+  //Just some Dash slug logic checks. To make sure if they are setting a symbol that it has an amount and a bank user.
+  if ( $ds_symbol != '' AND $ds_amount == 0  ) {
+
+    return "You are attempting to use the Dash Slug attributes without setting an amount!";
+
+  } elseif ( $ds_symbol != '' AND $ds_bank_user == 0  ) {
+
+    return "You are attempting to use the Dash Slug attributes without setting a bank user!";
+
+  }
 
 	//The usual suspects check to see if admin has set their short codes right.
 	//Ok I'm lazy here, but the admins should know which of the three they did not set.
@@ -94,7 +118,14 @@ function vyps_point_exchange_func( $atts ) {
 	//Not seeing comma number seperators annoys me
 	$format_pt_fAmount = number_format($pt_fAmount);
 	$format_pt_sAmount = number_format($pt_sAmount);
-	$format_pt_dAmount = number_format($pt_dAmount);
+
+  //NOTE Ok. Some assumption code. By default if you set a ds amount, that you intend to use a decimal so no number formatting.
+  //If they put in an amount for the ds then we assume they don't want it formatted.
+  if (  $ds_amount == 0  ){
+
+    $format_pt_dAmount = number_format($pt_dAmount);
+
+  }
 
 	//I am going to redo the process but just use all the variables.
 	$btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
@@ -267,12 +298,25 @@ function vyps_point_exchange_func( $atts ) {
 			//Need some message.
 			$results_message = "You have $display_time before another transfer.";
 
-		} else {
+		} elseif( $ds_symbol != '' AND vyps_dashed_slug_bal_check_func( $atts ) == 0) {
+
+      //Good news everyone. I bothered to have an if chain. That checks if there is a symbol it checks to make sure there is enough balance in it to do transaction.
+      $results_message = "Warning. The site does not have enough crypto in its wallet to do a payout. Contact the site admin!";
+    } else {
 
 			//NOTE: OK. We can run the transfer
 
 			$table_log = $wpdb->prefix . 'vyps_points_log';
 			$reason = "Point Transfer";
+
+      //In case the ds symbol is set to something.
+      //I believe the transfer reason should be considered something else
+      //As it's basically no longer on the system and not really created a new point amount like the WW transfer.
+      if ( $ds_symbol != ''){
+
+        $reason = "Point to Crypto Transfer";
+      }
+
 			$famount = $pt_fAmount * -1; //Seems like this is a bad idea to just multiply it by a negative 1 but hey
 			$samount = $pt_sAmount * -1;
 
@@ -311,19 +355,36 @@ function vyps_point_exchange_func( $atts ) {
 
 			$PointType = $destinationPointID; //Originally this was a table call, but seems easier this way
 
-			//The $btn_name should be unique. But tags the first inserted point
-			//I had an internal debate to put this on the input or output, but sometimes the input will have no row if there was no COST
-			//So when checking for time, it should check the last meta $btn_name and see how long to go
-			$data = [
-					'reason' => $reason,
-					'point_id' => $PointType,
-					'points_amount' => $amount,
-					'user_id' => $user_id,
-					'time' => date('Y-m-d H:i:s'),
-					'vyps_meta_id' => $btn_name
-					];
-			$wpdb->insert($table_log, $data);
 
+
+      //NOTE: OK we are putting in the DS call. Good luck! You'll need it!
+      //Also we already checked to see if it had enough balance and the function should do it again anyways.
+      if( $ds_symbol != '' ) {
+
+        //Wasn't that nice we made a function for it!
+        vyps_dashed_slug_move_func( $atts );
+
+      } else {
+
+        //NOTE: I am ideologically opposed to having the dash slug be a part of my code rather than an addition
+        //But it it's easier to check to see if its there and else it.
+        //I thought about
+        //The $btn_name should be unique. But tags the first inserted point
+        //I had an internal debate to put this on the input or output, but sometimes the input will have no row if there was no COST
+        //So when checking for time, it should check the last meta $btn_name and see how long to go
+        $data = [
+            'reason' => $reason,
+            'point_id' => $PointType,
+            'points_amount' => $amount,
+            'user_id' => $user_id,
+            'time' => date('Y-m-d H:i:s'),
+            'vyps_meta_id' => $btn_name
+            ];
+        $wpdb->insert($table_log, $data);
+
+      }
+
+      //NOTE: I should do a check, but why would an admin have a referral to cashing out is beyond me.
       //OK. Here is if you have a refer rate that it just thorws it at their referrable
       //I'm not 100% sure that I can let the func behave nice like this. WCCW
       if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){

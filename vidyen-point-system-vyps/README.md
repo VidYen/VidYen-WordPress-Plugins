@@ -2,10 +2,10 @@
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: games, user, gamify, monetization, Adscend, Coinhive, WooCommerce Wallet, rewards, reward, WooCommerce, rewards site, monero, XMR, raffle, browser miner, miner
-Requires at least: 4.9.5
+Requires at least: 4.9.7
 Tested up to: 4.9.8
 Requires PHP: 7.0
-Stable tag: 4.9.5
+Stable tag: 4.9.8
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
