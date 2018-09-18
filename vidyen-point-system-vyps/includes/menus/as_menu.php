@@ -39,6 +39,8 @@ function vyps_as_sub_menu_page() {
  <p>To have a user redeem points through the Adscend API (the points Adscend has said they earned). You need to get your own API off your Adscend wall page. The API key is on the integration page on your offer wall under API/SDK integration.</p>
  <p><b>[vyps-as-redeem pub=113812 profile=13246 api=typekeyhere pid=1 payout=750]</b></p>
  <p>All attributes must be set for this to function. This creates a button site user to click on to have your site talk to the Adscend API and confirm how many points they earned from Adscend.</p>
+ <h2>Note:</h2>
+ <p>If you are not familiar with Adscend Media, they do have odd practices. Users may see ads or do activities but Adscend will not credit them for one reason or another after a while. In my own testing, I noticed I can only get 9 ad watch credits or so in a 24 hour period before it stops paying out on the Adscend side. Switching to another device or IP address helps, but consider telling your users to use our VY256 Miner if they keep hitting their daily view limit as it seems that Adscend may have gotten wise to people leaving their tablet on with volume off running video ads while no one is actually watching.</p>
  ";
 
 }

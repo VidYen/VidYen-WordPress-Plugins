@@ -376,7 +376,33 @@ function vyps_point_exchange_func( $atts ) {
         //I'm making this more informative to me as something is not right.
         if ($dash_move_result == 1){
 
-          $results_message = "Success. Crypto payout at: ". date('Y-m-d H:i:s');
+          $results_message = "Success. Crypto payout at: ". date('Y-m-d H:i:s'); //NOTE I need to fix this later down the page. I don't have time today and not really that needed.
+
+          //NOTE: Was requested that we do a refer for crypto payouts but its doing to be the original
+          //Refer transfer below.
+          if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){
+
+            $PointType = $firstPointID; //I believe this should work? A refer with crypto payout should do it.
+            $reason = "Point Transfer Referral"; //It feels like this reason is legnth... But I shows that it was a refer rather than someone on your account transferring you points away
+            $amount = doubleval($pt_fAmount); //Why do I do a doubleval here again? I think it was something with Wordfence.
+            $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
+            $refer_user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
+
+            //Inserting VY256 hashes AS points! To referral user. NOTE: The meta_ud for 'refer' and meta_subid1 for the ud of the person who referred them
+            $data = [
+                'reason' => $reason,
+                'point_id' => $PointType,
+                'points_amount' => $amount,
+                'user_id' => $refer_user_id,
+                'vyps_meta_id' => 'refer',
+                'vyps_meta_subid1' => $user_id,
+                'time' => date('Y-m-d H:i:s')
+            ];
+            $wpdb->insert($table_log, $data);
+
+            //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
+
+          }
 
         } else {
 
@@ -413,7 +439,8 @@ function vyps_point_exchange_func( $atts ) {
       //NOTE: I should do a check, but why would an admin have a referral to cashing out is beyond me.
       //OK. Here is if you have a refer rate that it just thorws it at their referrable
       //I'm not 100% sure that I can let the func behave nice like this. WCCW
-      if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){
+      //NOTE: I added the case where the only does the refer is the $ds_amount is 0 so it doesn't do it twice. I should functionize this, but lack of time.
+      if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 AND $ds_amount == 0){
 
         $reason = "Point Transfer Referral"; //It feels like this reason is legnth... But I shows that it was a refer rather than someone on your account transferring you points away
         $amount = doubleval($pt_dAmount); //Why do I do a doubleval here again? I think it was something with Wordfence.
