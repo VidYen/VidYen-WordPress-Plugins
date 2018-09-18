@@ -125,10 +125,25 @@ function vyps_point_exchange_func( $atts ) {
 
     $format_pt_dAmount = number_format($pt_dAmount);
 
+    //OK this needed go go here. Because the post just was not happening
+    $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
+
+  } else {
+
+    //Need to have it but not formatted!
+    $format_pt_dAmount = $pt_dAmount;
+
+    //Also good place to do this since we know we have a $ds_amount
+    $ds_bal_check = vyps_dashed_slug_bal_check_func($atts); //This should return a 1 or a zero.
+
+    //Ok some herpy derpy here as I realized that the btn did not like decimals so we threw all that out.
+    //And set some nondecimal and text stuff. Should be unique enough.
+    $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $ds_symbol;
+
   }
 
 	//I am going to redo the process but just use all the variables.
-	$btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
+
 
 	//I don't know if this is some lazy coding but I am going to just return out if they haven't pressed the button
 	// Side note: And this is important. The button value should be dynamic to not interfer with other buttons on page
@@ -298,10 +313,12 @@ function vyps_point_exchange_func( $atts ) {
 			//Need some message.
 			$results_message = "You have $display_time before another transfer.";
 
-		} elseif( $ds_symbol != '' AND vyps_dashed_slug_bal_check_func( $atts ) == 0) {
+		} elseif( $ds_symbol != '' AND $ds_bal_check == 0) {
 
       //Good news everyone. I bothered to have an if chain. That checks if there is a symbol it checks to make sure there is enough balance in it to do transaction.
-      $results_message = "Warning. The site does not have enough crypto in its wallet to do a payout. Contact the site admin!";
+      //$results_message = "Warning. The site does not have enough crypto in its wallet to do a payout. Contact the site admin!";
+      return "The site wallet does not have enough crypto for a payout. Contact your administrator.";
+
     } else {
 
 			//NOTE: OK. We can run the transfer
@@ -349,22 +366,31 @@ function vyps_point_exchange_func( $atts ) {
 				$wpdb->insert($table_log, $data);
 			}
 
-			// Ok. Now we put the destination points in. Reason should stay the same
-
-			$amount = $pt_dAmount; //Destination amount should be positive
-
-			$PointType = $destinationPointID; //Originally this was a table call, but seems easier this way
-
-
-
       //NOTE: OK we are putting in the DS call. Good luck! You'll need it!
       //Also we already checked to see if it had enough balance and the function should do it again anyways.
-      if( $ds_symbol != '' ) {
+      if( $ds_amount > 0 ) {
 
         //Wasn't that nice we made a function for it!
-        vyps_dashed_slug_move_func( $atts );
+        $dash_move_result = vyps_dashed_slug_move_func($atts);
+
+        //I'm making this more informative to me as something is not right.
+        if ($dash_move_result == 1){
+
+          $results_message = "Success. Crypto payout at: ". date('Y-m-d H:i:s');
+
+        } else {
+
+          $results_message = "Transfer error.";
+
+        }
 
       } else {
+
+        // Ok. Now we put the destination points in. Reason should stay the same
+
+        $amount = $pt_dAmount; //Destination amount should be positive
+
+        $PointType = $destinationPointID; //Originally this was a table call, but seems easier this way
 
         //NOTE: I am ideologically opposed to having the dash slug be a part of my code rather than an addition
         //But it it's easier to check to see if its there and else it.

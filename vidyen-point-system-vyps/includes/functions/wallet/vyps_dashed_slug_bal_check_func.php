@@ -35,7 +35,7 @@ function vyps_dashed_slug_bal_check_func( $atts ) {
     $source_bank_account = $atts['from_user_id']; //OK peeps this is the bank account. The admin makes a users and designates it the deposite account. Use it wisely. The admin can abuse one of his users if he wants or is terrible at security.
     $current_user_id = get_current_user_id(); //I'm only comfortable doing the current logged in user. Your users can use the DS interface for user to user trades if they want.
     $fee = $atts['fee']; //I put in 0, but if you want fee then set.
-    $vyps_comment = $atts['VYPS Transfer']; //Letting you know it was a VYPS transfer. You can turn off i fyou want.
+    $vyps_comment = $atts['comment']; //Letting you know it was a VYPS transfer. You can turn off i fyou want.
     $skip_confirm = $atts['skip_confirm']; //Up to admin i guess. But for me. I'm leaving it off.
 
     //NOTE: This only works if dashed slug API works and is installed.
