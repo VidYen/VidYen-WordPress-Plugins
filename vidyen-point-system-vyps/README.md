@@ -72,7 +72,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 = 00.05.06 =
 
 Dashed Slug's wallet integration. Added the ability to use the point exchange to trade points for crypto on Dashed Slug's awesome wallet program. It is a rather complicated process and if you want to use it and cannot figure out how it works, you may have to contact me directly for support. I will make a video tutorial in the near future along with working on better documenation.
-Modified wording as there will be a shift from Coinhive to other miners as they now care $200 or more to use it. Remember VY256 miner is free to use!
+Modified wording as there will be a shift from Coinhive to other miners as they now cost $200 or more to use it. Remember VY256 miner is free to use!
 
 
 = 00.05.05 =
