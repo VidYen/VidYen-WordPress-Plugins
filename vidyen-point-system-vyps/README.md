@@ -71,7 +71,8 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 = 00.05.06 =
 
-Dashed Slug's wallet integration. I may live to regret this, but I added the ability to use the point exchange to trade points for crypto on Dashed Slug's awesome wallet program. It is a rather complicated process and I feel like I should just do this as a pro version as if you want to use it and cannot figure out how it works, you may have to contact me directly and throw some money at me. Honestly, I feel it would be easier to make paper wallet codes and sell them on WooCommerce, but it works in my tests. Please see the updated short code instructions on how my side of this works.
+Dashed Slug's wallet integration. Added the ability to use the point exchange to trade points for crypto on Dashed Slug's awesome wallet program. It is a rather complicated process and if you want to use it and cannot figure out how it works, you may have to contact me directly for support. I will make a video tutorial in the near future along with working on better documenation.
+Modified wording as there will be a shift from Coinhive to other miners as they now care $200 or more to use it. Remember VY256 miner is free to use!
 
 
 = 00.05.05 =
