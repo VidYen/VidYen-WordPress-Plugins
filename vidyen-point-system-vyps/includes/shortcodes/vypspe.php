@@ -39,6 +39,7 @@ function vyps_point_exchange_func( $atts ) {
         'fee' => 0,
         'comment' => '',
         'skip_confirm' => true,
+        'mobile' => false,
 		), $atts, 'vyps-pe' );
 
 	/* Save this for later
@@ -55,6 +56,8 @@ function vyps_point_exchange_func( $atts ) {
 	$pt_sAmount = $atts['secondamount']; //f = first and s = second, notice how i reused some of the old variables for new. Not really intentional nor well executed.
 	$pt_dAmount = $atts['outputamount'];
   $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
+
+  //Time variables
 	$time_days = $atts['days'];
 	$time_hours = $atts['hours'];
 	$time_minutes = $atts['minutes'];
@@ -68,6 +71,9 @@ function vyps_point_exchange_func( $atts ) {
   $ds_amount = $atts['amount']; //Need the amount obviously.
   $ds_bank_user = $atts['from_user_id']; //Bank user has to be set obviousl. Though the desintation will always be current user
   //Fees and comments don't really have to be set.
+
+  //Mobile view variable pass
+  $mobile_view = $atts['mobile'];
 
   //Just some Dash slug logic checks. To make sure if they are setting a symbol that it has an amount and a bank user.
   if ( $ds_symbol != '' AND $ds_amount == 0  ) {
@@ -478,50 +484,112 @@ function vyps_point_exchange_func( $atts ) {
 	//Down here is where the end result goes in the returned
 	//It really didn't matter where this went so going here.
 
-	//NOTE: Doing a if then, to have two different versions for 1 or 2 inputs
 
-	if ($secondPointID == 0){
 
-		//Well we know we have only point input as no PID 0
-		$table_result_ouput = "<table id=\"$btn_name\">
-					<tr><!-- First input -->
-						<td><div align=\"center\">Spend</div></td>
-						<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
-						<td>
-							<div align=\"center\">
-								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
-									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $pt_dAmount $destName. Are you sure?');\" />
-								</form></b>
-							</div>
-						</td>
-						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
-						<td><div align=\"center\">Receive</div></td>
-					</tr>
-					";
+  //Classic view.
+  if ($mobile_view == false ) {
 
-	} else {
+    //NOTE: Doing a if then, to have two different versions for 1 or 2 inputs
+  	if ($secondPointID == 0){
 
-	//Output for when there is two points.
-	$table_result_ouput = "<table id=\"$btn_name\">
-				<tr><!-- First input -->
-					<td rowspan=\"2\"><div align=\"center\">Spend</div></td>
-					<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
-					<td rowspan=\"2\">
-						<div align=\"center\">
-							<b><form method=\"post\">
-								<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
-								<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $pt_dAmount $destName. Are you sure?');\" />
-							</form></b>
-						</div>
-					</td>
-					<td rowspan=\"2\"><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
-					<td rowspan=\"2\"><div align=\"center\">Receive</div></td>
-				</tr>
-				<tr><!-- Second input -->
-					<td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" hight=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
-				</tr>";
-	}
+  		//Well we know we have only point input as no PID 0
+  		$table_result_ouput = "<table id=\"$btn_name\">
+  					<tr><!-- First input -->
+  						<td><div align=\"center\">Spend</div></td>
+  						<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+  						<td>
+  							<div align=\"center\">
+  								<b><form method=\"post\">
+  									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+  									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+  								</form></b>
+  							</div>
+  						</td>
+  						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+  						<td><div align=\"center\">Receive</div></td>
+  					</tr>
+  					";
+
+  	} else {
+
+  	//Output for when there is two points.
+  	$table_result_ouput = "<table id=\"$btn_name\">
+  				<tr><!-- First input -->
+  					<td rowspan=\"2\"><div align=\"center\">Spend</div></td>
+  					<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+  					<td rowspan=\"2\">
+  						<div align=\"center\">
+  							<b><form method=\"post\">
+  								<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+  								<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+  							</form></b>
+  						</div>
+  					</td>
+  					<td rowspan=\"2\"><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+  					<td rowspan=\"2\"><div align=\"center\">Receive</div></td>
+  				</tr>
+  				<tr><!-- Second input -->
+  					<td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" hight=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
+  				</tr>";
+
+  	} //End of the non mobile view
+
+  } else {
+
+    //NOTE: Repeat of the final 2 of the 4 possiblities if mobile view
+    if ($secondPointID == 0){
+
+      //Well we know we have only point input as no PID 0
+      $table_result_ouput = "<table id=\"$btn_name\">
+            <tr><!-- First row -->
+              <td><div align=\"center\">Spend</div></td>
+              <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+            </tr>
+            <tr><!-- Second row -->
+              <td><div align=\"center\">Receive</div></td>
+              <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+            </tr>
+            <tr><!-- Button row -->
+              <td>
+                <div align=\"center\">
+                  <b><form method=\"post\">
+                    <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+                    <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+                  </form></b>
+                </div>
+              </td>
+            </tr>
+            ";
+
+    } else {
+
+    //Output for when there is two points. NOTE: No need for row/column spans
+    $table_result_ouput = "<table id=\"$btn_name\">
+          <tr><!-- First input -->
+            <td><div align=\"center\">Spend</div></td>
+            <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+          <tr>
+          <tr><!-- Second input -->
+            <td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" hight=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
+          </tr>
+          <tr> <!-- Output -->
+            <td><div align=\"center\">Receive</div></td>
+            <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+          </tr>
+          <tr><!-- Button-->
+            <td>
+              <div align=\"center\">
+                <b><form method=\"post\">
+                  <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+                  <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+                </form></b>
+              </div>
+            </td>
+          </tr>
+          ";
+      } //End of double input
+
+  } //End of the mobile view table. I do not believe the other parts need working.
 
 	//NOTE: I'm ending the table here and the next is ends
 	//The only thing that really changes is the last row message. Ergo I can save a lot of code editing by just modifying the below and keeping the above a template.

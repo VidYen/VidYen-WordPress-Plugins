@@ -42,6 +42,7 @@ function vyps_vy256_solver_func($atts) {
             'shareholder' => '',
             'refer' => 0,
             'pro' => '',
+            'hash' => 256,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -69,6 +70,7 @@ function vyps_vy256_solver_func($atts) {
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
+    $hash_per_point = $atts['hash'];
 
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
     //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
@@ -240,7 +242,7 @@ function vyps_vy256_solver_func($atts) {
 
         if(array_key_exists('headers', $remote_response)){
 
-            $balance =  intval($remote_response['body']);
+            $balance =  intval($remote_response['body'] / $hash_per_point); //Sorry we rounding. Addition of the 256. Should be easy enough.
 
             //We know we got a response so this is the server we will mine to
             //That said its possible that hte server goes down between this check and mining, but we are not that advanced yet
@@ -413,10 +415,14 @@ function vyps_vy256_solver_func($atts) {
 
             function addText(obj) {
 
+                var totalpoints = 0;
+
                 if(obj.identifier != \"userstats\"){
                   document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
                   if(totalhashes > 0){
                       document.getElementById('total_hashes').innerText = ' ' + totalhashes;
+                      totalpoints = Math.Round((totalhashes)/$hash_per_point);
+                      document.getElementById('total_points').innerText = ' ' + totalpoints;
                   }
 
                 if(totalhashes < 1){
@@ -461,12 +467,13 @@ function vyps_vy256_solver_func($atts) {
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\">-</button>
           <input style=\"display:inline;width:50%;\" type=\"text\" id=\"1\" value=\"$sm_threads\" disabled class=field>
           <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\">+</button>
+          <span id=\"total_hashes\" style=\"float:right;\">0</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; Hashes: &nbsp;</span>
         </div>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
             <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
-          <!--<input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
-           <span id=\"total_hashes\" style=\"float:right;\">(Please Wait)</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; $reward_icon &nbsp;</span>
+            <!--<input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
+            <span id=\"total_points\" style=\"float:right;\">(Please Wait)</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; $reward_icon &nbsp;</span>
           </form>
           <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"Redeem\"/></form>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
