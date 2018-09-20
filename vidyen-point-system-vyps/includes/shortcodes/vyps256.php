@@ -43,6 +43,8 @@ function vyps_vy256_solver_func($atts) {
             'refer' => 0,
             'pro' => '',
             'hash' => 256,
+            'cstatic' => '',
+            'cworker'=> ''            
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -71,6 +73,9 @@ function vyps_vy256_solver_func($atts) {
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
     $hash_per_point = $atts['hash'];
+    $custom_worker_stat = $atts['cstatic'];
+    $custom_worker = $atts['cworker'];
+
 
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
     //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
@@ -206,6 +211,16 @@ function vyps_vy256_solver_func($atts) {
       if (vyps_procheck_func($atts) == 1) {
 
         $VYPS_power_row = ''; //No branding if procheck is correct.
+
+      }
+
+      //Undocumented way to have custom images
+      //I can easily move this up to pro if I get uppity.
+      if ( $custom_worker_stat != '' OR $custom_worker != '' ){
+
+        //Urls change. I'm not going to try to check to make sure they are valid or not
+        $VYPS_worker_url = $custom_worker;
+        $VYPS_stat_worker_url = $custom_worker_stat;
 
       }
 
@@ -421,7 +436,7 @@ function vyps_vy256_solver_func($atts) {
                   document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
                   if(totalhashes > 0){
                       document.getElementById('total_hashes').innerText = ' ' + totalhashes;
-                      totalpoints = Math.Round((totalhashes)/$hash_per_point);
+                      totalpoints = Math.round( totalhashes / $hash_per_point );
                       document.getElementById('total_points').innerText = ' ' + totalpoints;
                   }
 

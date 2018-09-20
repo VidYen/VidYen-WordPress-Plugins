@@ -29,6 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<p>Function debits points from one point type to another. with in being how many points used to transfer and out as how many points they get in the new point type.</p>
 	<p>The firstid is the source pointID and the outputid is the destination seen on the Point List page. This shortcode always requires the user to be logged in and will not let you use set the user id as you do not want other users messing with the balances.</p>
 	<p>The firstamount attribute is how many points is are spent. The outputamount attribute is how much currency the user gets in the other point type.</p>
+  <p>On mobile devices or screen impaired devices, you can set <b>mobile=true</b> to do the table vertically.</p>
   <h2>Point Transfer with Two Inputs</h2>
   <p><b>[vyps-pe firstid=1 secondid=2 outputid=3 firstamount=10 secondamount=10 outputamount=20]</b></p>
   <p>There was a need for game like situations where points were to be combined to create items. In this case, you can combine two points of the same or differeing values into a third point of the amount you decide.</p>

@@ -496,7 +496,7 @@ function vyps_point_exchange_func( $atts ) {
   		$table_result_ouput = "<table id=\"$btn_name\">
   					<tr><!-- First input -->
   						<td><div align=\"center\">Spend</div></td>
-  						<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+  						<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
   						<td>
   							<div align=\"center\">
   								<b><form method=\"post\">
@@ -505,7 +505,7 @@ function vyps_point_exchange_func( $atts ) {
   								</form></b>
   							</div>
   						</td>
-  						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+  						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
   						<td><div align=\"center\">Receive</div></td>
   					</tr>
   					";
@@ -516,7 +516,7 @@ function vyps_point_exchange_func( $atts ) {
   	$table_result_ouput = "<table id=\"$btn_name\">
   				<tr><!-- First input -->
   					<td rowspan=\"2\"><div align=\"center\">Spend</div></td>
-  					<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+  					<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
   					<td rowspan=\"2\">
   						<div align=\"center\">
   							<b><form method=\"post\">
@@ -525,11 +525,11 @@ function vyps_point_exchange_func( $atts ) {
   							</form></b>
   						</div>
   					</td>
-  					<td rowspan=\"2\"><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+  					<td rowspan=\"2\"><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
   					<td rowspan=\"2\"><div align=\"center\">Receive</div></td>
   				</tr>
   				<tr><!-- Second input -->
-  					<td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" hight=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
+  					<td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" height=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
   				</tr>";
 
   	} //End of the non mobile view
@@ -543,14 +543,14 @@ function vyps_point_exchange_func( $atts ) {
       $table_result_ouput = "<table id=\"$btn_name\">
             <tr><!-- First row -->
               <td><div align=\"center\">Spend</div></td>
-              <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+              <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
             </tr>
             <tr><!-- Second row -->
               <td><div align=\"center\">Receive</div></td>
-              <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+              <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
             </tr>
             <tr><!-- Button row -->
-              <td>
+              <td colspan = 2>
                 <div align=\"center\">
                   <b><form method=\"post\">
                     <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
@@ -567,17 +567,18 @@ function vyps_point_exchange_func( $atts ) {
     $table_result_ouput = "<table id=\"$btn_name\">
           <tr><!-- First input -->
             <td><div align=\"center\">Spend</div></td>
-            <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" hight=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+            <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
           <tr>
           <tr><!-- Second input -->
-            <td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" hight=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
+            <td><div align=\"center\">Spend</div></td>
+            <td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" height=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
           </tr>
           <tr> <!-- Output -->
             <td><div align=\"center\">Receive</div></td>
-            <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" hight=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+            <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
           </tr>
           <tr><!-- Button-->
-            <td>
+            <td colspan = 2>
               <div align=\"center\">
                 <b><form method=\"post\">
                   <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
@@ -594,15 +595,29 @@ function vyps_point_exchange_func( $atts ) {
 	//NOTE: I'm ending the table here and the next is ends
 	//The only thing that really changes is the last row message. Ergo I can save a lot of code editing by just modifying the below and keeping the above a template.
 	//I just have to remember to close the damn table or it all blows up.
-	$table_close_output = "
-				<tr>
-					<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
-				</tr>
-			</table>";
-				//<br><br>$btn_name";	//Debug: I'm curious what it looks like.
+
+  //Need to check if we are in mobile view and put the span at two.
+  if ($mobile_view == false ) {
+
+  	$table_close_output = "
+  				<tr>
+  					<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
+  				</tr>
+  			</table>";
+  				//<br><br>$btn_name";	//Debug: I'm curious what it looks like.
+  } else {
+
+    $table_close_output = "
+          <tr>
+            <td colspan = 2><div align=\"center\"><b>$results_message</b></div></td>
+          </tr>
+        </table>";
+
+  } //End of mobile view check.
 
 	//Lets see if it works:
 	return $table_result_ouput . $table_close_output;
+
 
 }
 

@@ -73,9 +73,11 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 - Revision of the VY256 hash to point method. I have always tried to avoid decimals but it was always pointed out to me that the current system still creates large amount of points and large amounts of digits on both sides of the decimal point get annoying. So going forward, by default the VY256 miner will show both hashes and points with the default payout being hashes divided by 256. You can change this ratio by hash=1024 if you want a scale. It will always round down.
 - Added ability to have custom urls for the miners. This is undocumented pro level. So feel free to ask me directly if interested.
+- Note: I feel the start up of the VY256 a bit clunky in feed back, but I need to get other opinions with the timer.
 - Fixes to readme file.
 - Dropped the [VYPS] the plugin name to match the repository to see if that fix an ongoing statistics issue.
 - Mobile view for the [VYPS-PE] with mobile=true makes it friendly with sites with limited width.
+- Fix: Seemed to misspelled height with hight in some of the HTML tables. Corrected.
 
 = 1.5.7 =
 
