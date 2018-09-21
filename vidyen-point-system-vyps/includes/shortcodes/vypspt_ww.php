@@ -1,5 +1,6 @@
 <?php
-   //VYPS bridge for WooWocommerce Shortcode
+
+//VYPS bridge for WooWocommerce Shortcode
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -29,17 +30,32 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 
 	$atts = shortcode_atts(
 		array(
-				'spid' => '0',
-				'dpid' => '0',
-				'samount' => '0',
-				'damount' => '0',
+				'spid' => 0,
+				'dpid' => 0,
+				'samount' => 0,
+				'damount' => 0,
+				'firstid' => 0,
+				'outputid' => 0,
+				'firstamount' => 0,
+				'outputamount' => 0,
 		), $atts, 'vyps-pt' );
 
-	$sourcePointID = $atts['spid'];
-	$destinationPointID = $atts['dpid'];
-	$pt_sAmount = $atts['samount'];
-	$pt_dAmount = $atts['damount'];
+	//NOTE: New version
+	$sourcePointID = $atts['firstid'];
+	$destinationPointID = $atts['outputid'];
+	$pt_sAmount = $atts['firstamount'];
+	$pt_dAmount = $atts['outputamount'];
 
+
+	//NOTE: Legacy version
+	if ($atts['spid'] > 0 ){
+
+		$sourcePointID = $atts['spid'];
+		$destinationPointID = $atts['dpid'];
+		$pt_sAmount = $atts['samount'];
+		$pt_dAmount = $atts['damount'];
+
+	}
 
 	/* Not seeing comma number seperators annoys me */
 

@@ -44,7 +44,7 @@ function vyps_vy256_solver_func($atts) {
             'pro' => '',
             'hash' => 256,
             'cstatic' => '',
-            'cworker'=> ''            
+            'cworker'=> ''
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -433,11 +433,17 @@ function vyps_vy256_solver_func($atts) {
                 var totalpoints = 0;
 
                 if(obj.identifier != \"userstats\"){
+
                   document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
+
                   if(totalhashes > 0){
                       document.getElementById('total_hashes').innerText = ' ' + totalhashes;
-                      totalpoints = Math.round( totalhashes / $hash_per_point );
-                      document.getElementById('total_points').innerText = ' ' + totalpoints;
+
+                      if(totalhashes > $hash_per_point ){
+                        totalpoints = Math.floor( totalhashes / $hash_per_point );
+                        document.getElementById('total_points').innerText = totalpoints;
+                      }
+
                   }
 
                 if(totalhashes < 1){

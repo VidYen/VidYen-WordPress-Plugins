@@ -69,6 +69,11 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.5.9 =
+
+- Fix: Miner display issue. When you had really high has to point ratios, it would display 1 before you got there.
+- Add: [vyps-ww] can use the same short code attributes as PE now or the old ones so it doesn't break the site when you update. I am going to revisit this and use a different method before bringing it in PE before depreciating vyps-ww to a better method.
+
 = 1.5.8 =
 
 - Revision of the VY256 hash to point method. I have always tried to avoid decimals but it was always pointed out to me that the current system still creates large amount of points and large amounts of digits on both sides of the decimal point get annoying. So going forward, by default the VY256 miner will show both hashes and points with the default payout being hashes divided by 256. You can change this ratio by hash=1024 if you want a scale. It will always round down.
@@ -95,7 +100,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 = 1.5.5 =
 
-More referral system additions.
+- More referral system additions.
 - Added refer= to the [vyps-pe] system to where if they have a referral code entered it gives them points. This way admins can gate in earnings transfers through point exchanges. NOTE: This does not work on WooWallet transfers. Yet... There is a side plan to roll the WW shortcode into the PE one and use short code attribute to specify.
 - Created [vyps-refer-bal] which shows log of the points earned by users referrals. NOTE: This is not who has their codes, but had their code and earned them points at some time in the past. You will have to specify the pid= like you would in the public balance.
 
