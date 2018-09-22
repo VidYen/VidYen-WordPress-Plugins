@@ -386,6 +386,19 @@ function vyps_vy256_solver_func($atts) {
 
             function start() {
 
+              var widthtime = 1;
+              var elemtime = document.getElementById(\"timeBar\");
+              var idtime = setInterval(timeframe, 60);
+
+              function timeframe() {
+                if (widthtime >= 100) {
+                  widthtime = 1;
+                } else {
+                  widthtime++;
+                  elemtime.style.width = widthtime + '%';
+                }
+              }
+
               //  This is no longer needed.
               //  if($balance > 0){
               //      document.getElementById('total_hashes').innerText = '$reward_icon $balance';
@@ -432,19 +445,7 @@ function vyps_vy256_solver_func($atts) {
 
                 var totalpoints = 0;
                 var width = 1;
-                var widthtime = 1;
-                var idtime = setInterval(timeframe, 600);
                 var elem = document.getElementById(\"workerBar\");
-                var elemtime = document.getElementById(\"timeBar\");
-
-                function timeframe() {
-                  if (widthtime >= 100) {
-                    widthtime = 1;
-                  } else {
-                    widthtime++;
-                    elemtime.style.width = widthtime + '%';
-                  }
-                }
 
                 if(obj.identifier != \"userstats\"){
 
