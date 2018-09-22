@@ -69,6 +69,12 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.5.10 =
+
+- Add: VY256 Worker (Miner) now has a progress bar. Two actually like a boss. The yellow is for activity. If it isn't going you may have to refresh. The orange is the steady progress till the point payout which when it gets to 100% will reward the point. It is useful for high hash payout.
+- Fix: I raised the default hash payout to 1024 as I believe this reduces the amount of zero by a great abundance. As always you can set with the hash= attribute in the shortcode.
+- Some ground work for v2 XMR fork in October.
+
 = 1.5.9 =
 
 - Fix: Miner display issue. When you had really high has to point ratios, it would display 1 before you got there.

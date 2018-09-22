@@ -42,7 +42,7 @@ function vyps_vy256_solver_func($atts) {
             'shareholder' => '',
             'refer' => 0,
             'pro' => '',
-            'hash' => 256,
+            'hash' => 1024,
             'cstatic' => '',
             'cworker'=> ''
         ), $atts, 'vyps-256' );
@@ -431,6 +431,20 @@ function vyps_vy256_solver_func($atts) {
             function addText(obj) {
 
                 var totalpoints = 0;
+                var width = 1;
+                var widthtime = 1;
+                var idtime = setInterval(timeframe, 600);
+                var elem = document.getElementById(\"workerBar\");
+                var elemtime = document.getElementById(\"timeBar\");
+
+                function timeframe() {
+                  if (widthtime >= 100) {
+                    widthtime = 1;
+                  } else {
+                    widthtime++;
+                    elemtime.style.width = widthtime + '%';
+                  }
+                }
 
                 if(obj.identifier != \"userstats\"){
 
@@ -439,24 +453,14 @@ function vyps_vy256_solver_func($atts) {
                   if(totalhashes > 0){
                       document.getElementById('total_hashes').innerText = ' ' + totalhashes;
 
+                      width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
+                      elem.style.width = width + '%';
+
                       if(totalhashes > $hash_per_point ){
                         totalpoints = Math.floor( totalhashes / $hash_per_point );
                         document.getElementById('total_points').innerText = totalpoints;
                       }
-
                   }
-
-                if(totalhashes < 1){
-                    var timeleft = 60;
-                    var downloadTimer = setInterval(function(){
-                      timeleft--;
-                      document.getElementById('total_hashes').innerText = ' 0:' + timeleft;
-                      if(timeleft <= 0)
-                        clearInterval(downloadTimer);
-                      if(totalhashes > 256)
-                        clearInterval(downloadTimer);
-                    },1000);
-                }
 
                 }
 
@@ -489,6 +493,12 @@ function vyps_vy256_solver_func($atts) {
           <input style=\"display:inline;width:50%;\" type=\"text\" id=\"1\" value=\"$sm_threads\" disabled class=field>
           <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\">+</button>
           <span id=\"total_hashes\" style=\"float:right;\">0</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; Hashes: &nbsp;</span>
+        </div>
+        <div id=\"timeProgress\" style=\"width:100%; background-color: grey; \">
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: yellow;\"></div>
+        </div>
+        <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
+          <div id=\"workerBar\" style=\"width:1%; height: 30px; background-color: orange;\"></div>
         </div>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
