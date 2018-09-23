@@ -69,6 +69,10 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.5.11 =
+
+- Add: User request. Added "timebar=yellow" and "workerbar=orange" to the [vyps-vy256] short code. Replace the color with the color of the choice for the bars.
+
 = 1.5.10 =
 
 - Add: VY256 Worker (Miner) now has a progress bar. Two actually like a boss. The yellow is for activity. If it isn't going you may have to refresh. The orange is the steady progress till the point payout which when it gets to 100% will reward the point. It is useful for high hash payout.

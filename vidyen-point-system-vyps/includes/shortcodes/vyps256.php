@@ -44,7 +44,9 @@ function vyps_vy256_solver_func($atts) {
             'pro' => '',
             'hash' => 1024,
             'cstatic' => '',
-            'cworker'=> ''
+            'cworker'=> '',
+            'timebar' => 'yellow',
+            'workerbar' => 'orange',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -75,6 +77,8 @@ function vyps_vy256_solver_func($atts) {
     $hash_per_point = $atts['hash'];
     $custom_worker_stat = $atts['cstatic'];
     $custom_worker = $atts['cworker'];
+    $timeBar_color = $atts['timebar'];
+    $workerBar_color = $atts['workerbar'];
 
 
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
@@ -496,10 +500,10 @@ function vyps_vy256_solver_func($atts) {
           <span id=\"total_hashes\" style=\"float:right;\">0</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; Hashes: &nbsp;</span>
         </div>
         <div id=\"timeProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: yellow;\"></div>
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"width:1%; height: 30px; background-color: orange;\"></div>
+          <div id=\"workerBar\" style=\"width:1%; height: 30px; background-color: $workerBar_color;\"></div>
         </div>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
