@@ -72,6 +72,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 = 1.5.11 =
 
 - Add: User request. Added "timebar=yellow" and "workerbar=orange" to the [vyps-vy256] short code. Replace the color with the color of the choice for the bars.
+- Executive Decision: Revert to old method of activity bar rather than a counter bar as it felt more alive.
 
 = 1.5.10 =
 

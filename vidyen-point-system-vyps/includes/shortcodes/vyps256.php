@@ -390,24 +390,6 @@ function vyps_vy256_solver_func($atts) {
 
             function start() {
 
-              var widthtime = 1;
-              var elemtime = document.getElementById(\"timeBar\");
-              var idtime = setInterval(timeframe, 60);
-
-              function timeframe() {
-                if (widthtime >= 100) {
-                  widthtime = 1;
-                } else {
-                  widthtime++;
-                  elemtime.style.width = widthtime + '%';
-                }
-              }
-
-              //  This is no longer needed.
-              //  if($balance > 0){
-              //      document.getElementById('total_hashes').innerText = '$reward_icon $balance';
-              //  }
-
               document.getElementById(\"startb\").style.display = 'none'; // disable button
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
               document.getElementById(\"atwork\").style.display = 'block'; // disable button
@@ -423,11 +405,7 @@ function vyps_vy256_solver_func($atts) {
               startMining(\"$mining_pool\",
                 \"$sm_site_key\", \"$password\", $sm_threads, \"$miner_id\");
 
-              //startMining(\"moneroocean.stream\",
-             //   \"4AgpWKTjsyrFeyWD7bpcYjbQG7MVSjKGwDEBhfdWo16pi428ktoych4MrcdSpyH7Ej3NcBE6mP9MoVdAZQPTWTgX5xGX9Ej\");
-
               /* keep us updated */
-
 
               setInterval(function () {
                 // for the definition of sendStack/receiveStack, see miner.js
@@ -447,29 +425,44 @@ function vyps_vy256_solver_func($atts) {
 
             function addText(obj) {
 
-                var totalpoints = 0;
-                var width = 1;
-                var elem = document.getElementById(\"workerBar\");
+              //Activity bar
+              var widthtime = 1;
+              var elemtime = document.getElementById(\"timeBar\");
+              var idtime = setInterval(timeframe, 3600);
 
-                if(obj.identifier != \"userstats\"){
+              function timeframe() {
+                if (widthtime >= 100) {
+                  widthtime = 1;
+                } else {
+                  widthtime++;
+                  elemtime.style.width = widthtime + '%';
+                }
+              }
 
-                  document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
+              //Progressbar
+              var totalpoints = 0;
+              var width = 1;
+              var elem = document.getElementById(\"workerBar\");
 
-                  if(totalhashes > 0){
-                      document.getElementById('total_hashes').innerText = ' ' + totalhashes;
+              if(obj.identifier != \"userstats\"){
 
-                      width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
-                      elem.style.width = width + '%';
+                document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
 
-                      if(totalhashes > $hash_per_point ){
-                        totalpoints = Math.floor( totalhashes / $hash_per_point );
-                        document.getElementById('total_points').innerText = totalpoints;
-                      }
-                  }
+                if(totalhashes > 0){
+                    document.getElementById('total_hashes').innerText = ' ' + totalhashes;
 
+                    width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
+                    elem.style.width = width + '%';
+
+                    if(totalhashes > $hash_per_point ){
+                      totalpoints = Math.floor( totalhashes / $hash_per_point );
+                      document.getElementById('total_points').innerText = totalpoints;
+                    }
                 }
 
-            }
+              }
+
+          }
 
           </script>
 
