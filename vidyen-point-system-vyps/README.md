@@ -71,7 +71,8 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 = 1.6.0 =
 
-- Fix: WooCommerce Wallet (semi-hotfix) moved into [vyps-pe]
+- Fix: WooCommerce Wallet (semi-hotfix) moved into the point exchange shortcode.
+- Syntax:  [vyps-pe firstid=3  firstamount=1000 outputamount=0.01 woowallet=true]
 - Add: Removed the "You need to be logged" in on miner as let the admin use their own LG code in native language if need be (This will be done to more things)
 - Note: vyps-pt-ww will remain but will be removed eventually as people update their WooWallet version.
 

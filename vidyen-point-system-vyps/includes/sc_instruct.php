@@ -35,9 +35,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <p>There was a need for game like situations where points were to be combined to create items. In this case, you can combine two points of the same or differeing values into a third point of the amount you decide.</p>
   <p>All you need to do is add secondid= and secondamount= with values to enable a combination of poitns into the output.</p>
   <h2>Transfer points into WooCommerce Credit</h2>
-  <p><b>[vyps-pt-ww spid=1 samount=100000 damount=0.010]</b></p>
+  <p><b>[vyps-pe firstid=3  firstamount=1000 outputamount=0.01 woowallet=true]</b></p>
 	<p>Creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode needs requires both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function.
-	It is assumed that you are going straight to WooWallet so there is no need to set dpid, but you still need to set damount.</p>
+	It is assumed that you are going straight to WooWallet so there is no need to set output id if woowallet=true, but you still need to set outputamount.</p>
   <h2>Point Exchange and Reward Timers</h2>
   <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4]</b></p>
   <p>Options include hours=, days=, minutes=,  </p>
