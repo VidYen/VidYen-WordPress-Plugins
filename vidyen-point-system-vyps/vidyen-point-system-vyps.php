@@ -364,5 +364,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_create_ref
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_is_refer_func.php'); //Function to make sure it is really a refer.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_bal_check_func.php'); //Tie in to Dashed Slug's wallet to check if transfer balance is possible
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_move_func.php'); //Function to transfer points between users if points allow.
+include( plugin_dir_path( __FILE__ ) . 'includes\functions\ww\vyps_woowallet_move_func.php'); //Function to credit the WooWallet.
 
 /*** End of Function Includes ***/
