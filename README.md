@@ -42,4 +42,9 @@ VidYen, LLC
 
 [VidYen Discord](https://discord.gg/6svN5sS) <- You can get live support here or at least Felt's attention. Do no abuse.
 
+If you need an Adscend Media account and plan on using that feature please sign up through our referral code!
+
+[Adscend Media Signup](https://adscendmedia.com/apply.php?refer=113812)
+
+
 2018
