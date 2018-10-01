@@ -1,11 +1,8 @@
 <?php
 
-//Shortcode itself.
-
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//NOTE: This is the shortcode we need to use going forward
-//NOTE: Also, going forward there will be no simple miner you can display without consent button. Sorry. Not. Sorry.
+//VY256 Worker Shortcode. Note the euphemisms.
 
 function vyps_vy256_solver_func($atts) {
 
@@ -568,7 +565,8 @@ function vyps_solver_consent_button_func( $atts ) {
 
         } else {
 
-            return "You need to be logged in to consent!"; //I feel like admin an use a
+            return; //NOTE: Admin should use a [vyps-lg] code.
+
         }
     }
 

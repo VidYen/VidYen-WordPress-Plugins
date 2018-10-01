@@ -45,6 +45,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				'samount' => '0',
 				'tickets' => '0',
 				'damount' => '0',
+				'mobile' => false,
 		), $atts, 'vyps-tr' );
 
 	$sourcePointID = $atts['spid'];
@@ -59,6 +60,9 @@ function vyps_point_threshold_raffle_func( $atts ) {
 	$format_pt_dAmount = number_format($pt_dAmount);
 
 	$btn_name = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
+
+	//Mobile view variable pass
+	$mobile_view = $atts['mobile'];
 
 	/*I don't know if this is some lazy coding but I am going to just return out if they haven't pressed the button
 	* Side note: And this is important. The button value should be dynamic to not interfer with other buttons on page

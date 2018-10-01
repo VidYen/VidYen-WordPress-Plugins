@@ -69,6 +69,13 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.6.0 =
+
+- Fix: WooCommerce Wallet (semi-hotfix) moved into [vyps-pe]
+- Add: Removed the "You need to be logged" in on miner as let the admin use their own LG code in native language if need be (This will be done to more things)
+- Note: vyps-pt-ww will remain but will be removed eventually as people update their WooWallet version.
+
+
 = 1.5.11 =
 
 - Add: User request. Added "timebar=yellow" and "workerbar=orange" to the [vyps-vy256] short code. Replace the color with the color of the choice for the bars.

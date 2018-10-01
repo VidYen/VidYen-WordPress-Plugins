@@ -40,6 +40,7 @@ function vyps_point_exchange_func( $atts ) {
         'comment' => '',
         'skip_confirm' => true,
         'mobile' => false,
+        'woowallet' => false,
 		), $atts, 'vyps-pe' );
 
 	/* Save this for later
@@ -54,7 +55,7 @@ function vyps_point_exchange_func( $atts ) {
 	$destinationPointID = $atts['outputid'];
 	$pt_fAmount = $atts['firstamount']; //I'm going to be the first to say, I'm am not proud of my naming conventions. Gods know if I ever get amnesia and have to fix my own code, I will be highly displeased. -Felty
 	$pt_sAmount = $atts['secondamount']; //f = first and s = second, notice how i reused some of the old variables for new. Not really intentional nor well executed.
-	$pt_dAmount = $atts['outputamount'];
+	$pt_dAmount = $atts['outputamount']; //desintation amount.
   $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
 
   //Time variables
@@ -74,6 +75,9 @@ function vyps_point_exchange_func( $atts ) {
 
   //Mobile view variable pass
   $mobile_view = $atts['mobile'];
+
+  //WooWallet Check
+  $woowallet_mode = $atts['woowallet'];
 
   //Just some Dash slug logic checks. To make sure if they are setting a symbol that it has an amount and a bank user.
   if ( $ds_symbol != '' AND $ds_amount == 0  ) {
@@ -96,11 +100,16 @@ function vyps_point_exchange_func( $atts ) {
 
 	//Oh yeah. Checking to see if source pid was set
 
-	if ( $firstPointID == 0 OR $destinationPointID == 0) {
+	if ( $firstPointID == 0 OR $destinationPointID == 0 AND $woowallet_mode != true ) {
 
-		return "Admin Error: A required id was set to 0! Please set all three.";
+		return "Admin Error: A required id was set to 0! Please set all ids.";
 
-	}
+	} elseif ( $firstPointID == 0 ) {
+
+    //In case we have $woowallet_mode == true
+    return "Admin Error: A required id was set to 0! First point id.";
+
+  }
 
 	if ($time_seconds < 0 ) {
 
@@ -127,15 +136,24 @@ function vyps_point_exchange_func( $atts ) {
 
   //NOTE Ok. Some assumption code. By default if you set a ds amount, that you intend to use a decimal so no number formatting.
   //If they put in an amount for the ds then we assume they don't want it formatted.
-  if (  $ds_amount == 0  ){
+  if (  $ds_amount == 0  OR $woowallet_mode != true ){
 
     $format_pt_dAmount = number_format($pt_dAmount);
 
     //OK this needed go go here. Because the post just was not happening
     $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
 
+  } elseif ($woowallet_mode == true) {
+
+    //We can assume (most likely incorrectly) that if a user has woowallet to true that they want decimals but not the dashed slug part below
+    $format_pt_dAmount = $pt_dAmount; //No formatting will have decimals. Lord knows who is doing large amounts of dollar transactions though.
+
+    //Almost forgot, we need a button without the out put as may be decimals
+    $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . 'ww'; //I'm just going to put ww to make it differet that other buttons.
+
   } else {
 
+    //This is Dashed slug checking
     //Need to have it but not formatted!
     $format_pt_dAmount = $pt_dAmount;
 
@@ -203,15 +221,29 @@ function vyps_point_exchange_func( $atts ) {
 	}
 
 	//NOTE: Output point
-	//SELECT name FROM $table_name_points WHERE id= '$destinationPointID'"
-	$destName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d";
-	$destName_query_prepared = $wpdb->prepare( $destName_query, $destinationPointID );
-	$destName = $wpdb->get_var( $destName_query_prepared );
+  //LOGIC: As long as the $woowallet_mode is not turned on it will do this.
 
-	//SELECT icon FROM $table_name_points WHERE id= '$destinationPointID'
-	$destIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
-	$destIcon_query_prepared = $wpdb->prepare( $destIcon_query, $destinationPointID );
-	$destIcon = $wpdb->get_var( $destIcon_query_prepared );
+  if ($woowallet_mode != true ) {
+    //SELECT name FROM $table_name_points WHERE id= '$destinationPointID'"
+  	$destName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d";
+  	$destName_query_prepared = $wpdb->prepare( $destName_query, $destinationPointID );
+  	$destName = $wpdb->get_var( $destName_query_prepared );
+
+  	//SELECT icon FROM $table_name_points WHERE id= '$destinationPointID'
+  	$destIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
+  	$destIcon_query_prepared = $wpdb->prepare( $destIcon_query, $destinationPointID );
+  	$destIcon = $wpdb->get_var( $destIcon_query_prepared );
+
+  } else {
+
+    //WooWallet mode must be true then. Or 1.
+    $destName = 'My Wallet';
+
+    //So we know WooWallet mod is true so we know it can do this:
+    //<span class=\"woo-wallet-icon-wallet\"></span>
+    $destIcon = '<span class=\"woo-wallet-icon-wallet\"></span>'; //Huh the '' vs "" came in handy.
+
+  }
 
 	//NOTE: I will have two inputs on two different row and the output and transfer button will be spread accross
 	//As my coding skills have improved greatly in the past 2 months I am redoing this next bit to be more modernized
@@ -416,6 +448,19 @@ function vyps_point_exchange_func( $atts ) {
 
         }
 
+      } elseif( $woowallet_mode == true ){
+
+        //This catch is if its not DS but is a woowallet output which has no VYPS destination
+        //I'm going to hope the WW dev didn't mess up his tables.
+        //I am assuming (WCCW) that the it checked for input points way before now.
+        $woowallet_result = vyps_woowallet_move_func( $atts );
+
+        if ($woowallet_result == 0){
+
+          $results_message = "WooWallet transfer error."; //Not sure if it will do any good, but may help me troubleshoot down the road.
+
+        }
+
       } else {
 
         // Ok. Now we put the destination points in. Reason should stay the same
@@ -446,13 +491,15 @@ function vyps_point_exchange_func( $atts ) {
       //OK. Here is if you have a refer rate that it just thorws it at their referrable
       //I'm not 100% sure that I can let the func behave nice like this. WCCW
       //NOTE: I added the case where the only does the refer is the $ds_amount is 0 so it doesn't do it twice. I should functionize this, but lack of time.
-      if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 AND $ds_amount == 0){
+      //Also, there will be no referrals to woowallet transfers. I know someone is going to ask, but its giving away free money at that point so you can pay me to spend the time to add it.
+      if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 AND $ds_amount == 0 AND $woowallet_mode != true){
 
         $reason = "Point Transfer Referral"; //It feels like this reason is legnth... But I shows that it was a refer rather than someone on your account transferring you points away
         $amount = doubleval($pt_dAmount); //Why do I do a doubleval here again? I think it was something with Wordfence.
         $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
         $refer_user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
         //NOTE: $PointType was changed from $pointType from the vy256 miner
+
         //Inserting VY256 hashes AS points! To referral user. NOTE: The meta_ud for 'refer' and meta_subid1 for the ud of the person who referred them
         $data = [
             'reason' => $reason,
@@ -471,7 +518,7 @@ function vyps_point_exchange_func( $atts ) {
 
 			$results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
 
-		}
+		} //End of the if for proceeding with transfer. Line 360
 
 
 
@@ -484,6 +531,20 @@ function vyps_point_exchange_func( $atts ) {
 	//Down here is where the end result goes in the returned
 	//It really didn't matter where this went so going here.
 
+  //Here is the destination icon code. As it was become a problem to change every 4 possiblities now * 2 for woo_wallet_transactions
+  //I decided to just make the destination icon a mini operation variables
+
+  if ($woowallet_mode != true ) {
+
+    //I am 99.99996% sure that this same for all 4 versions mobile and not.
+    //With the wonders of ctrl+f I confirmed it is.
+    $destIcon_output = "<img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\">";
+
+  } else {
+
+    //We do the woowallt mode icon
+    $destIcon_output = "<span class=\"woo-wallet-icon-wallet\"></span>";
+  }
 
 
   //Classic view.
@@ -505,7 +566,7 @@ function vyps_point_exchange_func( $atts ) {
   								</form></b>
   							</div>
   						</td>
-  						<td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+  						<td><div align=\"center\">$destIcon_output $format_pt_dAmount</div></td>
   						<td><div align=\"center\">Receive</div></td>
   					</tr>
   					";
@@ -525,7 +586,7 @@ function vyps_point_exchange_func( $atts ) {
   							</form></b>
   						</div>
   					</td>
-  					<td rowspan=\"2\"><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+  					<td rowspan=\"2\"><div align=\"center\">$destIcon_output $format_pt_dAmount</div></td>
   					<td rowspan=\"2\"><div align=\"center\">Receive</div></td>
   				</tr>
   				<tr><!-- Second input -->
@@ -547,7 +608,7 @@ function vyps_point_exchange_func( $atts ) {
             </tr>
             <tr><!-- Second row -->
               <td><div align=\"center\">Receive</div></td>
-              <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+              <td><div align=\"center\">$destIcon_output $format_pt_dAmount</div></td>
             </tr>
             <tr><!-- Button row -->
               <td colspan = 2>
@@ -575,7 +636,7 @@ function vyps_point_exchange_func( $atts ) {
           </tr>
           <tr> <!-- Output -->
             <td><div align=\"center\">Receive</div></td>
-            <td><div align=\"center\"><img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\"> $format_pt_dAmount</div></td>
+            <td><div align=\"center\">$destIcon_output $format_pt_dAmount</div></td>
           </tr>
           <tr><!-- Button-->
             <td colspan = 2>

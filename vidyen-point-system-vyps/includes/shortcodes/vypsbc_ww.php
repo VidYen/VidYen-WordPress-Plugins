@@ -54,13 +54,13 @@ function vyps_balance_woowallet_func() {
 		}
 
 		//This seems to be just built in to the plugin. I should check to see if its installed.
-		$icon_url = WOO_WALLET_ICON;
+		//$icon_url = WOO_WALLET_ICON; //NOTE: Was deprecriated by WooWallet. I yelled at him, but looks like you can just do a span now.
 
 		$balance_return = ''; //Note, I am changing this from the original points orion used. Eventually it will all be this. Descriptive variables. No exceptions!
 		$walletURL = get_site_url() . '/my-account/woo-wallet/'; //I'm going to take a big assumption that this url will not change. What could go wrong?
 
 		//Formatted for page and every day use. Doesn't look good in menus. Note the <br> and the placement of hte </a>
-		$balance_return = "<a href=\"$walletURL\"><img src=\"$icon_url\" width=\"16\" hight=\"16\" title=\"My Wallet\"></a> \$$old_balance<br>"; //I forgot that WooWallet needs to be always hard coded.
+		$balance_return = "<a href=\"$walletURL\"><span class=\"woo-wallet-icon-wallet\"></span></a> \$$old_balance<br>"; //I forgot that WooWallet needs to be always hard coded.
 
 		return $balance_return;
 
@@ -116,13 +116,13 @@ function vyps_balance_woowallet_menu_func() {
 		}
 
 		//This seems to be just built in to the plugin. I should check to see if its installed.
-		$icon_url = WOO_WALLET_ICON;
+		//$icon_url = WOO_WALLET_ICON;
 
 		$balance_return = ''; //Note, I am changing this from the original points orion used. Eventually it will all be this. Descriptive variables. No exceptions!
 		$walletURL = get_site_url() . '/my-account/woo-wallet/'; //I'm going to take a big assumption that this url will not change. What could go wrong?
 
 		//URL is formatted differently for menus.
-		$balance_return = "<a href=\"$walletURL\"><img src=\"$icon_url\" width=\"16\" hight=\"16\" title=\"My Wallet\"> \$$old_balance</a>";
+		$balance_return = "<a href=\"$walletURL\"><span class=\"woo-wallet-icon-wallet\"></span> \$$old_balance</a>";
 
 		return $balance_return;
 
