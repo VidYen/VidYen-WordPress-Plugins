@@ -39,12 +39,11 @@ function vyps_woowallet_move_func( $atts ) {
         'woowallet' => false,
 		), $atts, 'vyps-pe' );
 
-    //All the other things probaly not even needed. If this is being called we know its going into WooWallet
+    $current_user_id = get_current_user_id(); //Since this doesn't carry over from the shortcode $atts (thank god hard ware is improving exponentially)
     $pt_dAmount = floatval($atts['outputamount']); //desintation amount. Just making sure its numerical.
+    //All the other things probaly not even needed. If this is being called we know its going into WooWallet
 
-    $amount = $pt_dAmount; //Destination amount should be positive
-
-    $ww_earn = $pt_dAmount;
+    $ww_earn = $pt_dAmount; //Used as a reference.
 
     global $wpdb;
     $table_name_woowallet = $wpdb->prefix . 'woo_wallet_transactions';
@@ -71,7 +70,7 @@ function vyps_woowallet_move_func( $atts ) {
     //return $new_balance; //this was 3.01 which is also correct so it means the feed is not working
     $data_ww = [
       //'blog_id' => '1',
-      'user_id' => $user_id,
+      'user_id' => $current_user_id,
       'type' => 'credit',
       'balance' => $new_balance,
       'currency' => 'VYP',

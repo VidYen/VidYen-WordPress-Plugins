@@ -136,20 +136,21 @@ function vyps_point_exchange_func( $atts ) {
 
   //NOTE Ok. Some assumption code. By default if you set a ds amount, that you intend to use a decimal so no number formatting.
   //If they put in an amount for the ds then we assume they don't want it formatted.
-  if (  $ds_amount == 0  OR $woowallet_mode != true ){
+  //The logic with the OR neded to be implicit with an AND.  As if there is a DS amount you can't use woowallet. Sooo... May the gods save me from my users.
+  if (  $ds_amount == 0 AND $woowallet_mode != true ){
 
     $format_pt_dAmount = number_format($pt_dAmount);
 
     //OK this needed go go here. Because the post just was not happening
     $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
 
-  } elseif ($woowallet_mode == true) {
+  } elseif ($woowallet_mode == true ) {
 
     //We can assume (most likely incorrectly) that if a user has woowallet to true that they want decimals but not the dashed slug part below
-    $format_pt_dAmount = $pt_dAmount; //No formatting will have decimals. Lord knows who is doing large amounts of dollar transactions though.
+    $format_pt_dAmount = '$' . money_format('%i', $pt_dAmount); //Where we are going we are formating for $
 
     //Almost forgot, we need a button without the out put as may be decimals
-    $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . 'ww'; //I'm just going to put ww to make it differet that other buttons.
+    $btn_name = $firstPointID .  $pt_fAmount  . 'ww' . $mobile_view; //I am going to assume that you only have one button of each. I could be wrong. Yes. I was. I was testing with mobile and non mobile on same page, but.... That doesn't work.
 
   } else {
 
