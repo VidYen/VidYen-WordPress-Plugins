@@ -17,7 +17,19 @@ The VidYen Point System [VYPS] allows you to create your own rewards site on Wor
 
 Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising, Coinhive mining API, or even the VidYen VY256 Miner (adblock friendly!). It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
-Features include leaderboards, raffles, time based transfers and rewards (i.e. daily or weekly rewards), and ways to convert monetization credits into WooCommerce credit to sell items on your site store.
+== Features ==
+
+- Point tracking per user
+- Method to exchange points for other points
+- Leaderboards
+- Raffles
+- Public log
+- Time based transfers and rewards (i.e. daily or weekly rewards)
+- Adscend API tracking
+- VY256 Miner (non-adblock version)
+- Coinhive API tracking
+- WooCommerce Wallet bridge
+- Support for Dashed Slug's crypto API
 
 There are plans to include other monetization systems with more games and other activities for site users. Keep watching!
 
@@ -283,6 +295,5 @@ Various bug fixes.
 == Future Plans ==
 
 WordPress based combat game
-Leaderboard
 Downloadable public log
 Online game API transfer system (Word of Tanks API etc.)
