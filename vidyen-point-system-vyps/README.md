@@ -69,6 +69,13 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.6.1 =
+
+- NOTE: It has been determined that the new version of WooCommerce Wallet is no longer usable for VYPS. However, since it is GPLv3, we forked and [older version](https://www.vidyen.com/vyps-woocommerce-wallet/) which still works. This version works with it now.
+- NOTE: The new [vyps-pe] works fine, but the icons are no longer working, but will come up with our own.
+- Add: Some warranty wording.
+- Fix: Adjustment of reason for Wallet Payout and other wallet functions to work with older version.
+
 = 1.6.0 =
 
 - Fix: WooCommerce Wallet (semi-hotfix) moved into the point exchange shortcode.
