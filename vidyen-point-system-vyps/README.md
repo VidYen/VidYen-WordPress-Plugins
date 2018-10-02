@@ -69,9 +69,16 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.6.2 =
+
+- Fix: Have functions provided by WooWallet to do the transfers. Everything can go back to normal.
+- Fix: Reversion to instructions to using WooWallet.
+- Add: Have functions to call WooWallet Balance natively but not in use yet as will be put into the regular balance.
+- Add: More functions() for other developers to work on. They are in the functions folder in the includes.
+
 = 1.6.1 =
 
-- NOTE: It has been determined that the new version of WooCommerce Wallet is no longer usable for VYPS. However, since it is GPLv3, we forked and [older version](https://www.vidyen.com/vyps-woocommerce-wallet/) which still works. This version works with it now.
+- NOTE: If you need to use the old WooWallet transfer you need to use the old version of WooWallet [older version](https://www.vidyen.com/vyps-woocommerce-wallet/) which still works.
 - NOTE: The new [vyps-pe] works fine, but the icons are no longer working, but will come up with our own.
 - Add: Some warranty wording.
 - Fix: Adjustment of reason for Wallet Payout and other wallet functions to work with older version.

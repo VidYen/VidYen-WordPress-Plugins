@@ -454,7 +454,7 @@ function vyps_point_exchange_func( $atts ) {
         //This catch is if its not DS but is a woowallet output which has no VYPS destination
         //I'm going to hope the WW dev didn't mess up his tables.
         //I am assuming (WCCW) that the it checked for input points way before now.
-        $woowallet_result = vyps_woowallet_move_func( $atts );
+        $woowallet_result = vyps_woowallet_credit_func( $atts );
 
         if ($woowallet_result == 0){
 

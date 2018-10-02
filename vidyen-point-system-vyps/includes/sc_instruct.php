@@ -16,9 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<p><b>[vyps-balance pid=# uid=optional icon=optional ]</b></p>
 	<p>Shows the balance of a particular point through shortcode. Replace the # with the corresponding point ID. (Optional) You can set the user ID specifically by setting the uid attribute or if you want to turn off icons by setting to icon=0</p>
 	<p><b>[vyps-balance-ww]</b></p>
-	<p>Shows the current <a href=\"https://www.vidyen.com/vyps-woocommerce-wallet/\" target=\"_blank\">VYPS Wallet</a> if it is installed.</p>
+	<p>Shows the current <a href=\"https://wordpress.org/plugins/search/woowallet/\" target=\"_blank\">WooCommerce Wallet</a> if it is installed.</p>
 	<p><b>[vyps-balance-ww-menu]</b></p>
 	<p>Used only if you wish to stick display the My Icon in a menu. This of course does requires you to use a the Shortcodes In Menu Plugin and may have produce unexpected results.</p>
+  <p>Note: As of 1.6.2, you can use the WooWallet menu itself, but due to loading order issues, if the button of the transfer goes first the wallet on header will be behind. Side bar and footer options should load fine.</p>
   <h2>Public balance leaderboard</h2>
   <p><b>[vyps-pb pid=1]</b></p>
   <p>Shows all user's balance of that point type by order of amount and also functions as a leaderboard. PID is not required but will default to pid=1 if not set. Users who had a balance at one time will show up as zero. Otherwise, until a user earns that point type, they will not be on leaderboard for that PID. NOTE: It will show negative balances. This is intended.</p>
@@ -37,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <h2>Transfer points into WooCommerce Credit</h2>
   <p><b>NOTE: Due to changes to WooWallet it has been difficult to continue using it with VYPS so we forked an older version off GitHub under GPLv3 and recommend you use that.</b></p>
   <p><b>[vyps-pe firstid=3  firstamount=1000 outputamount=0.01 woowallet=true]</b></p>
-	<p>Creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode needs requires both VYPS and <a href=\"https://www.vidyen.com/vyps-woocommerce-wallet/\" target=\"_blank\">VYPS Wallet</a> to function.
+	<p>Creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode needs requires both VYPS and <a href=\"https://wordpress.org/plugins/search/woowallet/\" target=\"_blank\">WooCommerce Wallet</a> to function.
 	It is assumed that you are going straight to WooWallet so there is no need to set output id if woowallet=true, but you still need to set outputamount.</p>
   <h2>Point Exchange and Reward Timers</h2>
   <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4]</b></p>
