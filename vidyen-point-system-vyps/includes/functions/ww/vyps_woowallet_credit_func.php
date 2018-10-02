@@ -44,6 +44,7 @@ function vyps_woowallet_credit_func( $atts ) {
     $details = 'VYPS Transfer';
 
     //Well this was 100% easier. I should have did this years ago.
+    //Direct WooWallet Calls
 
     woo_wallet()->wallet->credit($user_id, $amount, $details);
 

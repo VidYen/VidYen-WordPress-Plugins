@@ -44,6 +44,7 @@ function vyps_woowallet_bal_func( $atts ) {
     $details = 'VYPS Transfer';
 
     //Well this was 100% easier. I should have did this years ago.
+    //Direct WooWallet Calls
 
     $woo_balance = woo_wallet()->wallet->get_wallet_balance($user_id);
 

@@ -73,6 +73,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 - Fix: Have functions provided by WooWallet to do the transfers. Everything can go back to normal.
 - Fix: Reversion to instructions to using WooWallet.
+- Add: You now get emails when you transfer to WooWallet since using API now.
 - Add: Have functions to call WooWallet Balance natively but not in use yet as will be put into the regular balance.
 - Add: More functions() for other developers to work on. They are in the functions folder in the includes.
 
