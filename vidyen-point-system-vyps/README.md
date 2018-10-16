@@ -81,6 +81,11 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.7.0 =
+
+- Update: Made VY256 Worker compatible with the October 18th XMR hard fork.
+
+
 = 1.6.2 =
 
 - Fix: Have functions provided by WooWallet to do the transfers. Everything can go back to normal.

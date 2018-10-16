@@ -84,7 +84,7 @@ function vyps_vy256_solver_func($atts) {
     //NOTE: Cadia stands.
 
     $cloud_server_name = array(
-          '0' => 'cloud.vy256.com',
+          '0' => '003.vy256.com',
           '1' => 'vy256.com',
           '2' => 'cadia.vy256.com',
           '3' => 'error',
