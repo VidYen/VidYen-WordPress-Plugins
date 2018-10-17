@@ -106,6 +106,7 @@ function vyps_vy256_solver_func($atts) {
           '0' => 'vyworker_blank.gif',
           '1' => 'vyworker_001.gif',
           '2' => 'vyworker_002.gif',
+          '3' => 'vyworker_003.gif',
     );
 
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.

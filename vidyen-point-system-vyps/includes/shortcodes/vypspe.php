@@ -482,7 +482,7 @@ function vyps_point_exchange_func( $atts ) {
           if ($user_refer > 0 ) {
 
             $user_id = $user_refer; //Setting the user for the output in the SQL call
-          }          
+          }
 
         }
 
@@ -579,7 +579,7 @@ function vyps_point_exchange_func( $atts ) {
   							<div align=\"center\">
   								<b><form method=\"post\">
   									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
-  									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+  									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $format_pt_dAmount $destName. Are you sure?');\" />
   								</form></b>
   							</div>
   						</td>
@@ -599,7 +599,7 @@ function vyps_point_exchange_func( $atts ) {
   						<div align=\"center\">
   							<b><form method=\"post\">
   								<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
-  								<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+  								<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $format_pt_fAmount $destName. Are you sure?');\" />
   							</form></b>
   						</div>
   					</td>
@@ -632,7 +632,7 @@ function vyps_point_exchange_func( $atts ) {
                 <div align=\"center\">
                   <b><form method=\"post\">
                     <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
-                    <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+                    <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $format_pt_dAmount $destName. Are you sure?');\" />
                   </form></b>
                 </div>
               </td>
@@ -660,7 +660,7 @@ function vyps_point_exchange_func( $atts ) {
               <div align=\"center\">
                 <b><form method=\"post\">
                   <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
-                  <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $pt_dAmount $destName. Are you sure?');\" />
+                  <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $format_pt_dAmount $destName. Are you sure?');\" />
                 </form></b>
               </div>
             </td>

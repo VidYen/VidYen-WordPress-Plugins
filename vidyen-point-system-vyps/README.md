@@ -49,7 +49,7 @@ Yes. You can install WooCommerce Wallet and use the point transfer shortcode to 
 
 =Can users transfer points between themselves=
 
-As WooCommerce Wallet already has a feature to transfer between users, we did not add that feature for VYPS points directly. If there is a demand, it can be added though.
+Yes. This has changed in 1.7 as users can now use the Point Exchange short code to transfer points to their referrals.
 
 =Can users buy points directly through WooCommerce?=
 
@@ -83,8 +83,10 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 = 1.7.0 =
 
-- Update: Made VY256 Worker compatible with the October 18th XMR hard fork.
-- Add: New short code attribute to the Point Exchange with transfer=true so that you change have a point transfer direct to users referral. (I would put it on your referral page)
+- Update: Made VY256 Worker compatible with the October 18th XMR hard fork. This is more complex that this line  of text makes it seem.
+- Add: New short code attribute to the Point Exchange with transfer=true so that you change have a point transfer direct to users referral. (I would put it on your referral page) NOTE: Time functions cannot be used with user transfers, so do not use as a daily reward method.
+- Add: Halloween skeleton miner graphic to the vy256. Set graphic=3 to display. I did not put into rotation to surprise users in areas that are skeleton adverse.
+- Fix: Fixed destination amount format in confirmation pop up in point exchange.
 
 
 = 1.6.2 =
