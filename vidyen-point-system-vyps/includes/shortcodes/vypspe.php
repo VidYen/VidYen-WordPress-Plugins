@@ -41,6 +41,7 @@ function vyps_point_exchange_func( $atts ) {
         'skip_confirm' => true,
         'mobile' => false,
         'woowallet' => false,
+        'transfer' => false,
 		), $atts, 'vyps-pe' );
 
 	/* Save this for later
@@ -57,6 +58,7 @@ function vyps_point_exchange_func( $atts ) {
 	$pt_sAmount = $atts['secondamount']; //f = first and s = second, notice how i reused some of the old variables for new. Not really intentional nor well executed.
 	$pt_dAmount = $atts['outputamount']; //desintation amount.
   $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
+  $user_transfer_state = $atts['transfer']; //NOTE: I was going to rewrite whole system to do user to user tranfer and it occurred to me could just put it here
 
   //Time variables
 	$time_days = $atts['days'];
@@ -469,6 +471,20 @@ function vyps_point_exchange_func( $atts ) {
         $amount = $pt_dAmount; //Destination amount should be positive
 
         $PointType = $destinationPointID; //Originally this was a table call, but seems easier this way
+
+        //Setting this to true sends the points to
+        if ($user_transfer_state == TRUE ){
+
+          $user_refer = vyps_current_refer_func($current_user_id); //By a slight of hand, if transfer==true then the output points all go to referral.
+
+          //Ok we just need to check if the refer function works and that it has a user_id.
+          //The function will return a 0 if there is no refer and an int 1 or greater if it does
+          if ($user_refer > 0 ) {
+
+            $user_id = $user_refer; //Setting the user for the output in the SQL call
+          }          
+
+        }
 
         //NOTE: I am ideologically opposed to having the dash slug be a part of my code rather than an addition
         //But it it's easier to check to see if its there and else it.

@@ -84,6 +84,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 = 1.7.0 =
 
 - Update: Made VY256 Worker compatible with the October 18th XMR hard fork.
+- Add: New short code attribute to the Point Exchange with transfer=true so that you change have a point transfer direct to users referral. (I would put it on your referral page)
 
 
 = 1.6.2 =

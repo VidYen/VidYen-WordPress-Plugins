@@ -43,6 +43,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <h2>Point Exchange and Reward Timers</h2>
   <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4]</b></p>
   <p>Options include hours=, days=, minutes=,  </p>
+  <h2>User to User Point Exchanges</h2>
+  <p>[vyps-pe firstid=3 outputid=3 firstamount=1000 outputamount=1000 transfer=true]</p>
+  <p>If a user has set a referral code from another user, they can do a point transfer to that referral user. I would recommend putting on your referral page so they can see who the points are going to. This is handy for multi account users who want to mine with more than one device.</p>
+  <p>Note: This is also very experimental and possibly create a gray market on your site if enabled. You can set output amount to something less than the first amount to have a soft fee to prevent abuse.</p>
   <h2>Login Awareness Shortcode</h2>
 	<p>Other plugins do this, but made this one provides a quick way to let users know they are not logged in and therefore cannot interact with VYPS.</p>
 	<p><b>[vyps-lg]</b></p>
