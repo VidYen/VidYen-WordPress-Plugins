@@ -28,7 +28,7 @@ function vyps_vy256_solver_func($atts) {
     $atts = shortcode_atts(
         array(
             'wallet' => '',
-            'site' => '',
+            'site' => 'default',
             'pid' => 0,
             'pool' => 'moneroocean.stream',
             'threads' => '2',
@@ -65,7 +65,8 @@ function vyps_vy256_solver_func($atts) {
     $sm_threads = $atts['threads'];
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
-    $password = $atts['password'];
+    //$password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
+    $password = 'x';
     $first_cloud_server = $atts['cloud'];
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
@@ -358,6 +359,11 @@ function vyps_vy256_solver_func($atts) {
       $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
       $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
 
+      if ($siteName != ''){
+
+        $siteName = "." . $siteName;
+      }
+
       //Ok some issues we need to know the path to the js file so will have to ess with that.
       $simple_miner_output = "<!-- $remote_url -->
       <table>
@@ -401,7 +407,7 @@ function vyps_vy256_solver_func($atts) {
               /* start mining, use a local server */
               server = \"wss://$used_server:8181\";
               startMining(\"$mining_pool\",
-                \"$sm_site_key\", \"$password\", $sm_threads, \"$miner_id\");
+                \"$sm_site_key$siteName\", \"$password\", $sm_threads, \"$miner_id\");
 
               /* keep us updated */
 

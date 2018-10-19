@@ -81,6 +81,10 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.7.1 =
+
+- Add: MoneroOcean workers now determined by use of site= in the vy256 miner.
+
 = 1.7.0 =
 
 - Update: Made VY256 Worker compatible with the October 18th XMR hard fork. This is more complex that this line  of text makes it seem.
