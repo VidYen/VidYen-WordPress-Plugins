@@ -84,6 +84,8 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 = 1.7.1 =
 
 - Add: MoneroOcean workers now determined by use of site= in the vy256 miner.
+- Fix: Made it possible to multi-mine with same account using different site= (or you can just transfer using different accounts and refer)
+- Fix: Raffles no longer auto buy tickets on post refresh via F5 and clicking yes.
 
 = 1.7.0 =
 
