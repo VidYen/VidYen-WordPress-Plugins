@@ -83,9 +83,10 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 = 1.7.1 =
 
-- Add: MoneroOcean workers now determined by use of site= in the vy256 miner.
+- Note: For any sites not able to mine with the new XMR fork with the VY256 miner. Delete your browser cache and temp files after updating!
+- Add: MoneroOcean worker name now determined by use of site= in the vy256 miner. It is now set to 'default' by default.
 - Fix: Made it possible to multi-mine with same account using different site= (or you can just transfer using different accounts and refer)
-- Fix: Raffles no longer auto buy tickets on post refresh via F5 and clicking yes.
+- Fix: Raffles no longer auto buy tickets on post refresh via F5 and clicking yes. (Use raffles if you wish to have high end rewards that no one user can mine on their own)
 
 = 1.7.0 =
 
