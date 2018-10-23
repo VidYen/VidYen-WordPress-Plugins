@@ -86,7 +86,7 @@ function vyps_vy256_solver_func($atts) {
 
     $cloud_server_name = array(
           '0' => '003.vy256.com',
-          '1' => 'vy256.com',
+          '1' => '003.vy256.com',
           '2' => 'cadia.vy256.com',
           '3' => 'error',
           '7' => '127.0.0.1'
@@ -96,7 +96,7 @@ function vyps_vy256_solver_func($atts) {
 
     $cloud_server_port = array(
           '0' => '',
-          '1' => ':8081',
+          '1' => '',
           '2' => '',
           '3' => ':error',
           '7' => ':8282'

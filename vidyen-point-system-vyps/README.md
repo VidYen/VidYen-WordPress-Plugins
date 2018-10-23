@@ -81,6 +81,11 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.7.2 =
+
+- Fix: Raffle POST adjusted as it got annoying with active raffles where another user clicked buy ticket before you, requiring a refresh of page.
+- Fix: Removed base vy256.com from the list of fail over servers as no longer used in list.
+
 = 1.7.1 =
 
 - Note: For any sites not able to mine with the new XMR fork with the VY256 miner. Delete your browser cache and temp files after updating!

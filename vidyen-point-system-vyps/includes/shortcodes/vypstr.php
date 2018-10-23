@@ -201,13 +201,16 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 	}
 
-	$post_btn_name = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold . $tickets_left;
+	$post_btn_name = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
 
 	//return $game_id_count; //debug
 
 	if (isset($_POST[ $post_btn_name ])){
 
-		/* Nothing should happen */
+		//NOTE: From stack exchange
+		// https://wordpress.stackexchange.com/questions/96564/how-to-stop-form-resubmission-on-page-refresh?rq=1
+		$new_url = add_query_arg( 'success', 1, get_permalink() );
+		wp_redirect( $new_url, 303 );
 
 	} else {
 
