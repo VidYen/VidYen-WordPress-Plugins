@@ -83,7 +83,8 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 = 1.7.2 =
 
-- Fix: Raffle POST adjusted as it got annoying with active raffles where another user clicked buy ticket before you, requiring a refresh of page.
+- Fix: Raffle ticket purchases not depending on no one else buying one before you.
+- Fix: Added feature that if you want to prevent users to not hit F5 and buy another raffle ticket via refresh=true (off by default as it will break a lot of themes)
 - Fix: Removed base vy256.com from the list of fail over servers as no longer used in list.
 
 = 1.7.1 =

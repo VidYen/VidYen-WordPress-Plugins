@@ -19,7 +19,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 	if ( is_user_logged_in() ) {
 
-	//I probaly don't have to have this part of the if
+		//I probaly don't have to have this part of the if
 
 	} else {
 
@@ -46,6 +46,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				'tickets' => '0',
 				'damount' => '0',
 				'mobile' => false,
+				'refresh' => false,
 		), $atts, 'vyps-tr' );
 
 	$sourcePointID = $atts['spid'];
@@ -53,6 +54,9 @@ function vyps_point_threshold_raffle_func( $atts ) {
 	$pt_sAmount = $atts['samount'];
 	$pt_dAmount = $atts['damount'];
 	$ticket_threshold = $atts['tickets'];
+
+	//NOTE: Used for prevenint F5 reposting, but will break themes. See below.
+	$refresh_mode = $atts['refresh'];
 
 	/* Not seeing comma number seperators annoys me */
 
@@ -197,8 +201,6 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 		}
 
-
-
 	}
 
 	$post_btn_name = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
@@ -207,10 +209,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 	if (isset($_POST[ $post_btn_name ])){
 
-		//NOTE: From stack exchange
-		// https://wordpress.stackexchange.com/questions/96564/how-to-stop-form-resubmission-on-page-refresh?rq=1
-		$new_url = add_query_arg( 'success', 1, get_permalink() );
-		wp_redirect( $new_url, 303 );
+		//Nothing really happens other than making sure is set.
 
 	} else {
 
@@ -334,6 +333,16 @@ function vyps_point_threshold_raffle_func( $atts ) {
 				'time' => date('Y-m-d H:i:s')
 				];
 		$wpdb->insert($table_log, $data);
+
+		//NOTE: This was a custom request. It got so annoying trying to get it to work with all themes
+		//that I told them, if they want ot mess with it, they can add the refresh=true on theirs.
+		//Otherwise tell your users not to hit F5 to refresh the post.
+		if( $refresh_mode == true ){
+
+			$new_url = add_query_arg( 'success', 1, get_permalink() );
+			wp_redirect( $new_url, 303 );
+
+		}
 
 		//The below should only be run if there is a winner. which means we should only fire if the game games left = 1
 		//Yeah counting at zero, but this fires it means there was one ticket left so there should be no more as this is exectuting
