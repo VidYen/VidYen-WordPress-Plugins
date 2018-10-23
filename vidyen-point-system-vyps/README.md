@@ -81,6 +81,10 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.7.3 =
+
+- Fix: Added SQL UNION select to make sure in leader boards to not include users who were deleted from WordPress and still had points.
+
 = 1.7.2 =
 
 - Fix: Raffle ticket purchases not depending on no one else buying one before you.

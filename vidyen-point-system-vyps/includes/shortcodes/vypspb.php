@@ -185,7 +185,7 @@ function vyps_public_balance_func( $atts ) {
 	$rank_order_array = 0;
 	//This shouldn't be too hard in theory. It's not going to be get gar though. Probaly column and feed into array.
 	//$rank_order_array_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d GROUP BY user_id ORDER BY sum(points_amount)"; //This should list users by their sum and order them into an array.
-	$rank_order_array_query = "SELECT user_id FROM ". $table_name_log . " WHERE point_id = %d GROUP BY user_id ORDER BY sum(points_amount)"; //actually isn't that more useful to rank user_id by rank?
+	$rank_order_array_query = "SELECT user_id FROM ". $table_name_log . " WHERE point_id = %d AND EXISTS (SELECT ID FROM ". $table_name_users . " WHERE ID = " . $table_name_log .".user_id) GROUP BY user_id ORDER BY sum(points_amount)"; //actually isn't that more useful to rank user_id by rank?
 	$rank_order_array_query_prepared = $wpdb->prepare( $rank_order_array_query, $pointID );
 	$rank_order_array = $wpdb->get_col( $rank_order_array_query_prepared ); //Hrm... The vypspb.php is the first time I did a column call as I hate arrays. But here we are.
 	$rank_order_array_count = count($rank_order_array); //This maybe useful to know how mnay we had in the rank. Actually why don't we make the for loop use it. Saves us a lot of time.
