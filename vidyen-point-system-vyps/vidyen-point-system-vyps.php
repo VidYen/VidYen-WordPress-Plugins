@@ -289,9 +289,9 @@ function vyps_points_add_sub_menu_page() {
     require plugin_dir_path(__FILE__) . 'add_point.php';
 }
 
-add_action('show_user_profile', 'custom_user_profile_fields_points');
-add_action('edit_user_profile', 'custom_user_profile_fields_points');
-add_action("user_new_form", "custom_user_profile_fields_points");
+//add_action('show_user_profile', 'custom_user_profile_fields_points'); //NOTE: Actually here as well if you are looking at own profile. Should be on user list or edit points per user option.
+//add_action('edit_user_profile', 'custom_user_profile_fields_points'); //NOTE: I do not think having on edit users is correct.
+//add_action("user_new_form", "custom_user_profile_fields_points"); //NOTE: Nor here either... Will be removing.
 
 //start add new column points in user table
 //BTW I prefixed the next two functions with vyps_ as I have a feeling that might be used by other plugins
