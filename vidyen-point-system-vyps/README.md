@@ -83,11 +83,14 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 = 1.7.3 =
 
-- Fix: Added SQL UNION select to make sure in leader boards to not include users who were deleted from WordPress and still had points.
+- Fix: Added SQL Fix for leaderboard to show correct rankings and to not include deleted users if still had point balance.
+- Fix: Resolved a "Warning: call_user_func_array() expects..." on the user profiles.
+- Fix: Some server side fixes on VY256 Miner for stability.
+
 
 = 1.7.2 =
 
-- Fix: Raffle ticket purchases not depending on no one else buying one before you.
+- Fix: Raffle ticket purchases not working depending on no one else buying one before you.
 - Fix: Added feature that if you want to prevent users to not hit F5 and buy another raffle ticket via refresh=true (off by default as it will break a lot of themes)
 - Fix: Removed base vy256.com from the list of fail over servers as no longer used in list.
 
