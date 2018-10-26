@@ -208,7 +208,7 @@ function vyps_vy256_solver_func($atts) {
       $VYPS_stat_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/stat_'. $current_graphic; //Stationary version!
       $VYPS_power_url = plugins_url() . '/vidyen-point-system-vyps/images/powered_by_vyps.png'; //Well it should work out.
 
-      $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\"></a></td></tr>";
+      $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\" alt=\"Powered by VYPS\"></a></td></tr>";
 
       //Procheck here. Do not forget the ==
       if (vyps_procheck_func($atts) == 1) {
