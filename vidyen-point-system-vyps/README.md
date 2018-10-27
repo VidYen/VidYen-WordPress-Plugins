@@ -81,6 +81,10 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 == Changelog ==
 
+= 1.7.4 =
+
+- Fix: Made it so if Adscend report a refund that it doesn't double count double negatives.
+
 = 1.7.3 =
 
 - Fix: Added SQL Fix for leaderboard to show correct rankings and to not include deleted users if still had point balance.

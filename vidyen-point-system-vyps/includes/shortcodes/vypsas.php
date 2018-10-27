@@ -236,7 +236,7 @@ function vyps_adscend_redeem_func( $atts ) {
 
 	$api_key = $atts['api'];
 
-	$adj_balance = $balance * -1; //Well. Apparently you can give your viewers more points for no good reason I guess. So we need negative values.
+	$adj_balance = abs($balance) * -1; //Well. Apparently you can give your viewers more points for no good reason I guess. So we need negative values. Added abs() in cases where there are point refunds.
 
 	$url = "https://adscendmedia.com/adwall/api/publisher/{$pub_id}/profile/{$adwall_id}/user/{$sub_id}/transactions.json";
 	//$url = "https://adscendmedia.com/adwall/api/publisher/{$pub_id}/profile/{$adwall_id}/user/{$sub_id}/transactions.json?api_key={$api_key}&currency_adjustment={$adj_balance}";
