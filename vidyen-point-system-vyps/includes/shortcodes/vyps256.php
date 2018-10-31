@@ -254,6 +254,7 @@ function vyps_vy256_solver_func($atts) {
       for ($x_for_count = $first_cloud_server; $x_for_count < 4; $x_for_count = $x_for_count +1 ) { //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
 
         $remote_url = "http://" . $cloud_server_name[$x_for_count] . $cloud_server_port[$x_for_count]  ."/?userid=" . $miner_id;
+        $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
 
         //return $remote_url; //debugging
@@ -274,7 +275,7 @@ function vyps_vy256_solver_func($atts) {
 
             $balance = 0;
 
-            return "Unable to establish connection with any VY256 server! Contact VidYen.com admin!<!--$remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
+            return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
         }
 
       }
@@ -366,7 +367,7 @@ function vyps_vy256_solver_func($atts) {
       }
 
       //Ok some issues we need to know the path to the js file so will have to ess with that.
-      $simple_miner_output = "<!-- $remote_url -->
+      $simple_miner_output = "<!-- $public_remote_url -->
       <table>
         $site_warning
         <tr><td>
