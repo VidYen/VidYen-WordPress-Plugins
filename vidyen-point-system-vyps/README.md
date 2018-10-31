@@ -84,6 +84,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 = 1.7.4 =
 
 - Fix: Made it so if Adscend report a refund that it doesn't double count double negatives.
+- Fix: Update server meta for the VY256 Miner and increase stability of server connection
 
 = 1.7.3 =
 
