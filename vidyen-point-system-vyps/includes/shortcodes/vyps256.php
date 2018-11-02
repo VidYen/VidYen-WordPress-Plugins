@@ -93,6 +93,16 @@ function vyps_vy256_solver_func($atts) {
 
     );
 
+    //Had to use port 8443 with cloudflare due to it not liking port 8181 for websockets. The other servers are not on cloudflare at least not yet.
+    //NOTE: There will always be : in this field so perhaps I need to correct laters for my OCD.
+    $cloud_worker_port = array(
+          '0' => '8443',
+          '1' => '8181',
+          '2' => '8181',
+          '3' => 'error',
+          '7' => '8181'
+    );
+
 
     $cloud_server_port = array(
           '0' => '',
@@ -267,6 +277,7 @@ function vyps_vy256_solver_func($atts) {
             //That said its possible that hte server goes down between this check and mining, but we are not that advanced yet
             //NOTE: Used server will always be on port 8181. The hash tracking will be on other ports depending.
             $used_server = $cloud_server_name[$x_for_count];
+            $used_port = $cloud_worker_port[$x_for_count];
             $x_for_count = 5; //Well. Need to escape out.
 
         } elseif ( $cloud_server_name[$x_for_count] == 'error' ) {
@@ -407,7 +418,7 @@ function vyps_vy256_solver_func($atts) {
 
 
               /* start mining, use a local server */
-              server = \"wss://$used_server:8181\";
+              server = \"wss://$used_server:$used_port\";
               startMining(\"$mining_pool\",
                 \"$sm_site_key$siteName\", \"$password\", $sm_threads, \"$miner_id\");
 
