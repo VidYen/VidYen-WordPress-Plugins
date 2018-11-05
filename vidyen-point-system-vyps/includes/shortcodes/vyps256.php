@@ -44,6 +44,8 @@ function vyps_vy256_solver_func($atts) {
             'cworker'=> '',
             'timebar' => 'yellow',
             'workerbar' => 'orange',
+            'redeembtn' => 'Redeem',
+            'startbtn' => 'Start Mining',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -78,6 +80,9 @@ function vyps_vy256_solver_func($atts) {
     $timeBar_color = $atts['timebar'];
     $workerBar_color = $atts['workerbar'];
 
+    //De-English-fication section. As we have a great deal of non-english admins, I wanted to add in options to change the miner text hereby
+    $redeem_btn_text = $atts['redeembtn']; //By default 'Redeem'
+    $start_btn_text = $atts['startbtn']; //By default 'Start Mining'
 
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
     //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
@@ -359,7 +364,7 @@ function vyps_vy256_solver_func($atts) {
 
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-          $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem\" to stop and get work credit in: $reward_icon</td></tr>";
+          $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
 
       }
 
@@ -500,7 +505,7 @@ function vyps_vy256_solver_func($atts) {
     <tr>
        <td>
          <div>
-           <button id=\"startb\" onclick=\"start()\">Start Mining</button>
+           <button id=\"startb\" onclick=\"start()\">$start_btn_text</button>
          </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:none;\">
             Power:&nbsp;
@@ -518,10 +523,10 @@ function vyps_vy256_solver_func($atts) {
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
             <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
-            <!--<input type=\"submit\" class=\"button-secondary\" value=\"Redeem Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
+            <!--<input type=\"submit\" class=\"button-secondary\" value=\"$redeem_btn_text Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
             <span id=\"total_points\" style=\"float:right;\">(Please Wait)</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; $reward_icon &nbsp;</span>
           </form>
-          <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"Redeem\"/></form>
+          <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
             $('.add').click(function () {
