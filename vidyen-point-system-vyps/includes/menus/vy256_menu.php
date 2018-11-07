@@ -96,6 +96,10 @@ function vyps_vy256_sub_menu_page() {
     <p>The rates of XMR per has is determined by them as well as the minium payouts. An account is not required, but by default the minimum payout is 0.3 XMR and if you wish adjust that you will have to create an account through them.</p>
     <p>To see your progress towards payout, vist the <a href=\"https://moneroocean.stream/#/dashboard\" target=\"_blank\">dashboard</a> and add your XMR wallet where it says Enter Payment Address at bottom of page. There you can see total hashes, current hash rate, and account option if you wish to change payout rate.</p>
     <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort.</p>
+    <h1>Localization</h1>
+    <p>The following will allow you change the text to a localized version in your language.</p>
+    <p>Redeem: redeembtn=\"Redimir\"</p>
+    <p>Start: startbtn=\"Comienzo\"</p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href=\"https://www.vidyen.com/about/\" target=\"_blank\">VidYen About</a> or on our <a href=\"https://wordpress.org/support/plugin/vidyen-point-system-vyps\" target=\"_blank\">WordPress support page</a>.</p>
     <p>If server is down and/or you need assistance immediatly, join the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)</p>
