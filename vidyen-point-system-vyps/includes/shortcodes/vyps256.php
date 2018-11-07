@@ -276,14 +276,21 @@ function vyps_vy256_solver_func($atts) {
 
         if(array_key_exists('headers', $remote_response)){
 
-            $balance =  intval($remote_response['body'] / $hash_per_point); //Sorry we rounding. Addition of the 256. Should be easy enough.
+            //Checking to see if the response is a number. If not, probaly something from cloudflare or ngix messing up. As is a loop should just kick out unless its the error round.
+            if( is_numeric($remote_response['body']) ){
 
-            //We know we got a response so this is the server we will mine to
-            //That said its possible that hte server goes down between this check and mining, but we are not that advanced yet
-            //NOTE: Used server will always be on port 8181. The hash tracking will be on other ports depending.
-            $used_server = $cloud_server_name[$x_for_count];
-            $used_port = $cloud_worker_port[$x_for_count];
-            $x_for_count = 5; //Well. Need to escape out.
+              //Balance to pull from the VY256 server since it is numeric and does exist.
+              $balance =  intval($remote_response['body'] / $hash_per_point); //Sorry we rounding. Addition of the 256. Should be easy enough.
+
+              //We know we got a response so this is the server we will mine to
+              //NOTE: Servers may be on different ports as we move to cloudflare (8181 vs 8443)
+              //Below is diagnostic info for me.
+              $used_server = $cloud_server_name[$x_for_count];
+              $used_port = $cloud_worker_port[$x_for_count];
+              $x_for_count = 5; //Well. Need to escape out.
+
+            }
+
 
         } elseif ( $cloud_server_name[$x_for_count] == 'error' ) {
 
