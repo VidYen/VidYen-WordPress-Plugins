@@ -371,7 +371,7 @@ function vyps_vy256_solver_func($atts) {
 
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-          $redeem_output = "<tr><td>Click  \"Start Mining\" to begin and  \"Redeem\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
+          $redeem_output = "<tr><td>Click  \"$start_btn_text\" to begin and  \"$redeem_btn_text\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
 
       }
 
@@ -580,11 +580,11 @@ function vyps_solver_consent_button_func( $atts ) {
         $atts = shortcode_atts(
             array(
 
-                'txt' => 'I agree and consent',
+              'text' => 'I agree and consent',
 
             ), $atts, 'vyps-ch-consent' );
 
-        $button_text = $atts['txt'];
+        $button_text = $atts['text'];
 
         /* User needs to be logged into consent. NO EXCEPTIONS */
 

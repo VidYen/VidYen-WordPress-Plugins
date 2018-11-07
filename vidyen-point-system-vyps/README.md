@@ -86,6 +86,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 - Fix: Made it so if Adscend report a refund that it doesn't double count double negatives.
 - Fix: Update server meta for the VY256 Miner and increase stability of server connection
 - Fix: Fix of non-numeric error in VY256 Miner. It still means an issue is going on the VY256 server side, but will fail a bit more gracefully now.
+- Fix: Consent shortcode text= actually works now.
 - Add: Localisation options for non-english sites in VY256 miner. redeembtn=, startbtn=
 
 = 1.7.3 =
