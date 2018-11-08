@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
   <h2>Public balance leaderboard</h2>
   <p><b>[vyps-pb pid=1]</b></p>
   <p>Shows all user's balance of that point type by order of amount and also functions as a leaderboard. PID is not required but will default to pid=1 if not set. Users who had a balance at one time will show up as zero. Otherwise, until a user earns that point type, they will not be on leaderboard for that PID. NOTE: It will show negative balances. This is intended.</p>
-  <p>Settings the max amounts of rows can be done via rows=50, by default it is 50, but change be reduced or extended depending on the bandwidth of your users. ie <b>[vyps-pb pid=3 rows=10]</p>
+  <p>Settings the max amounts of rows can be done via rows=50, by default it is 50, but change be reduced or extended depending on the bandwidth of your users. ie <b>[vyps-pb pid=3 rows=10]</b></p>
   <p>You can also show amount by percent of total with percent=yes such as <b>[vyps-pb pid=2 percent=yes]</b> so that you can see who owns the most by percent which is useful for the mining share option in the VY256 Miner.</p>
   <h2>Point Exchange</h2>
 	<p>This plugin needs requires VYPS Base and two point types to function. The intention is to allow a quick and easy way for users to transfer one type of point to another at varying rates.</p>
