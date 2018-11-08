@@ -20,7 +20,7 @@ Currently, this plugin allows you to create points and assign them to users base
 == Features ==
 
 - Point tracking per user
-- Method to exchange points for other points
+- System to exchange point type for other points (copper => silver => gold)
 - Leaderboards
 - Raffles
 - Public log
@@ -29,7 +29,7 @@ Currently, this plugin allows you to create points and assign them to users base
 - VY256 Miner (non-adblock version)
 - Coinhive API tracking
 - WooCommerce Wallet bridge
-- Support for Dashed Slug's crypto API
+- Support for Dashed Slug's crypto API for payouts
 
 There are plans to include other monetization systems with more games and other activities for site users. Keep watching!
 
