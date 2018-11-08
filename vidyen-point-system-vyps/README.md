@@ -2,8 +2,8 @@
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: games, monetization, Adscend, Coinhive, rewards, WooCommerce, rewards site, monero, XMR, raffle, mine, cryptocurrency
-Requires at least: 4.9.7
-Tested up to: 4.9.8
+Requires at least: 4.9.8
+Tested up to: 5.0.0
 Requires PHP: 7.0
 Stable tag: 4.9.8
 License: GPLv2
