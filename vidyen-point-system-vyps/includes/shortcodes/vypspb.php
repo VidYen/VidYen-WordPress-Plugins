@@ -8,8 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //There is a feature I want to add that shows spending into WooWallet, but I realized it may be undeeded and I'd want to do a different short for that all together
 //Either for a expenditure balance or a WW balance itself.
 
-/* Added prepare() to all SQL SELECT calls 7.1.2018 */
-
 /* Main Public Balance shortcode function */
 
 function vyps_public_balance_func( $atts ) {
@@ -111,54 +109,6 @@ function vyps_public_balance_func( $atts ) {
 
 	$page_button_output = ''; //Needs a define
 
-	/* don't need this for now, but will add back in laters
-	if ($boostrap_on == 'yes' OR $boostrap_on == 'YES' OR $boostrap_on =='Yes'){
-		//Ok. Just going to loop for nubmer of pages.
-		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
-
-			$page_button = "<li><a href=\"?action=$p_for_count\">$p_for_count</a></li>";
-
-			$page_button_output = $page_button_output . $page_button;
-			//end for
-		}
-
-		$page_button_row_output = "
-			<ul class=\"pagination\">
-				$page_button_output
-			</ul>";
-		//end of bootstrap if
-
-	} else {
-
-		//this meeans we got no boostrap so it's just links.
-		//Ok. Just going to loop for nubmer of pages.
-		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
-
-			$page_button = "<a href=\"?action=$p_for_count\">$p_for_count</a>&nbsp;|&nbsp;";
-
-			$page_button_output = $page_button_output . $page_button;
-			//end for
-		}
-
-		$page_button_row_output = "
-			<div class=\"pagination\">
-				$page_button_output
-			</div>";
-		//end of non bootstrap else
-
-	}
-
-	*/
-
-
-	//Because the shortcode version won't have this
-	//	<h1 class=\"wp-heading-inline\">Public Point Log</h1> this was commented out. I don't think it was needed as admin can put any text in they want.
-	/* turning this off for now.
-	$page_header_text = "
-			$page_button_row_output
-			";
-	*/
-
 	//this is what it's goint to be called
 	$table_output = "";
 
@@ -203,9 +153,8 @@ function vyps_public_balance_func( $atts ) {
 
 	$total_amount_data = intval($total_amount_data); //Got to cram it into an int.
 
-	//Ok. We need to just do an $x_for_count for just all the users. I really doubt you will have more than 1000 users. But we will burn that bridge when we get to it.
-	//for ($x_for_count = $table_range_start; $x_for_count >= $table_range_stop; $x_for_count = $x_for_count - 1 ) { //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
-	for ($x_for_count = $rank_order_array_count; $x_for_count >= 0; $x_for_count = $x_for_count - 1 ) { //Let's just use the order array count. How many users could their possibly be?
+	//Ok. We need to just do an $x_for_count for just all the users. I really doubt you will have more than 1000 users. But we will burn that bridge when we get to it. //NOTE we have burned that bridge as cripto had that many users ergo the new code.
+	for ($x_for_count = $rank_order_array_count; $x_for_count >= 0; $x_for_count = $x_for_count - 1 ) { //Let's just use the order array count. How many users could their possibly be? //Apparently a lot. -Felty to itself
 
 		//NOTE: In this method, the $x_for_count is not the actual user id but the rank of the top. To align the user ID, we need to pull it from array.
 
@@ -261,72 +210,18 @@ function vyps_public_balance_func( $atts ) {
 					<td>$display_rank_data</td>
 					<td>$display_name_data</td>
 					<td><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $amount_data</td>
-				</tr>
-					";
+				</tr>";
+		} //END no display of blank data
+
+		//The idea is to check to see if that row should be on the page, if not skip
+		//Some magic person manipulation here as we are using the $display_rank_data to acheive this as the other is a bit... off
+		if( $display_rank_data <= $table_row_limit ){
+
+			$table_output = $table_output . $current_row_output; //Output row
+
 		}
 
-		//Don't need the reason as far as I know... Might be useful down the road
-		/*
-		//$reason_data = $wpdb->get_var( "SELECT reason FROM $table_name_log WHERE id= '$x_for_count'" );
-    $reason_data_query = "SELECT reason FROM ". $table_name_log . " WHERE id = %d";
-    $reason_data_query_prepared = $wpdb->prepare( $reason_data_query, $x_for_count );
-    $reason_data = $wpdb->get_var( $reason_data_query_prepared );
-		*/
-
-		//$amount_data = number_format($amount_data); //Adds commas but leaving it out here to be raw and when make [vyps-pb-tbl] will have formatting and color attributes. Also icons.
-
-		//Compile into row output.
-
-		//Some weird logic I have had an idea for... To sort the table. One doesn't have to deal with sql at all. They just need to check the table to see if the user before or
-		//After it to determine if $table_output = $table_output . $current_row_output; vs $table_output = $current_row_output . $table_output;  Seems stupidly obvious
-		//Now that I think about its o don't have to deal with arrays or loops within loops. Cells in leaderboards interlinked.
-
-		$table_output = $table_output . $current_row_output; //Output row
-
-		/* this is no longer needed
-		if ( $display_name_data == '' ){
-
-			//Nothing really need to happen here (I suppose I could do =!). I have this here as I have a feeling I might need it later rather than just a =!
-
-		} else {
-
-			//I can't tell but I think this needs to only run when there is need to rather than all the time.
-			if ( $current_amount > $prior_amount ) {
-
-				$table_output = $current_row_output . $table_output; //If the current was bigger in the amount, put that current goes first
-
-				//I'm not 100% sure of this placement. But this might work.
-				$prior_amount = $current_amount; //Ok, we need to make prior only when there is an actual display name. Otherwise it doesn't chagne here either in case of back to back blanks
-
-			} elseif ( $current_amount <= $prior_amount ) {
-
-				$table_output = $table_output . $current_row_output; //If the prior was bigging current goes after. Or equal, it doesn't matter. Also no need for two elseifs that way
-
-			}
-
-		//End of checking for blank display name.
-		}
-
-		*/
-
-
-	}
-	/* Old page output
-	//The page output
-	return "
-		<div class=\"wrap\">
-			<h2 style=\"text-align:center\">Page $page_number</h2>
-			$page_header_text
-			<table class=\"wp-list-table widefat fixed striped users\">
-				$header_output
-				$table_output
-				$header_output
-			</table>
-			$page_button_row_output
-			<h2 style=\"text-align:center\">Page $page_number</h2>
-		</div>
-	";
-	*/
+	} //END FOR
 
 	//simple tables for now.
 	return "
