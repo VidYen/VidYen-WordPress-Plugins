@@ -604,7 +604,7 @@ function vyps_solver_consent_button_func( $atts ) {
 
         if ( is_user_logged_in() ) {
 
-            return "$disclaimer_text<br>
+            return "$disclaimer_text<br><br>
                 <form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"consent\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"$button_text\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
