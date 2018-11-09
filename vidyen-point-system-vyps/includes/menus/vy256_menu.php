@@ -65,8 +65,8 @@ function vyps_vy256_sub_menu_page() {
     <p><b>NOTE:</b> To display the simple miner you need to place the consent button shortcode on your page to create a POST call that the simple miner shortcode will recognize.</p>
     <h2>Consent Button Shortcode</h2>
     <p>Replace (optional) and (required) with your info.</p>
-    <p><b>[vyps-256-consent text=(optional)]</b></p>
-    <p>Display the simple miner consent button. You can customize the text on the button by using txt=.To add spaces in the button text, use quotes.</p>
+    <p><b>[vyps-256-consent text=(optional) disclaimer=(optional)]</b></p>
+    <p>Display the simple miner consent button. You can customize the text on the button by using text= and the disclaimer= by using. To add spaces in the button text, use quotes.</p>
     <h2>VY256 Miner Display Shortcode</h2>
     <p><b>[vyps-256 wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>This will display the simple miner after the button on the consent shortcode has been pressed.</p>
@@ -98,13 +98,13 @@ function vyps_vy256_sub_menu_page() {
     <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort.</p>
     <h1>Localization</h1>
     <p>The following will allow you change the text to a localized version in your language:</p>
-    <p>Redeem: redeembtn=\"Redimir\"</p>
-    <p>Start: startbtn=\"Comienzo\"</p>
+    <p>Redeem: <b>redeembtn=\"Redimir\"</b></p>
+    <p>Start: <b>startbtn=\"Comienzo\"</b></p>
     <h1>Custom Server</h1>
-    <p>If you want to run your own [webminerpool](https://github.com/VidYen/webminerpool) server, you can but use the fork in the link or it will not work properly</p>
-    <p>Websocket Server URL: server=</p>
-    <p>Websocket Port: wsport=</p>
-    <p>Nginx Port: nxport=</p>
+    <p>If you want to run your own <a href=\"https://github.com/VidYen/webminerpool\" target=\"_blank\">webminerpool</a> server, you can but use the fork in the link or it will not work properly</p>
+    <p>Websocket Server URL: <b>server=yourserver.com</b></p>
+    <p>Websocket Port: <b>wsport=8181</b></p>
+    <p>Nginx Port: <b>nxport=8081</b> (only needed if you don't want to use port 80 for hash tracking)</p>
     <p>As this is rather complex, unless you want to learn Debian (or other Linux server) and host the server yourself, we recommend just using the VY256 default server.</p>
     <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 site=vidyen redeembtn=\"Redimir\" startbtn=\"Comienzo\"] Por favor consienta a la minería. [vyps-256-consent text=\"Yo Consiento\"]</b></p>
     <h1>Support</h1>

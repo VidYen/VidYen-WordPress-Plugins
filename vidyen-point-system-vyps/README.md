@@ -95,6 +95,7 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 - Fix: Public balance rows= also actually works now so you don't have 10,000 users on a single leaderboard page.
 - Add: Localisation options for non-english sites in VY256 miner. redeembtn=, startbtn=
 - Add: Although should be a pro-feature, added the ability to specify your webminer server if you want to use your own using our [webminerpool](https://github.com/VidYen/webminerpool) fork.
+- Add: Put the disclaimer in the consent button so it goes away when clicked. Use shortcode disclaimer= to use a custom version.
 
 = 1.7.3 =
 

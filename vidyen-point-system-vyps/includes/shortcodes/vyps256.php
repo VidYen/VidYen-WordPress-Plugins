@@ -584,21 +584,28 @@ add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
 
 function vyps_solver_consent_button_func( $atts ) {
     if(!isset($_POST['consent']) && !isset($_POST['redeem'])){
+
+        //Going to grab the site name and put it into the message
+        $site_disclaim_name = get_bloginfo('name');
+
         //Some shortcode attributes to create custom button message
         $atts = shortcode_atts(
             array(
 
               'text' => 'I agree and consent',
+              'disclaimer' => "By clicking the button you consent to have your browser mine cryptocurrency and to exchange it with $site_disclaim_name for points. This will use your device’s resources, so we ask you to be mindful of your CPU and battery use.",
 
             ), $atts, 'vyps-ch-consent' );
 
         $button_text = $atts['text'];
+        $disclaimer_text = $atts['disclaimer'];
 
         /* User needs to be logged into consent. NO EXCEPTIONS */
 
         if ( is_user_logged_in() ) {
 
-            return "<form method=\"post\">
+            return "$disclaimer_text<br>
+                <form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"consent\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"$button_text\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
                 </form>";
