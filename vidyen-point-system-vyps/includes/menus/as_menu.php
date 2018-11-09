@@ -41,6 +41,9 @@ function vyps_as_sub_menu_page() {
  <p>All attributes must be set for this to function. This creates a button site user to click on to have your site talk to the Adscend API and confirm how many points they earned from Adscend.</p>
  <h2>Note:</h2>
  <p>If you are not familiar with Adscend Media, they do have odd practices. Users may see ads or do activities but Adscend will not credit them for one reason or another after a while. In my own testing, I noticed I can only get 9 ad watch credits or so in a 24 hour period before it stops paying out on the Adscend side. Switching to another device or IP address helps, but consider telling your users to use our VY256 Miner if they keep hitting their daily view limit as it seems that Adscend may have gotten wise to people leaving their tablet on with volume off running video ads while no one is actually watching.</p>
+ <h2>Referral</h2>
+ <p>Please help out VidYen when you sign up to Adscend by using our <a href=\"https://www.vidyen.com/adscend-signup/\" target=\"_blank\">referral link</a> on our webpage</p>
+ <p>We will also put some tips on getting accepeted on that page as well.</p>
  ";
 
 }
