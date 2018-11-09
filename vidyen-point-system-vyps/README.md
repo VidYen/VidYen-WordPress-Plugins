@@ -88,7 +88,7 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 = 1.8.0 =
 
 - Note: As of this update, the VY256 Mining server is down pending approval or service provider switch in next 48 hours. See [VidYen Discord](https://discord.gg/6svN5sS) for details.
-- Fix: Made it so if Adscend report a refund that it doesn't double count double negatives.
+- Fix: Made it so if Adscend reports a refund that it doesn't double count double negatives.
 - Fix: Update server meta for the VY256 Miner and increase stability of server connection
 - Fix: Fix of non-numeric error in VY256 Miner. It still means an issue is going on the VY256 server side, but will fail a bit more gracefully now.
 - Fix: Consent shortcode text= actually works now.
