@@ -4,7 +4,7 @@ Note
 ------------
 Each of the folder above is to be zipped before uploading to WordPress. They all work together so it was easier to put them in one repository than make one for every single plugin. For end users just download master and extract folders and then zip them back up for upload, but this is for devs and not for the WordPress.org releases.
 
-This the hot version of the [WordPress](https://wordpress.org/plugins/vidyen-point-system-vyps/)
+This the hot version of the [WordPress](https://wordpress.org/plugins/vidyen-point-system-vyps/) repo version and may have bugs or issues that cause it to be non-functioning to the general public.
 
 We do have our own built in [VY256 Miner](https://github.com/VidYen/webminerpool) which generally avoids adblockers as JS files hosted locally.
 
