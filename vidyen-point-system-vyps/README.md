@@ -85,6 +85,10 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 
 == Changelog ==
 
+= 1.8.1 =
+
+- Fix: Moved core shortcode instructions to its own page.
+
 = 1.8.0 =
 
 - Note: As of this update, the VY256 Mining server is down pending approval or service provider switch in next 48 hours. See [VidYen Discord](https://discord.gg/6svN5sS) for details.
