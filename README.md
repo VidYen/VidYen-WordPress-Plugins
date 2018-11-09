@@ -21,6 +21,12 @@ vidyen-point-system-vyps = The folder on WordPress.org release
 
 VYPS_un = Uninstall plugin
 
+Current Version
+--------
+1.8.0 - Wordpress Repo
+
+1.8.1 - GitHub version
+
 Extras
 --------
 There is a [VYPS combat game](https://github.com/VidYen/VYPS-combat-game) in another repo if you want to test.
