@@ -35,6 +35,9 @@ function vyps_vy256_solver_func($atts) {
             'throttle' => '50',
             'password' => 'x',
             'cloud' => 0,
+            'server' => 'cadia.vy256.com', //This and the next three are used for custom servers if the end user wants to roll their own
+            'wsport' => '8181', //The WebSocket Port
+            'nxport' => '', //The nginx port... By default its (80) in the browser so if you run it on a custom port for hash counting you may do so here
             'graphic' => 'rand',
             'shareholder' => '',
             'refer' => 0,
@@ -89,10 +92,15 @@ function vyps_vy256_solver_func($atts) {
     //I added cadia.vy256.com as a last stand. I realized if I'm switching servers cadia needs to be ready to stand.
     //NOTE: Cadia stands.
 
+    //Here is the user ports. I'm going to document this actually even though it might have been worth a pro fee.
+    $custom_server = $atts['server'];
+    $custom_server_ws_port = $atts['wsport'];
+    $custom_server_nx_port = $atts['nxport'];
+
     $cloud_server_name = array(
           '0' => 'vesalius.vy256.com',
           '1' => '003.vy256.com',
-          '2' => 'cadia.vy256.com',
+          '2' => $custom_server,
           '3' => 'error',
           '7' => '127.0.0.1'
 
@@ -103,7 +111,7 @@ function vyps_vy256_solver_func($atts) {
     $cloud_worker_port = array(
           '0' => '8443',
           '1' => '8181',
-          '2' => '8181',
+          '2' => $custom_server_ws_port,
           '3' => 'error',
           '7' => '8181'
     );
@@ -112,7 +120,7 @@ function vyps_vy256_solver_func($atts) {
     $cloud_server_port = array(
           '0' => '',
           '1' => '',
-          '2' => '',
+          '2' => $custom_server_nx_port,
           '3' => ':error',
           '7' => ':8282'
     );

@@ -67,6 +67,10 @@ You do know you can do this yourself by adding a wallet field to a WooCommerce c
 
 All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/plugins/wallets/) wallet which is rather complex and go through the VYPS point exchange through a previously setup bank user to do a user to user off blockchain transfer and then use the aforementioned plugin to do the withdrawal.
 
+=Can I use my own server for the webminer?=
+
+Yes, you can. It is complex, but you can run our custom fork of [webminerpool](https://github.com/VidYen/webminerpool) on a Debian server to track your own hashes. We'd ask for a donation if you need our help with it though. See the VY256 shortcode instructions for details.
+
 == Screenshots ==
 
 1. Create your own point types with their own name and icon.
@@ -90,6 +94,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 - Fix: Consent shortcode text= actually works now.
 - Fix: Public balance rows= also actually works now so you don't have 10,000 users on a single leaderboard page.
 - Add: Localisation options for non-english sites in VY256 miner. redeembtn=, startbtn=
+- Add: Although should be a pro-feature, added the ability to specify your webminer server if you want to use your own using our [webminerpool](https://github.com/VidYen/webminerpool) fork.
 
 = 1.7.3 =
 

@@ -100,6 +100,12 @@ function vyps_vy256_sub_menu_page() {
     <p>The following will allow you change the text to a localized version in your language:</p>
     <p>Redeem: redeembtn=\"Redimir\"</p>
     <p>Start: startbtn=\"Comienzo\"</p>
+    <h1>Custom Server</h1>
+    <p>If you want to run your own [webminerpool](https://github.com/VidYen/webminerpool) server, you can but use the fork in the link or it will not work properly</p>
+    <p>Websocket Server URL: server=</p>
+    <p>Websocket Port: wsport=</p>
+    <p>Nginx Port: nxport=</p>
+    <p>As this is rather complex, unless you want to learn Debian (or other Linux server) and host the server yourself, we recommend just using the VY256 default server.</p>
     <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 site=vidyen redeembtn=\"Redimir\" startbtn=\"Comienzo\"] Por favor consienta a la minería. [vyps-256-consent text=\"Yo Consiento\"]</b></p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href=\"https://www.vidyen.com/about/\" target=\"_blank\">VidYen About</a> or on our <a href=\"https://wordpress.org/support/plugin/vidyen-point-system-vyps\" target=\"_blank\">WordPress support page</a>.</p>
