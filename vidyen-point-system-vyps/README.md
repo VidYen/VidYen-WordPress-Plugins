@@ -87,7 +87,7 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 
 = 1.8.0 =
 
-- Note: Long burn in so moving to 1.8.0, there are issues with the VY256 and Google cloud which hopefully will be resolved soon.
+- Note: Long burn in so moving to 1.8.0, as there are issues with the VY256 and Google cloud which hopefully will be resolved soon.
 - Fix: Made it so if Adscend report a refund that it doesn't double count double negatives.
 - Fix: Update server meta for the VY256 Miner and increase stability of server connection
 - Fix: Fix of non-numeric error in VY256 Miner. It still means an issue is going on the VY256 server side, but will fail a bit more gracefully now.
