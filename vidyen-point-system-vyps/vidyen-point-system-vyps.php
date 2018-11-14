@@ -369,14 +369,23 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer.php'); //
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer_balance.php'); //Referal balance shortcdoe. I really need to functionize this.
 /*** End of Shortcode Includes ***/
 
-/*** FUNCTION INCLUDES IN BASE ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/vyps_procheck.php'); //Pro checking.
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/vyps_point_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
+/*** FUNCTION INCLUDES***/
+
+/*** CORE ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_procheck.php'); //Pro checking.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_balance_func.php'); //Functionalized balance (FINALLY! -Felty)
+
+/*** REFER ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_current_refer_func.php'); //General function to check if current user has a refer set, is valid, and returns it.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_create_refer_func.php'); //Function to create encode based off user id.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_is_refer_func.php'); //Function to make sure it is really a refer.
+
+/*** WALLET ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_bal_check_func.php'); //Tie in to Dashed Slug's wallet to check if transfer balance is possible
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_move_func.php'); //Function to transfer points between users if points allow.
+
+/*** WW ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_credit_func.php'); //Function to credit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_debit_func.php'); //Function to debit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_bal_func.php'); //Function to check bal the WooWallet.

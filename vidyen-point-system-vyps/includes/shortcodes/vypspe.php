@@ -417,6 +417,10 @@ function vyps_point_exchange_func( $atts ) {
         //I'm making this more informative to me as something is not right.
         if ($dash_move_result == 1){
 
+          //Doing balance update check.
+          vyps_balance_func( $atts );
+
+          //Results message output for dashed result transfer.
           $results_message = "Success. Crypto payout at: ". date('Y-m-d H:i:s'); //NOTE I need to fix this later down the page. I don't have time today and not really that needed.
 
           //NOTE: Was requested that we do a refer for crypto payouts but its doing to be the original

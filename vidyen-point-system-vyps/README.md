@@ -88,6 +88,8 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 = 1.8.1 =
 
 - Fix: Moved core shortcode instructions to its own page.
+- Fix: Balance update in PE during action.
+- Add: Functions moved around to appropriate folders.
 
 = 1.8.0 =
 
