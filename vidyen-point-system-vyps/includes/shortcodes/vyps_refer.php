@@ -4,15 +4,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//I swore I'd never use the usermeta table, but here i am.
-//Use case is that I just need every user to have an XMR if they are in the worker share point system.
-
-//Sortcodes all the way down
-//Note going forward. If its a shortcode funciton it gets name short_func
-//If just a func its just a funciton so vyps_current_refer_func is just a function to return
-//Where as vys_refer_short_func is a function designed specifcally for a shortcode
-//Oh my code is getting out of hand. -Felty
-function vyps_refer_short_func() {
+//OK. We are having a gui for stanard egnlish and the three break downs afterwards
+function vyps_refer_gui_short_func() {
 
   //Boot user out if not logged in. BTW my code is evolving. -Felty
   if ( ! is_user_logged_in() ) {
@@ -145,4 +138,67 @@ function vyps_refer_short_func() {
 }
 
 //Adding the shortcode.
-add_shortcode( 'vyps-refer', 'vyps_refer_short_func');
+add_shortcode( 'vyps-refer-gui', 'vyps_refer_gui_short_func');
+
+//Ok here are the 3 breakdown shortcodes for localization
+//1. Your referal code
+//2. Who you are referred to
+//3. The input field
+//The rest the admins have to put in with their own text
+
+
+/*** REFER CODE ONLY ***/
+function vyps_refer_code_short_func() {
+
+  //Boot user out if not logged in. BTW my code is evolving. -Felty
+  if ( ! is_user_logged_in() ) {
+
+    return; //Not logged in. You see nothing.
+
+  }
+  //Set variables
+  //Get current user Id obviously
+  $current_user_id = get_current_user_id();
+
+  //WE functionized this. This should output encode64
+  $user_id = $current_user_id;
+  $user_refer = vyps_create_refer_func($user_id);
+
+  return $user_refer; //Yep you just see you code
+
+}
+
+//Adding the shortcode.
+add_shortcode( 'vyps-refer-code', 'vyps_refer_code_short_func');
+
+/*** The code of the person you are set to ***/
+function vyps_current_refer_short_func() {
+
+  //Boot user out if not logged in. BTW my code is evolving. -Felty
+  if ( ! is_user_logged_in() ) {
+
+    return; //Not logged in. You see nothing.
+
+  }
+
+  $current_user_id = get_current_user_id();
+
+  //WE functionized this. This should output encode64
+  $user_id = $current_user_id;
+  $user_refer = vyps_create_refer_func($user_id);
+
+  //This is hardcoded, but the label we are going to cram into the usermeta table
+  $key = 'vyps_current_refer';
+
+  //NO WIRE ARRAYS! Only one value at all time. Unless someone messed something up somewhere.
+  $single = TRUE;
+
+  //Now we pull what the users current refer was
+  $current_refer = get_user_meta( $current_user_id, $key, $single ); //I'm guessing if it doesn't exist, that it will show a blank? WCCW
+
+  return $current;
+
+}
+
+//Adding the shortcode.
+add_shortcode( 'vyps-refer-current', 'vyps_current_refer_short_func');
