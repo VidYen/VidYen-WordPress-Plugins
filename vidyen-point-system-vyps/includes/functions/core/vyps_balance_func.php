@@ -109,6 +109,3 @@ function vyps_balance_func( $atts ) {
 	return $balance_output;
 
 }
-
-/* Send shortcode into WP */
-add_shortcode( 'vyps-balance', 'vyps_balance_func');

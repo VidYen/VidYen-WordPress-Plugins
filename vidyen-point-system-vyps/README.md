@@ -89,6 +89,7 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 
 - Fix: Moved core shortcode instructions to its own page.
 - Fix: Balance update in PE during action.
+- Fix: Admin log fixed to be manageable for large user bases. (Who would have thought this would be used on sites with thousands of users?)
 - Add: Functions moved around to appropriate folders.
 
 = 1.8.0 =
