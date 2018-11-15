@@ -47,6 +47,7 @@ function vyps_vy256_solver_func($atts) {
             'cworker'=> '',
             'timebar' => 'yellow',
             'workerbar' => 'orange',
+            'workerbartext' => 'white',
             'redeembtn' => 'Redeem',
             'startbtn' => 'Start Mining',
         ), $atts, 'vyps-256' );
@@ -78,10 +79,15 @@ function vyps_vy256_solver_func($atts) {
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
     $hash_per_point = $atts['hash'];
+
+    //Custom Graphics variables for the miner. Static means start image, custom worker just means the one that goes on when you hit start
     $custom_worker_stat = $atts['cstatic'];
     $custom_worker = $atts['cworker'];
+
+    //Colors for the progress bars and text
     $timeBar_color = $atts['timebar'];
     $workerBar_color = $atts['workerbar'];
+    $workerBar_text_color = $atts['workerbartext'];
 
     //De-English-fication section. As we have a great deal of non-english admins, I wanted to add in options to change the miner text hereby
     $redeem_btn_text = $atts['redeembtn']; //By default 'Redeem'
@@ -478,6 +484,7 @@ function vyps_vy256_solver_func($atts) {
 
               //Progressbar
               var totalpoints = 0;
+              var progresspoints = 0;
               var width = 1;
               var elem = document.getElementById(\"workerBar\");
 
@@ -487,6 +494,9 @@ function vyps_vy256_solver_func($atts) {
 
                 if(totalhashes > 0){
                     document.getElementById('total_hashes').innerText = ' ' + totalhashes;
+
+                    progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
+                    document.getElementById('progress_text').innerText = progresspoints + '/' + $hash_per_point;
 
                     width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
                     elem.style.width = width + '%';
@@ -533,7 +543,7 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"width:1%; height: 30px; background-color: $workerBar_color;\"></div>
+          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position:absolute; left: 50%; color:$workerBar_text_color;\">0/$hash_per_point</div></div>
         </div>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>

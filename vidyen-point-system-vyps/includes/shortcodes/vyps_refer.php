@@ -138,7 +138,7 @@ function vyps_refer_gui_short_func() {
 }
 
 //Adding the shortcode.
-add_shortcode( 'vyps-refer-gui', 'vyps_refer_gui_short_func');
+add_shortcode( 'vyps-refer', 'vyps_refer_gui_short_func');
 
 //Ok here are the 3 breakdown shortcodes for localization
 //1. Your referal code
