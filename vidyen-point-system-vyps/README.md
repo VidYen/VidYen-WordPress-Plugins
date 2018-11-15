@@ -91,7 +91,7 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 - Fix: Balance update in PE during action for Dashed Slug use.
 - Fix: Admin log fixed to be manageable for large user bases. (Who would have thought this would be used on sites with thousands of users?)
 - Add: Functions moved around to appropriate folders.
-- Add: Moved the hashes to the bar and then removed hashes but show the amount for each point to be more like an XP bar.
+- Add: (Major) Streamlined the VY256 miner UI to look like an XP bar and to consolidate space and streamline. Feel free to send feedback. Progress bar text colors can be modified via shortcode (see VY256 shortcode page)
 
 = 1.8.0 =
 

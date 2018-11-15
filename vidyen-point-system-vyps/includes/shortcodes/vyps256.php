@@ -46,6 +46,7 @@ function vyps_vy256_solver_func($atts) {
             'cstatic' => '',
             'cworker'=> '',
             'timebar' => 'yellow',
+            'timebartext' => 'white',
             'workerbar' => 'orange',
             'workerbartext' => 'white',
             'redeembtn' => 'Redeem',
@@ -86,6 +87,7 @@ function vyps_vy256_solver_func($atts) {
 
     //Colors for the progress bars and text
     $timeBar_color = $atts['timebar'];
+    $workerBar_text_color = $atts['timebartext'];
     $workerBar_color = $atts['workerbar'];
     $workerBar_text_color = $atts['workerbartext'];
 
@@ -454,7 +456,7 @@ function vyps_vy256_solver_func($atts) {
                 // for the definition of sendStack/receiveStack, see miner.js
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
-                document.getElementById('status-text').innerText = 'Working on mining rewards';
+                document.getElementById('status-text').innerText = 'Working.';
               }, 2000);
 
             }
@@ -474,7 +476,7 @@ function vyps_vy256_solver_func($atts) {
               var idtime = setInterval(timeframe, 3600);
 
               function timeframe() {
-                if (widthtime >= 100) {
+                if (widthtime >= 42) {
                   widthtime = 1;
                 } else {
                   widthtime++;
@@ -493,18 +495,19 @@ function vyps_vy256_solver_func($atts) {
                 document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
 
                 if(totalhashes > 0){
-                    document.getElementById('total_hashes').innerText = ' ' + totalhashes;
+                    //document.getElementById('total_hashes').innerText = ' ' + totalhashes;
 
                     progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
-                    document.getElementById('progress_text').innerText = progresspoints + '/' + $hash_per_point;
+                    totalpoints = Math.floor( totalhashes / $hash_per_point );
 
                     width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
                     elem.style.width = width + '%';
 
-                    if(totalhashes > $hash_per_point ){
-                      totalpoints = Math.floor( totalhashes / $hash_per_point );
-                      document.getElementById('total_points').innerText = totalpoints;
-                    }
+                    document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
+
+                    //Delete soon
+                    //document.getElementById('total_points').innerText = totalpoints;
+
                 }
 
               }
@@ -514,7 +517,7 @@ function vyps_vy256_solver_func($atts) {
           </script>
 
     <center id=\"mining\" style=\"display:none;\">
-    <div style=\"margin-top:10px !important;\"><span id=\"status-text\">Connecting to server</span><span id=\"wait\">.</span></div>
+
 
     <script>
     var dots = window.setInterval( function() {
@@ -530,28 +533,26 @@ function vyps_vy256_solver_func($atts) {
     <tr>
        <td>
          <div>
-           <button id=\"startb\" onclick=\"start()\">$start_btn_text</button>
-         </div>
+           <button id=\"startb\" style=\"width:100%;\" onclick=\"start()\">$start_btn_text</button>
+           <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
+         </div><br>
+        <div id=\"timeProgress\" style=\"width:100%; background-color: grey; \">
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Waiting to connect.</span><span id=\"wait\">.</span></div></div>
+        </div>
+        <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
+          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
+        </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:none;\">
             Power:&nbsp;
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\">-</button>
-          <input style=\"display:inline;width:50%;\" type=\"text\" id=\"1\" value=\"$sm_threads\" disabled class=field>
+          <input style=\"display:inline;width:42%;\" type=\"text\" id=\"1\" value=\"$sm_threads\" disabled class=field>
           <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\">+</button>
-          <span id=\"total_hashes\" style=\"float:right;\">0</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; Hashes: &nbsp;</span>
-        </div>
-        <div id=\"timeProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"></div>
-        </div>
-        <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position:absolute; left: 50%; color:$workerBar_text_color;\">0/$hash_per_point</div></div>
         </div>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
             <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
             <!--<input type=\"submit\" class=\"button-secondary\" value=\"$redeem_btn_text Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
-            <span id=\"total_points\" style=\"float:right;\">(Please Wait)</span><span id=\"point_icon\" style=\"float:right;\">&nbsp; $reward_icon &nbsp;</span>
           </form>
-          <form id=\"stop\" style=\"display:none;margin:5px !important;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
             $('.add').click(function () {
