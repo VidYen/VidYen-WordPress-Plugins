@@ -42,7 +42,7 @@ function vyps_point_exchange_func( $atts ) {
         'mobile' => false,
         'woowallet' => false,
         'transfer' => false,
-        'btn_name' => '', 
+        'btn_name' => '',
 		), $atts, 'vyps-pe' );
 
 	/* Save this for later
@@ -191,20 +191,6 @@ function vyps_point_exchange_func( $atts ) {
   $f_sourceName = vyps_point_name_func($firstPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
   $f_sourceIcon = vyps_point_icon_func($firstPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
 
-  //"SELECT name FROM $table_name_points WHERE id= '$sourcePointID'"
-  /* This has been commented out
-	$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-	$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $firstPointID );
-	$f_sourceName = $wpdb->get_var( $sourceName_query_prepared );
-  */
-
-  /*
-	//"SELECT icon FROM $table_name_points WHERE id= '$sourcePointID'"
-	$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
-	$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $firstPointID );
-	$f_sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
-  */
-
 	//NOTE: Second source point. Perhaps I should write something more to differentiate.
 	//Only does the the WPDB if the the secondPointID actually exists. I thought but perhaps greater than 0 is best to rule out negative numbers
 	if ($secondPointID > 0){
@@ -212,21 +198,6 @@ function vyps_point_exchange_func( $atts ) {
     //Second source point name and Icon
     $s_sourceName = vyps_point_name_func($secondPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
     $s_sourceIcon = vyps_point_icon_func($secondPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
-
-    /*
-
-
-		//"SELECT name FROM $table_name_points WHERE id= '$sourcePointID'"
-		$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-		$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $secondPointID );
-		$s_sourceName = $wpdb->get_var( $sourceName_query_prepared );
-
-		//"SELECT icon FROM $table_name_points WHERE id= '$sourcePointID'"
-		$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
-		$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $secondPointID );
-		$s_sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
-
-    */
 
 	}
 
@@ -238,18 +209,6 @@ function vyps_point_exchange_func( $atts ) {
     //Destination source point name and Icon
     $destName = vyps_point_name_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
     $destIcon = vyps_point_icon_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.p
-
-    /*
-    //SELECT name FROM $table_name_points WHERE id= '$destinationPointID'"
-  	$destName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d";
-  	$destName_query_prepared = $wpdb->prepare( $destName_query, $destinationPointID );
-  	$destName = $wpdb->get_var( $destName_query_prepared );
-
-  	//SELECT icon FROM $table_name_points WHERE id= '$destinationPointID'
-  	$destIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
-  	$destIcon_query_prepared = $wpdb->prepare( $destIcon_query, $destinationPointID );
-  	$destIcon = $wpdb->get_var( $destIcon_query_prepared );
-    */
 
   } else {
 
@@ -484,73 +443,8 @@ function vyps_point_exchange_func( $atts ) {
 
       } else {
 
-        //NOTE: All below should be the add (I think) commenting out to functionize
-        /*
-        // Ok. Now we put the destination points in. Reason should stay the same
-
-        $amount = $pt_dAmount; //Destination amount should be positive
-
-        $PointType = $destinationPointID; //Originally this was a table call, but seems easier this way
-
-        //Setting this to true sends the points to
-        if ($user_transfer_state == TRUE ){
-
-          $user_refer = vyps_current_refer_func($current_user_id); //By a slight of hand, if transfer==true then the output points all go to referral.
-
-          //Ok we just need to check if the refer function works and that it has a user_id.
-          //The function will return a 0 if there is no refer and an int 1 or greater if it does
-          if ($user_refer > 0 ) {
-
-            $user_id = $user_refer; //Setting the user for the output in the SQL call
-          }
-
-        }
-
-        //NOTE: I am ideologically opposed to having the dash slug be a part of my code rather than an addition
-        //But it it's easier to check to see if its there and else it.
-        //I thought about
-        //The $btn_name should be unique. But tags the first inserted point
-        //I had an internal debate to put this on the input or output, but sometimes the input will have no row if there was no COST
-        //So when checking for time, it should check the last meta $btn_name and see how long to go
-        $data = [
-            'reason' => $reason,
-            'point_id' => $PointType,
-            'points_amount' => $amount,
-            'user_id' => $user_id,
-            'time' => date('Y-m-d H:i:s'),
-            'vyps_meta_id' => $btn_name
-            ];
-        $wpdb->insert($table_log, $data);
-
-      }
-
-      /* Made redudant by the function
-      //NOTE: I should do a check, but why would an admin have a referral to cashing out is beyond me.
-      //OK. Here is if you have a refer rate that it just thorws it at their referrable
-      //I'm not 100% sure that I can let the func behave nice like this. WCCW
-      //NOTE: I added the case where the only does the refer is the $ds_amount is 0 so it doesn't do it twice. I should functionize this, but lack of time.
-      //Also, there will be no referrals to woowallet transfers. I know someone is going to ask, but its giving away free money at that point so you can pay me to spend the time to add it.
-      if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 AND $ds_amount == 0 AND $woowallet_mode != true){
-
-        $reason = "Point Transfer Referral"; //It feels like this reason is legnth... But I shows that it was a refer rather than someone on your account transferring you points away
-        $amount = doubleval($pt_dAmount); //Why do I do a doubleval here again? I think it was something with Wordfence.
-        $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
-        $refer_user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
-        //NOTE: $PointType was changed from $pointType from the vy256 miner
-
-        //Inserting VY256 hashes AS points! To referral user. NOTE: The meta_ud for 'refer' and meta_subid1 for the ud of the person who referred them
-        $data = [
-            'reason' => $reason,
-            'point_id' => $PointType,
-            'points_amount' => $amount,
-            'user_id' => $refer_user_id,
-            'vyps_meta_id' => 'refer',
-            'vyps_meta_subid1' => $user_id,
-            'time' => date('Y-m-d H:i:s')
-        ];
-        $wpdb->insert($table_log, $data);
-
-        */
+        //NOTE: Below is the adds for everything after the checks for non-vyps
+        //AKA this is pure VYPS to VYPS exchanges.
 
         //In theory I just now have to run the add and it all works! In theory...
         $add_result = vyps_add_func($atts);
