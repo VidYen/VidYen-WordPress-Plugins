@@ -42,6 +42,7 @@ function vyps_point_exchange_func( $atts ) {
         'mobile' => false,
         'woowallet' => false,
         'transfer' => false,
+        'btn_name' => '', 
 		), $atts, 'vyps-pe' );
 
 	/* Save this for later
@@ -169,6 +170,9 @@ function vyps_point_exchange_func( $atts ) {
 
   }
 
+  //Array hook for the add
+  $atts['btn_name'] = $btn_name; //Seems like I can pull this in reverse? Just a guess
+
 	//I am going to redo the process but just use all the variables.
 
 
@@ -181,35 +185,36 @@ function vyps_point_exchange_func( $atts ) {
 	$table_name_points = $wpdb->prefix . 'vyps_points';
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 
-	//Just doing some table calls to get point names and icons. Can you put icons in buttons? Hrm...
+  //NOTE: I'm replacing these SQL calls with functions that also do SQL calls
 
-	//Ok below is just the new way we are going to handle prepares. Takes 4 lines to do one get_var now, but just throw more hardware at it.
-	//1. Query comment as should be written out if you pasted it into command lines
-	//2. the Query pre-pregarded
-	//3. the query prepared
-	//4. The get_var command. Btw, I would like to avoid calling entire rows if possible as we usually are interested in different tables
-	//   And would be harder to read and not really needed.
-	//   BTW all table names are hard coded even though they are variables depending on the name of the WP table, but I think
-	//   if the prefix was an injection string the entire SQL server would have broke before then -Felty
+	//First source point name and Icon
+  $f_sourceName = vyps_point_name_func($firstPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
+  $f_sourceIcon = vyps_point_icon_func($firstPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
 
-	//Going to group this up since need to tell which ones are different
-	//NOTE: Reused code and just differentated the end variables with f for first and s for second. t will be for third if we do a three variable output
-
-
-	//NOTE: First source point
-	//"SELECT name FROM $table_name_points WHERE id= '$sourcePointID'"
+  //"SELECT name FROM $table_name_points WHERE id= '$sourcePointID'"
+  /* This has been commented out
 	$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
 	$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $firstPointID );
 	$f_sourceName = $wpdb->get_var( $sourceName_query_prepared );
+  */
 
+  /*
 	//"SELECT icon FROM $table_name_points WHERE id= '$sourcePointID'"
 	$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
 	$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $firstPointID );
 	$f_sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
+  */
 
 	//NOTE: Second source point. Perhaps I should write something more to differentiate.
 	//Only does the the WPDB if the the secondPointID actually exists. I thought but perhaps greater than 0 is best to rule out negative numbers
 	if ($secondPointID > 0){
+
+    //Second source point name and Icon
+    $s_sourceName = vyps_point_name_func($secondPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
+    $s_sourceIcon = vyps_point_icon_func($secondPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
+
+    /*
+
 
 		//"SELECT name FROM $table_name_points WHERE id= '$sourcePointID'"
 		$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
@@ -221,12 +226,20 @@ function vyps_point_exchange_func( $atts ) {
 		$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $secondPointID );
 		$s_sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
 
+    */
+
 	}
 
 	//NOTE: Output point
   //LOGIC: As long as the $woowallet_mode is not turned on it will do this.
 
   if ($woowallet_mode != true ) {
+
+    //Destination source point name and Icon
+    $destName = vyps_point_name_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
+    $destIcon = vyps_point_icon_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.p
+
+    /*
     //SELECT name FROM $table_name_points WHERE id= '$destinationPointID'"
   	$destName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d";
   	$destName_query_prepared = $wpdb->prepare( $destName_query, $destinationPointID );
@@ -236,6 +249,7 @@ function vyps_point_exchange_func( $atts ) {
   	$destIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
   	$destIcon_query_prepared = $wpdb->prepare( $destIcon_query, $destinationPointID );
   	$destIcon = $wpdb->get_var( $destIcon_query_prepared );
+    */
 
   } else {
 
@@ -470,6 +484,8 @@ function vyps_point_exchange_func( $atts ) {
 
       } else {
 
+        //NOTE: All below should be the add (I think) commenting out to functionize
+        /*
         // Ok. Now we put the destination points in. Reason should stay the same
 
         $amount = $pt_dAmount; //Destination amount should be positive
@@ -508,6 +524,7 @@ function vyps_point_exchange_func( $atts ) {
 
       }
 
+      /* Made redudant by the function
       //NOTE: I should do a check, but why would an admin have a referral to cashing out is beyond me.
       //OK. Here is if you have a refer rate that it just thorws it at their referrable
       //I'm not 100% sure that I can let the func behave nice like this. WCCW
@@ -533,11 +550,22 @@ function vyps_point_exchange_func( $atts ) {
         ];
         $wpdb->insert($table_log, $data);
 
-        //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
+        */
+
+        //In theory I just now have to run the add and it all works! In theory...
+        $add_result = vyps_add_func($atts);
 
       }
 
-			$results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
+      if ( $add_result == 1 ) {
+
+          //Then it must have worked in practice
+			    $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
+      } else {
+
+          $results_message = "Uknown Error: " . $add_result; //Yeah I would have no clue. Maybe $add_result could tell us.
+
+      }
 
 		} //End of the if for proceeding with transfer. Line 360
 
@@ -559,7 +587,7 @@ function vyps_point_exchange_func( $atts ) {
 
     //I am 99.99996% sure that this same for all 4 versions mobile and not.
     //With the wonders of ctrl+f I confirmed it is.
-    $destIcon_output = "<img src=\"$destIcon\" width=\"16\" height=\"16\" title=\"$destName\">";
+    $destIcon_output = $destIcon;
 
   } else {
 
@@ -578,7 +606,7 @@ function vyps_point_exchange_func( $atts ) {
   		$table_result_ouput = "<table id=\"$btn_name\">
   					<tr><!-- First input -->
   						<td><div align=\"center\">Spend</div></td>
-  						<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+  						<td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
   						<td>
   							<div align=\"center\">
   								<b><form method=\"post\">
@@ -598,7 +626,7 @@ function vyps_point_exchange_func( $atts ) {
   	$table_result_ouput = "<table id=\"$btn_name\">
   				<tr><!-- First input -->
   					<td rowspan=\"2\"><div align=\"center\">Spend</div></td>
-  					<td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+  					<td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
   					<td rowspan=\"2\">
   						<div align=\"center\">
   							<b><form method=\"post\">
@@ -611,7 +639,7 @@ function vyps_point_exchange_func( $atts ) {
   					<td rowspan=\"2\"><div align=\"center\">Receive</div></td>
   				</tr>
   				<tr><!-- Second input -->
-  					<td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" height=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
+  					<td><div align=\"center\">$s_sourceIcon $format_pt_sAmount</div></td>
   				</tr>";
 
   	} //End of the non mobile view
@@ -625,7 +653,7 @@ function vyps_point_exchange_func( $atts ) {
       $table_result_ouput = "<table id=\"$btn_name\">
             <tr><!-- First row -->
               <td><div align=\"center\">Spend</div></td>
-              <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+              <td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
             </tr>
             <tr><!-- Second row -->
               <td><div align=\"center\">Receive</div></td>
@@ -649,11 +677,11 @@ function vyps_point_exchange_func( $atts ) {
     $table_result_ouput = "<table id=\"$btn_name\">
           <tr><!-- First input -->
             <td><div align=\"center\">Spend</div></td>
-            <td><div align=\"center\"><img src=\"$f_sourceIcon\" width=\"16\" height=\"16\" title=\"$f_sourceName\"> $format_pt_fAmount</div></td>
+            <td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
           <tr>
           <tr><!-- Second input -->
             <td><div align=\"center\">Spend</div></td>
-            <td><div align=\"center\"><img src=\"$s_sourceIcon\" width=\"16\" height=\"16\" title=\"$s_sourceName\"> $format_pt_sAmount</div></td>
+            <td>$s_sourceIcon $format_pt_sAmount</div></td>
           </tr>
           <tr> <!-- Output -->
             <td><div align=\"center\">Receive</div></td>

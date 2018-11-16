@@ -85,6 +85,11 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 
 == Changelog ==
 
+= 1.8.2 =
+
+- Add: Functionalization of Point Exchange. Now with 3rd party API abilities
+- Add: MyCred hook into [vyps-pe] Point Exchange that allows for Monetization transfer into that.
+
 = 1.8.1 =
 
 - Fix: Moved core shortcode instructions to its own page.
