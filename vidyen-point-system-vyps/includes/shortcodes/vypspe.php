@@ -338,48 +338,23 @@ function vyps_point_exchange_func( $atts ) {
 
 			//NOTE: OK. We can run the transfer
 
-			$table_log = $wpdb->prefix . 'vyps_points_log';
-			$reason = "Point Transfer";
+			$table_log = $wpdb->prefix . 'vyps_points_log'; //Not sure if needed
+      //Reason set for $atts
+      $atts['reason'] = 'Point Exchange';
 
       //In case the ds symbol is set to something.
       //I believe the transfer reason should be considered something else
       //As it's basically no longer on the system and not really created a new point amount like the WW transfer.
       if ( $ds_symbol != ''){
 
-        $reason = "Point to Crypto Transfer";
+        //Reason set for $atts
+        $atts['reason'] = 'Point to Crypto Transfer';
+
       }
 
-			$famount = $pt_fAmount * -1; //Seems like this is a bad idea to just multiply it by a negative 1 but hey
-			$samount = $pt_sAmount * -1;
+      //NOTE: Going to guess here witht the deduct
 
-			$fPointType = $firstPointID; //Originally this was a table call, but seems easier this way
-			$sPointType = $secondPointID; //WCCW
-			$user_id = $current_user_id;
-
-
-			//Run the first input.
-			$data = [
-					'reason' => $reason,
-					'point_id' => $fPointType,
-					'points_amount' => $famount,
-					'user_id' => $user_id,
-					'time' => date('Y-m-d H:i:s'),
-					];
-			$wpdb->insert($table_log, $data);
-
-			//NOTE: Only run this is the second amount is greater than zero.
-			if ( $pt_sAmount > 0){
-
-				//Run the second input
-				$data = [
-						'reason' => $reason,
-						'point_id' => $sPointType,
-						'points_amount' => $samount,
-						'user_id' => $user_id,
-						'time' => date('Y-m-d H:i:s')
-						];
-				$wpdb->insert($table_log, $data);
-			}
+      $deduct_result=  vyps_deduct_func( $atts );
 
       //NOTE: OK we are putting in the DS call. Good luck! You'll need it!
       //Also we already checked to see if it had enough balance and the function should do it again anyways.
@@ -395,12 +370,14 @@ function vyps_point_exchange_func( $atts ) {
           vyps_balance_func( $atts );
 
           //Results message output for dashed result transfer.
+          $add_result = 1;
           $results_message = "Success. Crypto payout at: ". date('Y-m-d H:i:s'); //NOTE I need to fix this later down the page. I don't have time today and not really that needed.
 
           //NOTE: Was requested that we do a refer for crypto payouts but its doing to be the original
           //Refer transfer below.
           if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){
 
+            //Note this is a referral... So its an add. Deal with later
             $PointType = $firstPointID; //I believe this should work? A refer with crypto payout should do it.
             $reason = "Point Transfer Referral"; //It feels like this reason is legnth... But I shows that it was a refer rather than someone on your account transferring you points away
             $amount = doubleval($pt_fAmount); //Why do I do a doubleval here again? I think it was something with Wordfence.
@@ -420,12 +397,14 @@ function vyps_point_exchange_func( $atts ) {
             $wpdb->insert($table_log, $data);
 
             //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
+            $add_result = 1;
 
           }
 
         } else {
 
           $results_message = "Transfer error.";
+          $add_result = 0;
 
         }
 
@@ -439,7 +418,13 @@ function vyps_point_exchange_func( $atts ) {
         if ($woowallet_result == 0){
 
           $results_message = "WooWallet transfer error."; //Not sure if it will do any good, but may help me troubleshoot down the road.
+          $add_result = 0;
 
+        } else {
+
+          //If WooWallet works lets say it does.
+          $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
+          
         }
 
       } else {
@@ -453,17 +438,22 @@ function vyps_point_exchange_func( $atts ) {
         //In theory I just now have to run the add and it all works! In theory...
         $add_result = vyps_add_func($atts);
 
-      }
-
-      if ( $add_result == 1 ) {
-
-          //Then it must have worked in practice
-			    $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
-      } else {
-
-          $results_message = "Uknown Error: " . $add_result; //Yeah I would have no clue. Maybe $add_result could tell us.
 
       }
+
+      //Note $add_result may not matter... I'm just seeing if its defined change the result message... otherwise... It's not that bad.
+      if ( isset( $add_result )){
+
+        if ( $add_result == 1 ) {
+
+            //Then it must have worked in practice
+            $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
+        } else {
+
+            $results_message = "Uknown Error: " . $add_result; //Yeah I would have no clue. Maybe $add_result could tell us.
+
+        }
+      } //End of if defined
 
 		} //End of the if for proceeding with transfer. Line 360
 

@@ -34,18 +34,26 @@ function vyps_add_func( $atts ) {
     ), $atts, 'vyps-pe' );
 
 	//NOTE: Only adding. So do not need any input variables
-	$add_point_id = $atts['outputid'];
-	$add_amount = $atts['outputamount'];
-	$to_user_id = $atts['to_user_id'];
+	//ALL THESE SHOULD BE INTS as VYPS is INT only!
+	$add_point_id = intval($atts['outputid']);
+	$add_amount = intval($atts['outputamount']);
+	$to_user_id = intval($atts['to_user_id']);
+
+	//NOTE: It dawned me I should check to see if point exists. Luckily I made a function that can Tell
+	$pointID = $add_point_id;
+  if ( empty(vyps_point_name_func($pointID))) {
+
+				return 0; //Need better error, but in theory if point does not work, it ceases. Also if they need to name the point.
+	}
 
 	//This should be fed in by the hook doing the call now. ie Mining, Adscend, PE, etc
-	$reason = $atts['reason'];
+	$reason = sanitize_text_field($atts['reason']); //Santiized for text
 
 	//Refer rate
-	$refer_rate = $atts['refer'];
+	$refer_rate = intval($atts['refer']);
 
 	//Button Name. NOTE: This just not get passed by the shortcode, but rather PE
-	$btn_name = $atts['btn_name'];
+	$btn_name = $atts['btn_name']; //TODO Santize this better.... It works but I feel suspicious
 
 
 	//If this is not a transfer or a direct call, then we going to assume its the current id
@@ -134,7 +142,6 @@ function vyps_add_func( $atts ) {
 			'points_amount' => $add_amount,
 			'user_id' => $user_id,
 			'vyps_meta_id' => $meta_id,
-			'vyps_meta_subid1' => $user_id,
 			'time' => date('Y-m-d H:i:s')
 	];
 	$wpdb->insert($table_name_log, $data);
