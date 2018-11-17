@@ -41,6 +41,8 @@ function vyps_point_exchange_func( $atts ) {
         'skip_confirm' => true,
         'mobile' => false,
         'woowallet' => false,
+        'mycred' => false,
+        'mycred_reason' => 'VYPS Transfer',
         'transfer' => false,
         'btn_name' => '',
         'reason' => 'Point Exchange',
@@ -53,12 +55,14 @@ function vyps_point_exchange_func( $atts ) {
 	$pt_dAmount = $atts['damount'];
 	*/
 	$current_user_id = get_current_user_id(); //This needs to go here as we are checking the time way before then.
+  $user_id = $current_user_id;
 	$firstPointID = $atts['firstid'];
 	$secondPointID = $atts['secondid'];
 	$destinationPointID = $atts['outputid'];
 	$pt_fAmount = $atts['firstamount']; //I'm going to be the first to say, I'm am not proud of my naming conventions. Gods know if I ever get amnesia and have to fix my own code, I will be highly displeased. -Felty
 	$pt_sAmount = $atts['secondamount']; //f = first and s = second, notice how i reused some of the old variables for new. Not really intentional nor well executed.
 	$pt_dAmount = $atts['outputamount']; //desintation amount.
+  $vyps_reason = $atts['reason']; //PE reason TODO fix later
   $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
   $user_transfer_state = $atts['transfer']; //NOTE: I was going to rewrite whole system to do user to user tranfer and it occurred to me could just put it here
 
@@ -83,6 +87,10 @@ function vyps_point_exchange_func( $atts ) {
   //WooWallet Check
   $woowallet_mode = $atts['woowallet'];
 
+  //MyCred Check
+  $mycred_mode = $atts['mycred'];
+  $mycred_reason = $atts['mycred_reason'];
+
   //Just some Dash slug logic checks. To make sure if they are setting a symbol that it has an amount and a bank user.
   if ( $ds_symbol != '' AND $ds_amount == 0  ) {
 
@@ -104,7 +112,7 @@ function vyps_point_exchange_func( $atts ) {
 
 	//Oh yeah. Checking to see if source pid was set
 
-	if ( $firstPointID == 0 OR $destinationPointID == 0 AND $woowallet_mode != true ) {
+	if ( $firstPointID == 0 OR $destinationPointID == 0 AND $woowallet_mode != TRUE AND $mycred_mode != TRUE ) {
 
 		return "Admin Error: A required id was set to 0! Please set all ids.";
 
@@ -141,7 +149,7 @@ function vyps_point_exchange_func( $atts ) {
   //NOTE Ok. Some assumption code. By default if you set a ds amount, that you intend to use a decimal so no number formatting.
   //If they put in an amount for the ds then we assume they don't want it formatted.
   //The logic with the OR neded to be implicit with an AND.  As if there is a DS amount you can't use woowallet. Sooo... May the gods save me from my users.
-  if (  $ds_amount == 0 AND $woowallet_mode != true ){
+  if (  $ds_amount == 0 AND $woowallet_mode != true AND $mycred_mode != true){
 
     $format_pt_dAmount = number_format($pt_dAmount);
 
@@ -211,7 +219,7 @@ function vyps_point_exchange_func( $atts ) {
     $destName = vyps_point_name_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
     $destIcon = vyps_point_icon_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.p
 
-  } else {
+  } elseif($woowallet_mode == TRUE ) {
 
     //WooWallet mode must be true then. Or 1.
     $destName = 'My Wallet';
@@ -219,6 +227,14 @@ function vyps_point_exchange_func( $atts ) {
     //So we know WooWallet mod is true so we know it can do this:
     //<span class=\"woo-wallet-icon-wallet\"></span>
     $destIcon = '<span class=\"woo-wallet-icon-wallet\"></span>'; //Huh the '' vs "" came in handy.
+
+  } elseif ($mycred_mode == TRUE ) {
+
+    //Mycred on.... honestly... I know I have a 2nd or 3rd conciousness but didn't really think that would be a 3rd possiblity here... Oh well.
+    $destName = 'Mycred Points';
+
+    //Mycred wallet icon. ERE WE GO!
+    $destIcon = '<span class="dashicons dashicons-star-filled static"></span>';
 
   }
 
@@ -424,8 +440,15 @@ function vyps_point_exchange_func( $atts ) {
 
           //If WooWallet works lets say it does.
           $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
-          
+
         }
+
+      } elseif( $mycred_mode == true ){
+
+        //NOTE: mycred stuff goes here
+        //Developer note... Look at the woowallet stuff above... I seem to have lucked out with my subconcious Developement
+        //Note WW had its own functions but mycred had a bit better api
+        $mycred_result = mycred_add( $mycred_reason, $user_id, $pt_dAmount, $vyps_reason );
 
       } else {
 
@@ -477,9 +500,14 @@ function vyps_point_exchange_func( $atts ) {
     //With the wonders of ctrl+f I confirmed it is.
     $destIcon_output = $destIcon;
 
+  } elseif($mycred_mode == TRUE) {
+
+    //We do the mycred icon TODO I need to fix this as in two places has to update
+    $destIcon_output = "<span class=\"dashicons dashicons-star-filled static\"></span>";
+
   } else {
 
-    //We do the woowallt mode icon
+    //We do the woowallet mode icon
     $destIcon_output = "<span class=\"woo-wallet-icon-wallet\"></span>";
   }
 
