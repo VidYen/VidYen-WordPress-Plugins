@@ -2,10 +2,10 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-/***   This is the new functionalized add points function   ***/
+/***   This is the new functionalized deduct points function   ***/
 /*** Specfically to make my life easier and 3rd party hooks ***/
 
-function vyps_add_func( $atts ) {
+function vyps_deduct_func( $atts ) {
 
 	//Make sure user is logged in.
 	if ( is_user_logged_in() ) {
@@ -21,12 +21,13 @@ function vyps_add_func( $atts ) {
 
 	//NOTE: If there are shortcodes they go in, but generally we will see.
 	//Adds and subs will be their own beasts I suppose and will call the PE atts for now
-	//NOTE: Removing the other options that are for PE like the days, and DS stuff which does not register to the point log
+	//NOTE: Removing the adds part
 	$atts = shortcode_atts(
 		array(
-				'outputid' => 0,
-				'outputamount' => 0,
-        'refer' => 0,
+				'firstid' => '0',
+				'secondid' => '0',
+				'firstamount' => '0',
+				'secondamount' => '0',
 				'to_user_id' => 0,
         'comment' => '',
     		'reason' => '',
@@ -34,8 +35,10 @@ function vyps_add_func( $atts ) {
     ), $atts, 'vyps-pe' );
 
 	//NOTE: Only adding. So do not need any input variables
-	$add_point_id = $atts['outputid'];
-	$add_amount = $atts['outputamount'];
+	$first_point_id = $atts['firstid'];
+	$second_point_id = $atts['secondid'];
+	$first_amount = $atts['firstamount'];
+	$second_amount = $atts['firstamount'];
 	$to_user_id = $atts['to_user_id'];
 
 	//This should be fed in by the hook doing the call now. ie Mining, Adscend, PE, etc

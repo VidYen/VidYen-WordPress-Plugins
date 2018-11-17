@@ -43,6 +43,7 @@ function vyps_point_exchange_func( $atts ) {
         'woowallet' => false,
         'transfer' => false,
         'btn_name' => '',
+        'reason' => 'Point Exchange',
 		), $atts, 'vyps-pe' );
 
 	/* Save this for later
@@ -445,6 +446,9 @@ function vyps_point_exchange_func( $atts ) {
 
         //NOTE: Below is the adds for everything after the checks for non-vyps
         //AKA this is pure VYPS to VYPS exchanges.
+
+        ///NOTE NOTE: I added reason into the $atts option as a way to simply have it in the shortcode itself rather than Hardcoded
+        //My instince is to hard code it, but as my users are my children I should let them be free.
 
         //In theory I just now have to run the add and it all works! In theory...
         $add_result = vyps_add_func($atts);
