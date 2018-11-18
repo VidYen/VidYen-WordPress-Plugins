@@ -91,6 +91,20 @@ function vyps_point_exchange_func( $atts ) {
   $mycred_mode = $atts['mycred'];
   $mycred_reason = $atts['mycred_reason'];
 
+  //Normal Check. Order of operations issue. Just need to check if any of the 3rd party stuff is on.
+
+  if ( $mycred_mode == TRUE OR $woowallet_mode == TRUE ) {
+
+    //Definatley not normal mode
+    $vyps_pe_normal_mode = FALSE;
+
+  } else {
+
+    //In normal mode... Save DS... Which is kind of normal or no?
+    $vyps_pe_normal_mode = TRUE;
+
+  }
+
   //Just some Dash slug logic checks. To make sure if they are setting a symbol that it has an amount and a bank user.
   if ( $ds_symbol != '' AND $ds_amount == 0  ) {
 
@@ -213,7 +227,7 @@ function vyps_point_exchange_func( $atts ) {
 	//NOTE: Output point
   //LOGIC: As long as the $woowallet_mode is not turned on it will do this.
 
-  if ($woowallet_mode != true ) {
+  if ($vyps_pe_normal_mode == TRUE ) {
 
     //Destination source point name and Icon
     $destName = vyps_point_name_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
