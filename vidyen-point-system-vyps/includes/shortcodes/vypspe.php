@@ -464,6 +464,9 @@ function vyps_point_exchange_func( $atts ) {
         //Note WW had its own functions but mycred had a bit better api
         $mycred_result = mycred_add( $mycred_reason, $user_id, $pt_dAmount, $vyps_reason );
 
+        //Then it must have worked in practice
+        $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
+
       } else {
 
         //NOTE: Below is the adds for everything after the checks for non-vyps

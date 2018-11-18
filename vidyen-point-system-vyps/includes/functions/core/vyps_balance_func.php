@@ -29,16 +29,16 @@ function vyps_balance_func( $atts ) {
 		array(
 				'pid' => '0',
 				'uid' => '0',
-				'icon' => '1',
+				'raw' => FALSE,
 		), $atts, 'vyps-balance' );
 
 	$pointID = $atts['pid'];
 	$userID = $atts['uid'];
-	$isIcon = $atts['icon'];
+	$isRaw = $atts['raw'];
 
 	//Ok if admin set an UID, they can override current user to see anyone
 	//I realize in theory you could do this with WW as well.
-	//Note. I set icon on by default. As if we have them. You should use them
+	//Raw is for if you want just the number. Otherwise it comes with the icon and commas. Perhaps I should break this off into a 3rd way.
 	//But its possible for admin to set to no if they want
 
 	if ( $userID == 0 ){
@@ -85,24 +85,25 @@ function vyps_balance_func( $atts ) {
 
 	}
 
-	//Since we now can confirm its a number, let's add the commas
-	$balance_points = number_format( $balance_points );
-
-	if ( $isIcon == 1 ){
+	if ( $isRaw == FALSE ){
 
 		//Make the output html have the Icon.
 		$balance_output =  "<img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $balance_points<br>";
 
+		//Since we now can confirm its a number, let's add the commas
+		//NOTE: I'm taking a bit damn leap of faith here and I'm going to have to go back and fix this, but we need to only format, if its for icon.
+		//Else it should be raw AND RAW it should else the commans screw stuff up. But since this is default for shorcode... I may just do $isIcon == 0 for my functions. Gah its problematic.
+		$balance_points = number_format( $balance_points );
 
-	} elseif ( $isIcon == 0 ){
+	} elseif ( $isRaw == TRUE ){
 
-		$balance_output = $balance_points; //Just the raw data please
+		$balance_output = $balance_points; //Just the raw data please. No formatting. NOTE: Youy will have to call for it if you use this function. Hrm... Maybe that should be at top.
 
 		//Return out since not logged in
 	} else {
 
 		//If this else fires an admin put something other than a 1 or a zero which means they messed up.
-		$balance_output = "Admin Error: Icon set to something other than 1 or 0.";
+		$balance_output = "Admin Error: Raw setting issue.";
 	}
 
 	//Out it goes!

@@ -108,7 +108,7 @@ function vyps_deduct_func( $atts ) {
 
 	//set the first id and then check it
 	$atts['pid'] = $first_point_id;
-	$atts['icon'] = 0; //Icon needs to be 0 to get a pure numeric value. I should fix this someday.
+	$atts['raw'] = TRUE; //Icon needs to be 0 to get a pure numeric value. I should fix this someday.
 	$first_balance = intval(vyps_balance_func($atts));
 
 	//Define the short amounts. Should both be 0 to start.

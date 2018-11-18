@@ -71,10 +71,12 @@ function vyps_core_shortcodes_sub_menu_page() {
   <p>There was a need for game like situations where points were to be combined to create items. In this case, you can combine two points of the same or differeing values into a third point of the amount you decide.</p>
   <p>All you need to do is add secondid= and secondamount= with values to enable a combination of poitns into the output.</p>
   <h2>Transfer points into WooCommerce Credit</h2>
-  <p><b>NOTE: Due to changes to WooWallet it has been difficult to continue using it with VYPS so we forked an older version off GitHub under GPLv3 and recommend you use that.</b></p>
   <p><b>[vyps-pe firstid=3  firstamount=1000 outputamount=0.01 woowallet=true]</b></p>
  	<p>Creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode needs requires both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function.
  	It is assumed that you are going straight to WooWallet so there is no need to set output id if woowallet=true, but you still need to set outputamount.</p>
+  <h2>Transfer points into myCred</h2>
+  <p><b>[vyps-pe firstid=3  firstamount=1000 outputamount=100 mycred=true]</b></p>
+  <p>Takes VYPS points and transfers it into <a href=\"https://wordpress.org/plugins/mycred/\" target=\"_blank\">myCred</a> if you have it installed. You need at least the first id and first amount and output amount and mycred=true in the shortcode.</p>
   <h2>Point Exchange and Reward Timers</h2>
   <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4]</b></p>
   <p>Options include hours=, days=, minutes=,  </p>
