@@ -1,7 +1,7 @@
 === VidYen Point System ===
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
-Tags: games, monetization, Adscend, Coinhive, rewards, WooCommerce, rewards site, monero, XMR, raffle, mine, cryptocurrency
+Tags: monetization, Adscend, Coinhive, rewards, WooCommerce, rewards site, monero, XMR, myCred, mine, cryptocurrency, Bitcoin
 Requires at least: 4.9.8
 Tested up to: 5.0.0
 Requires PHP: 7.0
@@ -25,11 +25,12 @@ Currently, this plugin allows you to create points and assign them to users base
 - Raffles
 - Public log
 - Time based transfers and rewards (i.e. daily or weekly rewards)
-- Adscend API tracking
+- Adscend Media API tracking
 - VY256 Miner (non-adblock version)
 - Coinhive API tracking
-- WooCommerce Wallet bridge
-- Support for Dashed Slug's crypto API for payouts
+- [WooCommerce Wallet](https://wordpress.org/plugins/woo-wallet/) bridge
+- [myCred](https://wordpress.org/plugins/mycred/) bridge
+- [Bitcoin and Altcoin Wallets](https://wordpress.org/plugins/wallets/) (Dashed-Slug) Bridge
 
 There are plans to include other monetization systems with more games and other activities for site users. Keep watching!
 
@@ -88,7 +89,7 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 = 1.8.2 =
 
 - Add: Functionalization of Point Exchange. Now with 3rd party API abilities
-- Add: MyCred hook into [vyps-pe] Point Exchange that allows for Monetization transfer into that.
+- Add: [myCred](https://wordpress.org/plugins/mycred/) hook into [vyps-pe] Point Exchange that allows for Monetization transfer into that. ie [vyps-pe firstid=3  firstamount=1000 outputamount=100 mycred=true]
 
 = 1.8.1 =
 
