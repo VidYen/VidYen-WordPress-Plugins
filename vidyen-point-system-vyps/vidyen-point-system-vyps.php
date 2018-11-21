@@ -4,7 +4,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      1.8.2
+Version:      1.8.3
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -171,7 +171,7 @@ function vyps_points_parent_menu_page() {
 	<p>Add points by navigating to the Add Points menu.</p>
 	<p>To modify or see a user’s current point balance, go to the Users panel and use the context menu by &quot;Edit User Information&quot; under &quot;Edit Points&quot;.</p>
 	<p>To see a log of all user transactions, go to &quot;Point Log&quot; in the VidYen Points menu.</p>
-	<b>See the shortcode menus on how to integrate on your WordPress site.</p>
+	<p>See the shortcode menus on how to integrate on your WordPress site.</p>
 	";
 
 	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/credits.php');

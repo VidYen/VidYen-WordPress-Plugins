@@ -43,6 +43,8 @@ function vyps_point_exchange_func( $atts ) {
         'woowallet' => false,
         'mycred' => false,
         'mycred_reason' => 'VYPS Transfer',
+        'gamipress' => false,
+        'gamipress_reason' => 'VYPS Transfer',
         'transfer' => false,
         'btn_name' => '',
         'reason' => 'Point Exchange',
@@ -91,9 +93,16 @@ function vyps_point_exchange_func( $atts ) {
   $mycred_mode = $atts['mycred'];
   $mycred_reason = $atts['mycred_reason'];
 
+  //Gamipress Check
+  $gamipress_mode = $atts['gamipress'];
+  $gamipress_reason = $atts['gamipress_reason'];
+  $gamipress_point_type = $atts['outputid'];
+  $gamipress_point_amount = $atts['outputamount'];
+
+
   //Normal Check. Order of operations issue. Just need to check if any of the 3rd party stuff is on.
 
-  if ( $mycred_mode == TRUE OR $woowallet_mode == TRUE ) {
+  if ( $mycred_mode == TRUE OR $woowallet_mode == TRUE OR $gamipress_mode == TRUE ) {
 
     //Definatley not normal mode
     $vyps_pe_normal_mode = FALSE;
@@ -126,7 +135,8 @@ function vyps_point_exchange_func( $atts ) {
 
 	//Oh yeah. Checking to see if source pid was set
 
-	if ( $firstPointID == 0 OR $destinationPointID == 0 AND $woowallet_mode != TRUE AND $mycred_mode != TRUE ) {
+  //NOTE: I have a realization, this might not be valid, but who knows.
+	if ( $firstPointID == 0 OR ( $destinationPointID == 0 AND $woowallet_mode != TRUE AND $mycred_mode != TRUE AND $gamipress_mode != TRUE )) {
 
 		return "Admin Error: A required id was set to 0! Please set all ids.";
 
@@ -163,7 +173,8 @@ function vyps_point_exchange_func( $atts ) {
   //NOTE Ok. Some assumption code. By default if you set a ds amount, that you intend to use a decimal so no number formatting.
   //If they put in an amount for the ds then we assume they don't want it formatted.
   //The logic with the OR neded to be implicit with an AND.  As if there is a DS amount you can't use woowallet. Sooo... May the gods save me from my users.
-  if (  $ds_amount == 0 AND $woowallet_mode != true AND $mycred_mode != true){
+  //NOTE: As we are moving up in the world. We need to check to see if any of these are true. Then ds amount will be not invoked.
+  if (  $ds_amount == 0 AND $woowallet_mode != TRUE ){
 
     $format_pt_dAmount = number_format($pt_dAmount);
 
@@ -245,7 +256,15 @@ function vyps_point_exchange_func( $atts ) {
   } elseif ($mycred_mode == TRUE ) {
 
     //Mycred on.... honestly... I know I have a 2nd or 3rd conciousness but didn't really think that would be a 3rd possiblity here... Oh well.
-    $destName = 'Mycred Points';
+    $destName = 'myCred Points';
+
+    //Mycred wallet icon. ERE WE GO!
+    $destIcon = '<span class="dashicons dashicons-star-filled static"></span>';
+
+  } elseif ($gamipress_mode == TRUE ) {
+
+    //Mycred on.... honestly... I know I have a 2nd or 3rd conciousness but didn't really think that would be a 3rd possiblity here... Oh well.
+    $destName = 'GamiPress Points';
 
     //Mycred wallet icon. ERE WE GO!
     $destIcon = '<span class="dashicons dashicons-star-filled static"></span>';
@@ -457,12 +476,20 @@ function vyps_point_exchange_func( $atts ) {
 
         }
 
-      } elseif( $mycred_mode == true ){
+      } elseif( $mycred_mode == TRUE ){
 
         //NOTE: mycred stuff goes here
         //Developer note... Look at the woowallet stuff above... I seem to have lucked out with my subconcious Developement
         //Note WW had its own functions but mycred had a bit better api
         $mycred_result = mycred_add( $mycred_reason, $user_id, $pt_dAmount, $vyps_reason );
+
+        //Then it must have worked in practice
+        $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
+
+      } elseif( $gamipress_mode == TRUE ){
+
+        //Gamipress function call. Doing the output to gamipress
+        $gamipress_result = gamipress_award_points_to_user( $user_id, $gamipress_point_amount, $gamipress_point_type, array( 'reason' => $gamipress_reason ) );
 
         //Then it must have worked in practice
         $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');

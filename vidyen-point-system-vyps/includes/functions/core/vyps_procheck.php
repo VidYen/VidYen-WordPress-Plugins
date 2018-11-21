@@ -18,6 +18,19 @@ function vyps_procheck_func($atts) {
 
   $pro_check_string = $atts['pro'];
 
+  //NOTE: Doing a procheck install that ads a function
+  if (function_exists('vyps_flag_pro_2019')) {
+
+    //return 1;
+
+    //OK it does exist so lets run it.
+    $pro_result = intval(vyps_flag_pro_2019());
+    return $pro_result; //It should be a 1 or a 0
+
+  }
+
+  //If it doesn't work, then just need to fall back on the legacy code.
+
   //Need to return out if the strlen() is less than 6. Or greater than six. No exception. We boot out! Don't even bother checking strings.
   //Always must be 6. No more. No less. The key is always six.
   if (strlen($pro_check_string) != 6 ) {

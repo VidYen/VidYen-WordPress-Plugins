@@ -72,6 +72,10 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 Yes, you can. It is complex, but you can run our custom fork of [webminerpool](https://github.com/VidYen/webminerpool) on a Debian server to track your own hashes. We'd ask for a donation if you need our help with it though. See the VY256 shortcode instructions for details.
 
+=How to I remove the branding?=
+
+There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) that will turn off the branding when installed. NOTE: You can use the VYPS to earn credits towards its purchase.
+
 == Screenshots ==
 
 1. Create your own point types with their own name and icon.
@@ -85,6 +89,13 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 9. Or you can display which user owns what percent of the current supply of points.
 
 == Changelog ==
+
+= 1.8.3 =
+
+-Add: [Gamipress](https://wordpress.org/plugins/gamipress/) support in [vyps-pe] which is basically the same except you need outputid (as the GamiPress slug name) since GamiPress may have one that more point [vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]
+-Add: Created hooks for pro version in case anyone wants to remove branding. See [VidYen Store](https://vidyen.com) for details. Will include direct payouts to WW, myCred, and GamiPress.
+-Fix: Some Point Exchange grammar adjustments.
+-Fix: Removed redundant instruction pages.
 
 = 1.8.2 =
 

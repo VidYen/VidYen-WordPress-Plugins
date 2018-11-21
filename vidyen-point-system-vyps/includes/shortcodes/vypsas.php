@@ -73,7 +73,7 @@ function vyps_adscend_func( $atts ) {
 
 	return '<iframe src="https://asmwall.com/adwall/publisher/' . $atts['pub'] . '/profile/' . $atts['profile'] . '?subid1=' . $current_user_id . '&subid2=' . $atts['pid'] . '" frameborder="0" allowfullscreen="yes" width=800 height=600 ></iframe>';
 
-	/* It dawned on me that thie return may not be necessary  and that for this particualr shortcode it was unnecessary to
+	/* It dawned on me that the return may not be necessary  and that for this particualr shortcode it was unnecessary to
 	*  actually have it post anything to our WP tables as the AS interface doesn't do that until you get a post back.
 	*  It also dawned on me I could just call pid sub id etc, but not keeping the names same may confuse.
 	*  maybe subid3 could be whatever the user wants?
