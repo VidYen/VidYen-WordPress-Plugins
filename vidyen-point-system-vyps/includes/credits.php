@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	<h2>Coming Soon:</h2>
 	<p>Combat Game</p>
   <p>Strategy Game</p>
+  <h1>Warranty</h1>
+  <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2 of the License</p>
+  <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 	";
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
