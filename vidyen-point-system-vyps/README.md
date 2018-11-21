@@ -1,7 +1,7 @@
 === VidYen Point System ===
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
-Tags: monetization, Adscend, Coinhive, rewards, WooCommerce, rewards site, monero, XMR, myCred, mine, cryptocurrency, Bitcoin
+Tags: monetization, Adscend, Coinhive, rewards, WooCommerce, GamiPress, monero, XMR, myCred, mine, cryptocurrency, Bitcoin
 Requires at least: 4.9.8
 Tested up to: 5.0.0
 Requires PHP: 7.0
@@ -30,7 +30,8 @@ Currently, this plugin allows you to create points and assign them to users base
 - Coinhive API tracking
 - [WooCommerce Wallet](https://wordpress.org/plugins/woo-wallet/) bridge
 - [myCred](https://wordpress.org/plugins/mycred/) bridge
-- [Bitcoin and Altcoin Wallets](https://wordpress.org/plugins/wallets/) (Dashed-Slug) Bridge
+- [Gamipress](https://wordpress.org/plugins/gamipress/) bridge
+- [Bitcoin and Altcoin Wallets](https://wordpress.org/plugins/wallets/) (Dashed-Slug) bridge
 
 There are plans to include other monetization systems with more games and other activities for site users. Keep watching!
 
