@@ -23,9 +23,9 @@ VYPS_un = Uninstall plugin
 
 Current Version
 --------
-1.8.0 - Wordpress Repo
+1.8.3 - Wordpress Repo
 
-1.8.1 - GitHub version
+1.8.3 - GitHub version
 
 Extras
 --------
