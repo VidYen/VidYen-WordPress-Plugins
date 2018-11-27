@@ -91,6 +91,10 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 
 == Changelog ==
 
+= 1.8.4 =
+
+-Add: Some Monero Ocean explanations about earnings.
+
 = 1.8.3 =
 
 -Add: [Gamipress](https://wordpress.org/plugins/gamipress/) support in [vyps-pe] which is basically the same except you need outputid (as the GamiPress slug name) since GamiPress may have one that more point [vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]

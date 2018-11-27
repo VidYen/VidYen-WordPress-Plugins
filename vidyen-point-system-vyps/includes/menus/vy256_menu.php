@@ -119,6 +119,9 @@ function vyps_vy256_sub_menu_page() {
     <p>If cloud.vy256.com is down you can always set the shortcode attribute to cloud=1 to and open port 8081 on your server to use the backup.</p>
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
+    <h2>Notes about hash rates:</h2>
+    <p>FYI, hash rates even with dedicated GPU miners are never going to show evenly over time on the accepted hash page. There is the client side hash rate worked versus hashes accepted on the server side. MO uses PPNL which is different from Coinhive where Coinhive just increments your XMR payout for no rhyme or reason other than a 1 million hashes equals a certain amount of XMR.</p>
+    <p>There are many YouTube videos than can explain this, but just know that hash rate will vary over time regardless of the steadiness of the miner. More processing power will of course mean a general higher hash acceptance though.</p>
     <h2>Future plans.</h2>
     <p>We do have a goal to add more pools down the road, but for now MoneroOcean works and the developer of that pool is very responsive and fair.</p>
     <p>Felty does have a goal to add MSR support due to its unique method of mining, but that will be down the road when it gets mining branches.</p>" .
