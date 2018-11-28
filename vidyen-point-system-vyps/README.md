@@ -73,7 +73,7 @@ All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/
 
 Yes, you can. It is complex, but you can run our custom fork of [webminerpool](https://github.com/VidYen/webminerpool) on a Debian server to track your own hashes. We'd ask for a donation if you need our help with it though. See the VY256 shortcode instructions for details.
 
-=How to I remove the branding?=
+=How do I remove the branding?=
 
 There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) that will turn off the branding when installed. NOTE: You can use the VYPS to earn credits towards its purchase.
 
