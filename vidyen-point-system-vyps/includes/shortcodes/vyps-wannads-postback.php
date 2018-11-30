@@ -12,22 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 function vyps_wannads_postback_func( $atts )
 {
 
-	//OK. Need people to get referrals:
-
-	if (vyps_wannads_pro_check_func() <> 1)
-	{
-
-		return 'Referral code not setup or need Wannads Pro version installed for Post Back feature. Please see <a href="https://vidyen.com/wannads-install/">VidYen Store</a> for options.';
-
-	}
-
-	//The scarcy thing is... This post back can be writing to your SQL tables. SO we HAVE to be careful with it.
-	global $wpdb;
-	$table_name_log = $wpdb->prefix . 'vyps_points_log';
-
 	//NOTE: The admin needs to set the post back correctly. We will have no idea what the user id will be as it will be fed into the system by the post back
 	//We will need the secretkey
 	//Also NOTE: I changed pid to outputid because i think going forward pid is a bit nondescriptive
+
 
 	$atts = shortcode_atts(
 		array(
@@ -43,6 +31,18 @@ function vyps_wannads_postback_func( $atts )
 				'btn_name' => '',
 		), $atts, 'vyps-wannads' );
 
+	//OK. Need people to get referrals:
+
+	if (vyps_wannads_pro_check_func() <> 1)
+	{
+
+		return 'Referral code not setup or need Wannads Pro version installed for Post Back feature. Please see <a href="https://vidyen.com/wannads-install/">VidYen Store</a> for options.';
+
+	}
+
+	//The scarcy thing is... This post back can be writing to your SQL tables. SO we HAVE to be careful with it.
+	global $wpdb;
+	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 
 	//Checking to see if shortcodes were misset (Actually we may only need the secret key)
 

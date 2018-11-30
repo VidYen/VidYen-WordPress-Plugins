@@ -7,6 +7,21 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 function vyps_wannads_func( $atts )
 {
 
+	//Shortcode stuff... Must come first
+	$atts = shortcode_atts(
+		array(
+			'apikey' => '',
+			'profile' => '0',
+			'secretkey' => '',
+			'outputid' => 0,
+			'outputamount' => 0,
+			'refer' => 0,
+			'to_user_id' => 0,
+			'comment' => '',
+			'reason' => 'Wannads',
+			'btn_name' => '',
+		), $atts, 'vyps-wannads' );
+
 	// Check to see if user is logged in and boot them out of function if they aren't.
 	if ( is_user_logged_in() )
 	{
@@ -22,21 +37,6 @@ function vyps_wannads_func( $atts )
 		//return "You need to be logged in to watch advertisments for points.";
 
 	}
-
-	//Shortcode stuff...
-	$atts = shortcode_atts(
-		array(
-			'apikey' => '',
-			'profile' => '0',
-			'secretkey' => '',
-			'outputid' => 0,
-			'outputamount' => 0,
-			'refer' => 0,
-			'to_user_id' => 0,
-			'comment' => '',
-			'reason' => 'Wannads',
-			'btn_name' => '',
-		), $atts, 'vyps-wannads' );
 
 	//Honestly, the only think we need is the apikey. A bit different than Adscend in that regard.
 	if ( $atts['apikey'] == '' ) {
