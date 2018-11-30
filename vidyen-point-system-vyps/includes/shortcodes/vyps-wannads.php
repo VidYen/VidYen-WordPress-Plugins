@@ -64,7 +64,7 @@ function vyps_wannads_func( $atts )
 	}
 
 
-	$wannads_iframe = '<iframe style="width:100%;height:800px;border:0;padding:0;margin:0;" scrolling="yes" "frameborder="0" src="https://wall.wannads.com/wall?apiKey=' . $wannads_api_key. . '&userId='$current_user_id'"></iframe>';
+	$wannads_iframe = '<iframe style="width:100%;height:800px;border:0;padding:0;margin:0;" scrolling="yes" "frameborder="0" src="https://wall.wannads.com/wall?apiKey=' . $wannads_api_key .  '&userId='. $current_user_id . '"></iframe>';
 
 	return $VYPS_power_row . $wannads_iframe;
 
