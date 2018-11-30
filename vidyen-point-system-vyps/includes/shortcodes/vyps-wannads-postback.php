@@ -148,4 +148,4 @@ function vyps_wannads_postback_func( $atts )
 }
 
 /* Telling WP to use function for shortcode */
-add_shortcode( 'vyps-wannads-postback', 'vvyps_wannads_postback_func');
+add_shortcode( 'vyps-wannads-postback', 'vyps_wannads_postback_func');
