@@ -94,7 +94,7 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 
 = 1.9.0 =
 
--Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will not convert to points. There is a pro version on [VidYen Store](https://vidyen.com/store/) or you can simply use VidYen as a confirmed referral and will provide Wannads option free of charge.
+-Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will use postback unless referral is confirmed. Otherwise, will let users use but without point additions. Instructions here [VidYen Store]https://vidyen.com/wannads-install/) how to confirm referral.
 -Add: Some Monero Ocean explanations about earnings.
 
 = 1.8.3 =
