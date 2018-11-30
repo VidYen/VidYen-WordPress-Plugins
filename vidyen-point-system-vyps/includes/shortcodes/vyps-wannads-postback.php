@@ -49,7 +49,7 @@ function vyps_wannads_postback_func( $atts )
 	if ( $atts['apikey'] == '' )
 	{
 
-		return "Wannads API key not set!";
+		return "Wannads API key not set! apikey=";
 
 	}
 
@@ -58,7 +58,7 @@ function vyps_wannads_postback_func( $atts )
 	{
 
 
-		return "You did not set output point ID!";
+		return "You did not set output point ID! outputid=";
 
 	}
 
@@ -66,7 +66,7 @@ function vyps_wannads_postback_func( $atts )
 	if ( $atts['secretkey'] == '' )
 	{
 
-		return "You did not set secret API key!";
+		return "You did not set secret API key! secretkey=";
 
 	}
 
