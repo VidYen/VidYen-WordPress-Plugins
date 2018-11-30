@@ -40,8 +40,8 @@ function vyps_wannads_postback_func( $atts )
 				'to_user_id' => 0,
 				'comment' => '',
 				'reason' => 'Wannads',
-				'btn_name' => '';
-		), $atts, 'vyps-as-watch' );
+				'btn_name' => '',
+		), $atts, 'vyps-wannads' );
 
 
 	//Checking to see if shortcodes were misset (Actually we may only need the secret key)

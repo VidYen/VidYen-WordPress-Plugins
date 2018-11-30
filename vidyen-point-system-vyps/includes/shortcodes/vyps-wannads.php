@@ -36,7 +36,7 @@ function vyps_wannads_func( $atts )
 			'comment' => '',
 			'reason' => 'Wannads',
 			'btn_name' => '',
-		), $atts, 'vyps-as-watch' );
+		), $atts, 'vyps-wannads' );
 
 	//Honestly, the only think we need is the apikey. A bit different than Adscend in that regard.
 	if ( $atts['apikey'] == '' ) {
