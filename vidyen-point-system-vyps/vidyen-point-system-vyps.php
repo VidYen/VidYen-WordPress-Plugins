@@ -273,13 +273,13 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer_balance.p
 /*** FUNCTION INCLUDES***/
 
 /*** CORE ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_procheck.php'); //Pro checking.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_procheck_func.php'); //Pro checking.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_wannads_pro_func.php'); //Pro checking.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_balance_func.php'); //Functionalized balance (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_public_log_func.php'); //Functionalized public log (This should have been months ago! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_add_func.php'); //Functionalized adds to the log
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_deduct_func.php'); //Functionalized deducts to the log
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_procheck.php'); //Wannads check
 
 /*** REFER ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_current_refer_func.php'); //General function to check if current user has a refer set, is valid, and returns it.

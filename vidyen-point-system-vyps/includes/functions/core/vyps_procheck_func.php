@@ -5,7 +5,8 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
-function vyps_procheck_func($atts) {
+function vyps_procheck_func($atts)
+{
 
   //This should need no shortcode attributes by default
   //But its useful to just check if we have.
@@ -19,7 +20,8 @@ function vyps_procheck_func($atts) {
   $pro_check_string = $atts['pro'];
 
   //NOTE: Doing a procheck install that ads a function
-  if (function_exists('vyps_flag_pro_2019')) {
+  if (function_exists('vyps_flag_pro_2019'))
+  {
 
     //return 1;
 
@@ -33,7 +35,8 @@ function vyps_procheck_func($atts) {
 
   //Need to return out if the strlen() is less than 6. Or greater than six. No exception. We boot out! Don't even bother checking strings.
   //Always must be 6. No more. No less. The key is always six.
-  if (strlen($pro_check_string) != 6 ) {
+  if (strlen($pro_check_string) != 6 )
+  {
 
     return 0; //False return!
 
@@ -85,11 +88,15 @@ function vyps_procheck_func($atts) {
    . "F133S6";
 
    //Ere we go checking the stings for valid prochecks.
-   if (strpos($current_hash_string, $pro_check_string) !== false) {
+   if (strpos($current_hash_string, $pro_check_string) != FALSSE)
+   {
 
      return 1; //I suppose true would be well enough, but look. If they are looking at the PHP well....
 
-   } else {
+   }
+
+   else
+   {
 
      return 0; //Failure! All you failures!
 
@@ -97,6 +104,4 @@ function vyps_procheck_func($atts) {
 
 }
 
-//Adding the shortcode.
-
-add_shortcode( 'vyps-procheck', 'vyps_procheck_func'); //Unneeded in live version. But might be useful for debugging. Always... The debugging.
+//No shortcode required
