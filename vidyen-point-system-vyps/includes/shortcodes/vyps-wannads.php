@@ -2,13 +2,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//AS shortcode functons.
-//Need less disclaimers here as average people believe that Coinhive is evil. From my point of view, advertising is evil. -Felty
-//Yeah that is a prequel reference.
+/*** Wannads short code ***/
 
-// Below is the Wannads watching shortcode itself
-//Needs no SQL injection checking or nonce as Wannads does the ad tracking.
-//The worst someone could do is watch ads for you I guess.
 function vyps_wannads_func( $atts ) {
 
 	/* Check to see if user is logged in and boot them out of function if they aren't. */

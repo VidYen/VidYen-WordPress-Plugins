@@ -26,6 +26,7 @@ Currently, this plugin allows you to create points and assign them to users base
 - Public log
 - Time based transfers and rewards (i.e. daily or weekly rewards)
 - Adscend Media API tracking
+- Wannads wall support
 - VY256 Miner (non-adblock version)
 - Coinhive API tracking
 - [WooCommerce Wallet](https://wordpress.org/plugins/woo-wallet/) bridge
@@ -91,8 +92,9 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 
 == Changelog ==
 
-= 1.8.4 =
+= 1.9.0 =
 
+-Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will not convert to points. There is a pro version on [VidYen Store](https://vidyen.com/store/) or you can simply use VidYen as a confirmed referral and will provide Wannads option free of charge.
 -Add: Some Monero Ocean explanations about earnings.
 
 = 1.8.3 =
