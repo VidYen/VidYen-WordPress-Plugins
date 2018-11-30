@@ -8,7 +8,6 @@ function vyps_wannads_func( $atts )
 {
 
 	// Check to see if user is logged in and boot them out of function if they aren't.
-
 	if ( is_user_logged_in() )
 	{
 
@@ -24,8 +23,7 @@ function vyps_wannads_func( $atts )
 
 	}
 
-
-
+	//Shortcode stuff...
 	$atts = shortcode_atts(
 		array(
 			'apikey' => '',
@@ -37,7 +35,7 @@ function vyps_wannads_func( $atts )
 			'to_user_id' => 0,
 			'comment' => '',
 			'reason' => 'Wannads',
-			'btn_name' => '';
+			'btn_name' => '',
 		), $atts, 'vyps-as-watch' );
 
 	//Honestly, the only think we need is the apikey. A bit different than Adscend in that regard.

@@ -10,7 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //It's sad, when coin hive has a better system
 
 
-function vyps_meta_check_func( $atts ) {
+function vyps_meta_check_func( $atts )
+{
 
 	//NOTE: If there are shortcodes they go in, but generally it will be passed.
 
