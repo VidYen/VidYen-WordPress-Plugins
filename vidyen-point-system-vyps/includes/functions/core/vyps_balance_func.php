@@ -9,16 +9,17 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-/* Added prepare() to all SQL SELECT calls 7.1.2018 */
-
 function vyps_balance_func( $atts ) {
 
 	//Make sure user is logged in.
-	if ( is_user_logged_in() ) {
+	if ( is_user_logged_in() )
+	{
 
 		//Nothing
 
-	} else {
+	}
+	else
+	{
 
 		//If user is not logged in. Code needs to cease. I said CEASE!
 		return;
@@ -30,24 +31,28 @@ function vyps_balance_func( $atts ) {
 				'pid' => '0',
 				'uid' => '0',
 				'raw' => FALSE,
+				'decimal' => 0,
 		), $atts, 'vyps-balance' );
 
 	$pointID = $atts['pid'];
 	$userID = $atts['uid'];
 	$isRaw = $atts['raw'];
+	$decimal_format_modifier = intval($atts['decimal']); //This has to be a int or will throw the number format
 
 	//Ok if admin set an UID, they can override current user to see anyone
 	//I realize in theory you could do this with WW as well.
 	//Raw is for if you want just the number. Otherwise it comes with the icon and commas. Perhaps I should break this off into a 3rd way.
 	//But its possible for admin to set to no if they want
 
-	if ( $userID == 0 ){
+	if ( $userID == 0 )
+	{
 
 		$userID = get_current_user_id();
 
 	}
 
-	if ( $pointID == 0 ){
+	if ( $pointID == 0 )
+	{
 
 		return "Admin Error: pid not set!";
 
@@ -78,14 +83,16 @@ function vyps_balance_func( $atts ) {
 	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $userID, $sourcePointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
 	$balance_points = $wpdb->get_var( $balance_points_query_prepared );
 
-	if ($balance_points == ''){
+	if ($balance_points == '')
+	{
 
 		//Just a quick check to see if there were not points that it at least shows zero.
 		$balance_points = 0;
 
 	}
 
-	if ( $isRaw == FALSE ){
+	if ( $isRaw == FALSE )
+	{
 
 		//Make the output html have the Icon.
 		$balance_output =  "<img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $balance_points<br>";
@@ -93,14 +100,19 @@ function vyps_balance_func( $atts ) {
 		//Since we now can confirm its a number, let's add the commas
 		//NOTE: I'm taking a bit damn leap of faith here and I'm going to have to go back and fix this, but we need to only format, if its for icon.
 		//Else it should be raw AND RAW it should else the commans screw stuff up. But since this is default for shorcode... I may just do $isIcon == 0 for my functions. Gah its problematic.
-		$balance_points = number_format( $balance_points );
 
-	} elseif ( $isRaw == TRUE ){
+		$balance_points = number_format( $balance_points, $decimal_format_modifier ); //Currently doesn't really do much, but if you wanted a decimal. Its there.
+
+	}
+	elseif ( $isRaw == TRUE )
+	{
 
 		$balance_output = $balance_points; //Just the raw data please. No formatting. NOTE: Youy will have to call for it if you use this function. Hrm... Maybe that should be at top.
 
 		//Return out since not logged in
-	} else {
+	}
+	else
+	{
 
 		//If this else fires an admin put something other than a 1 or a zero which means they messed up.
 		$balance_output = "Admin Error: Raw setting issue.";
