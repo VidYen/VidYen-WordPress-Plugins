@@ -94,14 +94,15 @@ function vyps_balance_func( $atts ) {
 	if ( $isRaw == FALSE )
 	{
 
+		//NOTE: Huh. I must have took this out by accident in the order of operations and didn't know it missing *coughs*
+		$balance_points = number_format( $balance_points, $decimal_format_modifier ); //Currently doesn't really do much, but if you wanted a decimal. Its there.
+
 		//Make the output html have the Icon.
 		$balance_output =  "<img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $balance_points<br>";
 
 		//Since we now can confirm its a number, let's add the commas
 		//NOTE: I'm taking a bit damn leap of faith here and I'm going to have to go back and fix this, but we need to only format, if its for icon.
 		//Else it should be raw AND RAW it should else the commans screw stuff up. But since this is default for shorcode... I may just do $isIcon == 0 for my functions. Gah its problematic.
-
-		$balance_points = number_format( $balance_points, $decimal_format_modifier ); //Currently doesn't really do much, but if you wanted a decimal. Its there.
 
 	}
 	elseif ( $isRaw == TRUE )

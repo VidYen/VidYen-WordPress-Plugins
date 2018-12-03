@@ -10,28 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //It's sad, when coin hive has a better system
 
 
-function vyps_meta_check_func( $atts )
+function vyps_meta_check_func( $meta_id_pull )
 {
 
-	//NOTE: If there are shortcodes they go in, but generally it will be passed.
+	//NOTE: No need for shortcodes.
 
-	$atts = shortcode_atts(
-		array(
-				'btn_name' => '',
-    ), $atts, 'vyps-pe' );
-
-	//NOTE: Only adding. So do not need any input variables
-	//ALL THESE SHOULD BE INTS as VYPS is INT only!
-	$meta_id = sanitize_text_field($atts['btn_name']); //Should already be passed and sanitized, but I feel double santization never hurt.
+	//NOTE NOTE: Felt the need for santiization a second time was un-needed.
 
 	//$WPDB calls
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vyps_points_log'; //Don't need the points, just log.
 
 	//Query
-	$meta_id_query = "SELECT count(vyps_meta_id) FROM ". $table_name_log . " WHERE vyps_meta_id = %s"; //I'm not sure if this is resource optimal but it works. -Felty
-	$meta_id_query_prepared = $wpdb->prepare( $meta_id_query, $meta_id );
+	$meta_id_query = "SELECT COUNT(vyps_meta_id) FROM ". $table_name_log . " WHERE vyps_meta_id = %s"; //I'm not sure if this is resource optimal but it works. -Felty
+	$meta_id_query_prepared = $wpdb->prepare( $meta_id_query, $meta_id_pull );
 	$meta_id_count = $wpdb->get_var( $meta_id_query_prepared );
+
+	$meta_id_count = intval($meta_id_count); //This was not working so I suspected it was returning a non-numeric value.
 
 	if ($meta_id_count > 0) //So if it exists it will be > 0, which means the transaction already exists.
 	{
