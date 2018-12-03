@@ -28,12 +28,17 @@ function vyps_wannads_postback_func( $atts )
 				'reason' => 'Wannads',
 				'btn_name' => '',
 				'round' => 'default',
+				'pro'=> FALSE,
 		), $atts, 'vyps-wannads' );
 
 	$secret_key = $atts['secret']; //Doing a round about way.
 	//OK. Need people to get referrals:
 
-	if (vyps_wannads_pro_check_func() <> 1)
+	//Temp testing.
+	$pro_version = $atts['pro'];
+
+	//if (vyps_wannads_pro_check_func() <> 1 )
+	if ($pro_version != TRUE)
 	{
 		return 'Referral code not setup or need Wannads Pro version installed for Post Back feature. Please see <a href="https://vidyen.com/wannads-install/">VidYen Store</a> for options.';
 	}
