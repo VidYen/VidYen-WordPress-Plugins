@@ -13,7 +13,7 @@ function vyps_wannads_postback_func( $atts )
 {
 
 	//NOTE: The admin needs to set the post back correctly. We will have no idea what the user id will be as it will be fed into the system by the post back
-	//We will need the secretkey
+	//We will need the secret
 	//Also NOTE: I changed pid to outputid because i think going forward pid is a bit nondescriptive
 
 
@@ -21,7 +21,7 @@ function vyps_wannads_postback_func( $atts )
 		array(
 				'apikey' => '',
 				'profile' => '0',
-				'secretkey' => '',
+				'secret' => '',
 				'outputid' => 0,
 				'outputamount' => 0,
 				'refer' => 0,
@@ -29,6 +29,7 @@ function vyps_wannads_postback_func( $atts )
 				'comment' => '',
 				'reason' => 'Wannads',
 				'btn_name' => '',
+				'round' => 'default',
 		), $atts, 'vyps-wannads' );
 
 	//OK. Need people to get referrals:
@@ -40,39 +41,32 @@ function vyps_wannads_postback_func( $atts )
 
 	}
 
+	$round_direction_decision = $atts['round']; //By default this is default, which just takes the direction its closest too.
+
 	//The scarcy thing is... This post back can be writing to your SQL tables. SO we HAVE to be careful with it.
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 
-	//Checking to see if shortcodes were misset (Actually we may only need the secret key)
-
-	if ( $atts['apikey'] == '' )
-	{
-
-		return "Wannads API key not set! apikey=";
-
-	}
 
 	//This is the point id that the post back should go to. ie. the Point ID
 	if ( $atts['outputid'] == 0 )
 	{
-
 
 		return "You did not set output point ID! outputid=";
 
 	}
 
 	//Secret key. Gods know you don't want a random person filling up your SQL server with junk.
-	if ( $atts['secretkey'] == '' )
+	if ( $atts['secret'] == '' )
 	{
 
-		return "You did not set secret API key! secretkey=";
+		return "You did not set API Secret Key! secret=";
 
 	}
 
 	//Copied and pasted from https://wannads.readme.io/docs/postback-notifications
 	//Modified to deal with my format and OCD
-	$secret = $atts['secretkey']; // check your app info at www.wannads.com
+	$secret = $atts['secret']; // check your app info at www.wannads.com
 	$userId = isset($_GET['subId']) ? $_GET['subId'] : null;
 	$transactionId = isset($_GET['transId']) ? $_GET['transId'] : null;
 	$points = isset($_GET['reward']) ? $_GET['reward'] : null;
@@ -97,9 +91,27 @@ function vyps_wannads_postback_func( $atts )
 	//Yeah its unlikely Wannads may try an SQL injection their user base, but if the user is lax with their secret key and someone knows what this is, they can have an injection fest
 	$userId_sanitized = intval($userId); //User Id should be an int
 	$transactionId_sanitized = sanitize_text_field($transactionId); //This actually doesn't have to be collected but could be useful in one of the metas columsn
-	$points_sanitized = intval($points); //I actually wonder if this will be a problem as they may use decimals where I have always frowned on it as it confuses non technical users. Sorry not sorry, Satoshi
 	$action_sanitized = intval($action); //Good thing I read the documentation. According to wannads, if this is 1 there should be a reward and 2 if there is punishment for some reason. Should be int
 	$ipuser_sanitized = sanitize_text_field($ipuser); //Again, not a have to have, but would be useful if admin needs to look at issue
+
+	//NOTE: Points gets its own section.
+	if($round_direction_decision == 'up')
+	{
+		 $points = ceil($points);
+		 $points_sanitized = intval($points);
+	}
+	elseif($round_direction_decision == 'down')
+	{
+		$points = ceil($points);
+		$points_sanitized = intval($points);
+	}
+	else
+	{
+
+	$points_sanitized = intval($points); //I actually wonder if this will be a problem as they may use decimals where I have always frowned on it as it confuses non technical users. Sorry not sorry, Satoshi
+
+	}
+
 
 	//OK, now we santized everything. In theory we could use our nice functions.
 	//We will need to throw some more stuff on to the shortcode array to feed the add
