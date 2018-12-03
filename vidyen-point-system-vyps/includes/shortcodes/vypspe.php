@@ -50,6 +50,17 @@ function vyps_point_exchange_func( $atts ) {
         'reason' => 'Point Exchange',
 		), $atts, 'vyps-pe' );
 
+  //Check if user is logged in and stop the code.
+	//NOTE:I moved this here. I realized, its more likely that 10,000 users are bashing site mem while the admin is almost always logged in.
+	if ( is_user_logged_in() )
+  {
+	//I probaly don't have to have this part of the if
+	}
+  else
+  {
+		return; //You get nothing. Use the LG code.
+	}
+
 	/* Save this for later
 	$sourcePointID = $atts['spid'];
 	$destinationPointID = $atts['dpid'];
@@ -151,18 +162,6 @@ function vyps_point_exchange_func( $atts ) {
 
 		//I feel like this should be not needed but I feel that it would blow up one of my ifs down below catastrophically
 		return "Admin Error: You have a negative time somewhere.";
-
-	}
-
-	//Check if user is logged in and stop the code.
-	//NOTE: I am doing this here because I realize that the admin should see rigth away the short code is set incorrectly rather than having to log in to see that it is
-	if ( is_user_logged_in() ) {
-
-	//I probaly don't have to have this part of the if
-
-	} else {
-
-		return; //You get nothing. Use the LG code.
 
 	}
 
