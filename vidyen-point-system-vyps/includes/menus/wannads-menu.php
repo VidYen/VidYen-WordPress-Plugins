@@ -7,7 +7,7 @@ add_action('admin_menu', 'vyps_wannads_submenu', 420 );
 /* Creates the Wannads submenu on the main VYPS plugin */
 //Copied and pasted from Adscend and updated for post packs.
 
-function vyps_adscend_submenu()
+function vyps_wannads_submenu()
 {
 	$parent_menu_slug = 'vyps_points';
 	$page_title = "VYPS Wannads Shortcodes";
