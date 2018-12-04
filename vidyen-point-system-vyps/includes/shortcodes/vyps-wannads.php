@@ -22,21 +22,7 @@ function vyps_wannads_func( $atts )
 			'btn_name' => '',
 		), $atts, 'vyps-wannads' );
 
-	// Check to see if user is logged in and boot them out of function if they aren't.
-	if ( is_user_logged_in() )
-	{
 
-		//I probaly don't have to have this part of the if
-
-	}
-
-	else
-	{
-
-    return; //Admins should put the login shortcode for uniformity.
-		//return "You need to be logged in to watch advertisments for points.";
-
-	}
 
 	//Honestly, the only think we need is the apikey. A bit different than Adscend in that regard.
 	if ( $atts['apikey'] == '' ) {
@@ -61,6 +47,20 @@ function vyps_wannads_func( $atts )
 
 		$VYPS_power_row = ''; //No branding if procheck is correct.
 
+	}
+
+	// Check to see if user is logged in and boot them out of function if they aren't.
+	if ( is_user_logged_in() )
+	{
+
+		//I probaly don't have to have this part of the if
+
+	}
+
+	else
+	{
+		$VYPS_power_row .= '<img src="https://wall.wannads.com/wannads-logo143.png"><br><br>Please login to view the Offer Wall.';
+		return $VYPS_power_row; //Due to the nature of the referral system. I am changing this to be better.
 	}
 
 
