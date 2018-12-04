@@ -136,12 +136,14 @@ function vyps_wannads_postback_func( $atts )
 			//Subtract it. It looks like points has been added negative
 			vyps_deduct_func( $atts );
 			return "OK";
+			//exit; //This is a big warhammer of smashing ourway through this.
 		}
 	}
 	elseif(vyps_meta_check_func($meta_id_pull) == 2)
 	{
 	    // If the transaction already exist please echo DUP.
 	    return "DUP";
+			//exit;
 	}
 	else
 	{
