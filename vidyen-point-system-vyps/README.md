@@ -97,6 +97,7 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 -Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will use postback unless referral is confirmed. Otherwise, will let users use but without point additions. Instructions here [VidYen Store]https://vidyen.com/wannads-install/) how to confirm referral.
 -Add: Some Monero Ocean explanations about earnings.
 -Add: Balance shortcode has a decimal=(number value). Not really useful as just a placeholder for now.
+-Add: [vyps-pl current=TRUE] now displays just the current users. Since postback systems take a while to process (which is why I frown on them for game theory), its useful for end user to see their own log.
 
 = 1.8.3 =
 

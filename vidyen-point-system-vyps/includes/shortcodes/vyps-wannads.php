@@ -59,7 +59,7 @@ function vyps_wannads_func( $atts )
 
 	else
 	{
-		$VYPS_power_row .= '<img src="https://wall.wannads.com/wannads-logo143.png"><br><br>Please login to view the Offer Wall.';
+		$VYPS_power_row .= '<a href="http://www.wannads.com/" target="_blank"><img src="https://wall.wannads.com/wannads-logo143.png"></a><br><br>Please login to view the Offer Wall.';
 		return $VYPS_power_row; //Due to the nature of the referral system. I am changing this to be better.
 	}
 

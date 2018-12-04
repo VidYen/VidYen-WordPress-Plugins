@@ -28,6 +28,7 @@ function vyps_public_log_func( $atts ) {
 				'userid' => 0,
 				'uid' => FALSE,
 				'admin' => FALSE,
+				'current' => FALSE,
 		), $atts, 'vyps-pl' );
 
 	$pointID = $atts['pid'];
@@ -37,6 +38,13 @@ function vyps_public_log_func( $atts ) {
 	$uid_on = $atts['uid'];
 	$boostrap_on = $atts['bootstrap'];
 	$admin_on = $atts['admin'];
+	$current_user_state = $atts['current'];
+
+	//So users can see their own transcations, I'm putting this shortcode hoook in.
+	if ($current_user_state == TRUE)
+	{
+		$user_id = get_current_user_id(); //Over riding the current userid to show just the current user. I have no idea if this actually works as may have not set it up correctly.
+	}
 
 	global $wpdb;
 	$table_name_points = $wpdb->prefix . 'vyps_points';
