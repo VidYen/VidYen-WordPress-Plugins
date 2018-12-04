@@ -37,8 +37,7 @@ function vyps_wannads_postback_func( $atts )
 	//Temp testing.
 	$pro_version = $atts['pro'];
 
-	//if (vyps_wannads_pro_check_func() <> 1 )
-	if ($pro_version != TRUE)
+	if (vyps_wannads_pro_check_func() <> 1 )
 	{
 		return 'Referral code not setup or need Wannads Pro version installed for Post Back feature. Please see <a href="https://vidyen.com/wannads-install/">VidYen Store</a> for options.';
 	}
