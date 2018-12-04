@@ -38,14 +38,14 @@ function vyps_wannads_sub_menu_page()
 	<h1>Post Back Support:</h1>
 	<p>As Wannads has no direct redemption API, it was required to create a post back system which is a bit different that everything else up until now.</p>
 	<p>You can download the plugin off our <a href="https://www.vidyen.com/product/wannads-postback-plugin/" target="_blank">site store</a></p>
-	<p><b>NOTE:</b></p> While you can pay us the $10 with PayPal for the download, you can simply use our referral code and <a href="https://www.vidyen.com/contact/" target="_blank>let us know</a> when you have been approved, and will will manually send you the $10 in credit.</p>
+	<p><b>NOTE:</b></p> While you can pay us the $10 with PayPal for the download, you can simply use our referral code and <a href="https://www.vidyen.com/contact/" target="_blank">let us know</a> when you have been approved, and will will manually send you the $10 in credit.</p>
 	<p>Alternatively, you can just use one of the monetization methods to earn the WooCommerce Credit just like a user would on your site.</p>
 	<h1>Post Back Instructions:</h1>
 	<p>1. Create a WordPress stand alone page for the post back.</p>
 	<p>2. Install the plugin off the VidYen store.</p>
-	<p>3. Add the shortcode: <b>[vyps-wannads-postback outputid=(point id) secret=(your wannads secret key)]</b></p>
-	<p>4. Make sure no other text or shortcode in page body. (It will cause errors on the Adscend side if you do)</p>
+	<p>3. Add the shortcode: <b>[vyps-wannads-postback outputid=(point id) secret=(your Wannads secret key)]</b></p>
+	<p>4. Make sure no other text or shortcode is in page body. It will cause errors on the Wannads report if you do.</p>
 	<p>5. On Edit Page -> Page Attributes (right hand side on classic editor), set the template to Wannads Post Back Template and update. This will remove all the extra WordPress HTML that would cause the Wannads API to error out on the post back attempt.</p>
-	<p>Note: VYPS will do a 1 for 1 and round to the closet whole number based on the Wannads settings on their site. Simply set your Wannads Data to more than 100 per $1.00 USD and set their system to currency round.</p>
+	<p><b>Note:</b> VYPS will do a 1 for 1 and round to the closet whole number based on the Wannads settings on their site. Simply set your Wannads Data to more than 100 per $1.00 USD and set their system to currency round.</p>
  ';
 }
