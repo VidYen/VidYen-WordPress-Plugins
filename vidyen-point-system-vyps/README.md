@@ -89,6 +89,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 7. Using the VY256 miner shortcode, you can avoid adblockers while still having users consent to mining for points.
 8. You can use shortcodes to display leaderboards for user rank by point earnings.
 9. Or you can display which user owns what percent of the current supply of points.
+10. Wannads support included in VYPS 1.9
 
 == Changelog ==
 
