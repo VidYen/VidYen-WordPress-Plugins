@@ -131,6 +131,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/menus/core_shortcodes_menu.php'
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/as_menu.php'); //Adscend menu 400 order
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/ch_menu.php'); //CH menu 430 order
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256_menu.php'); //CH menu 440 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/wannads-menu.php'); //CH menu 420 order
 
 /*** End of Menu Includes ***/
 

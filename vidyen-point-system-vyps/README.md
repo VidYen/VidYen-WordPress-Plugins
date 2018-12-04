@@ -1,7 +1,7 @@
 === VidYen Point System ===
 Contributors: vidyen
 Donate link: https://www.vidyen.com/donate/
-Tags: monetization, Adscend, Coinhive, rewards, WooCommerce, GamiPress, monero, XMR, myCred, mine, cryptocurrency, Bitcoin
+Tags: monetization, Adscend, Coinhive, Wannads, rewards, WooCommerce, GamiPress, monero, XMR, myCred, mining, cryptocurrency, Bitcoin
 Requires at least: 4.9.8
 Tested up to: 5.0.0
 Requires PHP: 7.0
@@ -13,7 +13,7 @@ VidYen Point System [VYPS] allows you to create a rewards site using video ads o
 
 == Description ==
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Coinhive, and our own VY256 miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities. This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Wannads, Coinhive, and our own VY256 miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities. This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards via monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
 Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising, Coinhive mining API, or even the VidYen VY256 Miner (adblock friendly!). It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
@@ -23,10 +23,10 @@ Currently, this plugin allows you to create points and assign them to users base
 - System to exchange point type for other points (copper => silver => gold)
 - Leaderboards
 - Raffles
-- Public log
+- Public and user logs
 - Time based transfers and rewards (i.e. daily or weekly rewards)
-- Adscend Media API tracking
-- Wannads wall support
+- [Adscend Media](https://adscendmedia.com/) API tracking
+- [Wannads](https://www.wannads.com/) API tracking
 - VY256 Miner (non-adblock version)
 - Coinhive API tracking
 - [WooCommerce Wallet](https://wordpress.org/plugins/woo-wallet/) bridge
@@ -64,11 +64,7 @@ Yes, with the VY256 Miner, you can setup up shareholder mining so users get a ch
 
 =My users want their rewards in crypto currency rather than in gift cards and virtual items. Can you add this?=
 
-You do know you can do this yourself by adding a wallet field to a WooCommerce checkout and send the crypto currency manually like a regular eCommerce selling physical goods. Also, you can just setup paper wallets from valid wallet generator site and put a $1 in each of them and save the private keys in txt files so your users can just scrap them when purchased in your WooCommerce store. I cannot believe I am recommending Jaxx, but it works well enough or this if your users are not technical. Or you can put a $5 eBay gift card on your store, and your end users can buy it indirectly.
-
-=Are you sure I cannot pay my users directly in crypto for points?=
-
-All right. You can, but you need to setup [Dashed Slug's](https://wordpress.org/plugins/wallets/) wallet which is rather complex and go through the VYPS point exchange through a previously setup bank user to do a user to user off blockchain transfer and then use the aforementioned plugin to do the withdrawal.
+You can, but you need to setup [Dashed Slug's](https://wordpress.org/plugins/wallets/) wallet which is rather complex and go through the VYPS point exchange through a previously setup bank user to do a user to user off blockchain transfer and then use the aforementioned plugin to do the withdrawal.
 
 =Can I use my own server for the webminer?=
 
@@ -77,6 +73,10 @@ Yes, you can. It is complex, but you can run our custom fork of [webminerpool](h
 =How do I remove the branding?=
 
 There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) that will turn off the branding when installed. NOTE: You can use the VYPS to earn credits towards its purchase.
+
+=Why postback support not included in base version?=
+
+Unfortunately, postbacks are generally not intended for WordPress so I had to shuffle that part off the official repository and required a bit more work and testing. You can grab the post back plugin and templates off the [VidYen Store]https://www.vidyen.com/product/vyps-pro-install/). NOTE: You can use rewards credit earned off the site to purchase or contact us showing you have confirmation of using our referral code with Wannads and we will give you the credit to purchase. (Adscend postback coming down road)
 
 == Screenshots ==
 
@@ -94,7 +94,7 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 
 = 1.9.0 =
 
--Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will use postback unless referral is confirmed. Otherwise, will let users use but without point additions. Instructions here [VidYen Store]https://vidyen.com/wannads-install/) how to confirm referral.
+-Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will use postback unless referral is confirmed. Otherwise, will let users use but without point additions. Instructions here [VidYen Store](https://www.vidyen.com/product/wannads-postback-plugin/) how to confirm referral.
 -Add: Some Monero Ocean explanations about earnings.
 -Add: Balance shortcode has a decimal=(number value). Not really useful as just a placeholder for now.
 -Add: [vyps-pl current=TRUE] now displays just the current users. Since postback systems take a while to process (which is why I frown on them for game theory), its useful for end user to see their own log.
@@ -102,7 +102,7 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 = 1.8.3 =
 
 -Add: [Gamipress](https://wordpress.org/plugins/gamipress/) support in [vyps-pe] which is basically the same except you need outputid (as the GamiPress slug name) since GamiPress may have one that more point [vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]
--Add: Created hooks for pro version in case anyone wants to remove branding. See [VidYen Store](https://vidyen.com) for details. Will include direct payouts to WW, myCred, and GamiPress.
+-Add: Created hooks for pro version in case anyone wants to remove branding. See [VidYen Store](https://www.vidyen.com/product/vyps-pro-install/) for details. Will include direct payouts to WW, myCred, and GamiPress.
 -Fix: Some Point Exchange grammar adjustments.
 -Fix: Removed redundant instruction pages.
 
@@ -374,4 +374,4 @@ Various bug fixes.
 
 WordPress based combat game
 Downloadable public log
-Online game API transfer system (Word of Tanks API etc.)
+Online game API transfer system (EVE Online, Aria Online API etc.)
