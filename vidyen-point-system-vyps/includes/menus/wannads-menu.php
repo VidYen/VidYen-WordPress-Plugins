@@ -1,10 +1,11 @@
 <?php
 
-//Adscend menu
+//Wannads menu
 
 add_action('admin_menu', 'vyps_wannads_submenu', 420 );
 
-/* Creates the Adscend submenu on the main VYPS plugin */
+/* Creates the Wannads submenu on the main VYPS plugin */
+//Copied and pasted from Adscend and updated for post packs.
 
 function vyps_adscend_submenu()
 {

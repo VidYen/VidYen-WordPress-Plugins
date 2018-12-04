@@ -76,7 +76,7 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 
 =Why postback support not included in base version?=
 
-Unfortunately, postbacks are generally not intended for WordPress so I had to shuffle that part off the official repository and required a bit more work and testing. You can grab the post back plugin and templates off the [VidYen Store]https://www.vidyen.com/product/vyps-pro-install/). NOTE: You can use rewards credit earned off the site to purchase or contact us showing you have confirmation of using our referral code with Wannads and we will give you the credit to purchase. (Adscend postback coming down road)
+Unfortunately, postbacks are generally not intended for WordPress so I had to shuffle that part off the official repository and required a bit more work and testing. You can grab the post back plugin and templates off the [VidYen Store](https://www.vidyen.com/product/wannads-postback-plugin/). NOTE: You can use rewards credit earned off the site to purchase or contact us showing you have confirmation of using our referral code with Wannads and we will give you the credit to purchase. (Adscend postback coming down road)
 
 == Screenshots ==
 
@@ -94,17 +94,18 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 1.9.0 =
 
--Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will use postback unless referral is confirmed. Otherwise, will let users use but without point additions. Instructions here [VidYen Store](https://www.vidyen.com/product/wannads-postback-plugin/) how to confirm referral.
--Add: Some Monero Ocean explanations about earnings.
--Add: Balance shortcode has a decimal=(number value). Not really useful as just a placeholder for now.
--Add: [vyps-pl current=TRUE] now displays just the current users. Since postback systems take a while to process (which is why I frown on them for game theory), its useful for end user to see their own log.
+- Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will use postback unless referral is confirmed. Otherwise, will let users use but without point additions. Instructions here [VidYen Store](https://www.vidyen.com/product/wannads-postback-plugin/) how to confirm referral.
+- Add: Some Monero Ocean explanations about earnings.
+- Add: Balance shortcode has a decimal=(number value). Not really useful as just a placeholder for now.
+- Add: [vyps-pl current=TRUE] now displays just the current users. Since postback systems take a while to process (which is why I frown on them for game theory), its useful for end user to see their own log.
+- Fix: Formatting changes in code. This affects me more than you, but helps with the instructions pages.
 
 = 1.8.3 =
 
--Add: [Gamipress](https://wordpress.org/plugins/gamipress/) support in [vyps-pe] which is basically the same except you need outputid (as the GamiPress slug name) since GamiPress may have one that more point [vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]
--Add: Created hooks for pro version in case anyone wants to remove branding. See [VidYen Store](https://www.vidyen.com/product/vyps-pro-install/) for details. Will include direct payouts to WW, myCred, and GamiPress.
--Fix: Some Point Exchange grammar adjustments.
--Fix: Removed redundant instruction pages.
+- Add: [Gamipress](https://wordpress.org/plugins/gamipress/) support in [vyps-pe] which is basically the same except you need outputid (as the GamiPress slug name) since GamiPress may have one that more point [vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]
+- Add: Created hooks for pro version in case anyone wants to remove branding. See [VidYen Store](https://www.vidyen.com/product/vyps-pro-install/) for details. Will include direct payouts to WW, myCred, and GamiPress.
+- Fix: Some Point Exchange grammar adjustments.
+- Fix: Removed redundant instruction pages.
 
 = 1.8.2 =
 
