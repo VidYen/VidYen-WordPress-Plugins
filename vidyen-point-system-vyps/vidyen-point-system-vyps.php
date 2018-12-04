@@ -1,5 +1,4 @@
 <?php
-
  /*
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/

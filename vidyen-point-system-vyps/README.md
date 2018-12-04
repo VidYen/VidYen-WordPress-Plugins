@@ -1,5 +1,5 @@
 === VidYen Point System ===
-Contributors: vidyen
+Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
 Tags: monetization, Adscend, Coinhive, Wannads, rewards, WooCommerce, GamiPress, monero, XMR, myCred, mining, cryptocurrency, Bitcoin
 Requires at least: 4.9.8
@@ -92,6 +92,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 10. Wannads support included in VYPS 1.9
 
 == Changelog ==
+
+= 1.9.1 =
+
+- Fix: The public log view for current user made so it does not display all the pages for other users.
 
 = 1.9.0 =
 
