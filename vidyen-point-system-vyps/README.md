@@ -96,6 +96,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 1.9.1 =
 
 - Fix: The public log view for current user made so it does not display all the pages for other users.
+- Add: RNG wheel game [vyps-wheel] (Ere we go!)
 
 = 1.9.0 =
 
