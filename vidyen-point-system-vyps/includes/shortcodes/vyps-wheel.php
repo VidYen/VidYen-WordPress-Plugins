@@ -15,7 +15,7 @@ function vyps_rng_wheel_func( $atts )
 {
   //Get the url for the wheel js
   $vyps_wheel_jquery_folder_url = plugins_url( 'js/jquery/', __FILE__ );
-  $vyps_wheel_jquery_folder_url = str_replace('shortcodes/', '', $vy256_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
+  $vyps_wheel_jquery_folder_url = str_replace('shortcodes/', '', $vyps_wheel_jquery_folder_url); //having to reomove the folder depending on where you plugins might happen to be
   $vyps_wheel_js_url =  $vyps_wheel_jquery_folder_url . 'jquery-1.8.3.min.js';
 
   $vyps_rng_wheel_html_output = "
@@ -28,9 +28,10 @@ function vyps_rng_wheel_func( $atts )
     </style>
 
     <script src=\"$vyps_wheel_js_url\"></script>
-
-    <canvas width=\"600\" height=\"400\" id=\"gameCanvas\">
-    </canvas>
+    <table>
+      <canvas width=\"256\" height=\"256\" id=\"gameCanvas\">
+      </canvas>
+    </table>
 
     <script type=\"text/javascript\">
     	window.requestAnimFrame = (function(callback) {
@@ -75,8 +76,8 @@ function vyps_rng_wheel_func( $atts )
     		return sectorColors[currentColor];
     	}
     	function setCanvasWidth() {
-    		canvas.width = window.innerWidth - 20;
-    		canvas.height = window.innerHeight - 20;
+    		canvas.width = 256 - 20;
+    		canvas.height = 256 - 20;
     		rotatingCanvas.width = canvas.width;
     		rotatingCanvas.height = canvas.height;
     		centerX = canvas.width / 2;
