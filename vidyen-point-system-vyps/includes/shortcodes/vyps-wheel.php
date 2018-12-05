@@ -13,7 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 function vyps_rng_wheel_func( $atts )
 {
-  //NOTE: Doing to use "" instead of '' as well... As put variables in the code directly.
+  //Get the url for the wheel js
+  $vyps_wheel_jquery_folder_url = plugins_url( 'js/jquery/', __FILE__ );
+  $vyps_wheel_jquery_folder_url = str_replace('shortcodes/', '', $vy256_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
+  $vyps_wheel_js_url =  $vyps_wheel_jquery_folder_url . 'jquery-1.8.3.min.js';
+
   $vyps_rng_wheel_html_output = "
     <style type=\"text/css\">
     body {
@@ -23,7 +27,7 @@ function vyps_rng_wheel_func( $atts )
     }
     </style>
 
-    <script src=\"jquery-1.8.3.min.js\"></script>
+    <script src=\"$vyps_wheel_js_url\"></script>
 
     <canvas width=\"600\" height=\"400\" id=\"gameCanvas\">
     </canvas>
