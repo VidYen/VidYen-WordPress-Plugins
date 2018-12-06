@@ -41,10 +41,13 @@ function vyps_rng_wheel_func( $atts )
             };
           })();
     	var gameList = {
-    		\"0\" : 25.0,
-    		\"50\" : 25.0,
-    		\"100\" : 25.0,
-    		\"200\" : 25.0,
+    		\"0\" : 12.5,
+    		\"25\" : 12.5,
+    		\"75\" : 12.5,
+    		\"100\" : 12.5,
+        \"125\" : 12.5,
+        \"150\" : 12.5,
+        \"200\" : 12.5,
     	}
     	var totalGameScores = 0;
     	for (var game in gameList) {
@@ -54,10 +57,27 @@ function vyps_rng_wheel_func( $atts )
     		\"#00CC00\",
     		\"#FF0000\",
     		\"#FF7400\",
-    		\"#009999\"
+    		\"#009999\",
+        \"#FF0000\",
+        \"#FF7400\",
+        \"#009999\"
     	]
     	function getRandomRollSpeed() {
-    		return 1/1000 + Math.random() * 1 / 1000;
+        var vyps_response_rng = \"global\";
+        vyps_response_rng = 1;
+        jQuery(document).ready(function($) {
+          var data = {
+            'action': 'vyps_spin_wheel_action',
+            'whatever': '0',
+          };
+
+          // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+          jQuery.post(ajaxurl, data, function(response) {
+            alert('Got this from the server: ' + response );
+            vyps_response_rng = response;
+          });
+        });
+        return vyps_response_rng;
     	}
 
     	var rollSpeedDeceleration = 1/100000000;
@@ -176,7 +196,7 @@ function vyps_rng_wheel_func( $atts )
     		} else {
     			roll(getRandomRollSpeed(), null);
     		}
-    	}
+      }
     	$(window).resize(draw);
     	$(\"#gameCanvas\").click(userInput);
     	$(window).keydown(userInput);
@@ -189,3 +209,44 @@ function vyps_rng_wheel_func( $atts )
 /*** Short Code Name for RNG Wheel ***/
 
 add_shortcode( 'vyps-wheel', 'vyps_rng_wheel_func');
+
+/*** PHP Functions to handle AJAX request***/
+
+// register the ajax action for authenticated users
+add_action('wp_ajax_vyps_spin_wheel_action', 'vyps_spin_wheel_action');
+
+// handle the ajax request
+function vyps_spin_wheel_action()
+{
+
+  global $wpdb; // this is how you get access to the database
+
+  $whatever = intval( $_POST['whatever'] );
+
+  //$whatever += 10;
+
+  // add your logic here...
+  $atts = shortcode_atts(
+		array(
+				'outputid' => 1,
+				'outputamount' => 555,
+        'refer' => 0,
+				'to_user_id' => 1,
+        'comment' => '',
+    		'reason' => 'SPIN',
+				'btn_name' => 'SPINME',
+    ), $atts, 'vyps-pe' );
+
+  $atts['to_user_id'] = get_current_user_id();
+
+  if( $whatever != 0)
+  {
+    $add_result = vyps_add_func( $atts );
+  }
+
+  $rng_server_response = mt_rand() / mt_getrandmax(); //This is an int to get us from 0.900 to 1 the 100 should go through being rng with keeping speed reasonable.
+
+  echo $rng_server_response;
+
+  wp_die(); // this is required to terminate immediately and return a proper response
+}
