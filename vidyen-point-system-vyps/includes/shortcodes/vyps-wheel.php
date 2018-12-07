@@ -41,26 +41,44 @@ function vyps_rng_wheel_func( $atts )
             };
           })();
     	var gameList = {
-    		\"0\" : 12.5,
-    		\"25\" : 12.5,
-    		\"75\" : 12.5,
-    		\"100\" : 12.5,
-        \"125\" : 12.5,
-        \"150\" : 12.5,
-        \"200\" : 12.5,
+    		\"a1\" : 6.25,
+        \"a1/2\" : 6.25,
+        \"a1 1/2\" : 6.25,
+        \"a2\" : 6.25,
+        \"b1\" : 6.25,
+        \"b3/4\" : 6.25,
+        \"b1 3/4\" : 6.25,
+        \"b3\" : 6.25,
+        \"c1\" : 6.25,
+        \"c1/2\" : 6.25,
+        \"c1 1/2\" : 6.25,
+        \"c0\" : 6.25,
+        \"d1\" : 6.25,
+        \"d3/4\" : 6.25,
+        \"d1 3/4\" : 6.25,
+        \"d0\" : 6.25
     	}
     	var totalGameScores = 0;
     	for (var game in gameList) {
     		totalGameScores += gameList[game];
     	}
     	var sectorColors = [
-    		\"#00CC00\",
-    		\"#FF0000\",
-    		\"#FF7400\",
-    		\"#009999\",
-        \"#FF0000\",
-        \"#FF7400\",
-        \"#009999\"
+    		\"#f9a11b\",
+    		\"#ca5500\",
+        \"#f9a11b\",
+    		\"#ca5500\",
+        \"#f9a11b\",
+    		\"#ca5500\",
+        \"#f9a11b\",
+    		\"#ca5500\",
+        \"#f9a11b\",
+        \"#ca5500\",
+        \"#f9a11b\",
+        \"#ca5500\",
+        \"#f9a11b\",
+        \"#ca5500\",
+        \"#f9a11b\",
+        \"#ca5500\"
     	]
     	function getRandomRollSpeed() {
         var vyps_response_rng = \"global\";
@@ -95,8 +113,8 @@ function vyps_rng_wheel_func( $atts )
     		return sectorColors[currentColor];
     	}
     	function setCanvasWidth() {
-    		canvas.width = 256 - 20;
-    		canvas.height = 256 - 20;
+    		canvas.width = (256 * 2) - 20;
+    		canvas.height = (256 * 2) - 20;
     		rotatingCanvas.width = canvas.width;
     		rotatingCanvas.height = canvas.height;
     		centerX = canvas.width / 2;
