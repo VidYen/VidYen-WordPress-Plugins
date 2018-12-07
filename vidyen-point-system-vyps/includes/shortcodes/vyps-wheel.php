@@ -73,14 +73,13 @@ function vyps_rng_wheel_func( $atts )
 
           // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
           jQuery.post(ajaxurl, data, function(response) {
-            alert('Got this from the server: ' + response );
             vyps_response_rng = response;
           });
         });
         return vyps_response_rng;
     	}
 
-    	var rollSpeedDeceleration = 1/100000000;
+    	var rollSpeedDeceleration = 0.003;
     	var isSpinning = false;
     	var stopSpinning = false;
     	var centerX = 0;
@@ -174,7 +173,8 @@ function vyps_rng_wheel_func( $atts )
     		if (!startTime) {
     			startTime = new Date().getTime();
     		}
-    		var time = (new Date()).getTime() - startTime;
+    		//var time = (new Date()).getTime() - startTime;
+        var time = 6;
     		context.clearRect(0, 0, canvas.width, canvas.height);
     		rotatingContext.clearRect(0, 0, canvas.width, canvas.height);
     		rotatingContext.translate(canvas.width / 2, canvas.height / 2);
@@ -192,7 +192,7 @@ function vyps_rng_wheel_func( $atts )
     	draw();
     	function userInput() {
     		if (isSpinning) {
-    			stopSpinning = true;
+    			//stopSpinning = true;
     		} else {
     			roll(getRandomRollSpeed(), null);
     		}
@@ -244,7 +244,7 @@ function vyps_spin_wheel_action()
     $add_result = vyps_add_func( $atts );
   }
 
-  $rng_server_response = mt_rand() / mt_getrandmax(); //This is an int to get us from 0.900 to 1 the 100 should go through being rng with keeping speed reasonable.
+  $rng_server_response = ( mt_rand() / mt_getrandmax() ) + (1/1000); //This is an int to get us from 0.900 to 1 the 100 should go through being rng with keeping speed reasonable.
 
   echo $rng_server_response;
 
