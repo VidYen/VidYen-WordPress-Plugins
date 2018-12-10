@@ -14,16 +14,12 @@ function vyps_balance_func( $atts ) {
 	//Make sure user is logged in.
 	if ( is_user_logged_in() )
 	{
-
 		//Nothing
-
 	}
 	else
 	{
-
 		//If user is not logged in. Code needs to cease. I said CEASE!
 		return;
-
 	}
 
 	$atts = shortcode_atts(

@@ -12,6 +12,23 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 function vyps_rng_quads_func( $atts )
 {
+
+  $atts = shortcode_atts(
+    array(
+        'pid' => 1,
+        'uid' => '0',
+        'raw' => TRUE,
+        'decimal' => 0,
+    ), $atts, 'vyps-quads' );
+
+  //Login check.
+  if ( ! is_user_logged_in() )
+  {
+      return;
+  }
+
+  static $quads_point_id = 3;
+
   //Get the url for the Quads js
   $vyps_quads_jquery_folder_url = plugins_url( 'js/jquery/', __FILE__ );
   $vyps_quads_jquery_folder_url = str_replace('shortcodes/', '', $vyps_quads_jquery_folder_url); //having to reomove the folder depending on where you plugins might happen to be
@@ -35,7 +52,14 @@ function vyps_rng_quads_func( $atts )
            output_response = JSON.parse(response);
            document.getElementById('number-output').innerText = output_response.full_numbers;
            var elem = document.getElementById(\"texta\");
-           elem.value += \"[\" + new Date().toLocaleString() + \"] \";
+           elem.value += \"Date:[\" + new Date().toLocaleString() + \"]\";
+           elem.value += \"\\n\";
+           elem.value += \"Before Balance:[\" + output_response.pre_balance + \"] \";
+           elem.value += \"\\n\";
+           elem.value += \"After Balance:[\" + output_response.post_balance + \"] \";
+           elem.value += \"\\n\";
+           elem.value += \"Reward:[\" + output_response.reward + \"] \";
+           elem.value += \"\\n\";
            elem.value += output_response.response_text;
            elem.value += \"\\n\";
            elem.scrollTop = elem.scrollHeight;
@@ -91,18 +115,32 @@ function vyps_run_quads_action()
         'refer' => 0,
 				'to_user_id' => 1,
         'comment' => '',
-    		'reason' => 'run',
+    		'reason' => '',
 				'btn_name' => 'runME',
+        'raw' => TRUE,
+        'cost' => 1000,
     ), $atts, 'vyps-pe' );
 
-  $atts['to_user_id'] = get_current_user_id();
+  //This is hardcoded for now.
+  //$bet_cost = $atts['cost'];
+  $bet_cost = 1000;
 
-  /*
-  if( $whatever != 0)
-  {
-    $add_result = vyps_add_func( $atts );
+  $atts['to_user_id'] = get_current_user_id();
+  $atts['pid'] = 3;
+  $atts['firstid'] = 3;
+  $atts['firstamount'] = $bet_cost;
+
+  //Get current balance.
+  $pre_current_user_balance = vyps_balance_func($atts);
+
+  //Deduct. I figure there is a check when need to run.
+  $deduct_results = vyps_deduct_func( $atts );
+
+  if ( $deduct_results == 0 ){
+
+    return 0; //Something broke.
+
   }
-  */
 
   $digit_first = mt_rand(0, 9);
   $digit_second = mt_rand(0, 9);
@@ -114,40 +152,60 @@ function vyps_run_quads_action()
   if (($digit_first == $digit_second) AND ($digit_third == $digit_fourth) AND (($digit_first == $digit_fourth)))
   {
     //WE got quads
-    $response_text = " You got quads!";
+    $response_text = "QUADS";
+    $reward_amount = $bet_cost * 3;
   }
   elseif (($digit_first == $digit_second) AND ($digit_first == $digit_third))
   {
     //We got trips on first 3
-    $response_text = " You got trips!";
+    $response_text = "TRIPS";
+    $reward_amount = $bet_cost * 2;
   }
   elseif (($digit_second == $digit_third) AND ($digit_second == $digit_fourth))
   {
     //trips on last 3
-    $response_text = " You got trips!";
+    $response_text = "TRIPS";
+    $reward_amount = $bet_cost * 2;
   }
   elseif ($digit_first == $digit_second)
   {
     //dubs on first 2
-    $response_text = " You got dubs!";
+    $response_text = "DUBS";
+    $reward_amount = $bet_cost;
   }
   elseif ($digit_second == $digit_third)
   {
     //dubs on  middle 2
-    $response_text = " You got dubs!";
+    $response_text = "DUBS";
+    $reward_amount = $bet_cost;
   }
   elseif ($digit_third == $digit_fourth)
   {
     //dubs on last 2
-    $response_text = " You got dubs!";
+    $response_text = "DUBS";
+    $reward_amount = $bet_cost;
   }
   else
   {
       //YOU GET NOTHING!
-      $response_text = " You got nothing!";
+      $response_text = "FAIL";
+      $reward_amount = 0;
   }
 
   $rng_numbers_combined = $digit_first . $digit_second . $digit_third . $digit_fourth;
+
+  $atts['pid'] = 3;
+
+  //Well if they won. They should get something.
+  if ($reward_amount > 0 )
+  {
+    $atts['reason'] = $response_text;
+    $atts['outputid'] = 3;
+    $atts['outputamount'] = $reward_amount;
+    vyps_add_func( $atts );
+  }
+
+  $post_current_user_balance = vyps_balance_func($atts);
 
   $rng_array_server_response = array(
       'first' => $digit_first,
@@ -156,8 +214,10 @@ function vyps_run_quads_action()
       'fourth' => $digit_fourth,
       'full_numbers' => $rng_numbers_combined,
       'response_text' => $response_text,
+      'pre_balance' => $pre_current_user_balance,
+      'post_balance' => $post_current_user_balance,
+      'reward' => $reward_amount,
   );
-
 
   //Get the random 4 digit number. Just testing... will get a better check later.
   //$rng_server_response = $digit_first . $digit_second . $digit_third . $digit_fourth . $response_text;
