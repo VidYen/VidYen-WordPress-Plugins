@@ -107,7 +107,7 @@ function vyps_vy256_solver_func($atts) {
 
     $cloud_server_name = array(
           '0' => 'vesalius.vy256.com',
-          '1' => '003.vy256.com',
+          '1' => 'daidem.vy256.com',
           '2' => $custom_server,
           '3' => 'error',
           '7' => '127.0.0.1'
@@ -118,7 +118,7 @@ function vyps_vy256_solver_func($atts) {
     //NOTE: There will always be : in this field so perhaps I need to correct laters for my OCD.
     $cloud_worker_port = array(
           '0' => '8443',
-          '1' => '8181',
+          '1' => '8443',
           '2' => $custom_server_ws_port,
           '3' => 'error',
           '7' => '8181'
