@@ -15,7 +15,7 @@ function vyps_rng_quads_func( $atts )
 
   $atts = shortcode_atts(
     array(
-        'pid' => 11,
+        'pid' => 1,
         'uid' => '0',
         'raw' => FALSE,
         'decimal' => 0,
@@ -27,32 +27,37 @@ function vyps_rng_quads_func( $atts )
       return;
   }
 
-  static $quads_point_id = 3;
-
   //Get the url for the Quads js
   $vyps_quads_jquery_folder_url = plugins_url( 'js/jquery/', __FILE__ );
   $vyps_quads_jquery_folder_url = str_replace('shortcodes/', '', $vyps_quads_jquery_folder_url); //having to reomove the folder depending on where you plugins might happen to be
   $vyps_quads_js_url =  $vyps_quads_jquery_folder_url . 'jquery-1.8.3.min.js';
 
   $starting_balance_html = vyps_balance_func( $atts );
+  $pointID = $atts['pid'];
+  $icon_url = vyps_point_icon_func($pointID);
 
   $vyps_rng_quads_html_output = "
     <script>
       var randomtime = setInterval(timeframe, 36);
       function timeframe() {
-        document.getElementById('number-output').innerHTML = Math.floor(Math.random()*10000) + Math.floor(Math.random()*1000) + Math.floor(Math.random()*100) + Math.floor(Math.random()*10);
+        document.getElementById('animated_number_output').innerHTML = Math.floor(Math.random()*10000) + Math.floor(Math.random()*1000) + Math.floor(Math.random()*100) + Math.floor(Math.random()*10);
       }
 
-      function gettherng() {
+      function gettherng(multi) {
+        if (multi === undefined){
+          multi = 0;
+        }
+        document.getElementById(\"animated_number_output\").style.display = 'block'; // disable button
+        document.getElementById(\"number_output\").style.display = 'none'; // enable button
         jQuery(document).ready(function($) {
          var data = {
            'action': 'vyps_run_quads_action',
-           'whatever': '0',
+           'multicheck': multi,
          };
          // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
          jQuery.post(ajaxurl, data, function(response) {
            output_response = JSON.parse(response);
-           document.getElementById('number-output').innerHTML = output_response.full_numbers;
+           document.getElementById('number_output').innerHTML = output_response.full_numbers;
            document.getElementById('current_balance').innerHTML = output_response.post_balance;
            document.getElementById('reward_balance').innerHTML = output_response.reward;
            var elem = document.getElementById(\"texta\");
@@ -65,28 +70,25 @@ function vyps_rng_quads_func( $atts )
            elem.value += output_response.response_text;
            elem.value += \"\\n\";
            elem.scrollTop = elem.scrollHeight;
-           clearInterval(randomtime);
+           document.getElementById(\"animated_number_output\").style.display = 'none'; // disable button
+           document.getElementById(\"number_output\").style.display = 'block'; // enable button
+           //clearInterval(randomtime);
          });
         });
       }
 
-      function betretry() {
+      function spin_numbers() {
         randomtime = setInterval(timeframe, 36);
-        gettherng();
       }
 
-      function runthebet() {
-        document.getElementById(\"bet_action\").style.display = 'none'; // disable button
-        document.getElementById(\"retry_action\").style.display = 'block'; // enable button
-        gettherng();
-      }
     </script>
-    <div align=\"center\"><span id=\"number-output\">0000</span></div>
-    <div id=\"bet_action\" style=\"display:block;\" align=\"center\"><button onclick=\"runthebet()\">BET</button></div>
-    <div id=\"retry_action\" style=\"display:none;\" align=\"center\"><button onclick=\"betretry()\">RETRY</button></div>
+    <div align=\"center\"><span id=\"animated_number_output\" style=\"display:block\">0000</span></div>
+    <div align=\"center\"><span id=\"number_output\" style=\"display:none\">0000</span></div>
+    <div id=\"bet_action\" align=\"center\"><button onclick=\"gettherng(1)\">$icon_url 1</button><button onclick=\"gettherng(10)\">$icon_url 10</button></div>
+    <div id=\"bet_action\" align=\"center\"><button onclick=\"gettherng(100)\">$icon_url 100</button><button onclick=\"gettherng(1000)\">$icon_url 1000</button></div>
     <table>
       <tr><div align=\"center\"><span id=\"current_balance\">$starting_balance_html</span></div></tr>
-      <tr><div align=\"center\"><span id=\"reward_balance\">0</span></div></tr>
+      <tr><div align=\"center\"><span id=\"reward_balance\">$icon_url 0</span></div></tr>
     <table>
     <div align=\"center\"><textarea rows=\"4\" cols=\"50\" id=\"texta\"></textarea></div>
     ";
@@ -109,7 +111,7 @@ function vyps_run_quads_action()
 
   global $wpdb; // this is how you get access to the database
 
-  $whatever = intval( $_POST['whatever'] );
+  $incoming_multiplier = intval( $_POST['multicheck'] );
 
   //$whatever += 10;
 
@@ -129,7 +131,7 @@ function vyps_run_quads_action()
 
   //This is hardcoded for now.
   //$bet_cost = $atts['cost'];
-  $bet_cost = 1000;
+  $bet_cost = $incoming_multiplier;
 
   $atts['to_user_id'] = get_current_user_id();
   $atts['pid'] = 3;
@@ -144,7 +146,31 @@ function vyps_run_quads_action()
 
   if ( $deduct_results == 0 ){
 
-    return 0; //Something broke.
+    //Not enough to play!
+    $post_current_user_balance = vyps_balance_func($atts);
+
+    $response_text = "NOT ENOUGH POINTS!";
+
+    $reward_amount = 0;
+
+    $rng_array_server_response = array(
+        'first' => $digit_first,
+        'second' => $digit_second,
+        'third' => $digit_third,
+        'fourth' => $digit_fourth,
+        'full_numbers' => $rng_numbers_combined,
+        'response_text' => $response_text,
+        'pre_balance' => $pre_current_user_balance,
+        'post_balance' => $post_current_user_balance,
+        'reward' => $reward_amount,
+    );
+
+    //Get the random 4 digit number. Just testing... will get a better check later.
+    //$rng_server_response = $digit_first . $digit_second . $digit_third . $digit_fourth . $response_text;
+
+    echo json_encode($rng_array_server_response);
+
+    wp_die(); // this is required to terminate immediately and return a proper response
 
   }
 
@@ -210,12 +236,13 @@ function vyps_run_quads_action()
   $atts['pid'] = 3;
 
   //Well if they won. They should get something.
-  if ($reward_amount > 0 )
+  if ($reward_amount > 0  AND $deduct_results == 1)
   {
     $atts['reason'] = $response_text;
     $atts['outputid'] = 3;
     $atts['outputamount'] = $reward_amount;
     vyps_add_func( $atts );
+
   }
 
   $post_current_user_balance = vyps_balance_func($atts);
