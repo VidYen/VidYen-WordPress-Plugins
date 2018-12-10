@@ -15,9 +15,9 @@ function vyps_rng_quads_func( $atts )
 
   $atts = shortcode_atts(
     array(
-        'pid' => 1,
+        'pid' => 11,
         'uid' => '0',
-        'raw' => TRUE,
+        'raw' => FALSE,
         'decimal' => 0,
     ), $atts, 'vyps-quads' );
 
@@ -34,11 +34,13 @@ function vyps_rng_quads_func( $atts )
   $vyps_quads_jquery_folder_url = str_replace('shortcodes/', '', $vyps_quads_jquery_folder_url); //having to reomove the folder depending on where you plugins might happen to be
   $vyps_quads_js_url =  $vyps_quads_jquery_folder_url . 'jquery-1.8.3.min.js';
 
+  $starting_balance_html = vyps_balance_func( $atts );
+
   $vyps_rng_quads_html_output = "
     <script>
       var randomtime = setInterval(timeframe, 36);
       function timeframe() {
-        document.getElementById('number-output').innerText = Math.floor(Math.random()*10000) + Math.floor(Math.random()*1000) + Math.floor(Math.random()*100) + Math.floor(Math.random()*10);
+        document.getElementById('number-output').innerHTML = Math.floor(Math.random()*10000) + Math.floor(Math.random()*1000) + Math.floor(Math.random()*100) + Math.floor(Math.random()*10);
       }
 
       function gettherng() {
@@ -50,13 +52,13 @@ function vyps_rng_quads_func( $atts )
          // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
          jQuery.post(ajaxurl, data, function(response) {
            output_response = JSON.parse(response);
-           document.getElementById('number-output').innerText = output_response.full_numbers;
+           document.getElementById('number-output').innerHTML = output_response.full_numbers;
+           document.getElementById('current_balance').innerHTML = output_response.post_balance;
+           document.getElementById('reward_balance').innerHTML = output_response.reward;
            var elem = document.getElementById(\"texta\");
            elem.value += \"Date:[\" + new Date().toLocaleString() + \"]\";
            elem.value += \"\\n\";
-           elem.value += \"Before Balance:[\" + output_response.pre_balance + \"] \";
-           elem.value += \"\\n\";
-           elem.value += \"After Balance:[\" + output_response.post_balance + \"] \";
+           elem.value += \"Post Balance:[\" + output_response.post_balance + \"] \";
            elem.value += \"\\n\";
            elem.value += \"Reward:[\" + output_response.reward + \"] \";
            elem.value += \"\\n\";
@@ -82,6 +84,10 @@ function vyps_rng_quads_func( $atts )
     <div align=\"center\"><span id=\"number-output\">0000</span></div>
     <div id=\"bet_action\" style=\"display:block;\" align=\"center\"><button onclick=\"runthebet()\">BET</button></div>
     <div id=\"retry_action\" style=\"display:none;\" align=\"center\"><button onclick=\"betretry()\">RETRY</button></div>
+    <table>
+      <tr><div align=\"center\"><span id=\"current_balance\">$starting_balance_html</span></div></tr>
+      <tr><div align=\"center\"><span id=\"reward_balance\">0</span></div></tr>
+    <table>
     <div align=\"center\"><textarea rows=\"4\" cols=\"50\" id=\"texta\"></textarea></div>
     ";
 
@@ -117,7 +123,7 @@ function vyps_run_quads_action()
         'comment' => '',
     		'reason' => '',
 				'btn_name' => 'runME',
-        'raw' => TRUE,
+        'raw' => FALSE,
         'cost' => 1000,
     ), $atts, 'vyps-pe' );
 
@@ -153,46 +159,53 @@ function vyps_run_quads_action()
   {
     //WE got quads
     $response_text = "QUADS";
-    $reward_amount = $bet_cost * 3;
+    $reward_amount = $bet_cost * 4;
+    $rng_numbers_combined = '<b>' . $digit_first . $digit_second . $digit_third . $digit_fourth . '</b>'; //Bolding for end user
   }
   elseif (($digit_first == $digit_second) AND ($digit_first == $digit_third))
   {
     //We got trips on first 3
     $response_text = "TRIPS";
-    $reward_amount = $bet_cost * 2;
+    $reward_amount = $bet_cost * 3;
+    $rng_numbers_combined = '<b>' . $digit_first . $digit_second . $digit_third . '</b>' . $digit_fourth; //First three bold
   }
   elseif (($digit_second == $digit_third) AND ($digit_second == $digit_fourth))
   {
     //trips on last 3
     $response_text = "TRIPS";
-    $reward_amount = $bet_cost * 2;
+    $reward_amount = $bet_cost * 3;
+    $rng_numbers_combined = $digit_first . '<b>' . $digit_second . $digit_third . $digit_fourth . '</b>'; //Last three bold
   }
   elseif ($digit_first == $digit_second)
   {
     //dubs on first 2
     $response_text = "DUBS";
-    $reward_amount = $bet_cost;
+    $reward_amount = $bet_cost * 2;
+    $rng_numbers_combined = '<b>' . $digit_first . $digit_second . '</b>' . $digit_third . $digit_fourth; //First two
   }
   elseif ($digit_second == $digit_third)
   {
     //dubs on  middle 2
     $response_text = "DUBS";
-    $reward_amount = $bet_cost;
+    $reward_amount = $bet_cost * 2;
+    $rng_numbers_combined = $digit_first . '<b>' . $digit_second . $digit_third . '</b>' . $digit_fourth; //Middle two
   }
   elseif ($digit_third == $digit_fourth)
   {
     //dubs on last 2
     $response_text = "DUBS";
-    $reward_amount = $bet_cost;
+    $reward_amount = $bet_cost * 2;
+    $rng_numbers_combined = $digit_first . $digit_second . '<b>' . $digit_third . $digit_fourth . '</b>'; //Last two
   }
   else
   {
       //YOU GET NOTHING!
       $response_text = "FAIL";
       $reward_amount = 0;
+      $rng_numbers_combined = $digit_first . $digit_second . $digit_third . $digit_fourth; //Fail. Has no bolding.
   }
 
-  $rng_numbers_combined = $digit_first . $digit_second . $digit_third . $digit_fourth;
+  //$rng_numbers_combined = $digit_first . $digit_second . $digit_third . $digit_fourth;
 
   $atts['pid'] = 3;
 
