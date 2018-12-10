@@ -32,7 +32,13 @@ function vyps_rng_quads_func( $atts )
          };
          // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
          jQuery.post(ajaxurl, data, function(response) {
-           document.getElementById('number-output').innerText = response;
+           output_response = JSON.parse(response);
+           document.getElementById('number-output').innerText = output_response.full_numbers;
+           var elem = document.getElementById(\"texta\");
+           elem.value += \"[\" + new Date().toLocaleString() + \"] \";
+           elem.value += output_response.response_text;
+           elem.value += \"\\n\";
+           elem.scrollTop = elem.scrollHeight;
            clearInterval(randomtime);
          });
         });
@@ -49,9 +55,10 @@ function vyps_rng_quads_func( $atts )
         gettherng();
       }
     </script>
-    <div><span id=\"number-output\">0000</span></div>
-    <div id=\"bet_action\" style=\"display:block;\"><button onclick=\"runthebet()\">BET</button></div>
-    <div id=\"retry_action\" style=\"display:none;\"><button onclick=\"betretry()\">RETRY</button></div>
+    <div align=\"center\"><span id=\"number-output\">0000</span></div>
+    <div id=\"bet_action\" style=\"display:block;\" align=\"center\"><button onclick=\"runthebet()\">BET</button></div>
+    <div id=\"retry_action\" style=\"display:none;\" align=\"center\"><button onclick=\"betretry()\">RETRY</button></div>
+    <div align=\"center\"><textarea rows=\"4\" cols=\"50\" id=\"texta\"></textarea></div>
     ";
 
     return $vyps_rng_quads_html_output;
@@ -140,11 +147,22 @@ function vyps_run_quads_action()
       $response_text = " You got nothing!";
   }
 
+  $rng_numbers_combined = $digit_first . $digit_second . $digit_third . $digit_fourth;
+
+  $rng_array_server_response = array(
+      'first' => $digit_first,
+      'second' => $digit_second,
+      'third' => $digit_third,
+      'fourth' => $digit_fourth,
+      'full_numbers' => $rng_numbers_combined,
+      'response_text' => $response_text,
+  );
+
 
   //Get the random 4 digit number. Just testing... will get a better check later.
-  $rng_server_response = $digit_first . $digit_second . $digit_third . $digit_fourth . $response_text;
+  //$rng_server_response = $digit_first . $digit_second . $digit_third . $digit_fourth . $response_text;
 
-  echo $rng_server_response;
+  echo json_encode($rng_array_server_response);
 
   wp_die(); // this is required to terminate immediately and return a proper response
 }
