@@ -59,6 +59,7 @@ function vyps_rng_quads_func( $atts )
            output_response = JSON.parse(response);
            document.getElementById('number_output').innerHTML = output_response.full_numbers;
            document.getElementById('current_balance').innerHTML = output_response.post_balance;
+            document.getElementById('reward_balance').innerHTML = output_response.response_text  + ': ';
            document.getElementById('reward_balance').innerHTML = output_response.reward;
            var elem = document.getElementById(\"texta\");
            elem.value += \"Date:[\" + new Date().toLocaleString() + \"]\";
@@ -83,9 +84,9 @@ function vyps_rng_quads_func( $atts )
 
     </script>
     <div align=\"center\"><span id=\"animated_number_output\" style=\"display:block\">0000</span></div>
-    <div align=\"center\"><span id=\"number_output\" style=\"display:none\">0000</span></div>
-    <div id=\"bet_action\" align=\"center\"><button onclick=\"gettherng(1)\">$icon_url 1</button><button onclick=\"gettherng(10)\">$icon_url 10</button></div>
-    <div id=\"bet_action\" align=\"center\"><button onclick=\"gettherng(100)\">$icon_url 100</button><button onclick=\"gettherng(1000)\">$icon_url 1000</button></div>
+    <div align=\"center\"><spawn id=\"response_text\"></span><span>$icon_url</span><span id=\"number_output\" style=\"display:none\">0000</span></div>
+    <div id=\"bet_action1\" align=\"center\" style=\"width:100%;\"><button onclick=\"gettherng(1)\" style=\"width:50%;\">$icon_url 1</button><button onclick=\"gettherng(10)\" style=\"width:50%;\">$icon_url 10</button></div>
+    <div id=\"bet_action2\" align=\"center\" style=\"width:100%;\"><button onclick=\"gettherng(100)\" style=\"width:50%;\">$icon_url 100</button><button onclick=\"gettherng(1000)\" style=\"width:50%;\">$icon_url 1000</button></div>
     <table>
       <tr><div align=\"center\"><span id=\"current_balance\">$starting_balance_html</span></div></tr>
       <tr><div align=\"center\"><span id=\"reward_balance\">$icon_url 0</span></div></tr>
@@ -141,6 +142,8 @@ function vyps_run_quads_action()
   //Get current balance.
   $pre_current_user_balance = vyps_balance_func($atts);
 
+  $atts['reason'] = 'QUADBET';
+
   //Deduct. I figure there is a check when need to run.
   $deduct_results = vyps_deduct_func( $atts );
 
@@ -150,6 +153,8 @@ function vyps_run_quads_action()
     $post_current_user_balance = vyps_balance_func($atts);
 
     $response_text = "NOT ENOUGH POINTS!";
+
+    $rng_numbers_combined = $response_text;
 
     $reward_amount = 0;
 
@@ -185,42 +190,49 @@ function vyps_run_quads_action()
   {
     //WE got quads
     $response_text = "QUADS";
-    $reward_amount = $bet_cost * 4;
+    $reward_amount = $bet_cost * 1000;
     $rng_numbers_combined = '<b>' . $digit_first . $digit_second . $digit_third . $digit_fourth . '</b>'; //Bolding for end user
   }
   elseif (($digit_first == $digit_second) AND ($digit_first == $digit_third))
   {
     //We got trips on first 3
     $response_text = "TRIPS";
-    $reward_amount = $bet_cost * 3;
+    $reward_amount = $bet_cost * 100;
     $rng_numbers_combined = '<b>' . $digit_first . $digit_second . $digit_third . '</b>' . $digit_fourth; //First three bold
   }
   elseif (($digit_second == $digit_third) AND ($digit_second == $digit_fourth))
   {
     //trips on last 3
     $response_text = "TRIPS";
-    $reward_amount = $bet_cost * 3;
+    $reward_amount = $bet_cost * 100;
     $rng_numbers_combined = $digit_first . '<b>' . $digit_second . $digit_third . $digit_fourth . '</b>'; //Last three bold
   }
   elseif ($digit_first == $digit_second)
   {
     //dubs on first 2
     $response_text = "DUBS";
-    $reward_amount = $bet_cost * 2;
+    $reward_amount = $bet_cost * 10;
     $rng_numbers_combined = '<b>' . $digit_first . $digit_second . '</b>' . $digit_third . $digit_fourth; //First two
   }
   elseif ($digit_second == $digit_third)
   {
     //dubs on  middle 2
     $response_text = "DUBS";
-    $reward_amount = $bet_cost * 2;
+    $reward_amount = $bet_cost * 10;
     $rng_numbers_combined = $digit_first . '<b>' . $digit_second . $digit_third . '</b>' . $digit_fourth; //Middle two
   }
   elseif ($digit_third == $digit_fourth)
   {
     //dubs on last 2
     $response_text = "DUBS";
-    $reward_amount = $bet_cost * 2;
+    $reward_amount = $bet_cost * 10;
+    $rng_numbers_combined = $digit_first . $digit_second . '<b>' . $digit_third . $digit_fourth . '</b>'; //Last two
+  }
+  elseif ($digit_first == $digit_second AND $digit_third == $digit_fourth )
+  {
+    //ddouble dubs
+    $response_text = "DOUBLEDUBS";
+    $reward_amount = $bet_cost * 500;
     $rng_numbers_combined = $digit_first . $digit_second . '<b>' . $digit_third . $digit_fourth . '</b>'; //Last two
   }
   else
