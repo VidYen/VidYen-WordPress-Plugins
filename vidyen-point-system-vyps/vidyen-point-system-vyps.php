@@ -268,8 +268,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsxmr_wallet.php')
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); //Shareholder pick. Is shortcode but used elsewhere
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer.php'); //Referal shortcode display shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer_balance.php'); //Referal balance shortcdoe. I really need to functionize this.
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wheel.php'); //The RNG wheel. Moving to a new tomorrow!
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-quads.php'); //The RNG wheel. Moving to a new tomorrow!
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-quads.php'); //QUADS the game. Moving to a new tomorrow!
 
 /*** End of Shortcode Includes ***/
 
