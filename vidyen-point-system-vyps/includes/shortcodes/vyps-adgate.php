@@ -59,12 +59,12 @@ function vyps_adgate_func( $atts )
 
 	else
 	{
-		$VYPS_power_row .= '<a href="http://www.adgaterewards.com/" target="_blank"><img src="https://panel.adgatemedia.com/assets/img/adgate-logo.png"></a><br><br>Please login to view the Offer Wall.';
+		$VYPS_power_row .= '<a href="https://www.adgaterewards.com/" target="_blank"><img src="https://panel.adgatemedia.com/assets/img/adgate-logo.png"></a><br><br>Please login to view the Offer Wall.';
 		return $VYPS_power_row; //Due to the nature of the referral system. I am changing this to be better.
 	}
 
 
-	$adgate_iframe = '<iframe style="width:100%;height:800px;border:0;padding:0;margin:0;" scrolling="yes" "frameborder="0" src="http://wall.adgaterewards.com/' . $adgate_api_key .  '/'. $current_user_id . '"></iframe>';
+	$adgate_iframe = '<iframe style="width:100%;height:800px;border:0;padding:0;margin:0;" scrolling="yes" "frameborder="0" src="https://wall.adgaterewards.com/' . $adgate_api_key .  '/'. $current_user_id . '"></iframe>';
 
 	return $VYPS_power_row . $adgate_iframe;
 
