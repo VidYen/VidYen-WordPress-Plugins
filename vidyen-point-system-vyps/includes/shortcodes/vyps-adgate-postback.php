@@ -70,32 +70,28 @@ function vyps_adgate_postback_func( $atts )
 	 * address as listed on your affiliate panel at http://adgatemedia.com under
 	 * the Postbacks Section and the Postback Information heading.
 	 */
-	define('AdGate_IP', $postback_ip_address); // Note: as noted above change the IP to match what is in your affiliate panel.
-	protected $ip = $_SERVER['REMOTE_ADDR'];
-	protected $data = null;
-	protected $servername = "localhost";
-	protected $username = "username";
-	protected $password = "password";
-	protected $dbname = "app";
-	/**
+	//define('AdGate_IP', $postback_ip_address); // Note: as noted above change the IP to match what is in your affiliate panel.
+	$ip = $_SERVER['REMOTE_ADDR'];
+	$data = null;
+		/**
 	 * Check the Remote Address is AdGate Media
 	 * if it is not throw an Exception
 	 */
-	if($ip === AdGate_IP)
+	if($ip == $postback_ip_address)
 	{
 	    $data = $_GET;
 	    // Process or Persist Data here inline or via a function call.
 	} else {
 	     // Throw either a custom Exception or just throw a generic \Exception
-	    throw new InvalidIPException();
+	    exit(); //NOTE: I put exit as the AdGate method was bad.
 	}
 
-	//I'm going to do some greygoose and bad coding so that we recycle the wannads format.
-	$userId = $data['user_id']);
-	$transactionId = $data['tx_id']);
-	$points = $data['point_value']);
-	$action = $data['status']); //Determines if added (1) or subtracted (0) NOTE: This is different than wannads where 2 is a chargeback
-	$ipuser = $data['session_ip']);
+	//I'm going to do some greygoose and bad coding so that we recycle the Adgate format.
+	$userId = $data['user_id'];
+	$transactionId = $data['tx_id'];
+	$points = $data['point_value'];
+	$action = $data['status']; //Determines if added (1) or subtracted (0) NOTE: This is different than Adgate where 2 is a chargeback
+	$ipuser = $data['session_ip'];
 
 	if($action == 0) { // action = 1 CREDITED // action = 2 REVOKED
 	    $points = -abs($points);
