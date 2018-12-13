@@ -258,6 +258,8 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Roll
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-adscend.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads.php'); //Adding Wannads support. Not the naming convention change.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads-postback.php'); //Wannads post back
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-adgate.php'); //Adding Wannads support. Not the naming convention change.
+//include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-adgate-postback.php'); //Wannads post back
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
