@@ -227,27 +227,27 @@ function vyps_run_quads_action()
   $digit_third = mt_rand(0, 9);
   $digit_fourth = mt_rand(0, 9);
 
-  //Some math Matic. If A = B and C = D and A = D, then B = C
+  //Some math Mathmatics. If A = B and C = D and A = D, then B = C
 
   if (($digit_first == $digit_second) AND ($digit_third == $digit_fourth) AND (($digit_first == $digit_fourth)))
   {
     //WE got quads
     $response_text = "QUADS";
-    $reward_amount = intval($bet_cost * 1000 ); //Ok. It took me a while to figure out fair odds. Basically this is = 1/( (1/10) * (1/10) * (1/10) * (1/10) ) odds per point spend of winning or 0.0001% of getting quads per roll
+    $reward_amount = intval($bet_cost * 100 ); //Ok. It took me a while to figure out fair odds. Basically this is = 1/( (1/10) * (1/10) * (1/10) * (1/10) ) odds per point spend of winning or 0.0001% of getting quads per roll
     $rng_numbers_combined = '<b>' . $digit_first . $digit_second . $digit_third . $digit_fourth . '</b>'; //Bolding for end user
   }
   elseif (($digit_first == $digit_second) AND ($digit_first == $digit_third))
   {
     //We got trips on first 3
     $response_text = "TRIPS";
-    $reward_amount = intval($bet_cost * 50); //Or =1/((1/10)*(1/10)*(1/10)+(1/10)*(1/10)*(1/10))
+    $reward_amount = intval($bet_cost * 5); //Or =1/((1/10)*(1/10)*(1/10)+(1/10)*(1/10)*(1/10))
     $rng_numbers_combined = '<b>' . $digit_first . $digit_second . $digit_third . '</b>' . $digit_fourth; //First three bold
   }
   elseif (($digit_second == $digit_third) AND ($digit_second == $digit_fourth))
   {
     //trips on last 3
     $response_text = "TRIPS";
-    $reward_amount = intval($bet_cost * 50);
+    $reward_amount = intval($bet_cost * 5);
     $rng_numbers_combined = $digit_first . '<b>' . $digit_second . $digit_third . $digit_fourth . '</b>'; //Last three bold
   }
   elseif ($digit_first == $digit_second)
@@ -275,7 +275,7 @@ function vyps_run_quads_action()
   {
     //ddouble dubs
     $response_text = "DOUBLEDUBS";
-    $reward_amount = intval($bet_cost * ((1000)/2)); //Same as trips but half as unlikely as you pairs although almost statitically the same do not require the same card. A statistics major might want to argue this with me though.
+    $reward_amount = intval($bet_cost * 75); //Same as trips but half as unlikely as you pairs although almost statitically the same do not require the same card. A statistics major might want to argue this with me though.
     $rng_numbers_combined = $digit_first . $digit_second . '<b>' . $digit_third . $digit_fourth . '</b>'; //Last two
   }
   else
