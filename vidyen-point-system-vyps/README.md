@@ -3,7 +3,7 @@ Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
 Tags: monetization, Adscend, Coinhive, Wannads, rewards, WooCommerce, GamiPress, monero, XMR, myCred, mining, cryptocurrency, Bitcoin
 Requires at least: 4.9.8
-Tested up to: 5.0.0
+Tested up to: 5.0.1
 Requires PHP: 7.0
 Stable tag: 4.9.8
 License: GPLv2
