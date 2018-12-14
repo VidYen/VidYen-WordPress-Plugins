@@ -77,9 +77,9 @@ function vyps_adgate_postback_func( $atts )
 	 * Check the Remote Address is AdGate Media
 	 * if it is not throw an Exception
 	 */
-	if($ip == $postback_ip_address)
+	if($ip == $postback_ip_address OR $ip == '52.42.57.125 ' OR $ip == '104.130.7.162' OR $ip == '208.253.87.210')
 	{
-	    $data = $_GET;
+    	//$data = array($_GET);
 	    // Process or Persist Data here inline or via a function call.
 	} else {
 	     // Throw either a custom Exception or just throw a generic \Exception
@@ -87,11 +87,11 @@ function vyps_adgate_postback_func( $atts )
 	}
 
 	//I'm going to do some greygoose and bad coding so that we recycle the Adgate format.
-	$userId = $data['user_id'];
-	$transactionId = $data['tx_id'];
-	$points = $data['point_value'];
-	$action = $data['status']; //Determines if added (1) or subtracted (0) NOTE: This is different than Adgate where 2 is a chargeback
-	$ipuser = $data['session_ip'];
+	$userId = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+	$transactionId = isset($_GET['tx_id']) ? $_GET['tx_id'] : null;
+	$points = isset($_GET['point_value']) ? $_GET['point_value'] : null;
+	$action = isset($_GET['status']) ? $_GET['status'] : null; //Determines if added (1) or subtracted (0) NOTE: This is different than Adgate where 2 is a chargeback
+	$ipuser = isset($_GET['session_ip']) ? $_GET['session_ip'] : null;
 
 	if($action == 0) { // action = 1 CREDITED // action = 2 REVOKED
 	    $points = -abs($points);
