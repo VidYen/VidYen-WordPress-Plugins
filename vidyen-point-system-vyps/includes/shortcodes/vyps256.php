@@ -107,7 +107,7 @@ function vyps_vy256_solver_func($atts) {
 
     $cloud_server_name = array(
           '0' => 'vesalius.vy256.com',
-          '1' => 'daidem.vy256.com',
+          '1' => 'daidem.vidhash.com',
           '2' => $custom_server,
           '3' => 'error',
           '7' => '127.0.0.1'
