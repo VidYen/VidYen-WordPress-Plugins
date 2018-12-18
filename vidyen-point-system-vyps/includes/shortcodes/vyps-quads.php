@@ -233,7 +233,7 @@ function vyps_run_quads_action()
   {
     //WE got quads
     $response_text = "QUADS";
-    $reward_amount = intval($bet_cost * 100 ); //Ok. It took me a while to figure out fair odds. Basically this is = 1/( (1/10) * (1/10) * (1/10) * (1/10) ) odds per point spend of winning or 0.0001% of getting quads per roll
+    $reward_amount = intval($bet_cost * 10 ); //Ok. It took me a while to figure out fair odds. Basically this is = 1/( (1/10) * (1/10) * (1/10) * (1/10) ) odds per point spend of winning or 0.0001% of getting quads per roll
     $rng_numbers_combined = '<b>' . $digit_first . $digit_second . $digit_third . $digit_fourth . '</b>'; //Bolding for end user
   }
   elseif (($digit_first == $digit_second) AND ($digit_first == $digit_third))
@@ -254,28 +254,28 @@ function vyps_run_quads_action()
   {
     //dubs on first 2
     $response_text = "DUBS";
-    $reward_amount = intval($bet_cost * (1/0.3)); //Dubs odds are a bit different so it took me a bit to get over it... =1/((1/10)*(1/10)+(1/10)*(1/10)+(1/10)*(1/10))
+    $reward_amount = intval($bet_cost * 2.317443396445042); //Ok. I wish I could post how i got this number, but had a discussion on a discord about the fair payout on this.
     $rng_numbers_combined = '<b>' . $digit_first . $digit_second . '</b>' . $digit_third . $digit_fourth; //First two
   }
   elseif ($digit_second == $digit_third)
   {
     //dubs on  middle 2
     $response_text = "DUBS";
-    $reward_amount = intval($bet_cost * (1/0.3));
+    $reward_amount = intval($bet_cost * 2.317443396445042);
     $rng_numbers_combined = $digit_first . '<b>' . $digit_second . $digit_third . '</b>' . $digit_fourth; //Middle two
   }
   elseif ($digit_third == $digit_fourth)
   {
     //dubs on last 2
     $response_text = "DUBS";
-    $reward_amount = intval($bet_cost * (1/0.3));
+    $reward_amount = intval($bet_cost * 2.317443396445042);
     $rng_numbers_combined = $digit_first . $digit_second . '<b>' . $digit_third . $digit_fourth . '</b>'; //Last two
   }
   elseif ($digit_first == $digit_second AND $digit_third == $digit_fourth )
   {
     //ddouble dubs
     $response_text = "DOUBLEDUBS";
-    $reward_amount = intval($bet_cost * 75); //Same as trips but half as unlikely as you pairs although almost statitically the same do not require the same card. A statistics major might want to argue this with me though.
+    $reward_amount = intval($bet_cost * 5); //Same as trips but half as unlikely as you pairs although almost statitically the same do not require the same card. A statistics major might want to argue this with me though.
     $rng_numbers_combined = $digit_first . $digit_second . '<b>' . $digit_third . $digit_fourth . '</b>'; //Last two
   }
   else
