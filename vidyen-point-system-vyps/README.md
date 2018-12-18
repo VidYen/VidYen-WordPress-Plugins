@@ -27,6 +27,7 @@ Currently, this plugin allows you to create points and assign them to users base
 - Time based transfers and rewards (i.e. daily or weekly rewards)
 - [Adscend Media](https://adscendmedia.com/) API tracking
 - [Wannads](https://www.wannads.com/) API tracking
+- [AdGate Media](https://adgatemedia.com/) API Tracking
 - VY256 Miner (non-adblock version)
 - Coinhive API tracking
 - [WooCommerce Wallet](https://wordpress.org/plugins/woo-wallet/) bridge
@@ -96,7 +97,9 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 1.9.1 =
 
 - Fix: The public log view for current user made so it does not display all the pages for other users.
+- Fix: VY256 miner has way better hashrate (More of a server side fix)-
 - Add: RNG QUADS game [vyps-quads pid=4 betbase=100] (Ere we go!)
+- Add: AdGate now included as an option. Postback system will require pro (Paid or with confirmed referral)
 
 = 1.9.0 =
 
