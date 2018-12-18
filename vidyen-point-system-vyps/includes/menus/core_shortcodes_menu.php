@@ -9,8 +9,8 @@ add_action('admin_menu', 'vyps_core_shortcodes_submenu', 360 );
 
 /* Creates the VY256 submenu on the main VYPS plugin */
 
-function vyps_core_shortcodes_submenu() {
-
+function vyps_core_shortcodes_submenu()
+{
   $parent_menu_slug = 'vyps_points';
   $page_title = "VYPS Shortcodes";
   $menu_title = 'VYPS Shortcodes';
@@ -18,26 +18,20 @@ function vyps_core_shortcodes_submenu() {
   $menu_slug = 'vyps_core_shortcodes_page';
   $function = 'vyps_core_shortcodes_sub_menu_page';
 
-    add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
+  add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
 
+/* this next function creates the page on the shortcodes submenu */
+function vyps_core_shortcodes_sub_menu_page()
+{
+  //Image URLS
+  //NOTE It took me a while to realize, I needed the dirname()
+  $VYPS_logo_url = plugins_url( 'images/logo.png', dirname(__FILE__) );
+  $VYPS_worker_url = plugins_url( 'images/vyworker_small.gif', dirname(__FILE__) );
 
-/* this next function creates the page on the VY256 submenu */
-
-function vyps_core_shortcodes_sub_menu_page() {
-
-  //NOTE: I do not think these are needed since we moved into new path.
-  /* Getting the plugin root path. I'm calling VYPS_root but not to be confused with the root in the folder */
-  /*
-  $VYPS_root_path = plugin_dir_path(__FILE__);
-	$path_find = "VYPS_ch/includes/";
-	$path_remove = '';
-	$VYPS_root_path = str_replace( $path_find, $path_remove, $VYPS_root_path);
-  */
-	$VYPS_logo_url = plugins_url() . '/vidyen-point-system-vyps/images/logo.png'; //I should make this a function.
-  $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/vyworker_small.gif'; //Small version
-	echo '<br><br><img src="' . $VYPS_logo_url . '" > ';
-  echo '<br><img src="' . $VYPS_worker_url . '" > ';
+  //HTML ECHO of graphics.
+	echo '<br><br><img src="' . $VYPS_logo_url_standard . '" > ';
+  echo '<br><img src="' . $VYPS_worker_url_standard . '" > ';
 
   echo "<br>
  	<h1>Shortcodes and Syntax</h1>

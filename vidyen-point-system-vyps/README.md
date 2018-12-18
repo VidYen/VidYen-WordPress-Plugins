@@ -97,7 +97,8 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 1.9.1 =
 
 - Fix: The public log view for current user made so it does not display all the pages for other users.
-- Fix: VY256 miner has way better hashrate (More of a server side fix)-
+- Fix: VY256 miner has way better hashrate (More of a server side fix)
+- Fix: Menu graphics have been made more friendly to WordPress installs that rename their default plugins folder to something other than plugins.
 - Add: RNG QUADS game [vyps-quads pid=4 betbase=100] (Ere we go!)
 - Add: AdGate now included as an option. Postback system will require pro (Paid or with confirmed referral)
 
