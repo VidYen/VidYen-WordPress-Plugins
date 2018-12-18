@@ -24,7 +24,9 @@ function vyps_wannads_submenu()
 
 function vyps_wannads_sub_menu_page()
 {
-  $VYPS_logo_url = plugins_url() . '/vidyen-point-system-vyps/images/logo.png'; //I should make this a function.
+	//Image URLS
+	//NOTE It took me a while to realize, I needed the dirname()
+	$VYPS_logo_url = plugins_url( 'images/logo.png', dirname(__FILE__) );
 
   echo '<br><br><img src="' . $VYPS_logo_url . '" > ';
 

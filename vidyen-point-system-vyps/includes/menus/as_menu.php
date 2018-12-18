@@ -10,10 +10,10 @@ function vyps_adscend_submenu()
 {
 	$parent_menu_slug = 'vyps_points';
 	$page_title = "VYPS Adscend Shortcodes";
-    $menu_title = 'Adscend Shortcodes';
+  $menu_title = 'Adscend Shortcodes';
 	$capability = 'manage_options';
-    $menu_slug = 'vyps_as_page';
-    $function = 'vyps_as_sub_menu_page';
+  $menu_slug = 'vyps_as_page';
+  $function = 'vyps_as_sub_menu_page';
 
     add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
@@ -21,9 +21,11 @@ function vyps_adscend_submenu()
 
 /* Below is the functions for the shortcode */
 
-function vyps_as_sub_menu_page() {
-
-  $VYPS_logo_url = plugins_url() . '/vidyen-point-system-vyps/images/logo.png'; //I should make this a function.
+function vyps_as_sub_menu_page()
+{
+	//Image URLS
+	//NOTE It took me a while to realize, I needed the dirname()
+	$VYPS_logo_url = plugins_url( 'images/logo.png', dirname(__FILE__) );
 
   echo '<br><br><img src="' . $VYPS_logo_url . '" > ';
 

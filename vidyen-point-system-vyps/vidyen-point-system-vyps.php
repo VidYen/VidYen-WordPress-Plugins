@@ -97,8 +97,8 @@ function vyps_points_install() {
 //adding menues
 add_action('admin_menu', 'vyps_points_menu');
 
-function vyps_points_menu() {
-
+function vyps_points_menu()
+{
     $parent_page_title = "VidYen Point System";
     $parent_menu_title = 'VYPS';
     $capability = 'manage_options';
@@ -135,7 +135,8 @@ include( plugin_dir_path( __FILE__ ) . 'includes/menus/wannads-menu.php'); //CH 
 /*** End of Menu Includes ***/
 
 //Updated on 11.14.2018
-function vyps_admin_log() {
+function vyps_admin_log()
+{
 
 	//Shortcode hard coding for the admin log. Yes, it is missing the actual user name (has the UID though) this should suffice
 	$atts = array(
@@ -150,15 +151,16 @@ function vyps_admin_log() {
 
 	//Echo and not return due to the nature of this not being a shortcode and a page.
 	echo vyps_public_log_func( $atts );
-
 }
 
 /* Main page informational page. Includes shortcodes, advertistments etc */
 
-function vyps_points_parent_menu_page() {
-
+function vyps_points_parent_menu_page()
+{
+	//It's possible we don't use the VYPS logo since no points.
+  $vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
 	//Logo from base. If a plugin is installed not on the menu they can't see it not showing.
-	echo '<br><br><img src="' . plugins_url( '../vidyen-point-system-vyps/images/logo.png', __FILE__ ) . '" > ';
+	echo '<br><br><img src="' . $vyps_logo_url . '" > ';
 
 	//Static text for the base plugin
 	echo
@@ -178,32 +180,30 @@ function vyps_points_parent_menu_page() {
 
 }
 
-function vyps_points_sub_menu_page() {
+function vyps_points_sub_menu_page()
+{
     global $wpdb;
     require plugin_dir_path(__FILE__) . 'manage_points.php';
 }
 
-function vyps_points_add_sub_menu_page() {
+function vyps_points_add_sub_menu_page()
+{
     global $wpdb;
     require plugin_dir_path(__FILE__) . 'add_point.php';
 }
 
-//add_action('show_user_profile', 'custom_user_profile_fields_points'); //NOTE: Actually here as well if you are looking at own profile. Should be on user list or edit points per user option.
-//add_action('edit_user_profile', 'custom_user_profile_fields_points'); //NOTE: I do not think having on edit users is correct.
-//add_action("user_new_form", "custom_user_profile_fields_points"); //NOTE: Nor here either... Will be removing.
-
 //start add new column points in user table
 //BTW I prefixed the next two functions with vyps_ as I have a feeling that might be used by other plugins
 //Since it was generic
-
-function vyps_register_custom_user_column($columns) {
+function vyps_register_custom_user_column($columns)
+{
     $columns['points'] = 'Points';
     return $columns;
 }
 
 /* The next function is important to show the points in the user table */
-
-function vyps_register_custom_user_column_view($value, $column_name, $user_id) {
+function vyps_register_custom_user_column_view($value, $column_name, $user_id)
+{
     $user_info = get_userdata($user_id);
     global $wpdb;
     $query_row = "select *, sum(points_amount) as sum from {$wpdb->prefix}vyps_points_log group by point_id, user_id having user_id = '{$user_id}'";
@@ -230,8 +230,8 @@ add_action('manage_users_columns', 'vyps_register_custom_user_column');
 add_action('manage_users_custom_column', 'vyps_register_custom_user_column_view', 10, 3);
 
 //BTW this was all original from orion (Are they ever getting the daily login). I have no clue what cgc_ub_action_links stands for but I know what it does. I'll call it something more informative.
-function vyps_user_menu_action_links($actions, $user_object) {
-
+function vyps_user_menu_action_links($actions, $user_object)
+{
 		//Ok. The nonce.
 		$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
     $actions['edit_points'] = "<a class='cgc_ub_edit_badges' href='" . admin_url("admin.php?page=vyps_point_list&edituserpoints=$user_object->ID&_wpnonce=$vyps_nonce_check") . "'>" . __('Edit Points') . "</a>";

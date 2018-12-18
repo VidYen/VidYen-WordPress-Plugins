@@ -24,18 +24,13 @@ function vyps_vy256_submenu() {
 
 /* this next function creates the page on the VY256 submenu */
 
-function vyps_vy256_sub_menu_page() {
+function vyps_vy256_sub_menu_page()
+{
+  //Image URLS
+  //NOTE It took me a while to realize, I needed the dirname()
+  $VYPS_logo_url = plugins_url( 'images/logo.png', dirname(__FILE__) );
+  $VYPS_worker_url = plugins_url( 'images/vyworker_small.gif', dirname(__FILE__) );
 
-  //NOTE: I do not think these are needed since we moved into new path.
-  /* Getting the plugin root path. I'm calling VYPS_root but not to be confused with the root in the folder */
-  /*
-  $VYPS_root_path = plugin_dir_path(__FILE__);
-	$path_find = "VYPS_ch/includes/";
-	$path_remove = '';
-	$VYPS_root_path = str_replace( $path_find, $path_remove, $VYPS_root_path);
-  */
-	$VYPS_logo_url = plugins_url() . '/vidyen-point-system-vyps/images/logo.png'; //I should make this a function.
-  $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/vyworker_small.gif'; //Small version
 	echo '<br><br><img src="' . $VYPS_logo_url . '" > ';
   echo '<br><img src="' . $VYPS_worker_url . '" > ';
 

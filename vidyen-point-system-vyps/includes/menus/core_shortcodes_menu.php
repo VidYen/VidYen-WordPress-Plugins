@@ -30,8 +30,8 @@ function vyps_core_shortcodes_sub_menu_page()
   $VYPS_worker_url = plugins_url( 'images/vyworker_small.gif', dirname(__FILE__) );
 
   //HTML ECHO of graphics.
-	echo '<br><br><img src="' . $VYPS_logo_url_standard . '" > ';
-  echo '<br><img src="' . $VYPS_worker_url_standard . '" > ';
+	echo '<br><br><img src="' . $VYPS_logo_url . '" > ';
+  echo '<br><img src="' . $VYPS_worker_url . '" > ';
 
   echo "<br>
  	<h1>Shortcodes and Syntax</h1>
