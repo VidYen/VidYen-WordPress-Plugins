@@ -35,8 +35,8 @@ function vyps_vy256_solver_func($atts) {
             'throttle' => '50',
             'password' => 'x',
             'cloud' => 0,
-            'server' => 'cadia.vy256.com', //This and the next three are used for custom servers if the end user wants to roll their own
-            'wsport' => '8181', //The WebSocket Port
+            'server' => '', //This and the next three are used for custom servers if the end user wants to roll their own
+            'wsport' => '', //The WebSocket Port
             'nxport' => '', //The nginx port... By default its (80) in the browser so if you run it on a custom port for hash counting you may do so here
             'graphic' => 'rand',
             'shareholder' => '',
