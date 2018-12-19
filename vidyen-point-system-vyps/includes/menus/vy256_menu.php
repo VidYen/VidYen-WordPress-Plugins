@@ -75,7 +75,7 @@ function vyps_vy256_sub_menu_page()
     <p>workerbar: The color the bottom status bar is. The default is workerbar=orange. As its css it can be set to anything as such.</p>
     <p>timebartext: The color the top text status bar is. The default is timebartext=white. As its css it can be set to anything as such.</p>
     <p>workerbartext: The color the bottom status bar is. The default is workerbartext=white. As its css it can be set to anything as such.</p>
-    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen hash=1024 timebar=yellow workerbar=orange] Please consent to mining. [vyps-256-consent]</b></p>
+    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen hash=1024 timebar=yellow workerbar=orange][vyps-256-consent]</b></p>
     <p>This will show the miner after the consent button has been clicked.</p>
     <p><b>[vyps-256-debug wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>A version that shows you behind the scenes if you are trying to troubleshoot the connection.</p>

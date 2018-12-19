@@ -75,7 +75,7 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>Takes VYPS points and transfers it into <a href=\"https://wordpress.org/plugins/mycred/\" target=\"_blank\">myCred</a> if you have it installed. You need at least the first id and first amount and output amount and mycred=true in the shortcode.</p>
   <h2>Transfer points into GamiPress</h2>
   <p><b>[vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]</b></p>
-  <p>Takes VYPS points and transfers it into <a href=\"https://wordpress.org/plugins/gamipress/\" target=\"_blank\">GamiPress</a> if you have it installed. You need at least the first id and first amount and output amount and mycred=true in the shortcode.</p>
+  <p>Takes VYPS points and transfers it into <a href=\"https://wordpress.org/plugins/gamipress/\" target=\"_blank\">GamiPress</a> if you have it installed. You need at least the first id and first amount and output amount and gamipress=true in the shortcode.</p>
   <h2>Point Exchange and Reward Timers</h2>
   <p><b>[vyps-pe firstid=3 outputid=3 firstamount=0 outputamount=100 minutes=4]</b></p>
   <p>Options include hours=, days=, minutes=,  </p>
