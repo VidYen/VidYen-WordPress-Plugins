@@ -96,6 +96,10 @@ function vyps_core_shortcodes_sub_menu_page()
   <p><b>[vyps-tr-log spid=3 dpid=3 samount=1000 damount=10000 tickets=10]</b></p>
   <p>This is an optional log of the raffle so users can see who bought which ticket number and how many. Users can also see the ticket purchases on public log. NOTE: The attributes must be set for the same as the game as it is possible to run multiple games with different point, payout, and total amount of ticket numbers. That way you can have several pages with different games.</p>
   <p>Also note, there is no pagnation as of yet (coming soon) and we would recommend not running a 10,000 ticket game unless you do not show the log.</p>
+  <h2>QUADS Game</h2>
+  <p>Adds a small RNG game that allows user to make bets to get consecutive same numbers. Up to 4 of a kind.</p>
+  <p><b>[vyps-quads pid=4 betbase=100]</b></p>
+  <p>pid is the poin type number and the betbase is the number that is the smallest best. Must be an integer</p>
   <h2>Referral System</h2>
   <p>Users can set their referral code with the shortcode <b>[vyps-refer]</b> which should give them a page to give and get their referral code. This is not an automatic system and your users will have to manually add the code. There are plenty of login customization and user account plugins an admin can use to integrate this system with.</p>
   <p>You can set shortcode option to <b>refer=10</b> in either the [vyps-pe] or [vyps-256] to give 10% percent referral reward to the user who entered their referal code. There will be no forth coming addition to Adscend or Coinhive refer codes, but you can gate those points through the point exchange system easy enough.</p>

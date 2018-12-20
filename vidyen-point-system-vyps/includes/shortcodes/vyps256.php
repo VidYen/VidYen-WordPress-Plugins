@@ -235,9 +235,9 @@ function vyps_vy256_solver_func($atts) {
       } //Shareholder close
 
       //loading the graphic url
-      $VYPS_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/'. $current_graphic; //Now with dynamic images!
-      $VYPS_stat_worker_url = plugins_url() . '/vidyen-point-system-vyps/images/stat_'. $current_graphic; //Stationary version!
-      $VYPS_power_url = plugins_url() . '/vidyen-point-system-vyps/images/powered_by_vyps.png'; //Well it should work out.
+      $VYPS_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . $current_graphic; //Now with dynamic images!
+      $VYPS_stat_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . 'stat_'. $current_graphic; //Stationary version!
+      $VYPS_power_url = plugins_url( 'images/', dirname(__FILE__) ) . 'powered_by_vyps.png'; //Well it should work out.
 
       $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\" alt=\"Powered by VYPS\"></a></td></tr>";
 
