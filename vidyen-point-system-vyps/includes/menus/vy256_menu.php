@@ -92,7 +92,7 @@ function vyps_vy256_sub_menu_page()
     <p>The VY256 works in conjuction with the <a href=\"https://moneroocean.stream/\" target=\"_blank\">MoneroOcean</a> pool as a third party service to handle wallet payouts.</p>
     <p>The rates of XMR per has is determined by them as well as the minium payouts. An account is not required, but by default the minimum payout is 0.3 XMR and if you wish adjust that you will have to create an account through them.</p>
     <p>To see your progress towards payout, vist the <a href=\"https://moneroocean.stream/#/dashboard\" target=\"_blank\">dashboard</a> and add your XMR wallet where it says Enter Payment Address at bottom of page. There you can see total hashes, current hash rate, and account option if you wish to change payout rate.</p>
-    <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort.</p>
+    <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort. VY256 has a range of 1% to 5% developer fee depending on the overall network rate.</p>
     <h1>Localization</h1>
     <p>The following will allow you change the text to a localized version in your language:</p>
     <p>Redeem: <b>redeembtn=\"Redimir\"</b></p>
