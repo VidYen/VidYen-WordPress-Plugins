@@ -282,6 +282,24 @@ function vyps_public_log_func( $atts ) {
 				$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
 			}
 		}
+
+		//NOTE: I'm Normally against this but this warrants two outputs
+		//The page output
+		return "
+			<div class=\"wrap\">
+				<h2 style=\"text-align:center\">Page $page_number</h2>
+				$page_header_text
+				<table class=\"wp-list-table widefat fixed striped users\">
+					$header_output
+					$table_output
+					$header_output
+				</table>
+				$page_button_row_output
+				<h2 style=\"text-align:center\">Page $page_number</h2>
+			</div>
+		";
+
+
 	} //End of if its not current user
 	elseif( $current_user_state == TRUE ) //NOTE: The below is only if it is set for current users
 	{
@@ -290,7 +308,7 @@ function vyps_public_log_func( $atts ) {
 		$number_of_user_rows_query_prepared = $wpdb->prepare( $number_of_user_rows_query, $user_id );
 		$number_of_user_rows = $wpdb->get_var( $number_of_user_rows_query_prepared ); //Ok. I realized that not only prepare() doesn't work it, there is no varialbes needed to sanitize as the table name is actually hard coded.
 
-		//The number of log rows will always but correct but its the starting point and end points that will change.
+		//In this instance there will be all rows. This will fix fixed eventually... Maybe. (How many entries can one user possibly have?)
 		for ($x_for_count = $number_of_log_rows; $x_for_count >= 1; $x_for_count = $x_for_count - 1 ) //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
 		{
 			//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
@@ -366,21 +384,16 @@ function vyps_public_log_func( $atts ) {
 				$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
 			}
 		}
+
+		//The page output for user. There are no pages currently.
+		return "
+			<div class=\"wrap\">
+				<table class=\"wp-list-table widefat fixed striped users\">
+					$header_output
+					$table_output
+					$header_output
+				</table>
+			</div>
+		";
 	}
-
-	//The page output
-	return "
-		<div class=\"wrap\">
-			<h2 style=\"text-align:center\">Page $page_number</h2>
-			$page_header_text
-			<table class=\"wp-list-table widefat fixed striped users\">
-				$header_output
-				$table_output
-				$header_output
-			</table>
-			$page_button_row_output
-			<h2 style=\"text-align:center\">Page $page_number</h2>
-		</div>
-	";
-
 }
