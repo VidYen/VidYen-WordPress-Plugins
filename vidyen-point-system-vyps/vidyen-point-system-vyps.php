@@ -176,7 +176,8 @@ function vyps_points_parent_menu_page()
 	<p><b>See the shortcode menus on how to integrate on your WordPress site.</b></p>
 	";
 
-	include( plugin_dir_path( __FILE__ ) . '../vidyen-point-system-vyps/includes/credits.php');
+	include( plugin_dir_path( __FILE__ ) . 'includes/menus/credits.php');
+	//plugins_url( 'includes/menus/credits.php', __FILE__ );
 
 }
 
