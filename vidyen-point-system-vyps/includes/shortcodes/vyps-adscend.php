@@ -167,8 +167,7 @@ function vyps_adscend_redeem_func( $atts ) {
 
 	/* Ok. This might be lazy coding and Grey Goose but I figured we can just see if the button has been clicked */
 
-	$VYPS_power_url = plugins_url() . '/vidyen-point-system-vyps/images/powered_by_vyps.png'; //Well it should work out.
-
+	$VYPS_power_url = plugins_url( 'images/', dirname(__FILE__) ) . 'powered_by_vyps.png'; //Well it should work out.
 	$VYPS_power_row = "<br>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\"></a>";
 
 	//Procheck here. Do not forget the ==
