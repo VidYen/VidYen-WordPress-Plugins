@@ -91,6 +91,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 8. You can use shortcodes to display leaderboards for user rank by point earnings.
 9. Or you can display which user owns what percent of the current supply of points.
 10. Wannads support included in VYPS 1.9
+11. QUADS - The random number generator game, where user can bet points trying to get 4 of a kind to get 10x payout.
 
 == Changelog ==
 

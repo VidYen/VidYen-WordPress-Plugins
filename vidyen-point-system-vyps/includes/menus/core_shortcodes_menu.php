@@ -100,6 +100,12 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>Adds a small RNG game that allows user to make bets to get consecutive same numbers. Up to 4 of a kind.</p>
   <p><b>[vyps-quads pid=4 betbase=100]</b></p>
   <p>pid is the poin type number and the betbase is the number that is the smallest best. Must be an integer</p>
+  <p>Payout is as follow:</p>
+  <p>4 of a kind (QUADS) = 10x</p>
+  <p>3 of a kind (TRIPS)= 5x</p>
+  <p>2 doubles (DOUBLE DUBS) = 5x</p>
+  <p>2 of a kind (DUBS) = 2.3x</p>
+  <p>These odds are based on fair odds and there is a plan to let admins adjust as they see fit down the road.</p>
   <h2>Referral System</h2>
   <p>Users can set their referral code with the shortcode <b>[vyps-refer]</b> which should give them a page to give and get their referral code. This is not an automatic system and your users will have to manually add the code. There are plenty of login customization and user account plugins an admin can use to integrate this system with.</p>
   <p>You can set shortcode option to <b>refer=10</b> in either the [vyps-pe] or [vyps-256] to give 10% percent referral reward to the user who entered their referal code. There will be no forth coming addition to Adscend or Coinhive refer codes, but you can gate those points through the point exchange system easy enough.</p>
