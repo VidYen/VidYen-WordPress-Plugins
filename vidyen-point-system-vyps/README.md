@@ -95,6 +95,12 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.1.0 =
+
+- Add: Hash per second display on the VY256 miner.
+- Add: Console log for miner.
+
+
 = 2.0.0 =
 
 - Fix: VY256 miner has way better hashrate (More of a server side fix)
