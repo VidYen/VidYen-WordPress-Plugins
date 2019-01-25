@@ -166,14 +166,14 @@ function vyps_points_parent_menu_page()
 	echo
 	"<h1>VidYen Point System Base Plugin</h1>
 	<p>VYPS allows you to gamify monetization by giving your users a reason to turn off adblockers in return for rewards and recognition.</p>
-	<p>This is a multipart system - similar to WooCommerce - which allows WordPress administrators to track points for rewards in monetization systems.</p>
+	<p>This is a multi-part system, similar to WooCommerce, that allows WordPress administrators to track points for rewards using monetization systems.</p>
 	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To drop your VYPS tables from the WPDB, use the VYPS Uninstall plugin to do a clean install.</p>
 	<br>
 	<h2>Base Plugin Instructions</h2>
-	<p>Add points by navigating to the Add Points menu.</p>
-	<p>To modify or see a user’s current point balance, go to the Users panel and use the context menu by &quot;Edit User Information&quot; under &quot;Edit Points&quot;.</p>
-	<p>To see a log of all user transactions, go to &quot;Point Log&quot; in the VidYen Points menu.</p>
-	<p><b>See the shortcode menus on how to integrate on your WordPress site.</b></p>
+	<p>Navigate to the Add Points menu to add points.</p>
+	<p>Go to the Users panel and use the context menu by Edit User Information under Edit Points to modify or see a user’s current point balance.</p>
+	<p>Go to Point Log in the VidYen Points menu to see a log of all user transactions.</p>
+	<p>See the shortcode menus on how to integrate this on your WordPress site.</p>
 	";
 
 	include( plugin_dir_path( __FILE__ ) . 'includes/menus/credits.php');
