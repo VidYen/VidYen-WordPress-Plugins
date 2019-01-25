@@ -91,7 +91,7 @@ function vyps_mo_api_action()
 /*** Fix for the ajaxurl not found with custom template sites ***/
 add_action('wp_head', 'vyms_ajaxurl');
 
-function vyms_ajaxurl()
+function vyjps_ajaxurl()
 {
    echo '<script type="text/javascript">
            var ajaxurl = "' . admin_url('admin-ajax.php') . '";

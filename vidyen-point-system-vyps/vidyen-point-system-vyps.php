@@ -297,10 +297,10 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_deb
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_bal_func.php'); //Function to check bal the WooWallet.
 
 /*** AJAX ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_ajaxurl.php'); //Forces ajax to be called regardless of installation
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mo_ajax.php'); //MO Pull ajax
 
 /*** XMR Wallet Check ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/xmr-wallet/vyps_xmr_wallet_check.php'); //Function to make sure wallet is valid
-
 
 /*** End of Function Includes ***/
