@@ -95,6 +95,31 @@ function vyps_vy256_solver_func($atts) {
     $redeem_btn_text = $atts['redeembtn']; //By default 'Redeem'
     $start_btn_text = $atts['startbtn']; //By default 'Start Mining'
 
+
+    //Wallet check
+    $wallet = $atts['wallet'];
+
+    if (vyps_xmr_wallet_check_func($wallet) == 3) //This means that the wallet lenght was no longer than 90 characters
+    {
+      $html_output_error = '<p>Error: Wallet Address not longer than 90! Possible invalid XMR Address!</p>'; //Error output
+
+      return $html_output_error . $xmr_address_form_html; //Return both the error along with original form.
+    }
+    elseif (vyps_xmr_wallet_check_func($wallet) == 2) //This means the wallet does not start with a 4 or 8
+    {
+      $html_output_error = '<p> Error: Wallet address does not start with 4 or 8 so most likley an invalid XMR address!</p>'; //Error output
+      return $html_output_error . $xmr_address_form_html; //Return both the error along with original form.
+    }
+    elseif (vyps_xmr_wallet_check_func($wallet) != 1)
+    {
+      $html_output_error = '<p> Error: Uknown error!</p>'; //Error output
+      return $html_output_error . $xmr_address_form_html; //Return both the error along with original form.
+    }
+    else
+    {
+      $sm_site_key = $wallet; //Extra jump but should be fine now
+    }
+
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
     //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
     //I added cadia.vy256.com as a last stand. I realized if I'm switching servers cadia needs to be ready to stand.
@@ -154,52 +179,23 @@ function vyps_vy256_solver_func($atts) {
     }
 
     //NOTE: 7 is the number for if we want to do local host testing. Maybe for Monroe down the road.
-    if ($cloud_server_name == 7 ){
-
+    if ($cloud_server_name == 7 )
+    {
       //Some debug stuff put in for futre if testing on local host.
-
     }
-
-    elseif ($first_cloud_server > 2 OR $first_cloud_server < 0 ){
-
+    elseif ($first_cloud_server > 2 OR $first_cloud_server < 0 )
+    {
       return "Error: Cloud set to invalid value. 0-1 only.";
-
     }
 
-    if ($sm_site_key == '' AND $siteName == '') {
-
+    if ($sm_site_key == '' AND $siteName == '')
+    {
         return "Error: Wallet address and site name not set. This is required!";
 
-    } else {
-
+    }
+    else
+    {
         $site_warning = '';
-
-    }
-
-    //Site validation to make sure the wallet is validate
-
-    //Might as well check to see if wallet is right length
-    $wallet_len = strlen($sm_site_key);
-
-    //Wallets should always be longer than 90 character... 95, but
-    if ($wallet_len < 90 ) {
-
-      return "Error: Wallet address is less than 90 characters!";
-
-    }
-
-    //Checkj the first character
-    $wallet_first_character = substr($sm_site_key, 0, 1);
-
-    if ($wallet_first_character == '4' OR $wallet_first_character == '8') {
-
-      //Nothing shall happen. I would have done != but logic
-
-    } else {
-
-      //report that invalid validate
-      return "Error: Wallet address does not start with 4 or 8 so most likley an invalid XMR address!";
-
     }
 
     //NOTE: Debugging turned off
@@ -212,26 +208,23 @@ function vyps_vy256_solver_func($atts) {
       global $wpdb;
 
       //It is a bit of some SQL reads. Not writes so its not terrible, but unless its needed let's not run the function. If the shareholder is set to 1 or more it should fire
-      if ( $share_holder_status > 0 ){
-
+      if ( $share_holder_status > 0 )
+      {
         $share_holder_pick = vyps_worker_shareholder_pick( $atts ); //I'm 75% sure this works since the shortcode is the same. Calling it after WPDB tho.
 
         //If pick is 0 it means that house one so wallet remains the same as what it started out with
-        if ($share_holder_pick != 0){
-
+        if ($share_holder_pick != 0)
+        {
             $key = 'vyps_xmr_wallet'; //This is static. May have MSR wallet someday.
             $single = TRUE; //Need to to force to not be an array.
             $user_meta_wallet = get_user_meta( $share_holder_pick, $key, $single );
 
             //I have the notion that a user may have got points but failed to put in an address. An XMR address is way more than 2 characters
-            if ( strlen($user_meta_wallet)  > 2 ){
-
+            if ( strlen($user_meta_wallet)  > 2 )
+            {
               $sm_site_key = $user_meta_wallet; //ok the site key becomes this, but... see below about the issues i had to work around with the note.
-
             } //strlen check.
-
         } //Pick check if
-
       } //Shareholder close
 
       //loading the graphic url
@@ -242,20 +235,18 @@ function vyps_vy256_solver_func($atts) {
       $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\" alt=\"Powered by VYPS\"></a></td></tr>";
 
       //Procheck here. Do not forget the ==
-      if (vyps_procheck_func($atts) == 1) {
-
+      if (vyps_procheck_func($atts) == 1)
+      {
         $VYPS_power_row = ''; //No branding if procheck is correct.
-
       }
 
       //Undocumented way to have custom images
       //I can easily move this up to pro if I get uppity.
-      if ( $custom_worker_stat != '' OR $custom_worker != '' ){
-
+      if ( $custom_worker_stat != '' OR $custom_worker != '' )
+      {
         //Urls change. I'm not going to try to check to make sure they are valid or not
         $VYPS_worker_url = $custom_worker;
         $VYPS_stat_worker_url = $custom_worker_stat;
-
       }
 
       //I'm putting these two here as need to be somewhat global to this function
@@ -282,19 +273,19 @@ function vyps_vy256_solver_func($atts) {
 
       //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
       //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
-      for ($x_for_count = $first_cloud_server; $x_for_count < 4; $x_for_count = $x_for_count +1 ) { //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
-
+      for ($x_for_count = $first_cloud_server; $x_for_count < 4; $x_for_count = $x_for_count +1 ) //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
+      {
         $remote_url = "http://" . $cloud_server_name[$x_for_count] . $cloud_server_port[$x_for_count]  ."/?userid=" . $miner_id;
         $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
 
         //return $remote_url; //debugging
 
-        if(array_key_exists('headers', $remote_response)){
-
+        if(array_key_exists('headers', $remote_response))
+        {
             //Checking to see if the response is a number. If not, probaly something from cloudflare or ngix messing up. As is a loop should just kick out unless its the error round.
-            if( is_numeric($remote_response['body']) ){
-
+            if( is_numeric($remote_response['body']) )
+            {
               //Balance to pull from the VY256 server since it is numeric and does exist.
               $balance =  intval($remote_response['body'] / $hash_per_point); //Sorry we rounding. Addition of the 256. Should be easy enough.
 
@@ -304,24 +295,18 @@ function vyps_vy256_solver_func($atts) {
               $used_server = $cloud_server_name[$x_for_count];
               $used_port = $cloud_worker_port[$x_for_count];
               $x_for_count = 5; //Well. Need to escape out.
-
             }
-
-
-        } elseif ( $cloud_server_name[$x_for_count] == 'error' ) {
-
+        }
+        elseif ( $cloud_server_name[$x_for_count] == 'error' )
+        {
             //The last server will be error which means it tried all the servers.
-
             $balance = 0;
-
             return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
         }
-
       }
 
-
-      if ($balance > 0) {
-
+      if ($balance > 0)
+      {
           //Ok we need to actually use $wpdb here as its going to feed into the log of course.
           global $wpdb;
           $table_log = $wpdb->prefix . 'vyps_points_log';
@@ -343,8 +328,8 @@ function vyps_vy256_solver_func($atts) {
 
           //OK. Here is if you have a refer rate that it just thorws it at their referrable
           //I'm not 100% sure that I can let the func behave nice like this. WCCW
-          if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){
-
+          if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 )
+          {
             $reason = "VY256 Mining Referral"; //It shows in the log. NOTE: I am going to keep point exchange and referral seperate in the logs. I'm curious how this plays out. Can count both with an OR. AS and CH will never get a direct refer.
             $amount = doubleval($balance); //Why do I do a doubleval here again? I think it was something with Wordfence.
             $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
@@ -364,7 +349,6 @@ function vyps_vy256_solver_func($atts) {
             $wpdb->insert($table_log, $data);
 
             //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
-
           }
 
           //Yeah a bit heavy on the SQL calls but need to check a second time if redeeming on load
@@ -377,18 +361,15 @@ function vyps_vy256_solver_func($atts) {
           $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
           //Pulling the graphic
-
-
           $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
 
           $balance = 0; //This should be set to zero at this point.
 
-      } else {
-
+      }else
+      {
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
           $redeem_output = "<tr><td>Click  \"$start_btn_text\" to begin and  \"$redeem_btn_text\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
-
       }
 
       //Get the url for the solver
@@ -400,9 +381,14 @@ function vyps_vy256_solver_func($atts) {
       $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
       $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
 
-      if ($siteName != ''){
-
-        $siteName = "." . $siteName;
+      //Going to set a worker name regardless to track id.
+      if ($siteName != '')
+      {
+        $siteName = "." . $siteName . $current_user_id;
+      }
+      else
+      {
+        $siteName = "." . 'worker' . $current_user_id;
       }
 
       //Ok some issues we need to know the path to the js file so will have to ess with that.
@@ -584,7 +570,68 @@ function vyps_vy256_solver_func($atts) {
             </script>
         </td></tr>";
 
-      $final_return = $simple_miner_output . $redeem_output . $VYPS_power_row .  '</table>'; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
+        //MO ajax js to put add.
+        $mo_ajax_html_output = "
+          <script>
+            function pull_mo_stats()
+            {
+              jQuery(document).ready(function($) {
+               var data = {
+                 'action': 'vyms_mo_api_action',
+                 'site_wallet': '$mo_site_wallet',
+                 'site_worker': '$mo_site_worker',
+                 'client_wallet': '$mo_client_wallet',
+                 'client_worker': '$mo_client_worker',
+               };
+               // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+               jQuery.post(ajaxurl, data, function(response) {
+                 output_response = JSON.parse(response);
+                 document.getElementById('site_hashes').innerHTML = output_response.site_hashes;
+                 document.getElementById('site_hash_per_second').innerHTML = output_response.site_hash_per_second + ' H/s';
+                 document.getElementById('client_hashes').innerHTML = output_response.client_hashes;
+                 document.getElementById('client_hash_per_second').innerHTML = output_response.client_hash_per_second + ' H/s';
+               });
+              });
+            }
+
+            //Refresh the MO
+            function moAjaxTimerPrimus()
+            {
+              //Should call ajax every 30 seconds
+              var ajaxTime = 1;
+              var id = setInterval(moAjaxTimeFrame, 1000); //1000 is 1 second
+              function moAjaxTimeFrame() {
+                if (ajaxTime >= 30) {
+                  pull_mo_stats();
+                  console.log('Ping MoneroOcean');
+                  clearInterval(id);
+                  moAjaxTimerSecondus()
+                } else {
+                  ajaxTime++;
+                }
+              }
+            }
+
+            //Refresh the MO
+            function moAjaxTimerSecondus()
+            {
+              //Should call ajax every 30 seconds
+              var ajaxTime = 1;
+              var id = setInterval(moAjaxTimeFrame, 1000);
+              function moAjaxTimeFrame() {
+                if (ajaxTime >= 30) {
+                  pull_mo_stats();
+                  console.log('Ping MoneroOcean');
+                  clearInterval(id);
+                  moAjaxTimerPrimus();
+                } else {
+                  ajaxTime++;
+                }
+              }
+            }
+            </script>";
+
+      $final_return = $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>'; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
 
 
     } else {

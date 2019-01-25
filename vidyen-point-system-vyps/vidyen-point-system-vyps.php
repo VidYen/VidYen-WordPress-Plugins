@@ -262,7 +262,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads-postbac
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_vy256.php'); //VYPS WMP shortcode
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-vy256.php'); //VYPS WMP shortcode
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsxmr_wallet.php'); //Let's user add XMR wallet to usermeta table in WP
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); //Shareholder pick. Is shortcode but used elsewhere
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer.php'); //Referal shortcode display shortcode.
@@ -295,5 +295,12 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_sl
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_credit_func.php'); //Function to credit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_debit_func.php'); //Function to debit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_bal_func.php'); //Function to check bal the WooWallet.
+
+/*** AJAX ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mo_ajax.php'); //MO Pull ajax
+
+/*** XMR Wallet Check ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/xmr-wallet/vyps_xmr_wallet_check.php'); //Function to make sure wallet is valid
+
 
 /*** End of Function Includes ***/
