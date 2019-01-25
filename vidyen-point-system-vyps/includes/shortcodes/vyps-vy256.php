@@ -118,6 +118,7 @@ function vyps_vy256_solver_func($atts) {
     else
     {
       $sm_site_key = $wallet; //Extra jump but should be fine now
+      $mo_site_wallet = $sm_site_key; //Double passing down in ajax
     }
 
     //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
@@ -384,10 +385,12 @@ function vyps_vy256_solver_func($atts) {
       //Going to set a worker name regardless to track id.
       if ($siteName != '')
       {
+        $mo_site_worker = $siteName . $current_user_id; //NOTE: need two versions. One with . and one without
         $siteName = "." . $siteName . $current_user_id;
       }
       else
       {
+        $mo_site_worker = 'worker' . $current_user_id;
         $siteName = "." . 'worker' . $current_user_id;
       }
 
@@ -420,6 +423,11 @@ function vyps_vy256_solver_func($atts) {
 
 
             function start() {
+
+              //Start the MO pull
+              moAjaxTimerPrimus();
+              pull_mo_stats();
+              console.log('Ping MoneroOcean');
 
               document.getElementById(\"startb\").style.display = 'none'; // disable button
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
@@ -536,7 +544,7 @@ function vyps_vy256_solver_func($atts) {
            <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
          </div><br>
         <div id=\"timeProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Press start to begin.</span><span id=\"wait\">.</span></div></div>
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Press start to begin.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
           <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
@@ -575,21 +583,17 @@ function vyps_vy256_solver_func($atts) {
           <script>
             function pull_mo_stats()
             {
+              var output_hash_per_second = '';
               jQuery(document).ready(function($) {
                var data = {
-                 'action': 'vyms_mo_api_action',
+                 'action': 'vyps_mo_api_action',
                  'site_wallet': '$mo_site_wallet',
                  'site_worker': '$mo_site_worker',
-                 'client_wallet': '$mo_client_wallet',
-                 'client_worker': '$mo_client_worker',
                };
                // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
                jQuery.post(ajaxurl, data, function(response) {
                  output_response = JSON.parse(response);
-                 document.getElementById('site_hashes').innerHTML = output_response.site_hashes;
-                 document.getElementById('site_hash_per_second').innerHTML = output_response.site_hash_per_second + ' H/s';
-                 document.getElementById('client_hashes').innerHTML = output_response.client_hashes;
-                 document.getElementById('client_hash_per_second').innerHTML = output_response.client_hash_per_second + ' H/s';
+                 document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
                });
               });
             }
