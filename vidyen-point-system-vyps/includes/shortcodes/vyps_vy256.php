@@ -443,8 +443,6 @@ function vyps_vy256_solver_func($atts) {
               document.getElementById(\"stop\").style.display = 'block'; // disable button
               document.getElementById(\"mining\").style.display = 'block'; // disable button
 
-
-
               /* start mining, use a local server */
               server = \"wss://$used_server:$used_port\";
               startMining(\"$mining_pool\",
@@ -504,16 +502,31 @@ function vyps_vy256_solver_func($atts) {
                     elem.style.width = width + '%';
 
                     document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
-
-                    //Delete soon
-                    //document.getElementById('total_points').innerText = totalpoints;
-
                 }
-
               }
 
+              //Adding back in console logs.
+              if (obj.identifier === \"job\")
+              {
+                console.log(\"new job: \" + obj.job_id);
+              }
+              else if (obj.identifier === \"solved\")
+              {
+                console.log(\"solved job: \" + obj.job_id);
+              }
+              else if (obj.identifier === \"hashsolved\")
+              {
+                console.log(\"pool accepted hash!\");
+              }
+              else if (obj.identifier === \"error\")
+              {
+                console.log(\"error: \" + obj.param);
+              }
+              else
+              {
+                //console.log(obj);
+              }
           }
-
           </script>
 
     <center id=\"mining\" style=\"display:none;\">

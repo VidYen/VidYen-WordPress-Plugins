@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
-Version:      2.0.0
+Version:      2.1.0
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -262,9 +262,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads-postbac
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256.php'); //VYPS WMP shortcode
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_dev.php'); //Developement version
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps256_debug.php'); //Debug version that shows output. Does not throttle btw
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_vy256.php'); //VYPS WMP shortcode
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsxmr_wallet.php'); //Let's user add XMR wallet to usermeta table in WP
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); //Shareholder pick. Is shortcode but used elsewhere
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer.php'); //Referal shortcode display shortcode.
