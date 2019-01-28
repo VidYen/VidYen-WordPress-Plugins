@@ -118,12 +118,12 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: Basic version of Wannads support. Will only display page and let users earn on your wall for demonstration, but will use postback unless referral is confirmed. Otherwise, will let users use but without point additions. Instructions here [VidYen Store](https://www.vidyen.com/product/wannads-postback-plugin/) how to confirm referral.
 - Add: Some Monero Ocean explanations about earnings.
 - Add: Balance shortcode has a decimal=(number value). Not really useful as just a placeholder for now.
-- Add: [vyps-pl current=TRUE] now displays just the current users. Since postback systems take a while to process (which is why I frown on them for game theory), its useful for end user to see their own log.
+- Add: `[vyps-pl current=TRUE]` now displays just the current users. Since postback systems take a while to process (which is why I frown on them for game theory), its useful for end user to see their own log.
 - Fix: Formatting changes in code. This affects me more than you, but helps with the instructions pages.
 
 = 1.8.3 =
 
-- Add: [Gamipress](https://wordpress.org/plugins/gamipress/) support in [vyps-pe] which is basically the same except you need outputid (as the GamiPress slug name) since GamiPress may have one that more point [vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]
+- Add: [Gamipress](https://wordpress.org/plugins/gamipress/) support in [vyps-pe] which is basically the same except you need outputid (as the GamiPress slug name) since GamiPress may have one that more point `[vyps-pe firstid=3 firstamount=1000 outputid=gamiyen outputamount=100 gamipress=true]`
 - Add: Created hooks for pro version in case anyone wants to remove branding. See [VidYen Store](https://www.vidyen.com/product/vyps-pro-install/) for details. Will include direct payouts to WW, myCred, and GamiPress.
 - Fix: Some Point Exchange grammar adjustments.
 - Fix: Removed redundant instruction pages.
@@ -131,7 +131,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 1.8.2 =
 
 - Add: Functionalization of Point Exchange. Now with 3rd party API abilities
-- Add: [myCred](https://wordpress.org/plugins/mycred/) hook into [vyps-pe] Point Exchange that allows for Monetization transfer into that. ie [vyps-pe firstid=3  firstamount=1000 outputamount=100 mycred=true]
+- Add: [myCred](https://wordpress.org/plugins/mycred/) hook into `[vyps-pe]` Point Exchange that allows for Monetization transfer into that. ie `[vyps-pe firstid=3  firstamount=1000 outputamount=100 mycred=true]`
 
 = 1.8.1 =
 
