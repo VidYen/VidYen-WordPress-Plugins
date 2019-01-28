@@ -119,14 +119,10 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>Once you get it working, you can call the API to exchange VYPS points to crypto with the following example:</p>
   <p><b>[vyps-pe firstid=3 outputid=5 firstamount=1000 outputamount=0.0001 symbol=LTC from_user_id=11 amount=0.0001]</b></p>
   <p>By adding symbol= from_user_id= and amount=, you can call the API into action. You need to create a bank user that holds the crypto you deposited and use that user’s id for the from.</p>
-  <p>You will need to create a dummy point for the coin in VYPS with the graphic of the crypto you want and make the outpoutamount and amount the same.</p>
-  <p>If you add a refer= attribute to the shortcode, it behaves the same as a point to point except the referral is paid out in the input point rather than than either the output point or the crypto itself as it would get messy if we paid referrals in crypto.</p>
-  <p>It is complicated to test as I'm using someone elses software but it does a user to user off blockchain transfer on your site. The user will still need to use the 3rd party Wallet via Dashed Slug's plugin to withdraw it off your site.</p>
-  <p>For this particular feature as the rest of VYPS:</p>
-  <p>No Warranty. EXCEPT AS OTHERWISE EXPRESSLY SET FORTH IN THIS AGREEMENT, NEITHER PARTY HERETO MAKES ANY REPRESENTATION AND EXTENDS NO WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, WITH RESPECT TO THE SUBJECT MATTER OF THIS AGREEMENT, INCLUDING WITHOUT LIMITATION WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND ANY WARRANTY ARISING OUT OF PRIOR COURSE OF DEALING AND USAGE OF TRADE. IN PARTICULAR, BUT WITHOUT LIMITATION, VidYen, LLC MAKES NO REPRESENTATION AND EXTENDS NO WARRANTY CONCERNING WHETHER THE LICENSED COMPOUND OR A LICENSED PRODUCT IS FIT FOR ANY PARTICULAR PURPOSE OR SAFE FOR HUMAN CONSUMPTION.</p>
+  <p>You will need to create a dummy point for the coin in VYPS with the graphic of the crypto you want and make the outputamount and amount the same.</p>
+  <p>If you add a refer= attribute to the shortcode, it behaves the same as a point to point, except the referral is paid out in the input point rather than either the output point or the crypto itself as it would get messy if referrals are paid in crypto.</p>
+  <p>It is complicated to test as someone else’s software is being used, but it does a user-to-user off-blockchain transfer on your site. The user will still need to use the third-party wallet via Dashed Slug’s plugin to withdraw it off your site.</p>
+  <p>For this particular feature as the rest of VYPS,</p>
+  <p>No Warranty. EXCEPT AS OTHERWISE EXPRESSLY SET FORTH IN THIS AGREEMENT, NEITHER PARTY HERETO MAKES ANY REPRESENTATION AND EXTENDS NO WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, WITH RESPECT TO THE SUBJECT MATTER OF THIS AGREEMENT, INCLUDING WITHOUT LIMITATION WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND ANY WARRANTY ARISING OUT OF PRIOR COURSE OF DEALING AND USAGE OF TRADE. IN PARTICULAR, BUT WITHOUT LIMITATION, VidYen, LLC MAKES NO REPRESENTATION AND EXTENDS NO WARRANTY CONCERNING WHETHER THE LICENSED COMPOUND OR A LICENSED PRODUCT IS FIT FOR ANY PARTICULAR PURPOSE OR SAFE FOR HUMAN CONSUMPTION.</p>
   ";
-
-  	/* I may not want advertising, but I suppose putting it here never hurts */
-  	//$credits_include = $VYPS_root_path . 'includes/credits.php';
-
 }

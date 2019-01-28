@@ -31,7 +31,7 @@ function vyps_as_sub_menu_page()
 
   //Originally, this was includes to other files but don't need that much de-integration
 
-  echo "<br><br><h1>VYPS Adscend Media User Tracking API Shortcodes</h1>
+  echo "<br><br><h1>Adscend Media User Tracking API Shortcodes</h1>
  <p>This plugin needs an <a href=\"https://adscendmedia.com\" target=\"_blank\">Adscend Media</a> account to function. The intention is to allow a quick and easy way for you to award user points for Adscend Activity.</p>
  <p>The intention of this plugin was to make it easier for a WordPress admin to talk with the Adscend API without actually having to program curl calls in PHP manually and automate the recognition of the monetization activity by your end users.</p>
  <h1>Shortcodes and Syntax</h1>
