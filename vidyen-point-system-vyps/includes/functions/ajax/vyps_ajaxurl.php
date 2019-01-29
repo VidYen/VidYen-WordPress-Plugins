@@ -1,7 +1,7 @@
 <?php
 
 /*** Fix for the ajaxurl not found with custom template sites ***/
-add_action('wp_head', 'vyms_ajaxurl');
+add_action('wp_head', 'vyps_ajaxurl');
 
 function vyps_ajaxurl()
 {
