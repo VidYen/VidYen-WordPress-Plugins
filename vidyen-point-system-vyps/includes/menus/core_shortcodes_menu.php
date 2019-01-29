@@ -56,7 +56,7 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>This shows all users’ balance of that point type by order of amount and also functions as a leaderboard. PID is not required but will default to pid=1 if not set. Users who had a balance at one time will show up as zero. Otherwise, until a user earns that point type, they will not be on the leaderboard for that PID.</p>
   <p>NOTE: It will show negative balances. This is intended.</p>
   <p>The number of rows can be set, up to a maximum of 50, rows=50, and it is 50 by default, i.e., <b>[vyps-pb pid=3 rows=10]</b></p>
-  <b>NOTE: The number of row/transactions in the log may slow the site, depending on the amount of users.</p>
+  <p>NOTE: The number of row/transactions in the log may slow the site, depending on the amount of users.</p>
   <p>You can also show the amount by percent of total with percent=yes, [vyps-pb pid=2 percent=yes]. This way, you can see who owns the most by percent, which is useful for the mining share option in the VY256 Miner.</p>
   <h2>Point Exchange</h2>
  	<p>This plugin requires VYPS Base and two point types to function. The intention is to allow a quick and easy way for users to transfer one type of point to another at varying rates.</p>
@@ -99,6 +99,7 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>This is an optional log of the raffle so users can see who bought which ticket number and how many. Users can also see the ticket purchases on public log.</p>
   <p>NOTES: The attributes must be set for the same as the game as it is possible to run multiple games with different point, payout, and total amount of ticket numbers. That way, you can have several pages with different games.</p>
   <p>Also, there is no pagination as of yet (coming soon), and it is recommended not to run a 10,000-ticket game unless you do not show the log.</p>
+  <p>If you have a custom theme that reloads page different than default themes, you may need to add <b>refresh=true</b></p>
   <h2>QUADS Game</h2>
   <p>This adds a small RNG game that allows user to make bets to get consecutive same numbers, up to four of a kind.</p>
   <p><b>[vyps-quads pid=4 betbase=100]</b></p>
