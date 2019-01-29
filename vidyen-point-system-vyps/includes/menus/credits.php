@@ -44,6 +44,9 @@ echo '
   ';
 
 echo '
+<h2>Export Data</h2>
+<p>WordPress has instructons on how to export your tables <a href="https://codex.wordpress.org/Backing_Up_Your_Database" target="_blank">found here</a>.</p>
+<p>The table for the user data for VYPS is called: <b>(db)_vyps_points_log</b></p>
 <h2>Coming Soon:</h2>
 <p>Combat Game</p>
 <p>Strategy Game</p>
