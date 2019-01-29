@@ -43,14 +43,21 @@ echo '
   </table>
   ';
 
-echo "
+echo '
 <h2>Coming Soon:</h2>
 <p>Combat Game</p>
 <p>Strategy Game</p>
 <h1>Warranty</h1>
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2 of the License</p></p>
 <p>This program is distributed with the intention to be useful but WITHOUT ANY WARRANTY, without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
-";
+<h2>This plugin uses the 3rd party services</h2>
+<p>VidYen, LLC - To run websocket connections between your users client and the pool to distribute hash jobs. <a href="https://www.vidyen.com/privacy/" target="_blank">[Privacy Policy]</a></p>
+<p>MoneroOcean - To provide mining stastics and handle the XMR payouts. <a href="https://moneroocean.stream/#/help/faq" target="_blank">[Privacy Policy]</a></p>
+<p>Wannads - Offer Walls <a href="https://publishers.wannads.com/privacy" target="_blank">[Privacy Policy]</a></p>
+<p>AdScend Media - Offer Walls <a href="https://adscendmedia.com/notices/privacy-policy" target="_blank">[Privacy Policy]</a></p>
+<p>AdGate Media - Offer Walls <a href="https://adgatemedia.com/pp.php" target="_blank">[Privacy Policy]</a></p>
+<p>Coinhive - To run websocket connections between your users client and put JS on your page. <a href="https://coinhive.com/info/privacy" target="_blank">[Privacy Policy]</a></p>
+';
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
 *  According to WP standards it's not needed.
