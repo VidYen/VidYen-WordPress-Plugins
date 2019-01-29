@@ -79,37 +79,35 @@ function vyps_vy256_sub_menu_page()
     <p><b>[vyps-xmr-wallet]</b></p>
     <p>To enable mining sharing, add the shortcode shareholder=1. Replace the 1 with the pointid that you want users to be ranked in. The way it works is that there is a weighted change for holder of most points of that type to get their wallet mined to say if one user owned 60% of that point type, they would have 60% type to win the display. If no one wins, it defaults to the site’s wallet. Admins can always be point owners as well, so look at leaderboards for fairness. I will make a leaderboard with percentage of ownership in next update.</p>
     <h1>Payout</h1>
-    <p>The VY256 works in conjuction with the <a href=\"https://moneroocean.stream/" target="_blank">MoneroOcean</a> pool as a third party service to handle wallet payouts.</p>
-    <p>The rates of XMR per has is determined by them as well as the minium payouts. An account is not required, but by default the minimum payout is 0.3 XMR and if you wish adjust that you will have to create an account through them.</p>
-    <p>To see your progress towards payout, vist the <a href="https://moneroocean.stream/#/dashboard" target="_blank">dashboard</a> and add your XMR wallet where it says Enter Payment Address at bottom of page. There you can see total hashes, current hash rate, and account option if you wish to change payout rate.</p>
-    <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort. VY256 has a range of 1% to 5% developer fee depending on the overall network rate.</p>
+    <p>The VY256 works in conjunction with the <a href="https://moneroocean.stream/" target="_blank">MoneroOcean</a> pool as a third-party service to handle wallet payouts.</p>
+    <p>The rates of XMR per hash is determined by them as well as the minimum payouts. An account is not required, but by default, the minimum payout is 0.3 XMR, and if you wish to adjust that, you will have to create an account through them.</p>
+    <p>To see your progress toward payout, visit the <a href="https://moneroocean.stream/#/dashboard" target="_blank">dashboard</a> and add your XMR wallet where it says Enter Payment Address at the bottom of page. There, you can see total hashes, current hash rate, and account option if you wish to change payout rate.</p>
+    <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort. VY256 has a range of 1%–5% developer fee, depending on the overall network rate.</p>
     <h1>Localization</h1>
     <p>The following will allow you change the text to a localized version in your language:</p>
     <p>Redeem: <b>redeembtn="Redimir"</b></p>
     <p>Start: <b>startbtn="Comienzo"</b></p>
+    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 site=vidyen redeembtn="Redimir" startbtn="Comienzo"] Por favor consienta a la minería. [vyps-256-consent text="Yo Consiento"]</b></p>
     <h1>Custom Server</h1>
-    <p>If you want to run your own <a href="https://github.com/VidYen/webminerpool" target="_blank">webminerpool</a> server, you can but use the fork in the link or it will not work properly</p>
+    <p>If you want to run your own <a href="https://github.com/VidYen/webminerpool" target="_blank">webminerpool</a> erver, you can but use the fork in the link, or it will not work properly.</p>
     <p>Websocket Server URL: <b>server=yourserver.com</b></p>
     <p>Websocket Port: <b>wsport=8181</b></p>
-    <p>Nginx Port: <b>nxport=8081</b> (only needed if you don\'t want to use port 80 for hash tracking)</p>
+    <p>Nginx Port: <b>nxport=8081</b> (only needed if you do not want to use port 80 for hash tracking)</p>
     <p>As this is rather complex, unless you want to learn Debian (or other Linux server) and host the server yourself, we recommend just using the VY256 default server.</p>
-    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 site=vidyen redeembtn="Redimir" startbtn="Comienzo"] Por favor consienta a la minería. [vyps-256-consent text="Yo Consiento"]</b></p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href="https://www.vidyen.com/about/" target="_blank">VidYen About</a> or on our <a href="https://wordpress.org/support/plugin/vidyen-point-system-vyps" target="_blank">WordPress support page</a>.</p>
-    <p>If server is down and/or you need assistance immediatly, join the <a href="https://discord.gg/6svN5sS" target="_blank">VidYen Discord</a> and PM Felty. (It will ping my phone, so do not abuse. -Felty)</p>
+    <p>If server is down and/or you need assistance immediately, join the <a href="https://discord.gg/6svN5sS" target="_blank">VidYen Discord</a> (It will ping my phone, so do not abuse. -Felty)</p>
     <p>For anyone who is trying this, we want to thank you for testing and that please let us know if you have any problems!</p>
-    <p>Keep in mind that both we and the pools do take some fees, but it is generally way less than Coinhives 20% and depending on the pool you can get a smaller minimum payout.</p>
-    <p>Our code is open source so if you want to run your own version, just go to our github and grab the code.</p>
-    <p>In the most recent update we now use port 80 on http://cloud.vy256.com so you should no longer have to worry about your server blocking random ports. That said you still need curl installed on PHP.</p>
-    <p>If cloud.vy256.com is down you can always set the shortcode attribute to cloud=1 to and open port 8081 on your server to use the backup.</p>
+    <p>Keep in mind that we and the pools take some fees, but it is generally way less than the Coinhives 20% fee, and you can get a smaller minimum payout of 0.003 XMR on MoneroOcean.</p>
+    <p>Our code is open source, so if you want to run your own version, just go to our <a href="https://github.com/VidYen/VYPS-Plugin" target="_blank">github</a> and grab the code.</p>
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
     <h2>Notes about hash rates:</h2>
-    <p>FYI, hash rates even with dedicated GPU miners are never going to show evenly over time on the accepted hash page. There is the client side hash rate worked versus hashes accepted on the server side. MO uses PPNL which is different from Coinhive where Coinhive just increments your XMR payout for no rhyme or reason other than a 1 million hashes equals a certain amount of XMR.</p>
-    <p>There are many YouTube videos than can explain this, but just know that hash rate will vary over time regardless of the steadiness of the miner. More processing power will of course mean a general higher hash acceptance though.</p>
+    <p>FYI, hash rates, even with dedicated GPU miners, are never going to show evenly over time on the accepted hash page. There is the client side hash rate worked versus hashes accepted on the server side. MO uses PPNL, which is different from Coinhive, where Coinhive just increments your XMR payout for no rhyme or reason other than a one million hashes equals a certain amount of XMR.</p>
+    <p>There are many YouTube videos than can explain this, but just know that hash rates will vary over time, regardless of the steadiness of the miner. More processing power will, of course, means a general higher hash acceptance.</p>
     <h2>Future plans.</h2>
-    <p>We do have a goal to add more pools down the road, but for now MoneroOcean works and the developer of that pool is very responsive and fair.</p>
-    <p>Felty does have a goal to add MSR support due to its unique method of mining, but that will be down the road when it gets mining branches.</p>' .
+    <p>We do have a goal to add more pools down the road, but for now, MoneroOcean works, and the developer of that pool is very responsive and fair.</p>
+    <p>Felty has a goal to add MSR support because of its unique method of mining, but that will be down the road when it gets mining branches.</p>' .
     /*<p>xmrpool.eu</p>
     <p>moneropool.com</p>
     <p>monero.crypto-pool.fr</p>
