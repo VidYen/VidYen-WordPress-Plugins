@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-add_action('admin_menu', 'vyps_vy256_submenu', 440 );
+add_action('admin_menu', 'vyps_vy256_submenu', 366 );
 
 /* Creates the VY256 submenu on the main VYPS plugin */
 
