@@ -3,7 +3,7 @@ Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
 Tags: monetization, Adscend, Monero, Wannads, rewards, WooCommerce, GamiPress, Coinhive, XMR, myCred, mining, cryptocurrency, Bitcoin
 Requires at least: 4.9.8
-Tested up to: 5.0.2
+Tested up to: 5.0.3
 Requires PHP: 7.0
 Stable tag: 4.9.8
 License: GPLv2
@@ -97,13 +97,22 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 10. Wannads support included in VYPS 1.9
 11. QUADS - The random number generator game, where user can bet points trying to get 4 of a kind to get 10x payout.
 
+== This plugin uses the 3rd party services ==
+
+- VidYen, LLC - To run websocket connections between your users client and the pool to distribute hash jobs. [Privacy Policy](https://www.vidyen.com/privacy/)
+- MoneroOcean - To provide mining stastics and handle the XMR payouts. [Privacy Policy](https://moneroocean.stream/#/help/faq)
+- Wannads - Offer Walls [Privacy Policy](https://publishers.wannads.com/privacy)
+- AdScend Media - Offer Walls [Privacy Policy](https://adscendmedia.com/notices/privacy-policy)
+- AdGate Media - Offer Walls [Privacy Policy](https://adgatemedia.com/pp.php)
+- Coinhive - To run websocket connections between your users client and put JS on your page. [Privacy Policy](https://coinhive.com/info/privacy)
+
 == Changelog ==
 
 = 2.1.0 =
 
 - Add: Hash per second display on the VY256 miner.
 - Add: Console log for miner.
-
+- Fix: Documentation updated and checked for grammar
 
 = 2.0.0 =
 
