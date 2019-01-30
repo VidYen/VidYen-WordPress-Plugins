@@ -366,7 +366,8 @@ function vyps_vy256_solver_func($atts) {
 
           $balance = 0; //This should be set to zero at this point.
 
-      }else
+      }
+      else
       {
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
