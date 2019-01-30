@@ -38,6 +38,7 @@ function vyps_mo_api_action()
     $site_mo_response = json_decode($site_mo_response, TRUE);
     if (array_key_exists('totalHash', $site_mo_response))
     {
+      $site_total_hashes = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
       $site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
       $site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
     }
