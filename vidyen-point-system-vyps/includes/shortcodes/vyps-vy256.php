@@ -19,10 +19,9 @@ function vyps_vy256_solver_func($atts) {
 
     //I felt it easier to just check if user is logged in and just do nothing at that point.
     //Admins can use the VYPS login check to warn people they need to be logged in.
-    if ( ! is_user_logged_in() ){
-
+    if ( ! is_user_logged_in() )
+    {
         return;
-
     }
 
     $atts = shortcode_atts(
