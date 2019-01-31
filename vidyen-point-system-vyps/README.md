@@ -108,6 +108,12 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.2.0 =
+
+- Add: Adscend overhall.
+- Fix: Wannads instructions made clearer.
+
+
 = 2.1.0 =
 
 - Add: Hash per second display on the VY256 miner.
