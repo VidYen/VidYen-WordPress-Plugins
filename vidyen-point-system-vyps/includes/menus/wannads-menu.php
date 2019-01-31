@@ -35,6 +35,7 @@ function vyps_wannads_sub_menu_page()
 	<p>This plugin needs a <a href="https://www.wannads.com" target="_blank">Wannads Media</a> account to function. The intention is to allow a quick and easy way for you to award user points for Adscend Activity.</p>
 	<p>The intention of this plugin was to make it easier for a WordPress admin to talk with the Adscend API without actually having to program curl calls in PHP manually and automate the recognition of the monetization activity by your end users.</p>
 	<h1>Shortcodes and Syntax</h1>
+	<p>Display the offer wall on your site.</p>
 	<p><b>[vyps-wannads apikey=(found on Wannads site)]</b></p>
 	<p>This is pretty much it. You just need to grab your Wannads API and post it here.<p>
 	<h1>Post Back Support:</h1>

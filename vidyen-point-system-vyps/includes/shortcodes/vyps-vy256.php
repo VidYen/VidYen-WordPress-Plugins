@@ -125,27 +125,52 @@ function vyps_vy256_solver_func($atts) {
     //I added cadia.vy256.com as a last stand. I realized if I'm switching servers cadia needs to be ready to stand.
     //NOTE: Cadia stands.
 
+
+
     //Here is the user ports. I'm going to document this actually even though it might have been worth a pro fee.
     $custom_server = $atts['server'];
     $custom_server_ws_port = $atts['wsport'];
     $custom_server_nx_port = $atts['nxport'];
 
-    $cloud_server_name = array(
-          '0' => 'vesalius.vy256.com',
-          '1' => 'daidem.vidhash.com',
-          '2' => $custom_server,
-          '3' => 'error',
-          '7' => '127.0.0.1'
+    //OK going to do a shuffle of servers to pick one at random from top.
+    if(empty($custom_server))
+    {
+      $server_random_pick = mt_rand(0,2); //Some distribution
 
-    );
+      $cloud_server_name = array(
+            array('vesalius.vy256.com', '8443'), //0,0 0,1
+            array('daidem.vidhash.com', '8443'), //1,0 1,1
+            array('savona.vy256.com', '8183'), //2,0 2,1
+      );
 
+      shuffle($cloud_server_name);
+
+      //print_r($cloud_server_name);
+      //return;
+
+    }
+    else
+    {
+      $cloud_server_name = array(
+            '0' => 'vesalius.vy256.com',
+            '1' => 'daidem.vidhash.com',
+            '2' => 'savona.vy256.com',
+            '3' => $custom_server,
+            '4' => 'error',
+            '7' => '127.0.0.1'
+      );
+    }
+
+    //NOTE THis is broke for now.
+    /*
     //Had to use port 8443 with cloudflare due to it not liking port 8181 for websockets. The other servers are not on cloudflare at least not yet.
     //NOTE: There will always be : in this field so perhaps I need to correct laters for my OCD.
     $cloud_worker_port = array(
           '0' => '8443',
           '1' => '8443',
-          '2' => $custom_server_ws_port,
-          '3' => 'error',
+          '2' => '8183',
+          '3' => $custom_server_ws_port,
+          '4' => 'error',
           '7' => '8181'
     );
 
@@ -157,6 +182,8 @@ function vyps_vy256_solver_func($atts) {
           '3' => ':error',
           '7' => ':8282'
     );
+
+    */
 
     //Here we set the arrays of possible graphics. Eventually this will be a slew of graphis. Maybe holidy day stuff even.
     $graphic_list = array(
@@ -256,6 +283,7 @@ function vyps_vy256_solver_func($atts) {
       $reward_icon = vyps_point_icon_func($pointID); //Thank the gods. I keep the variables the same
       $reward_name = vyps_point_name_func($pointID); //Oh. My naming conventions are working better these days.
 
+      /*** Unique mining ***/
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';
       $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
@@ -271,14 +299,16 @@ function vyps_vy256_solver_func($atts) {
 
       $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
+      $server_fail = 0; //Going into this we should have 0 server fails until we tested
       //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
       //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
-      for ($x_for_count = $first_cloud_server; $x_for_count < 4; $x_for_count = $x_for_count +1 ) //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
+      for ($x_for_count = 0; $x_for_count < 3; $x_for_count = $x_for_count + 1 ) //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
       {
-        $remote_url = "http://" . $cloud_server_name[$x_for_count] . $cloud_server_port[$x_for_count]  ."/?userid=" . $miner_id;
+        $remote_url = "http://" . $cloud_server_name[$x_for_count][0] ."/?userid=" . $miner_id;
         $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
 
+        echo $remote_url . '<br>';
         //return $remote_url; //debugging
 
         if(array_key_exists('headers', $remote_response))
@@ -287,21 +317,59 @@ function vyps_vy256_solver_func($atts) {
             if( is_numeric($remote_response['body']) )
             {
               //Balance to pull from the VY256 server since it is numeric and does exist.
-              $balance =  intval($remote_response['body'] / $hash_per_point); //Sorry we rounding. Addition of the 256. Should be easy enough.
-
-              //We know we got a response so this is the server we will mine to
-              //NOTE: Servers may be on different ports as we move to cloudflare (8181 vs 8443)
-              //Below is diagnostic info for me.
-              $used_server = $cloud_server_name[$x_for_count];
-              $used_port = $cloud_worker_port[$x_for_count];
+              //$balance =  intval($remote_response['body'] / $hash_per_point); //Commenting out since we not getting hashes from here anymore.
+              $used_server = $cloud_server_name[$x_for_count][0];
+              $used_port = $cloud_server_name[$x_for_count][1];
               $x_for_count = 5; //Well. Need to escape out.
             }
+            else
+            {
+              $server_fail = $server_fail + 1; //So if we got a response but it wasn't numeric. Bad gateway
+            }
         }
-        elseif ( $cloud_server_name[$x_for_count] == 'error' )
+        else
         {
-            //The last server will be error which means it tried all the servers.
-            $balance = 0;
-            return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
+            $server_fail = $server_fail + 1; //We didn't get a response at all. Server failure +1.
+        }
+      }
+
+
+      if ( $server_fail >= 3  )
+      {
+          //The last server will be error which means it tried all the servers.
+          return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
+      }
+
+      $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
+
+      //I feel like maybe should eventually functionize this.
+      //MO remote get info for site
+      $mo_site_wallet = $sm_site_key;
+      $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
+
+      /*** MoneroOcean Gets***/
+      //Site get
+      $site_url = 'https://api.moneroocean.stream/miner/' . $mo_site_wallet . '/stats/' . $mo_site_worker;
+      echo '<br>' . $site_url . '<br>';
+      $site_mo_response = wp_remote_get( $site_url );
+      if ( is_array( $site_mo_response ) )
+      {
+        $site_mo_response = $site_mo_response['body']; // use the content
+        $site_mo_response = json_decode($site_mo_response, TRUE);
+        if (array_key_exists('totalHash', $site_mo_response))
+        {
+          $site_total_hashes = floatval($site_mo_response['totalHash']); //No formatted hashes.
+          echo '<br>' . $site_total_hashes . '<br>';
+          $site_total_hashes_formatted = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
+          $site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
+          $site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
+          $balance =  intval($site_total_hashes / $hash_per_point);
+        }
+        else
+        {
+          $site_total_hashes = 0;
+          $site_hash_per_second = '';
+          $balance = 0;
         }
       }
 
@@ -357,8 +425,11 @@ function vyps_vy256_solver_func($atts) {
           $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining" ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
           $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
+          //NOTE: I new something was messing up
           //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
           $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+          $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
+          $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
           //Pulling the graphic
           $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
@@ -381,18 +452,6 @@ function vyps_vy256_solver_func($atts) {
       $vy256_solver_folder_url = str_replace('shortcodes/', '', $vy256_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
       $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
       $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
-
-      //Going to set a worker name regardless to track id.
-      if ($siteName != '')
-      {
-        $mo_site_worker = $siteName . $current_user_id; //NOTE: need two versions. One with . and one without
-        $siteName = "." . $siteName . $current_user_id;
-      }
-      else
-      {
-        $mo_site_worker = 'worker' . $current_user_id;
-        $siteName = "." . 'worker' . $current_user_id;
-      }
 
       //Ok some issues we need to know the path to the js file so will have to ess with that.
       $simple_miner_output = "<!-- $public_remote_url -->
@@ -440,7 +499,7 @@ function vyps_vy256_solver_func($atts) {
               /* start mining, use a local server */
               server = \"wss://$used_server:$used_port\";
               startMining(\"$mining_pool\",
-                \"$sm_site_key$siteName\", \"$password\", $sm_threads, \"$miner_id\");
+                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads, \"$miner_id\");
 
               /* keep us updated */
 
@@ -476,26 +535,12 @@ function vyps_vy256_solver_func($atts) {
                 }
               }
 
-              //Progressbar
-              var totalpoints = 0;
-              var progresspoints = 0;
-              var width = 1;
-              var elem = document.getElementById(\"workerBar\");
-
               if(obj.identifier != \"userstats\"){
 
-                document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
+                //document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
 
                 if(totalhashes > 0){
-                    //document.getElementById('total_hashes').innerText = ' ' + totalhashes;
-
-                    progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
-                    totalpoints = Math.floor( totalhashes / $hash_per_point );
-
-                    width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
-                    elem.style.width = width + '%';
-
-                    document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
+                    //document.getElementById('total_hashes').innerText = ' ' + totalhashes; //Had commented this out a while ago
                 }
               }
 
@@ -593,7 +638,18 @@ function vyps_vy256_solver_func($atts) {
                // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
                jQuery.post(ajaxurl, data, function(response) {
                  output_response = JSON.parse(response);
+                 //Progressbar
+                 var totalpoints = 0;
+                 var progresspoints = 0;
+                 var width = 0;
+                 var totalhashes = parseFloat(output_response.site_hashes;
+                 var elem = document.getElementById(\"workerBar\");
+                 progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
+                 totalpoints = Math.floor( totalhashes / $hash_per_point );
+                 document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                  document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
+                 width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
+                 elem.style.width = width + '%';
                });
               });
             }
@@ -633,6 +689,8 @@ function vyps_vy256_solver_func($atts) {
                 }
               }
             }
+
+
             </script>";
 
       $final_return = $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>'; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.

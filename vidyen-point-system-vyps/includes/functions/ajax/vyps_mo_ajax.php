@@ -45,6 +45,7 @@ function vyps_mo_api_action()
     else
     {
       $site_hash_per_second = '';
+      $site_total_hashes = 0;
     }
   }
 
