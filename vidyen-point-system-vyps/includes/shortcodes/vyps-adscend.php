@@ -2,6 +2,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+//NOTE: I feel somewhat motivated to get this to work now that I can get referrals transfered according to Adscend.
+
 //AS shortcode functons.
 //Need less disclaimers here as average people believe that Coinhive is evil. From my point of view, advertising is evil. -Felty
 //Yeah that is a prequel reference.
@@ -13,15 +15,9 @@ function vyps_adscend_func( $atts ) {
 
 	/* Check to see if user is logged in and boot them out of function if they aren't. */
 
-	if ( is_user_logged_in() ) {
-
-		//I probaly don't have to have this part of the if
-
-	} else {
-
+	if (!is_user_logged_in())
+	{
     return; //Admins should put the login shortcode for uniformity.
-		//return "You need to be logged in to watch advertisments for points.";
-
 	}
 
 	global $wpdb;
@@ -143,26 +139,23 @@ function vyps_adscend_redeem_func( $atts ) {
 
 
 	/* API key will never be a single character in theory but I needed something easy to check #lazycoding */
-	if ( $atts['api'] == 'z' ) {
-
+	if ( $atts['api'] == 'z' )
+	{
 		return "You did not set the API Key!";
-
 	}
 
 	/* Oh yeah. Checking to see if no pid was set */
 
-	if ( $atts['pid'] == 0 ) {
-
+	if ( $atts['pid'] == 0 )
+	{
 		return "You did not set point ID!";
-
 	}
 
 	//In theory one could set their payout to be 0 on purpose, but if you are that kind of person just comment this if out
 
-	if ( $atts['payout'] == 0 ) {
-
+	if ( $atts['payout'] == 0 )
+	{
 		return "You did not set payout!";
-
 	}
 
 	/* Ok. This might be lazy coding and Grey Goose but I figured we can just see if the button has been clicked */
@@ -171,16 +164,17 @@ function vyps_adscend_redeem_func( $atts ) {
 	$VYPS_power_row = "<br>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\"></a>";
 
 	//Procheck here. Do not forget the ==
-	if (vyps_procheck_func($atts) == 1) {
-
+	if (vyps_procheck_func($atts) == 1)
+	{
 		$VYPS_power_row = ''; //No branding if procheck is correct.
-
 	}
 
-	if (isset($_POST["redeem"])){
+	if (isset($_POST["redeem"]))
+	{
 
-	} else {
-
+	}
+	else
+	{
 		/* Just show them button if button has not been clicked. Its a requirement not a suggestion. */
 		return "<form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"redeem\"/>
@@ -208,6 +202,13 @@ function vyps_adscend_redeem_func( $atts ) {
 
 	$url = "https://adscendmedia.com/adwall/api/publisher/{$pub_id}/profile/{$adwall_id}/user/{$sub_id}/transactions.json";
 
+	/* //Working on something. Will delete later. I'm thinking the postback is the best method for getting referrals.
+
+	$site_url = esc_url(site_url());
+
+	$vyps_url ='https://www.vidyen.com/adscend-tracking/?type=adscend&site=' . $site_url;
+
+	*/
 	//Note Api says no https but well I feel it should be so and it seems to work
 
 	$as = curl_init();
