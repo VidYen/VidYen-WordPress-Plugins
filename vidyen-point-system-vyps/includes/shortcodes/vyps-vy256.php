@@ -519,28 +519,22 @@ function vyps_vy256_solver_func($atts) {
 
             /* helper function to put text into the text field.  */
 
-            function addText(obj) {
-
+            function addText(obj)
+            {
               //Activity bar
               var widthtime = 1;
               var elemtime = document.getElementById(\"timeBar\");
               var idtime = setInterval(timeframe, 3600);
 
-              function timeframe() {
-                if (widthtime >= 42) {
+              function timeframe()
+              {
+                if (widthtime >= 42)
+                {
                   widthtime = 1;
-                } else {
+                } else
+                {
                   widthtime++;
                   elemtime.style.width = widthtime + '%';
-                }
-              }
-
-              if(obj.identifier != \"userstats\"){
-
-                //document.querySelector('input[name=\"hash_amount\"]').value = totalhashes;
-
-                if(totalhashes > 0){
-                    //document.getElementById('total_hashes').innerText = ' ' + totalhashes; //Had commented this out a while ago
                 }
               }
 
@@ -628,7 +622,6 @@ function vyps_vy256_solver_func($atts) {
           <script>
             function pull_mo_stats()
             {
-              var output_hash_per_second = '';
               jQuery(document).ready(function($) {
                var data = {
                  'action': 'vyps_mo_api_action',
@@ -642,7 +635,7 @@ function vyps_vy256_solver_func($atts) {
                  var totalpoints = 0;
                  var progresspoints = 0;
                  var width = 0;
-                 var totalhashes = parseFloat(output_response.site_hashes;
+                 var totalhashes = parseFloat(output_response.site_hashes);
                  var elem = document.getElementById(\"workerBar\");
                  progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( totalhashes / $hash_per_point );
@@ -660,13 +653,17 @@ function vyps_vy256_solver_func($atts) {
               //Should call ajax every 30 seconds
               var ajaxTime = 1;
               var id = setInterval(moAjaxTimeFrame, 1000); //1000 is 1 second
-              function moAjaxTimeFrame() {
-                if (ajaxTime >= 30) {
+              function moAjaxTimeFrame()
+              {
+                if (ajaxTime >= 30)
+                {
                   pull_mo_stats();
                   console.log('Ping MoneroOcean');
                   clearInterval(id);
-                  moAjaxTimerSecondus()
-                } else {
+                  moAjaxTimerSecondus();
+                }
+                else
+                {
                   ajaxTime++;
                 }
               }
@@ -678,13 +675,17 @@ function vyps_vy256_solver_func($atts) {
               //Should call ajax every 30 seconds
               var ajaxTime = 1;
               var id = setInterval(moAjaxTimeFrame, 1000);
-              function moAjaxTimeFrame() {
-                if (ajaxTime >= 30) {
+              function moAjaxTimeFrame()
+              {
+                if (ajaxTime >= 30)
+                {
                   pull_mo_stats();
                   console.log('Ping MoneroOcean');
                   clearInterval(id);
                   moAjaxTimerPrimus();
-                } else {
+                }
+                else
+                {
                   ajaxTime++;
                 }
               }
