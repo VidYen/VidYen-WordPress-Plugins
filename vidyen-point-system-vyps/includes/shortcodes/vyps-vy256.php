@@ -96,6 +96,8 @@ function vyps_vy256_solver_func($atts) {
 
     $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
 
+    //Twitch mode
+    $twitch_mode = $atts['twitch'];
 
     //Wallet check
     $wallet = $atts['wallet'];
@@ -180,18 +182,19 @@ function vyps_vy256_solver_func($atts) {
     //ini_set('display_startup_errors', 1);
     //error_reporting(E_ALL);
 
-    //I'm putting this in here so that if you have a cookie that it knows you consented.
-    //Designed for the twithc video
-    $cookie_name = "vytwitchconsent";
-    $cookie_value = "consented";
-    if(isset($_COOKIE[$cookie_name]))
+    $vy_twitch_consent_cookie = FALSE; //Best put this here and then change it down the road.
+    if ($twitch_mode==TRUE)
     {
-      $vy_twitch_consent_cookie = TRUE;
+      //I'm putting this in here so that if you have a cookie that it knows you consented with twitch mode on.
+      //Designed for the twithc video
+      $cookie_name = "vytwitchconsent";
+      $cookie_value = "consented";
+      if(isset($_COOKIE[$cookie_name]))
+      {
+        $vy_twitch_consent_cookie = TRUE;
+      }
     }
-    else
-    {
-      $vy_twitch_consent_cookie = FALSE;
-    }
+
 
     if (isset($_POST["consent"]) OR $vy_twitch_consent_cookie == TRUE){ // Just checking if they clicked conset and are logged in case something dumb happened.
 
@@ -271,9 +274,6 @@ function vyps_vy256_solver_func($atts) {
         $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
 
-        //echo $remote_url . '<br>';
-        //return $remote_url; //debugging
-
         if(array_key_exists('headers', $remote_response))
         {
             //Checking to see if the response is a number. If not, probaly something from cloudflare or ngix messing up. As is a loop should just kick out unless its the error round.
@@ -312,7 +312,6 @@ function vyps_vy256_solver_func($atts) {
       /*** MoneroOcean Gets***/
       //Site get
       $site_url = 'https://api.moneroocean.stream/miner/' . $mo_site_wallet . '/stats/' . $mo_site_worker;
-      //echo '<br>' . $site_url . '<br>';
       $site_mo_response = wp_remote_get( $site_url );
       if ( is_array( $site_mo_response ) )
       {
@@ -321,7 +320,6 @@ function vyps_vy256_solver_func($atts) {
         if (array_key_exists('totalHash', $site_mo_response))
         {
           $site_total_hashes = floatval($site_mo_response['totalHash']); //No formatted hashes.
-          echo '<br>' . $site_total_hashes . '<br>';
           $site_total_hashes_formatted = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
           $site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
           $site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
@@ -406,6 +404,18 @@ function vyps_vy256_solver_func($atts) {
           $redeem_output = "<tr><td>Click  \"$start_btn_text\" to begin and  \"$redeem_btn_text\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
       }
 
+      $start_button_html ="
+        <button id=\"startb\" style=\"width:100%;\" onclick=\"start()\">$start_btn_text</button>
+        <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
+      ";
+
+      if ($twitch_mode==TRUE)
+      {
+        $start_button_html = "
+        <button id=\"startb\" style=\"display:none;width:100%;\" onclick=\"start()\">$start_btn_text</button>
+        <form id=\"stop\" style=\"width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>";
+      }
+
       //Get the url for the solver
       $vy256_solver_folder_url = plugins_url( 'js/solver/', __FILE__ );
       //$vy256_solver_url = plugins_url( 'js/solver/miner.js', __FILE__ ); //Ah it was the worker.
@@ -415,18 +425,36 @@ function vyps_vy256_solver_func($atts) {
       $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
       $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
 
+      if($twitch_mode != TRUE)
+      {
+        $graphics_html_ouput= "
+          <tr><td>
+            <div id=\"waitwork\">
+            <img src=\"$VYPS_stat_worker_url\"><br>
+            </div>
+            <div style=\"display:none;\" id=\"atwork\">
+            <img src=\"$VYPS_worker_url\"><br>
+            </div>
+            <center id=\"mining\" style=\"display:none;\">
+            </center>
+          </td></tr>
+        ";
+      }
+      else
+      {
+        $graphics_html_ouput = "
+        <div id=\"waitwork\" style=\"display:none;\"></div>
+        <div style=\"display:none;\" id=\"atwork\"></div>
+        <center id=\"mining\" style=\"display:none;\">
+        </center>";
+      }
+
       //Ok some issues we need to know the path to the js file so will have to ess with that.
-      $simple_miner_output = "<!-- $public_remote_url -->
+      $simple_miner_output = "
+      <!-- $public_remote_url -->
       <table>
         $site_warning
-        <tr><td>
-          <div id=\"waitwork\">
-          <img src=\"$VYPS_stat_worker_url\"><br>
-          </div>
-          <div style=\"display:none;\" id=\"atwork\">
-          <img src=\"$VYPS_worker_url\"><br>
-          </div>
-
+        $graphics_html_ouput
           <script>
                   function get_worker_js()
             {
@@ -465,12 +493,17 @@ function vyps_vy256_solver_func($atts) {
 
               /* keep us updated */
 
-              setInterval(function () {
+              var sendstackId = setInterval( vy256sendStack, 2000);
+              function vy256sendStack() {
                 // for the definition of sendStack/receiveStack, see miner.js
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
                 document.getElementById('status-text').innerText = 'Working.';
-              }, 2000);
+              };
+
+              function clearSendStack(){
+                clearInterval(sendstackId);
+              }
 
             }
 
@@ -522,11 +555,7 @@ function vyps_vy256_solver_func($atts) {
                 //console.log(obj);
               }
           }
-          </script>
-
-    <center id=\"mining\" style=\"display:none;\">
-
-
+    </script>
     <script>
     var dots = window.setInterval( function() {
         var wait = document.getElementById(\"wait\");
@@ -536,13 +565,10 @@ function vyps_vy256_solver_func($atts) {
             wait.innerHTML += \".\";
         }, 500);
     </script>
-    </center>
-    </td></tr>
     <tr>
        <td>
          <div>
-           <button id=\"startb\" style=\"width:100%;\" onclick=\"start()\">$start_btn_text</button>
-           <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
+          $start_button_html
          </div><br>
         <div id=\"timeProgress\" style=\"width:100%; background-color: grey; \">
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Press start to begin.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
