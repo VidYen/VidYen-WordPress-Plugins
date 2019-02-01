@@ -469,7 +469,10 @@ function vyps_vy256_solver_func($atts) {
             {
                 return \"$miner_id\";
             }
-
+            var sendstackId = 0;
+            function clearSendStack(){
+              clearInterval(sendstackId);
+            }
 
             function start() {
 
@@ -493,18 +496,12 @@ function vyps_vy256_solver_func($atts) {
 
               /* keep us updated */
 
-              var sendstackId = setInterval( vy256sendStack, 2000);
-              function vy256sendStack() {
+              setInterval(function () {
                 // for the definition of sendStack/receiveStack, see miner.js
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
                 document.getElementById('status-text').innerText = 'Working.';
-              };
-
-              function clearSendStack(){
-                clearInterval(sendstackId);
-              }
-
+              }, 2000);
             }
 
             function stop(){
@@ -526,7 +523,8 @@ function vyps_vy256_solver_func($atts) {
                 if (widthtime >= 42)
                 {
                   widthtime = 1;
-                } else
+                }
+                else
                 {
                   widthtime++;
                   elemtime.style.width = widthtime + '%';
@@ -569,9 +567,12 @@ function vyps_vy256_solver_func($atts) {
        <td>
          <div>
           $start_button_html
-         </div><br>
-        <div id=\"timeProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Press start to begin.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
+        </div><br>
+        <div id=\"pauseProgress\" style=\"width:100%; background-color: grey; \">
+          <div id=\"pauseBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"pause-text\">Press play to begin.</span></div></div>
+        </div>
+        <div id=\"timeProgress\" style=\"display:none;width:100%; background-color: grey; \">
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
           <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
