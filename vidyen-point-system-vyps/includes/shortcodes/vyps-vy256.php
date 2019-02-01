@@ -33,7 +33,6 @@ function vyps_vy256_solver_func($atts) {
             'threads' => '2',
             'throttle' => '50',
             'password' => 'x',
-            'cloud' => 0,
             'server' => '', //This and the next three are used for custom servers if the end user wants to roll their own
             'wsport' => '', //The WebSocket Port
             'nxport' => '', //The nginx port... By default its (80) in the browser so if you run it on a custom port for hash counting you may do so here
@@ -50,6 +49,8 @@ function vyps_vy256_solver_func($atts) {
             'workerbartext' => 'white',
             'redeembtn' => 'Redeem',
             'startbtn' => 'Start Mining',
+            'debug' => FALSE,
+            'twitch' => FALSE,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -73,7 +74,6 @@ function vyps_vy256_solver_func($atts) {
     $pointID = $atts['pid'];
     //$password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
     $password = 'x';
-    $first_cloud_server = $atts['cloud'];
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
@@ -93,6 +93,8 @@ function vyps_vy256_solver_func($atts) {
     //De-English-fication section. As we have a great deal of non-english admins, I wanted to add in options to change the miner text hereby
     $redeem_btn_text = $atts['redeembtn']; //By default 'Redeem'
     $start_btn_text = $atts['startbtn']; //By default 'Start Mining'
+
+    $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
 
 
     //Wallet check
@@ -120,13 +122,6 @@ function vyps_vy256_solver_func($atts) {
       $mo_site_wallet = $sm_site_key; //Double passing down in ajax
     }
 
-    //Cloud Server list array. I suppose one could have a non-listed server, but they'd need to be running our versions
-    //the cloud is on a different port but that is only set in nginx and can be anything really as long as it goes to 8282
-    //I added cadia.vy256.com as a last stand. I realized if I'm switching servers cadia needs to be ready to stand.
-    //NOTE: Cadia stands.
-
-
-
     //Here is the user ports. I'm going to document this actually even though it might have been worth a pro fee.
     $custom_server = $atts['server'];
     $custom_server_ws_port = $atts['wsport'];
@@ -137,53 +132,20 @@ function vyps_vy256_solver_func($atts) {
     {
       $server_random_pick = mt_rand(0,2); //Some distribution
 
-      $cloud_server_name = array(
+      $server_name = array(
             array('vesalius.vy256.com', '8443'), //0,0 0,1
             array('daidem.vidhash.com', '8443'), //1,0 1,1
             array('savona.vy256.com', '8183'), //2,0 2,1
       );
 
-      shuffle($cloud_server_name);
-
-      //print_r($cloud_server_name);
-      //return;
-
+      shuffle($server_name);
     }
-    else
+    else //Going to allow for custom servers is admin wants. No need for redudance as its on them.
     {
-      $cloud_server_name = array(
-            '0' => 'vesalius.vy256.com',
-            '1' => 'daidem.vidhash.com',
-            '2' => 'savona.vy256.com',
-            '3' => $custom_server,
-            '4' => 'error',
-            '7' => '127.0.0.1'
+      $server_name = array(
+          array($custom_server, $custom_server_ws_port), //0,0 0,1
       );
     }
-
-    //NOTE THis is broke for now.
-    /*
-    //Had to use port 8443 with cloudflare due to it not liking port 8181 for websockets. The other servers are not on cloudflare at least not yet.
-    //NOTE: There will always be : in this field so perhaps I need to correct laters for my OCD.
-    $cloud_worker_port = array(
-          '0' => '8443',
-          '1' => '8443',
-          '2' => '8183',
-          '3' => $custom_server_ws_port,
-          '4' => 'error',
-          '7' => '8181'
-    );
-
-
-    $cloud_server_port = array(
-          '0' => '',
-          '1' => '',
-          '2' => $custom_server_nx_port,
-          '3' => ':error',
-          '7' => ':8282'
-    );
-
-    */
 
     //Here we set the arrays of possible graphics. Eventually this will be a slew of graphis. Maybe holidy day stuff even.
     $graphic_list = array(
@@ -194,31 +156,19 @@ function vyps_vy256_solver_func($atts) {
     );
 
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
-    if ($graphic_choice == 'rand'){
-
+    if ($graphic_choice == 'rand')
+    {
       $rand_choice = mt_rand(1,2);
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
-
-    } else {
-
+    }
+    else
+    {
       $current_graphic = $graphic_list[$graphic_choice];
-
-    }
-
-    //NOTE: 7 is the number for if we want to do local host testing. Maybe for Monroe down the road.
-    if ($cloud_server_name == 7 )
-    {
-      //Some debug stuff put in for futre if testing on local host.
-    }
-    elseif ($first_cloud_server > 2 OR $first_cloud_server < 0 )
-    {
-      return "Error: Cloud set to invalid value. 0-1 only.";
     }
 
     if ($sm_site_key == '' AND $siteName == '')
     {
         return "Error: Wallet address and site name not set. This is required!";
-
     }
     else
     {
@@ -230,7 +180,20 @@ function vyps_vy256_solver_func($atts) {
     //ini_set('display_startup_errors', 1);
     //error_reporting(E_ALL);
 
-    if (isset($_POST["consent"]) AND is_user_logged_in() ){ // Just checking if they clicked conset and are logged in case something dumb happened.
+    //I'm putting this in here so that if you have a cookie that it knows you consented.
+    //Designed for the twithc video
+    $cookie_name = "vytwitchconsent";
+    $cookie_value = "consented";
+    if(isset($_COOKIE[$cookie_name]))
+    {
+      $vy_twitch_consent_cookie = TRUE;
+    }
+    else
+    {
+      $vy_twitch_consent_cookie = FALSE;
+    }
+
+    if (isset($_POST["consent"]) OR $vy_twitch_consent_cookie == TRUE){ // Just checking if they clicked conset and are logged in case something dumb happened.
 
       global $wpdb;
 
@@ -304,11 +267,11 @@ function vyps_vy256_solver_func($atts) {
       //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
       for ($x_for_count = 0; $x_for_count < 3; $x_for_count = $x_for_count + 1 ) //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
       {
-        $remote_url = "http://" . $cloud_server_name[$x_for_count][0] ."/?userid=" . $miner_id;
+        $remote_url = "http://" . $server_name[$x_for_count][0] ."/?userid=" . $miner_id;
         $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
         $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
 
-        echo $remote_url . '<br>';
+        //echo $remote_url . '<br>';
         //return $remote_url; //debugging
 
         if(array_key_exists('headers', $remote_response))
@@ -318,8 +281,8 @@ function vyps_vy256_solver_func($atts) {
             {
               //Balance to pull from the VY256 server since it is numeric and does exist.
               //$balance =  intval($remote_response['body'] / $hash_per_point); //Commenting out since we not getting hashes from here anymore.
-              $used_server = $cloud_server_name[$x_for_count][0];
-              $used_port = $cloud_server_name[$x_for_count][1];
+              $used_server = $server_name[$x_for_count][0];
+              $used_port = $server_name[$x_for_count][1];
               $x_for_count = 5; //Well. Need to escape out.
             }
             else
@@ -333,8 +296,7 @@ function vyps_vy256_solver_func($atts) {
         }
       }
 
-
-      if ( $server_fail >= 3  )
+      if ( $server_fail >= 3)
       {
           //The last server will be error which means it tried all the servers.
           return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
@@ -350,7 +312,7 @@ function vyps_vy256_solver_func($atts) {
       /*** MoneroOcean Gets***/
       //Site get
       $site_url = 'https://api.moneroocean.stream/miner/' . $mo_site_wallet . '/stats/' . $mo_site_worker;
-      echo '<br>' . $site_url . '<br>';
+      //echo '<br>' . $site_url . '<br>';
       $site_mo_response = wp_remote_get( $site_url );
       if ( is_array( $site_mo_response ) )
       {
@@ -690,11 +652,19 @@ function vyps_vy256_solver_func($atts) {
                 }
               }
             }
-
-
             </script>";
 
-      $final_return = $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>'; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
+      //Hidden DEBUG
+      if($debug_mode==TRUE)
+      {
+        $debug_html_output = '<br><br>' . $remote_url . '<br><br>' . $site_url . '<br><br>';
+      }
+      else
+      {
+        $debug_html_output = '';
+      }
+
+      $final_return = $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>' . $debug_html_output; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
 
 
     } else {
@@ -710,8 +680,6 @@ function vyps_vy256_solver_func($atts) {
 /* Telling WP to use function for shortcode for sm-consent*/
 
 add_shortcode( 'vyps-256', 'vyps_vy256_solver_func');
-
-
 
 /* Shortcode for the API call to create a lot entry */
 /* There is some debate if this should be a button, but I'm just going to run on the code on page load and the admins can just make a button that runs the smart code if they want */
