@@ -190,8 +190,7 @@ function vyps_vy256_solver_func($atts) {
     //ini_set('display_startup_errors', 1);
     //error_reporting(E_ALL);
 
-    $vy_twitch_consent_cookie = FALSE; //Best put this here and then change it down the road.
-    if ($player_mode==TRUE)
+    if ($player_mode==TRUE) //Player mode for Twitch and YouTube VidHash
     {
       //I'm putting this in here so that if you have a cookie that it knows you consented with twitch mode on.
       //Designed for the twithc video
@@ -201,10 +200,23 @@ function vyps_vy256_solver_func($atts) {
       {
         $vy_twitch_consent_cookie = TRUE;
       }
+
+      //This need to be set in both php functions and need to be the same.
+      $cookie_name = "vidhashconsent";
+      $cookie_value = "consented";
+      if(isset($_COOKIE[$cookie_name]))
+      {
+          $vy_vidhash_consent_cookie = TRUE;
+      }
+    }
+    else
+    {
+      $vy_twitch_consent_cookie = FALSE; //Best put this here and then change it down the road.
+      $vy_vidhash_consent_cookie = FALSE; //Again otherwise will get error.
     }
 
-
-    if (isset($_POST["consent"]) OR $vy_twitch_consent_cookie == TRUE){ // Just checking if they clicked conset and are logged in case something dumb happened.
+    if (isset($_POST["consent"]) OR $vy_twitch_consent_cookie == TRUE OR $vy_vidhash_consent_cookie == TRUE) // Just checking if they clicked conset or accepted a cookie prior.
+    {
 
       global $wpdb;
 
