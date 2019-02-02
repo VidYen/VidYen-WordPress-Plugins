@@ -397,11 +397,17 @@ function vyps_vy256_solver_func($atts) {
           $balance = 0; //This should be set to zero at this point.
 
       }
-      else
+      elseif($twitch_mode != TRUE)
       {
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
           $redeem_output = "<tr><td>Click  \"$start_btn_text\" to begin and  \"$redeem_btn_text\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
+      }
+      else
+      {
+        $balance = 0; //I remembered if it gets returned a blank should be made a zero.
+        //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
+        $redeem_output = "<tr><td>Click play to begin and  \"$redeem_btn_text\" to get work credit in: " . $reward_icon . "</td></tr>";
       }
 
       $start_button_html ="
