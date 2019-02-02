@@ -415,11 +415,19 @@ function vyps_vy256_solver_func($atts) {
         <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
       ";
 
+      $start_message_verbage = 'Press Start to begin.';
+
+      $switch_pause_div_on = "document.getElementById(\"pauseProgress\").style.display = 'none'; // hide pause
+      document.getElementById(\"timeProgress\").style.display = 'block'; // begin time";
+
       if ($twitch_mode==TRUE)
       {
         $start_button_html = "
         <button id=\"startb\" style=\"display:none;width:100%;\" onclick=\"start()\">$start_btn_text</button>
         <form id=\"stop\" style=\"width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>";
+
+        $start_message_verbage = 'Press Play to begin.';
+        $switch_pause_div_on = '';
       }
 
       //Get the url for the solver
@@ -487,6 +495,8 @@ function vyps_vy256_solver_func($atts) {
               pull_mo_stats();
               console.log('Ping MoneroOcean');
 
+              //Switch on animations and bars.
+              $switch_pause_div_on
               document.getElementById(\"startb\").style.display = 'none'; // disable button
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
               document.getElementById(\"atwork\").style.display = 'block'; // disable button
@@ -575,7 +585,7 @@ function vyps_vy256_solver_func($atts) {
           $start_button_html
         </div><br>
         <div id=\"pauseProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"pauseBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"pause-text\">Press play to begin.</span></div></div>
+          <div id=\"pauseBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"pause-text\">$start_message_verbage</span></div></div>
         </div>
         <div id=\"timeProgress\" style=\"display:none;width:100%; background-color: grey; \">
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
