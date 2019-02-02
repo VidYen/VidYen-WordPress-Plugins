@@ -51,6 +51,7 @@ function vyps_vy256_solver_func($atts) {
             'startbtn' => 'Start Mining',
             'debug' => FALSE,
             'twitch' => FALSE,
+            'youtube' => FALSE,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -96,8 +97,15 @@ function vyps_vy256_solver_func($atts) {
 
     $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
 
-    //Twitch mode
-    $twitch_mode = $atts['twitch'];
+    //Player MODE. Either for youtube or twitch
+    if ($atts['twitch'] == TRUE OR $atts['youtube'] == TRUE)
+    {
+      $player_mode = TRUE;
+    }
+    else
+    {
+      $player_mode = FALSE;
+    }
 
     //Wallet check
     $wallet = $atts['wallet'];
@@ -183,7 +191,7 @@ function vyps_vy256_solver_func($atts) {
     //error_reporting(E_ALL);
 
     $vy_twitch_consent_cookie = FALSE; //Best put this here and then change it down the road.
-    if ($twitch_mode==TRUE)
+    if ($player_mode==TRUE)
     {
       //I'm putting this in here so that if you have a cookie that it knows you consented with twitch mode on.
       //Designed for the twithc video
@@ -397,7 +405,7 @@ function vyps_vy256_solver_func($atts) {
           $balance = 0; //This should be set to zero at this point.
 
       }
-      elseif($twitch_mode != TRUE)
+      elseif($player_mode != TRUE)
       {
           $balance = 0; //I remembered if it gets returned a blank should be made a zero.
           //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
@@ -420,7 +428,7 @@ function vyps_vy256_solver_func($atts) {
       $switch_pause_div_on = "document.getElementById(\"pauseProgress\").style.display = 'none'; // hide pause
       document.getElementById(\"timeProgress\").style.display = 'block'; // begin time";
 
-      if ($twitch_mode==TRUE)
+      if ($player_mode==TRUE)
       {
         $start_button_html = "
         <button id=\"startb\" style=\"display:none;width:100%;\" onclick=\"start()\">$start_btn_text</button>
@@ -439,7 +447,7 @@ function vyps_vy256_solver_func($atts) {
       $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
       $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
 
-      if($twitch_mode != TRUE)
+      if($player_mode != TRUE)
       {
         $graphics_html_ouput= "
           <tr><td>
