@@ -114,6 +114,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: Support for point tracking both [Twitch Player](https://wordpress.org/plugins/vidyen-twitch-player/) and [VidHash](https://wordpress.org/plugins/vidyen-vidhash/) (See each plugins Shortcodes for details after install)
 - Add: Dynamic server balancing keeping option to run own webminer pool server.
 - Add: Prep to allow different pools.
+- Fix: Made Ajax URL names unique to not interfer with other plugins.
 
 
 = 2.1.0 =
