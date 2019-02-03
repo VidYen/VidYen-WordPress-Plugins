@@ -110,7 +110,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.2.1 =
 
-- Fix: Fixed instance of cookies not being set for VY256 while `twitch=true` or `youtube=true`
+- Fix: Fixed missing variable of cookies not being set when logged in for VY256 while `twitch=true` or `youtube=true`
 - Add: Shortcode attribute for vy256 added called `password=` so you can set your default MoneroOcean account without having a GPU miner (not documented)
 
 = 2.2.0 =
