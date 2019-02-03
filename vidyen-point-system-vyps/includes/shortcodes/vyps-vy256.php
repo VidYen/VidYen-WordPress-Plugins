@@ -200,6 +200,10 @@ function vyps_vy256_solver_func($atts) {
       {
         $vy_twitch_consent_cookie = TRUE;
       }
+      else
+      {
+        $vy_twitch_consent_cookie = FALSE;
+      }
 
       //This need to be set in both php functions and need to be the same.
       $cookie_name = "vidhashconsent";
@@ -207,6 +211,10 @@ function vyps_vy256_solver_func($atts) {
       if(isset($_COOKIE[$cookie_name]))
       {
           $vy_vidhash_consent_cookie = TRUE;
+      }
+      else
+      {
+        $vy_vidhash_consent_cookie = FALSE;
       }
     }
     else
