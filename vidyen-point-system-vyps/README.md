@@ -108,6 +108,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.2.1 =
+
+- Fix: Fixed instance of cookies not being set for VY256 while `twitch=true` or `youtube=true`
+- Add: Shortcode attribute for vy256 added called `password=` so you can set your default MoneroOcean account without having a GPU miner (not documented)
+
 = 2.2.0 =
 
 - Change: Hash tracking is now direct from MoneroOcean rather than VidYen. You should a more accurate hash per point now when it comes to accepted hashes.
@@ -115,8 +120,6 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: Dynamic server balancing keeping option to run own webminer pool server.
 - Add: Prep to allow different pools.
 - Fix: Made Ajax URL names unique to not interfer with other plugins.
-- Add: Shortcode attribute for vy256 added called `password=` so you can set your default MoneroOcean account without having a GPU miner (not documented)
-
 
 = 2.1.0 =
 
