@@ -73,8 +73,8 @@ function vyps_vy256_solver_func($atts) {
     $sm_threads = $atts['threads'];
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
-    //$password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
-    $password = 'x';
+    $password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
+    //$password = 'x';
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
