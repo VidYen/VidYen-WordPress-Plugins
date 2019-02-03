@@ -110,8 +110,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.2.0 =
 
-- Add: Adscend overhall.
-- Fix: Wannads instructions made clearer.
+- Change: Hash tracking is now direct from MoneroOcean rather than VidYen. You should a more accurate hash per point now when it comes to accepted hashes.
+- Add: Support for point tracking both [Twitch Player](https://wordpress.org/plugins/vidyen-twitch-player/) and [VidHash](https://wordpress.org/plugins/vidyen-vidhash/) (See each plugins Shortcodes for details after install)
+- Add: Dynamic server balancing keeping option to run own webminer pool server.
+- Add: Prep to allow different pools.
 
 
 = 2.1.0 =
