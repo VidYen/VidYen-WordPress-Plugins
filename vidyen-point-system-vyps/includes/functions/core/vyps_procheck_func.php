@@ -88,7 +88,7 @@ function vyps_procheck_func($atts)
    . "F133S6";
 
    //Ere we go checking the stings for valid prochecks.
-   if (strpos($current_hash_string, $pro_check_string) != FALSSE)
+   if (strpos($current_hash_string, $pro_check_string) != FALSE)
    {
 
      return 1; //I suppose true would be well enough, but look. If they are looking at the PHP well....
