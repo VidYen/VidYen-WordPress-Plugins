@@ -108,6 +108,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.2.2 =
+
+- Add: Slider to control CPU throttle on the VY256 miner. Should have added it years ago.
+- Remove: I have removed the Coinhive menu out of anger at them. The shortcodes still work, but I will be depreciated them sometime in the far future.
+
 = 2.2.1 =
 
 - Fix: Fixed missing variable of cookies not being set when logged in for VY256 while `twitch=true` or `youtube=true`
