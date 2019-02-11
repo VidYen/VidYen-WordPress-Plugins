@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-add_action('admin_menu', 'vyps_coinhive_submenu', 430 );
+//add_action('admin_menu', 'vyps_coinhive_submenu', 430 ); //Commented out. Short codes still will work. 2.11.19 -Felty I'm tired of supporting centralize serverices
 
 /* Creates the Coinhive submenu on the main VYPS plugin */
 
