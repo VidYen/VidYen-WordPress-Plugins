@@ -31,7 +31,7 @@ function vyps_vy256_solver_func($atts) {
             'pid' => 0,
             'pool' => 'moneroocean.stream',
             'threads' => '2',
-            'throttle' => '50',
+            'throttle' => 50,
             'password' => 'x',
             'server' => '', //This and the next three are used for custom servers if the end user wants to roll their own
             'wsport' => '', //The WebSocket Port
@@ -517,6 +517,8 @@ function vyps_vy256_solver_func($atts) {
               clearInterval(sendstackId);
             }
 
+            throttleMiner = $sm_throttle;
+
             function start() {
 
               //Start the MO pull
@@ -533,6 +535,8 @@ function vyps_vy256_solver_func($atts) {
               document.getElementById(\"thread_manage\").style.display = 'block'; // disable button
               document.getElementById(\"stop\").style.display = 'block'; // disable button
               document.getElementById(\"mining\").style.display = 'block'; // disable button
+              document.getElementById(\"add\").disabled = false;
+              document.getElementById(\"sub\").disabled = false;
 
               /* start mining, use a local server */
               server = \"wss://$used_server:$used_port\";
@@ -622,17 +626,37 @@ function vyps_vy256_solver_func($atts) {
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
           <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
         </div>
-        <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:none;\">
-            Power:&nbsp;
-          <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\">-</button>
+        <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
+            Threads:&nbsp;
+          <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
           <input style=\"display:inline;width:42%;\" type=\"text\" id=\"1\" value=\"$sm_threads\" disabled class=field>
-          <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\">+</button>
-        </div>
+          <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\" disabled>+</button>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
             <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
             <!--<input type=\"submit\" class=\"button-secondary\" value=\"$redeem_btn_text Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
           </form>
+        </div>
+      <tr>
+        <td>
+          <div class=\"slidecontainer\">
+            <p>CPU Use: <span id=\"cpu_stat\"></span>%</p>
+            <input type=\"range\" min=\"0\" max=\"100\" value=\"$sm_throttle\" class=\"slider\" id=\"cpuRange\">
+          </div>
+        </td>
+      </tr>
+      <script>
+        //CPU throttle
+        var slider = document.getElementById(\"cpuRange\");
+        var output = document.getElementById(\"cpu_stat\");
+        output.innerHTML = slider.value;
+
+        slider.oninput = function() {
+          output.innerHTML = this.value;
+          throttleMiner = 100 - this.value;
+          console.log(throttleMiner);
+        }
+      </script>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
             $('.add').click(function () {
