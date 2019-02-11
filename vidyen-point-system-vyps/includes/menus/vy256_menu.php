@@ -91,7 +91,8 @@ function vyps_vy256_sub_menu_page()
     <p>Start: <b>startbtn="Comienzo"</b></p>
     <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 site=vidyen redeembtn="Redimir" startbtn="Comienzo"] Por favor consienta a la minería. [vyps-256-consent text="Yo Consiento"]</b></p>
     <h1>Custom Server</h1>
-    <p>If you want to run your own <a href="https://github.com/VidYen/webminerpool" target="_blank">webminerpool</a> erver, you can but use the fork in the link, or it will not work properly.</p>
+    <p>If you want to run your own <a href="https://github.com/VidYen/webminerpool" target="_blank">webminerpool</a> you can, but it needs to support MoneroOcean.</p>
+    <p>You can use MoneroOcean webminepool directly if you want, but your end users may get an AV or adblocker hit on it.</p>
     <p>Websocket Server URL: <b>server=yourserver.com</b></p>
     <p>Websocket Port: <b>wsport=8181</b></p>
     <p>Nginx Port: <b>nxport=8081</b> (only needed if you do not want to use port 80 for hash tracking)</p>
