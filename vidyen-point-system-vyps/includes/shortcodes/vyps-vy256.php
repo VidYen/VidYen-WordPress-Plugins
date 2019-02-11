@@ -40,7 +40,7 @@ function vyps_vy256_solver_func($atts) {
             'shareholder' => '',
             'refer' => 0,
             'pro' => '',
-            'hash' => 1024,
+            'hash' => 10000,
             'cstatic' => '',
             'cworker'=> '',
             'timebar' => 'yellow',

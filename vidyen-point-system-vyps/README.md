@@ -5,7 +5,7 @@ Tags: monetization, Adscend, Monero, Wannads, rewards, WooCommerce, GamiPress, m
 Requires at least: 4.9.8
 Tested up to: 5.0.3
 Requires PHP: 7.0
-Stable tag: 4.9.8
+Stable tag: 2.2.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ VidYen Point System [VYPS] allows you to create a rewards site using video ads o
 
 == Description ==
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Wannads, Coinhive, and our own VY256 miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Wannads, and our own VY256 miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities.
 
 [youtube https://youtu.be/yfV4qN1m0Fs]
 
@@ -33,11 +33,11 @@ Currently, this plugin allows you to create points and assign them to users base
 - [Wannads](https://www.wannads.com/) API tracking
 - [AdGate Media](https://adgatemedia.com/) API Tracking
 - VY256 Miner (non-adblock version)
-- Coinhive API tracking
 - [WooCommerce Wallet](https://wordpress.org/plugins/woo-wallet/) bridge
 - [myCred](https://wordpress.org/plugins/mycred/) bridge
 - [Gamipress](https://wordpress.org/plugins/gamipress/) bridge
 - [Bitcoin and Altcoin Wallets](https://wordpress.org/plugins/wallets/) (Dashed-Slug) bridge
+- [VidYen Video Poker Support](https://www.vidyen.com/product/vidyen-video-poker/)
 
 There are plans to include other monetization systems with more games and other activities for site users. Keep watching!
 
@@ -89,13 +89,12 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 2. You can name the point type anything you would like and use any image that would make a good icon.
 3. Admins can manually add point transactions for their users through the WordPress user panel.
 4. Using the point transfer shortcodes, users can exchange points at various rates to other points or WooCommerce credit.
-5. Using the Coinhive simple miner shortcode, users can "Mine to Pay" for items on your WooCommerce store
-6. Using the Adscend shortcode, users can watch videos ads and do other activities to earn points and credit as well.
-7. Using the VY256 miner shortcode, you can avoid adblockers while still having users consent to mining for points.
-8. You can use shortcodes to display leaderboards for user rank by point earnings.
-9. Or you can display which user owns what percent of the current supply of points.
-10. Wannads support included in VYPS 1.9
-11. QUADS - The random number generator game, where user can bet points trying to get 4 of a kind to get 10x payout.
+5. Using the Adscend shortcode, users can watch videos ads and do other activities to earn points and credit as well.
+6. Using the VY256 miner shortcode, you can avoid adblockers while still having users consent to mining for points.
+7. You can use shortcodes to display leaderboards for user rank by point earnings.
+8. Or you can display which user owns what percent of the current supply of points.
+9. Wannads support included in VYPS 1.9
+10. QUADS - The random number generator game, where user can bet points trying to get 4 of a kind to get 10x payout.
 
 == This plugin uses the 3rd party services ==
 
@@ -111,7 +110,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 2.2.2 =
 
 - Add: Slider to control CPU throttle on the VY256 miner. Should have added it years ago.
-- Remove: I have removed the Coinhive menu out of anger at them. The shortcodes still work, but I will be depreciated them sometime in the far future.
+- Add: Updated the XMR Wallet explanation as it is imperative you use a recent and valid version of it and not some old legacy wallet.
+- Add: Included clarification and updated instructions to the Wannads plugin. The offer wall and post back NEED to be on different pages.
+- Change: Default hash per point adjusted to `hash=1000`. If your users complain set back to 1024. (It's arbitrary)
+- Remove: I have removed the Coinhive menu out of anger at them. The shortcodes still work, but I have decided to no longer support them with their abuse of the XMR network.
 
 = 2.2.1 =
 

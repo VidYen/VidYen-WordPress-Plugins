@@ -9,11 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 $vidyen_vidhash_logo_url = plugins_url( 'images/vidyen-vidhash.png', dirname(__FILE__) );
 $vidyen_twitch_logo_url = plugins_url( 'images/vidyen-twitch.png', dirname(__FILE__) );
 $vidyen_monero_share_logo_url = plugins_url( 'images/vidyen-monero-share.png', dirname(__FILE__) );
+$vidyen_poker_game_logo_url = plugins_url( 'images/pokergame.png', dirname(__FILE__) );
 
 //Plugin URLS
 $vidyen_vidhash_plugin_url = 'https://wordpress.org/plugins/vidyen-vidhash/';
 $vidyen_twitch_plugin_url = 'https://wordpress.org/plugins/vidyen-twitch-player/';
 $vidyen_monero_share_plugin_url = 'https://wordpress.org/plugins/vidyen-monero-share/';
+$vidyen_video_poker_plugin_url = 'https://www.vidyen.com/product/vidyen-video-poker/';
 
 echo "
   <h1>Pro Version</h1>
@@ -41,6 +43,8 @@ echo '
       <td>VidYen Monero Share</td>
     </tr>
   </table>
+  <h2>Available for Purchase</h2>
+  <br><a href="' . $vidyen_video_poker_plugin_url . '" target= "_blank"><img src="' . $vidyen_poker_game_logo_url . '" ></a>
   ';
 
 echo '

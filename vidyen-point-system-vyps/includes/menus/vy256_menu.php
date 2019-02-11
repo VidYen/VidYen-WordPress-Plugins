@@ -30,6 +30,7 @@ function vyps_vy256_sub_menu_page()
   //NOTE It took me a while to realize, I needed the dirname()
   $VYPS_logo_url = plugins_url( 'images/logo.png', dirname(__FILE__) );
   $VYPS_worker_url = plugins_url( 'images/vyworker_small.gif', dirname(__FILE__) );
+  $mo_example_url = plugins_url( 'images/mo_example.png', dirname(__FILE__) );
 
 	echo '<br><br><img src="' . $VYPS_logo_url . '" > ';
   echo '<br><img src="' . $VYPS_worker_url . '" > ';
@@ -43,7 +44,8 @@ function vyps_vy256_sub_menu_page()
     <p>There is now a CPU control. It is not as precise as Coinhive, but it allows you to know use 100% by cranking it up to 6 (it’s possible to lock up your computer with two browsers open at 10, so I’m leaving a cap on it), or you can turn it to 0 to pause</p>
     <p><b>NOTE:</b> Hash updates sometimes come in waves as it has to go from your client’s browser to our stratum to the pool and then back each time.</p>
     <p>The benefit, however, is that this version does not require any account like Coinhive. AND as far as my testing goes, this version does not get blocked by uBLock or Brave. Also, Malwarebytes never complained in premium mode (unlike Coinhive). That alone makes the low CPU worth it, but we are working on getting the code better.</p>
-    <p>All you need is a viable Monero XMR wallet <a href="https://mymonero.com" target="_blank">MyMonero</a> and access to the <a href="https://moneroocean.stream/" target="_blank">MoneroOcean</a> pool, which only requires the XMR wallet to use.</p>
+    <p>All you need is an up to date Monero XMR wallet <a href="https://mymonero.com" target="_blank">MyMonero</a> and access to the <a href="https://moneroocean.stream/" target="_blank">MoneroOcean</a> pool, which only requires the XMR wallet to use.</p>
+    <p><b>NOTE:</b> You must use a wallet that is compatible with the latest fork of Monero. If you have a wallet older than October, 2018 you should create a new one for this purpose. There is a new fork planned on March 9th, but if you wallet is new then it should be ok as long as it is with a company who choses to follow fork.</p>
     <p>The payouts and monitoring are through MoneroOcean (not VidYen). As the project progresses, we plan to add other pools, but currently, every seems fine with MoneroOcean.</p>
     <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain, VidYen, LLC is against the removal or obfuscation of the user consent system.</p>
     <p>You should make users aware that this miner may drain their battery and use their electrcity in your consent disclaimer.</p>
@@ -58,9 +60,8 @@ function vyps_vy256_sub_menu_page()
     <p><b>[vyps-256 wallet=(required) pid=(required) throttle=(optional) site=(required)]</b></p>
     <p>This will display the simple miner after the button on the consent shortcode has been pressed.</p>
     <p>wallet: Your XMR wallet.</p>
-    <p>pool: The mining pool you wish to use. By default, it is moneroocean.stream. There will be a list of compatible pools at bottom of page.</p>
     <p>pid: The VYPS point ID found in the “VYPS Point List” of the point type you want to redeem to.</p>
-    <p>hash: Hashes by default redeemed for a 1024 hashes for 1 of your points. You can use the shortcode attribute hash= to set the has to any number above or below 1024.</p>
+    <p>hash: Hashes by default redeemed for a 10000 hashes for 1 of your points. You can use the shortcode attribute hash= to set the has to any number above or below 10000. This was originaly set to 1024, but the 10000 hash worked out better with new speeds and GUI.</p>
     <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices. Users can change this with the + or - buttons.</p>
     <p>throttle: The default is 50, which reduces CPU use by 50%, so they only use 50% for mining. I would also recommend leaving this set to 50 and allowing the user to increase it if they want to mine faster via the slider on the menu.</p>
     <p>timebar: The colored part of the top status bar. The default is timebar=yellow. As its CSS, it can be set to anything as such.</p>
@@ -108,7 +109,11 @@ function vyps_vy256_sub_menu_page()
     <h2>Notes about hash rates:</h2>
     <p>You may have to let your users know that because we use a true pool (unlike Coinhive) that the hash rates need time to spool up before Monero Ocean gets at fool power.</p>
     <p>Since the VY256 miner now uses Hashes Accepted and not hashes worked, users need to wait 60 to 120 seconds before being acknoledged as accepted.</p>
+    <p>And generally, if they let it run past 10 minutes it will go to maximum efficency. (I recently got up to 93 H/s on an i7 after 20 minutes at 6 threads and 80% cpu use on slider).</p>
+    <p>In theory, I could allow the use of more than 6 threads, but in testing it was easy to lock up my computer testing in multiple tabs so for now, I believe its a safe comprimise.</p>
+    <p>Because of the nature of the XMR network, hash rates do vary based on what random algo a block has decided to use. Other services such as Coinhive obfuscate this, but the idea is long term, not short term.</p>
     <p>You may want to create an instructions page and test this yourself.</p>
+    <br><img src="' . $mo_example_url . '" >
     <h2>Future plans.</h2>
     <p>We do have a goal to add more pools down the road, but for now, MoneroOcean works, and the developer of that pool is very responsive and fair.</p>
     <p>Felty has a goal to add MSR support because of its unique method of mining, but that will be down the road when it gets mining branches.</p>' .
