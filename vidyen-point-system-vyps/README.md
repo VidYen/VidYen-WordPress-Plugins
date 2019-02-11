@@ -112,7 +112,9 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: Slider to control CPU throttle on the VY256 miner. Should have added it years ago.
 - Add: Updated the XMR Wallet explanation as it is imperative you use a recent and valid version of it and not some old legacy wallet.
 - Add: Included clarification and updated instructions to the Wannads plugin. The offer wall and post back NEED to be on different pages.
+- Add: The usual round of undocumented features for short code options. Say, overriding max settings.
 - Change: Default hash per point adjusted to `hash=1000`. If your users complain set back to 1024. (It's arbitrary)
+- Change: Thread count no longer goes to 0 as you can set cpu to zero instead.
 - Remove: I have removed the Coinhive menu out of anger at them. The shortcodes still work, but I have decided to no longer support them with their abuse of the XMR network.
 
 = 2.2.1 =
