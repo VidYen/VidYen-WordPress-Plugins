@@ -30,7 +30,8 @@ function vyps_vy256_solver_func($atts) {
             'site' => 'default',
             'pid' => 0,
             'pool' => 'moneroocean.stream',
-            'threads' => '2',
+            'threads' => 2,
+            'maxthreads' => 6,
             'throttle' => 50,
             'password' => 'x',
             'server' => '', //This and the next three are used for custom servers if the end user wants to roll their own
@@ -71,6 +72,7 @@ function vyps_vy256_solver_func($atts) {
     //$mining_pool = $atts['pool'];
     $mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
     $sm_threads = $atts['threads'];
+    $max_threads = $atts['maxthreads'];
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
     $password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
@@ -660,14 +662,14 @@ function vyps_vy256_solver_func($atts) {
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
             $('.add').click(function () {
-                if($(this).prev().val() < 6){
+                if($(this).prev().val() < $max_threads ){
                       $(this).prev().val(+$(this).prev().val() + 1);
                       addWorker();
                       console.log(Object.keys(workers).length);
                 }
             });
             $('.sub').click(function () {
-                if ($(this).next().val() > 0){
+                if ($(this).next().val() > 1 ){
                     $(this).next().val(+$(this).next().val() - 1);
                       removeWorker();
                 }
