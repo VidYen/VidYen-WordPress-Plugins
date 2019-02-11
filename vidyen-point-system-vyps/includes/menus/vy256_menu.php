@@ -107,6 +107,8 @@ function vyps_vy256_sub_menu_page()
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
     <h2>Notes about hash rates:</h2>
+    <p><b>It may take 60-120 seconds before MoneroOceans reports accepted hashes!</b></p>
+    <p>Yes we could lie to you or your users, but generally it is bad form. This is an open system and involves several servers to avoid Adblockers and AV.</p>
     <p>You may have to let your users know that because we use a true pool (unlike Coinhive) that the hash rates need time to spool up before Monero Ocean gets at fool power.</p>
     <p>Since the VY256 miner now uses Hashes Accepted and not hashes worked, users need to wait 60 to 120 seconds before being acknoledged as accepted.</p>
     <p>And generally, if they let it run past 10 minutes it will go to maximum efficency. (I recently got up to 93 H/s on an i7 after 20 minutes at 6 threads and 80% cpu use on slider).</p>
