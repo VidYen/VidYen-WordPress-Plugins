@@ -21,7 +21,7 @@ echo "
   <h1>Pro Version</h1>
   <p>There is a pro plugin valid until 2020 available for purchase on the <a href=\"https://www.vidyen.com/product/vyps-pro-install/\" target=\"_blank\">VidYen</a> store. It will remove the VYPS branding on the monetization pages.</p>
   <p>NOTE: You can use VYPS to earn credit toward its purchase.</p>
-  <h2>PFor more development work, please check out  <a href=\"https://www.vidyen.com/vyps/\" target=\"_blank\">VidYen.com</a></h2>
+  <h2>For more development work, please check out  <a href=\"https://www.vidyen.com/\" target=\"_blank\">VidYen.com</a></h2>
   <p>Feel free to ping Felty on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a> if you have any immediate questions.</p>
   <h2>Other VidYen Plugins</h2>
   <br>";
@@ -45,6 +45,7 @@ echo '
   </table>
   <h2>Available for Purchase</h2>
   <br><a href="' . $vidyen_video_poker_plugin_url . '" target= "_blank"><img src="' . $vidyen_poker_game_logo_url . '" ></a>
+  <p>VidYen Video Poker</p>
   ';
 
 echo '
