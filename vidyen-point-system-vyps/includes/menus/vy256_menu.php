@@ -61,8 +61,8 @@ function vyps_vy256_sub_menu_page()
     <p>pool: The mining pool you wish to use. By default, it is moneroocean.stream. There will be a list of compatible pools at bottom of page.</p>
     <p>pid: The VYPS point ID found in the “VYPS Point List” of the point type you want to redeem to.</p>
     <p>hash: Hashes by default redeemed for a 1024 hashes for 1 of your points. You can use the shortcode attribute hash= to set the has to any number above or below 1024.</p>
-    <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices.</p>
-    <p>throttle: The default is 50, which reduces CPU use by 50%, so they only use 50% for mining. I would also recommend leaving this set to 50 and allowing the user to increase it if they want to mine faster via the simple miner GUI.</p>
+    <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices. Users can change this with the + or - buttons.</p>
+    <p>throttle: The default is 50, which reduces CPU use by 50%, so they only use 50% for mining. I would also recommend leaving this set to 50 and allowing the user to increase it if they want to mine faster via the slider on the menu.</p>
     <p>timebar: The colored part of the top status bar. The default is timebar=yellow. As its CSS, it can be set to anything as such.</p>
     <p>workerbar: The colored part of the bottom status bar. The default is workerbar=orange. As its CSS, it can be set to anything as such.</p>
     <p>timebartext: The colored part of the top text status bar. The default is timebartext=white. As its CSS, it can be set to anything as such.</p>
@@ -106,8 +106,9 @@ function vyps_vy256_sub_menu_page()
     <h2>Supported pool list:</h2>
     <p>moneroocean.stream</p>
     <h2>Notes about hash rates:</h2>
-    <p>FYI, hash rates, even with dedicated GPU miners, are never going to show evenly over time on the accepted hash page. There is the client side hash rate worked versus hashes accepted on the server side. MO uses PPNL, which is different from Coinhive, where Coinhive just increments your XMR payout for no rhyme or reason other than a one million hashes equals a certain amount of XMR.</p>
-    <p>There are many YouTube videos than can explain this, but just know that hash rates will vary over time, regardless of the steadiness of the miner. More processing power will, of course, means a general higher hash acceptance.</p>
+    <p>You may have to let your users know that because we use a true pool (unlike Coinhive) that the hash rates need time to spool up before Monero Ocean gets at fool power.</p>
+    <p>Since the VY256 miner now uses Hashes Accepted and not hashes worked, users need to wait 60 to 120 seconds before being acknoledged as accepted.</p>
+    <p>You may want to create an instructions page and test this yourself.</p>
     <h2>Future plans.</h2>
     <p>We do have a goal to add more pools down the road, but for now, MoneroOcean works, and the developer of that pool is very responsive and fair.</p>
     <p>Felty has a goal to add MSR support because of its unique method of mining, but that will be down the road when it gets mining branches.</p>' .
