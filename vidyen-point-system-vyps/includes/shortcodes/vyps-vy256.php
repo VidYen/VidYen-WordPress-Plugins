@@ -632,7 +632,7 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"pauseBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"pause-text\">$start_message_verbage</span></div></div>
         </div>
         <div id=\"timeProgress\" style=\"display:none;width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span><span id=\"pool_accept\"> Pool Accept[0]</span></div></div>
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span><span id=\"pool_accept\"> - Jobs Processed[0]</span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
           <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
