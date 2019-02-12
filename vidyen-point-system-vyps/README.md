@@ -107,6 +107,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.2.3 =
+
+- Fix: jQuery bug broke threads on certain servers. I would recommend updating to this hot fix.
+
 = 2.2.2 =
 
 - Add: Slider to control CPU throttle on the VY256 miner. Should have added it years ago.
