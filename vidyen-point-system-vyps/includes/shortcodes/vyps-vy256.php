@@ -642,7 +642,7 @@ function vyps_vy256_solver_func($atts) {
       <tr>
         <td>
           <div class=\"slidecontainer\">
-            <p>CPU Use: <span id=\"cpu_stat\"></span>%</p>
+            <p>CPU Power: <span id=\"cpu_stat\"></span>%</p>
             <input type=\"range\" min=\"0\" max=\"100\" value=\"$sm_throttle\" class=\"slider\" id=\"cpuRange\">
           </div>
         </td>
