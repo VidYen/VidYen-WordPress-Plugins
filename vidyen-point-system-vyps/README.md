@@ -107,6 +107,14 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.2.4 =
+
+- Note: Had issues with both VidYen Twitch and Vidhash, you will need to upgrade both of those to 1.1.1
+- Fix: Fixed a lot of VY256 miner issues and updated code to be compatible with various themes.
+- Fix: Resolved the thread issues which would often display incorrectly and now show true thread use.
+- Add: Added a message display that was happening in console that lets your user know miner is doing something before report of hashes from MoneroOcean.
+
+
 = 2.2.3 =
 
 - Fix: jQuery bug broke threads on certain servers. I would recommend updating to this hot fix.
