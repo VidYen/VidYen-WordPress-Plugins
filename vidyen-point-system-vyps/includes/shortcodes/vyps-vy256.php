@@ -521,6 +521,8 @@ function vyps_vy256_solver_func($atts) {
 
             throttleMiner = $sm_throttle;
 
+            activity_hashes = 0;
+
             function start() {
 
               //Start the MO pull
@@ -537,8 +539,6 @@ function vyps_vy256_solver_func($atts) {
               document.getElementById(\"thread_manage\").style.display = 'block'; // disable button
               document.getElementById(\"stop\").style.display = 'block'; // disable button
               document.getElementById(\"mining\").style.display = 'block'; // disable button
-              document.getElementById(\"add\").disabled = false;
-              document.getElementById(\"sub\").disabled = false;
 
               /* start mining, use a local server */
               server = \"wss://$used_server:$used_port\";
@@ -553,6 +553,9 @@ function vyps_vy256_solver_func($atts) {
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
                 document.getElementById('status-text').innerText = 'Working.';
               }, 2000);
+
+              //Order of operations issue. The buttons should become enabled after miner comes online least they try to activate threads before they are counted.
+              document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
             }
 
             function stop(){
@@ -586,14 +589,20 @@ function vyps_vy256_solver_func($atts) {
               if (obj.identifier === \"job\")
               {
                 console.log(\"new job: \" + obj.job_id);
+                activity_hashes = activity_hashes + 1;
+                console.log(activity_hashes);
               }
               else if (obj.identifier === \"solved\")
               {
                 console.log(\"solved job: \" + obj.job_id);
+                activity_hashes = activity_hashes + 1;
+                console.log(activity_hashes);
               }
               else if (obj.identifier === \"hashsolved\")
               {
                 console.log(\"pool accepted hash!\");
+                activity_hashes = activity_hashes + 1;
+                console.log(activity_hashes);
               }
               else if (obj.identifier === \"error\")
               {
@@ -623,18 +632,17 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"pauseBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"pause-text\">$start_message_verbage</span></div></div>
         </div>
         <div id=\"timeProgress\" style=\"display:none;width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span><span id=\"pool_accept\"> Pool Accept[0]</span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
           <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
         </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
-          <span>Threads:&nbsp;</span><span style=\"display:inline;text-align:center\" id=\"thread_count\">$sm_threads</span>
+          Threads:&nbsp;<span style=\"display:inline;\" id=\"thread_count\">0</span>
           <button type=\"button\" id=\"add\" style=\"display:inline;position:absolute;right:50px;\" class=\"add\" disabled>+</button>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
-            <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
             <!--<input type=\"submit\" class=\"button-secondary\" value=\"$redeem_btn_text Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
           </form>
         </div>
@@ -660,23 +668,21 @@ function vyps_vy256_solver_func($atts) {
       </script>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
-            var current_threads = $sm_threads;
-
               jQuery('.add').click(function () {
-                  if( current_threads < $max_threads ){
-                        addWorker();
-                        current_threads = current_threads + 1;
-                        document.getElementById('thread_count').innerHTML = current_threads;
-                        console.log(Object.keys(workers).length);
-                  }
+                if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
+                {
+                  addWorker();
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+                  console.log(Object.keys(workers).length);
+                }
               });
               jQuery('.sub').click(function () {
-                  if( current_threads > 1 ){
-                        removeWorker();
-                        current_threads = current_threads - 1;
-                        document.getElementById('thread_count').innerHTML = current_threads;
-                        console.log(Object.keys(workers).length);
-                  }
+                if( Object.keys(workers).length > 1)
+                {
+                  removeWorker();
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+                  console.log(Object.keys(workers).length);
+                }
               });
             </script>
         </td></tr>";
@@ -684,6 +690,13 @@ function vyps_vy256_solver_func($atts) {
         //MO ajax js to put add.
         $mo_ajax_html_output = "
           <script>
+            var progresspoints = 0; //Global needed for something else
+            var activity_progresspoints = 0;
+            var totalpoints = 0;
+            var progresswidth = 0;
+            var totalhashes = 0;
+            var elemworkerbar = document.getElementById(\"workerBar\");
+
             function pull_mo_stats()
             {
               jQuery(document).ready(function($) {
@@ -695,20 +708,22 @@ function vyps_vy256_solver_func($atts) {
                // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
                jQuery.post(ajaxurl, data, function(response) {
                  output_response = JSON.parse(response);
-                 //Progressbar
-                 var totalpoints = 0;
-                 var progresspoints = 0;
-                 var width = 0;
-                 var totalhashes = parseFloat(output_response.site_hashes);
-                 var elem = document.getElementById(\"workerBar\");
+                 //Progressbar for MO Pull
+                 totalhashes = parseFloat(output_response.site_hashes);
                  progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( totalhashes / $hash_per_point );
                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                  document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
-                 width = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
-                 elem.style.width = width + '%';
+                 progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
+                 elemworkerbar.style.width = progresswidth + '%';
                });
               });
+            }
+
+            //This shows activity prediction. Should not give over prediction results
+            function poolAccept()
+            {
+              document.getElementById('pool_accept').innerHTML = ' - Jobs Processed[' + activity_hashes + ']';
             }
 
             //Refresh the MO
@@ -729,6 +744,13 @@ function vyps_vy256_solver_func($atts) {
                 else
                 {
                   ajaxTime++;
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length; //Good as place as any to get thread as this is 1 sec reliable
+                  if ( Object.keys(workers).length > 1)
+                  {
+                    document.getElementById(\"add\").disabled = false; //enable the + button
+                    document.getElementById(\"sub\").disabled = false; //enable the - button
+                  }
+                  poolAccept(); //Run this every second
                 }
               }
             }
@@ -751,6 +773,13 @@ function vyps_vy256_solver_func($atts) {
                 else
                 {
                   ajaxTime++;
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length; //Good as place as any.
+                  if ( Object.keys(workers).length > 1)
+                  {
+                    document.getElementById(\"add\").disabled = false; //enable the + button
+                    document.getElementById(\"sub\").disabled = false; //enable the - button
+                  }
+                  poolAccept(); //Run this every second
                 }
               }
             }
