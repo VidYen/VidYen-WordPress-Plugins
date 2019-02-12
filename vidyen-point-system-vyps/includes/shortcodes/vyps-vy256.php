@@ -629,10 +629,9 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
         </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
-            Threads:&nbsp;
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
-          <input style=\"display:inline;width:42%;\" type=\"text\" id=\"1\" value=\"$sm_threads\" disabled class=field>
-          <button type=\"button\" id=\"add\" style=\"display:inline;\" class=\"add\" disabled>+</button>
+          <span>Threads:&nbsp;</span><span style=\"display:inline;text-align:center\" id=\"thread_count\">$sm_threads</span>
+          <button type=\"button\" id=\"add\" style=\"display:inline;position:absolute;right:50px;\" class=\"add\" disabled>+</button>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
             <input type=\"hidden\" value=\"\" name=\"hash_amount\"/>
@@ -661,19 +660,24 @@ function vyps_vy256_solver_func($atts) {
       </script>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
-            jQuery('.add').click(function () {
-                if($(this).prev().val() < $max_threads ){
-                      $(this).prev().val(+$(this).prev().val() + 1);
-                      addWorker();
-                      console.log(Object.keys(workers).length);
-                }
-            });
-            jQuery('.sub').click(function () {
-                if ($(this).next().val() > 1 ){
-                    $(this).next().val(+$(this).next().val() - 1);
-                      removeWorker();
-                }
-            });
+            var current_threads = $sm_threads;
+
+              jQuery('.add').click(function () {
+                  if( current_threads < $max_threads ){
+                        addWorker();
+                        current_threads = current_threads + 1;
+                        document.getElementById('thread_count').innerHTML = current_threads;
+                        console.log(Object.keys(workers).length);
+                  }
+              });
+              jQuery('.sub').click(function () {
+                  if( current_threads > 1 ){
+                        removeWorker();
+                        current_threads = current_threads - 1;
+                        document.getElementById('thread_count').innerHTML = current_threads;
+                        console.log(Object.keys(workers).length);
+                  }
+              });
             </script>
         </td></tr>";
 
