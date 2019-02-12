@@ -661,14 +661,14 @@ function vyps_vy256_solver_func($atts) {
       </script>
           <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
           <script>
-            $('.add').click(function () {
+            jQuery('.add').click(function () {
                 if($(this).prev().val() < $max_threads ){
                       $(this).prev().val(+$(this).prev().val() + 1);
                       addWorker();
                       console.log(Object.keys(workers).length);
                 }
             });
-            $('.sub').click(function () {
+            jQuery('.sub').click(function () {
                 if ($(this).next().val() > 1 ){
                     $(this).next().val(+$(this).next().val() - 1);
                       removeWorker();
