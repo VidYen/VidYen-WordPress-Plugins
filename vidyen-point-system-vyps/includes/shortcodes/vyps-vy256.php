@@ -540,6 +540,8 @@ function vyps_vy256_solver_func($atts) {
               document.getElementById(\"stop\").style.display = 'block'; // disable button
               document.getElementById(\"mining\").style.display = 'block'; // disable button
 
+              document.getElementById('status-text').innerText = 'Working.'; //set to working
+
               /* start mining, use a local server */
               server = \"wss://$used_server:$used_port\";
               startMining(\"$mining_pool\",
@@ -551,7 +553,6 @@ function vyps_vy256_solver_func($atts) {
                 // for the definition of sendStack/receiveStack, see miner.js
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
-                document.getElementById('status-text').innerText = 'Working.';
               }, 2000);
 
               //Order of operations issue. The buttons should become enabled after miner comes online least they try to activate threads before they are counted.
@@ -589,24 +590,25 @@ function vyps_vy256_solver_func($atts) {
               if (obj.identifier === \"job\")
               {
                 console.log(\"new job: \" + obj.job_id);
-                activity_hashes = activity_hashes + 1;
-                console.log(activity_hashes);
+                document.getElementById('status-text').innerText = 'New job.';
+                setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"solved\")
               {
                 console.log(\"solved job: \" + obj.job_id);
-                activity_hashes = activity_hashes + 1;
-                console.log(activity_hashes);
+                document.getElementById('status-text').innerText = 'Finished job.';
+                setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"hashsolved\")
               {
                 console.log(\"pool accepted hash!\");
-                activity_hashes = activity_hashes + 1;
-                console.log(activity_hashes);
+                document.getElementById('status-text').innerText = 'Pool accepted job.';
+                setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"error\")
               {
                 console.log(\"error: \" + obj.param);
+                document.getElementById('status-text').innerText = 'Error.';
               }
               else
               {
@@ -632,7 +634,7 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"pauseBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"pause-text\">$start_message_verbage</span></div></div>
         </div>
         <div id=\"timeProgress\" style=\"display:none;width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span><span id=\"pool_accept\"> - Jobs Processed[0]</span></div></div>
+          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
           <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
@@ -720,12 +722,6 @@ function vyps_vy256_solver_func($atts) {
               });
             }
 
-            //This shows activity prediction. Should not give over prediction results
-            function poolAccept()
-            {
-              document.getElementById('pool_accept').innerHTML = ' - Jobs Processed[' + activity_hashes + ']';
-            }
-
             //Refresh the MO
             function moAjaxTimerPrimus()
             {
@@ -750,7 +746,6 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
-                  poolAccept(); //Run this every second
                 }
               }
             }
@@ -779,7 +774,6 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
-                  poolAccept(); //Run this every second
                 }
               }
             }
