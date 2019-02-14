@@ -3,7 +3,7 @@ Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
 Tags: monetization, Adscend, Monero, Wannads, rewards, WooCommerce, GamiPress, myCred, mining, crypto, Bitcoin, credit, wallet
 Requires at least: 4.9.8
-Tested up to: 5.0.3
+Tested up to: 5.1.0
 Requires PHP: 7.0
 Stable tag: 2.2.0
 License: GPLv2
@@ -109,8 +109,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.2.5 =
 
-- Add: Created login option for ProfileGrid to make it easier for my own test site in login awareness. `vyps-pg-lg`
-- Fix: Changed a few function names that were short that may interfere with some other plugin I do no know about. 
+- Add: Created login option for ProfileGrid to make it easier for my own test site in login awareness. `[vyps-pg-lg]`
+- Add: Also made login option to show image while not loged in. `[vyps-lg-img url=https://vidyen.com/imgage/image.png]`
+- Fix: Changed a few function names that were short that may interfere with some other plugin I do no know about.
+- Change: `[vyps-pe]` will default to `mobile=TRUE` so this may change your site look, but got too many complaints about mobile use and not reading the instructions. Change to `mobile=FALSE` to get legacy.
 
 = 2.2.4 =
 
