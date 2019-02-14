@@ -339,6 +339,8 @@ function vyps_vy256_solver_func($atts) {
         $public_remote_url = $server_name[0][0]; //Defaults for one server.
         $used_server = $server_name[0][0];
         $used_port = $server_name[0][1];
+
+        //webminer.moneroocean.stream:443 is the placeholder
       }
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
