@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads, offer walls, or browser mining.
-Version:      2.2.4
+Version:      2.2.5
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -28,28 +28,27 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //Ok. I'm adding a custom fuction to the VYPS plugin. It's put on pages where, you just want to straight kick people out if they aren't admins.
 //Similar to the login check, but the admins. This will put put on all pages that only admins should be able to see but not the shortcodes results.
 
-function VYPS_check_if_true_admin(){
-
+function VYPS_check_if_true_admin()
+{
 	//I'm going to be a little lenient and if you can edit users maybe you should be able to edit their point since you can just
 	//Change roles at that point. May reconsider.
-	if( current_user_can('install_plugin') OR current_user_can('edit_users') ){
-
+	if( current_user_can('install_plugin') OR current_user_can('edit_users') )
+	{
 		//echo "You good!"; //Debugging
 		return;
-
-	} else {
-
+	}
+	else
+	{
 		echo "<br><br>You need true administrator rights to see this page!"; //Debugging
 		exit; //Might be a better solution to iform before exit like an echo before hand, but well....
 	}
-
 }
 
 register_activation_hook(__FILE__, 'vyps_points_install');
 
 //Install the SQL tables for VYPS.
-function vyps_points_install() {
-
+function vyps_points_install()
+{
     global $wpdb;
 
 		//I have no clue why this is needed. I should learn, but I wasn't the original author. -Felty
@@ -254,7 +253,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_tbl.php'); //
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_2in.php'); //Point Transfer with two inputs.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspe.php'); //Point Exchange is going to depreciate all earlier versions of Point Transfer
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypslg.php'); //You are not logged in blank shortcode.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-login.php'); //You are not logged in blank shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the CH in.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-adscend.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads.php'); //Adding Wannads support. Not the naming convention change.

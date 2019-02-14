@@ -107,6 +107,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.2.5 =
+
+- Add: Created login option for ProfileGrid to make it easier for my own test site in login awareness. `vyps-pg-lg`
+- Fix: Changed a few function names that were short that may interfere with some other plugin I do no know about. 
+
 = 2.2.4 =
 
 - Note: Had issues with both VidYen Twitch and Vidhash, you will need to upgrade both of those to 1.1.1
