@@ -123,6 +123,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Fix: Fixed a lot of VY256 miner issues and updated code to be compatible with various themes.
 - Fix: Resolved the thread issues which would often display incorrectly and now show true thread use.
 - Add: Added a message display that was happening in console that lets your user know miner is doing something before report of hashes from MoneroOcean.
+- Fix: Resolved issue with custom webminerpool server resulting in index error.
 
 
 = 2.2.3 =
