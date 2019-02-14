@@ -39,7 +39,7 @@ function vyps_point_exchange_func( $atts ) {
         'fee' => 0,
         'comment' => '',
         'skip_confirm' => true,
-        'mobile' => false,
+        'mobile' => TRUE,
         'woowallet' => false,
         'mycred' => false,
         'mycred_reason' => 'VYPS Transfer',
