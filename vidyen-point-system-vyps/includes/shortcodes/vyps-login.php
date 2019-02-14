@@ -61,13 +61,12 @@ add_shortcode( 'vyps-lg-img', 'vyps_login_img_func');
 function vyps_profilegrid_login_func()
 {
 	//Only works if user is not logged in and profilegrid is  installed.... Hrm... just realized they use profiile magic and didn't chagne functions... lol
-	//I think this function will pick up
-	if ( !is_user_logged_in() AND function_exists('profile_magic_registration_form') )
+	//NOTE: Was having some problems seeing which function could tell if ProfileGrid was installed so I am going to assume if you use this shortcode you know its installed.
+	if ( !is_user_logged_in() )
 	{
 		$content = '[PM_Login]';
 
-		return do_shortcode($content);
-		//return ”;
+		return do_shortcode($content);		
 	}
 }
 
