@@ -48,6 +48,7 @@ function vyps_point_exchange_func( $atts ) {
         'transfer' => false,
         'btn_name' => '',
         'reason' => 'Point Exchange',
+        'auto' => FALSE,
 		), $atts, 'vyps-pe' );
 
   //Check if user is logged in and stop the code.
@@ -96,6 +97,9 @@ function vyps_point_exchange_func( $atts ) {
 
   //Mobile view variable pass
   $mobile_view = $atts['mobile'];
+
+  //Automode check
+  $auto_mode = $atts['auto'];
 
   //WooWallet Check
   $woowallet_mode = $atts['woowallet'];
@@ -321,8 +325,8 @@ function vyps_point_exchange_func( $atts ) {
 
 	}
 
-	if (isset($_POST[ $btn_name ])){
-
+	if (isset($_POST[ $btn_name ]) OR $auto_mode == TRUE ) //I'm 90% sure that this will work with automode. As the idea was that we needed to know which button to press, but if its auto it means it loads every time the page is loaded.
+  {
 		//Code check.
 		//First things first. Make sure they have enough damn points to transfer.
 		$table_name_log = $wpdb->prefix . 'vyps_points_log';
@@ -640,7 +644,7 @@ function vyps_point_exchange_func( $atts ) {
           <tr>
           <tr><!-- Second input -->
             <td><div align=\"center\">Spend</div></td>
-            <td>$s_sourceIcon $format_pt_sAmount</div></td>
+            <td><div align=\"center\">$s_sourceIcon $format_pt_sAmount</div></td>
           </tr>
           <tr> <!-- Output -->
             <td><div align=\"center\">Receive</div></td>
