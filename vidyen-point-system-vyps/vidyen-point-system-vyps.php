@@ -251,7 +251,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsbc_ww.php'); //B
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt.php'); //Point Transfer shorcode raw format. Maybe should rename to vypspt_raw.php
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_tbl.php'); //Point Transfer Table code. One day. I'm goign to retire PT, but admins might need it.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_2in.php'); //Point Transfer with two inputs.
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspe.php'); //Point Exchange is going to depreciate all earlier versions of Point Transfer
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-point-exchange.php'); //Point Exchange is going to depreciate all earlier versions of Point Transfer
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-login.php'); //You are not logged in blank shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the CH in.
