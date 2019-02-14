@@ -139,27 +139,6 @@ function vyps_vy256_solver_func($atts) {
     $custom_server_ws_port = $atts['wsport'];
     $custom_server_nx_port = $atts['nxport'];
 
-    //OK going to do a shuffle of servers to pick one at random from top.
-    if(empty($custom_server))
-    {
-      $server_random_pick = mt_rand(0,2); //not sure if this is needed?
-
-      $server_name = array(
-            array('vesalius.vy256.com', '8443'), //0,0 0,1
-            array('daidem.vidhash.com', '8443'), //1,0 1,1
-            array('clarion.vidhash.com', '8184'), //her own
-            array('savona.vy256.com', '8183'), //2,0 2,1
-      );
-
-      shuffle($server_name);
-    }
-    else //Going to allow for custom servers is admin wants. No need for redudance as its on them.
-    {
-      $server_name = array(
-          array($custom_server, $custom_server_ws_port), //0,0 0,1
-      );
-    }
-
     //Here we set the arrays of possible graphics. Eventually this will be a slew of graphis. Maybe holidy day stuff even.
     $graphic_list = array(
           '0' => 'vyworker_blank.gif',
@@ -299,38 +278,67 @@ function vyps_vy256_solver_func($atts) {
       $server_fail = 0; //Going into this we should have 0 server fails until we tested
       //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
       //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
-      for ($x_for_count = 0; $x_for_count < 4; $x_for_count = $x_for_count + 1 ) //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
-      {
-        $remote_url = "http://" . $server_name[$x_for_count][0] ."/?userid=" . $miner_id;
-        $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
-        $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
 
-        if(array_key_exists('headers', $remote_response))
+      //OK going to do a shuffle of servers to pick one at random from top.
+      if(empty($custom_server))
+      {
+        $server_random_pick = mt_rand(0,2); //not sure if this is needed?
+
+        $server_name = array(
+              array('vesalius.vy256.com', '8443'), //0,0 0,1
+              array('daidem.vidhash.com', '8443'), //1,0 1,1
+              array('clarion.vidhash.com', '8184'), //her own
+              array('savona.vy256.com', '8183'), //2,0 2,1
+        );
+
+        shuffle($server_name);
+
+        //Moving server up check here
+        for ($x_for_count = 0; $x_for_count < 4; $x_for_count = $x_for_count + 1 ) //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
         {
-            //Checking to see if the response is a number. If not, probaly something from cloudflare or ngix messing up. As is a loop should just kick out unless its the error round.
-            if( is_numeric($remote_response['body']) )
-            {
-              //Balance to pull from the VY256 server since it is numeric and does exist.
-              //$balance =  intval($remote_response['body'] / $hash_per_point); //Commenting out since we not getting hashes from here anymore.
-              $used_server = $server_name[$x_for_count][0];
-              $used_port = $server_name[$x_for_count][1];
-              $x_for_count = 5; //Well. Need to escape out.
-            }
-            else
-            {
-              $server_fail = $server_fail + 1; //So if we got a response but it wasn't numeric. Bad gateway
-            }
+          $remote_url = "http://" . $server_name[$x_for_count][0] ."/?userid=" . $miner_id;
+          $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
+          $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
+
+          if(array_key_exists('headers', $remote_response))
+          {
+              //Checking to see if the response is a number. If not, probaly something from cloudflare or ngix messing up. As is a loop should just kick out unless its the error round.
+              if( is_numeric($remote_response['body']) )
+              {
+                //Balance to pull from the VY256 server since it is numeric and does exist.
+                //$balance =  intval($remote_response['body'] / $hash_per_point); //Commenting out since we not getting hashes from here anymore.
+                $used_server = $server_name[$x_for_count][0];
+                $used_port = $server_name[$x_for_count][1];
+                $x_for_count = 5; //Well. Need to escape out.
+              }
+              else
+              {
+                $server_fail = $server_fail + 1; //So if we got a response but it wasn't numeric. Bad gateway
+              }
+          }
+          else
+          {
+              $server_fail = $server_fail + 1; //We didn't get a response at all. Server failure +1.
+          }
         }
-        else
+
+        if ( $server_fail >= 4)
         {
-            $server_fail = $server_fail + 1; //We didn't get a response at all. Server failure +1.
+            //The last server will be error which means it tried all the servers.
+            return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
         }
+
+
       }
-
-      if ( $server_fail >= 4)
+      else //Going to allow for custom servers is admin wants. No need for redudance as its on them.
       {
-          //The last server will be error which means it tried all the servers.
-          return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
+        $server_name = array(
+            array($custom_server, $custom_server_ws_port), //0,0 0,1
+        );
+
+        $public_remote_url = $server_name[0][0]; //Defaults for one server.
+        $used_server = $server_name[0][0];
+        $used_port = $server_name[0][1];
       }
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
