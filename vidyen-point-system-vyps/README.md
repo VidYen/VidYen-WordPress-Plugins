@@ -153,6 +153,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: Dynamic server balancing keeping option to run own webminer pool server.
 - Add: Prep to allow different pools.
 - Fix: Made Ajax URL names unique to not interfere with other plugins.
+- Fix: You can reliably use `server=webminer.moneroocean.stream wsport=443` as a backup now. I would not recommend as default as MO is blocked on many routers, antivirus, and adblockers. Again, you can run your own server if you want or find someone not blocked.
 
 = 2.1.0 =
 
