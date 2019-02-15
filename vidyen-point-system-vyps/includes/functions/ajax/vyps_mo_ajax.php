@@ -41,11 +41,22 @@ function vyps_mo_api_action()
       $site_total_hashes = floatval($site_mo_response['totalHash']); //I'm removing the number format as we need the raw data.
       $site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
       $site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
+
+      $_SESSION['attention_total'] = 0; //Do not want to over count if they refresh page.
     }
     else
     {
       $site_hash_per_second = '';
       $site_total_hashes = 0;
+
+      //NOTE if we got an array but not data MO talked to us. which means I guess ok to do the following:
+      //Side notes 30 should be reasonable without messing up. Once they get to actual hashes people be less antsy
+      if(isset($_SESSION['attention']))
+      {
+        $_SESSION['attention_total'] = $_SESSION['attention_total'] + $_SESSION['attention'];
+
+        $site_total_hashes = $_SESSION['attention_total'];
+      }
     }
   }
 

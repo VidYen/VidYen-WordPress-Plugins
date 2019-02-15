@@ -53,15 +53,15 @@ function vyps_vy256_solver_func($atts) {
             'debug' => FALSE,
             'twitch' => FALSE,
             'youtube' => FALSE,
+            'attention' => 0, //points to give to keep people from being attention deficiet. You should set to 30 as 1 H/s is the most unreasable i can think of
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
     //In theory they still need to consent, but no Coinhive code will be displayed
     //until the site admin fixes it. I suppose in theory one could set a negative number -Felty
-    if ($atts['pid'] == 0){
-
+    if ($atts['pid'] == 0)
+    {
         return "ADMIN ERROR: Point ID not set!";
-
     }
 
     //NOTE: Where we are going we don't need $wpdb
@@ -209,6 +209,26 @@ function vyps_vy256_solver_func($atts) {
     {
 
       global $wpdb;
+
+      //Some global sessions settings
+      if ($atts['attention'] > 0)
+      {
+        $_SESSION['attention'] = $atts['attention']; //This becomes a global for the session
+      }
+      else
+      {
+        $_SESSION['attention'] = 0; //Setting to zero
+      }
+
+      //NOTE: THis is where the attention total is set if not set to keep an error from throwing. $_SESSION['attention_total'] = ; //This is balance
+      if(!isset($_SESSION['attention_total']))
+      {
+        $_SESSION['attention_total'] = 0; //If it isn't set, then we define it. else its set in MO ajax
+      }
+      else
+      {
+          //NOTE: I'm debating on if putting an atention total reset if greater than the hash since its a known, but it should reset when the MO gets a sucessful pull.
+      }
 
       //It is a bit of some SQL reads. Not writes so its not terrible, but unless its needed let's not run the function. If the shareholder is set to 1 or more it should fire
       if ( $share_holder_status > 0 )
