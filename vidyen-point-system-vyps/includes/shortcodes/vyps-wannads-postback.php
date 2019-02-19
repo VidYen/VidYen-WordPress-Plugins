@@ -39,7 +39,7 @@ function vyps_wannads_postback_func( $atts )
 
 	if (vyps_wannads_pro_check_func() <> 1 )
 	{
-		return 'Referral code not setup or need Wannads Pro version installed for Post Back feature. Please see <a href="https://vidyen.com/wannads-install/">VidYen Store</a> for options.';
+		return 'Referral code not setup or need Wannads Pro version installed for Post Back feature. Please see <a href="https://www.vidyen.com/product/wannads-postback-plugin/">VidYen Store</a> for options. (It is free!)';
 	}
 
 	$round_direction_decision = $atts['round']; //By default this is default, which just takes the direction its closest too.
