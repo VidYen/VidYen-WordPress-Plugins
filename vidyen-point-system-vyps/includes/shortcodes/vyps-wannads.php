@@ -19,7 +19,7 @@ function vyps_wannads_func( $atts )
 			'to_user_id' => 0,
 			'comment' => '',
 			'reason' => 'Wannads',
-			'btn_name' => '',
+			'vyps_meta_id' => '',
 		), $atts, 'vyps-wannads' );
 
 

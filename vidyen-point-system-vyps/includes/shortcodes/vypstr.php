@@ -64,7 +64,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 	$format_pt_dAmount = number_format($pt_dAmount);
 
 	//Legacy method used for created game id, not the post button.
-	$btn_name = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
+	$vyps_meta_id = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
 
 	//Mobile view variable pass
 	$mobile_view = $atts['mobile'];
@@ -151,8 +151,8 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 	//Ok we need to check to see if there is a raffle game going on and if it is then keep on going
 	//This is just a hunch about the order of santization.
-	$btn_name = sanitize_text_field($btn_name);
-	$game_id = $btn_name; //see what I did there? raffles will be idenitfied by the same meta as the button name to keep each shortcode unique (unless got two doing the same? which would be dumb)
+	$vyps_meta_id = sanitize_text_field($vyps_meta_id);
+	$game_id = $vyps_meta_id; //see what I did there? raffles will be idenitfied by the same meta as the button name to keep each shortcode unique (unless got two doing the same? which would be dumb)
 	//$game_id = sanitize_text_field($game_id); //I believe shortcodes have some sort of santization built in, but easier to do this than research that
 
 	//return $game_id; //debug. What does this show?
@@ -203,11 +203,11 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 	}
 
-	$post_btn_name = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
+	$post_vyps_meta_id = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
 
 	//return $game_id_count; //debug
 
-	if (isset($_POST[ $post_btn_name ])){
+	if (isset($_POST[ $post_vyps_meta_id ])){
 
 		//Nothing really happens other than making sure is set.
 
@@ -231,14 +231,14 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 		//NOTE: Here is the catch. If the post is not pushed. Then this return will fire. Kicks us out. And no operations will happen.
 		//If I had to do this over again, I would have used the new PE method with return at the end.
-		return "<table id=\"$post_btn_name\">
+		return "<table id=\"$post_vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Ticket Price</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$post_btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$post_vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Buy\" onclick=\"return confirm('You are about to by 1 ticket for $format_pt_sAmount $sourceName for a chance to win $pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -250,7 +250,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 						<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
 					</tr>
 				</table>";
-					//<br><br>$post_btn_name";	//Debug: I'm curious what it looks like.
+					//<br><br>$post_vyps_meta_id";	//Debug: I'm curious what it looks like.
 	}
 
 
@@ -274,14 +274,14 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 		$results_message = "Not enough " . $sourceName . " to buy a ticket! You need " . $need_points . " more.";
 
-		return "<table id=\"$post_btn_name\">
+		return "<table id=\"$post_vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Ticket Price</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$post_btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$post_vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Buy\" onclick=\"return confirm('You are about to by 1 ticket for $format_pt_sAmount $sourceName for a chance to win $pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -428,14 +428,14 @@ function vyps_point_threshold_raffle_func( $atts ) {
 
 	}
 
-	return "<table id=\"$post_btn_name\">
+	return "<table id=\"$post_vyps_meta_id\">
 				<tr>
 					<td><div align=\"center\">Ticket Price</div></td>
 					<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 					<td>
 						<div align=\"center\">
 							<b><form method=\"post\">
-								<input type=\"hidden\" value=\"\" name=\"$post_btn_name\"/>
+								<input type=\"hidden\" value=\"\" name=\"$post_vyps_meta_id\"/>
 								<input type=\"submit\" class=\"button-secondary\" value=\"Buy\" onclick=\"return confirm('You are about to by 1 ticket for $format_pt_sAmount $sourceName for a chance to win $pt_dAmount $destName. Are you sure?');\" />
 							</form></b>
 						</div>
@@ -449,7 +449,7 @@ function vyps_point_threshold_raffle_func( $atts ) {
 			</table>";
 
 			/* since I have the point names I might as well use them. Also I put it below because its annoying to have button move. */
-			//<br><br>$post_btn_name"; //Debug stuff
+			//<br><br>$post_vyps_meta_id"; //Debug stuff
 
 
 }

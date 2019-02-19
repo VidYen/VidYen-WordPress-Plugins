@@ -26,7 +26,7 @@ function vyps_wannads_postback_func( $atts )
 				'to_user_id' => 0,
 				'comment' => '',
 				'reason' => 'Wannads',
-				'btn_name' => '',
+				'vyps_meta_id' => '',
 				'round' => 'default',
 				'pro'=> FALSE,
 		), $atts, 'vyps-wannads' );
@@ -116,10 +116,10 @@ function vyps_wannads_postback_func( $atts )
 	$atts['to_user_id'] = $userId_sanitized; //In theory you could set this in shortcode itself but I have no idea why other than debugging. Well that is good enough.
 	$atts['outputamount'] = $points_sanitized; //The int of the points.
 	$meta_id_pull = 'wannads'  . $userId_sanitized . $transactionId_sanitized; //the meta_id will be wannads with userid plus the transaction id. To see if its unique.
-	$atts['btn_name'] = $meta_id_pull; //Need to one day make it a better name. But for now... The Button name for the transaction will be inlucded this way. Perhaps a find and replace of btn_name to meta_id or something for gets and posted etc etc
+	$atts['vyps_meta_id'] = $meta_id_pull; //Need to one day make it a better name. But for now... The Button name for the transaction will be inlucded this way. Perhaps a find and replace of vyps_meta_id to meta_id or something for gets and posted etc etc
 
 	//NOTE: I am about to rage here. This is why postbacks are crap and always will be crap. Why would they be post back crap that is dupblicate. I dunno. This is abusive to the admins server.
-	//Anyways... I'll just use the btn_name for the metaId... check if meta id is same and then if it is. Anyways, hopefully this is a good solution to a bad implementation
+	//Anyways... I'll just use the vyps_meta_id for the metaId... check if meta id is same and then if it is. Anyways, hopefully this is a good solution to a bad implementation
 
 	if(vyps_meta_check_func($meta_id_pull) == 1) //Seeing if this return a 1. If so no duplicates.
 	{

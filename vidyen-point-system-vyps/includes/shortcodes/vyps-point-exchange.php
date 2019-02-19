@@ -46,7 +46,7 @@ function vyps_point_exchange_func( $atts ) {
         'gamipress' => false,
         'gamipress_reason' => 'VYPS Transfer',
         'transfer' => false,
-        'btn_name' => '',
+        'vyps_meta_id' => '',
         'reason' => 'Point Exchange',
         'auto' => FALSE,
 		), $atts, 'vyps-pe' );
@@ -182,7 +182,7 @@ function vyps_point_exchange_func( $atts ) {
     $format_pt_dAmount = number_format($pt_dAmount);
 
     //OK this needed go go here. Because the post just was not happening
-    $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
+    $vyps_meta_id = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
 
   } elseif ($woowallet_mode == true ) {
 
@@ -190,7 +190,7 @@ function vyps_point_exchange_func( $atts ) {
     $format_pt_dAmount = '$' . money_format('%i', $pt_dAmount); //Where we are going we are formating for $
 
     //Almost forgot, we need a button without the out put as may be decimals
-    $btn_name = $firstPointID .  $pt_fAmount  . 'ww' . $mobile_view; //I am going to assume that you only have one button of each. I could be wrong. Yes. I was. I was testing with mobile and non mobile on same page, but.... That doesn't work.
+    $vyps_meta_id = $firstPointID .  $pt_fAmount  . 'ww' . $mobile_view; //I am going to assume that you only have one button of each. I could be wrong. Yes. I was. I was testing with mobile and non mobile on same page, but.... That doesn't work.
 
   } else {
 
@@ -203,12 +203,12 @@ function vyps_point_exchange_func( $atts ) {
 
     //Ok some herpy derpy here as I realized that the btn did not like decimals so we threw all that out.
     //And set some nondecimal and text stuff. Should be unique enough.
-    $btn_name = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $ds_symbol;
+    $vyps_meta_id = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $ds_symbol;
 
   }
 
   //Array hook for the add
-  $atts['btn_name'] = $btn_name; //Seems like I can pull this in reverse? Just a guess
+  $atts['vyps_meta_id'] = $vyps_meta_id; //Seems like I can pull this in reverse? Just a guess
 
 	//I am going to redo the process but just use all the variables.
 
@@ -285,7 +285,7 @@ function vyps_point_exchange_func( $atts ) {
 	if ($time_seconds > 0 ){
 
 		$last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND vyps_meta_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
-		$last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $current_user_id, $btn_name );
+		$last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $current_user_id, $vyps_meta_id );
 		$last_transfer = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
 
 		//return $last_transfer; //DEBUG I think there is something going on here that I'm not aware of.
@@ -325,7 +325,7 @@ function vyps_point_exchange_func( $atts ) {
 
 	}
 
-	if (isset($_POST[ $btn_name ]) OR $auto_mode == TRUE ) //I'm 90% sure that this will work with automode. As the idea was that we needed to know which button to press, but if its auto it means it loads every time the page is loaded.
+	if (isset($_POST[ $vyps_meta_id ]) OR $auto_mode == TRUE ) //I'm 90% sure that this will work with automode. As the idea was that we needed to know which button to press, but if its auto it means it loads every time the page is loaded.
   {
 		//Code check.
 		//First things first. Make sure they have enough damn points to transfer.
@@ -566,14 +566,14 @@ function vyps_point_exchange_func( $atts ) {
   	if ($secondPointID == 0){
 
   		//Well we know we have only point input as no PID 0
-  		$table_result_ouput = "<table id=\"$btn_name\">
+  		$table_result_ouput = "<table id=\"$vyps_meta_id\">
   					<tr><!-- First input -->
   						<td><div align=\"center\">Spend</div></td>
   						<td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
   						<td>
   							<div align=\"center\">
   								<b><form method=\"post\">
-  									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+  									<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
   									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $format_pt_dAmount $destName. Are you sure?');\" />
   								</form></b>
   							</div>
@@ -586,14 +586,14 @@ function vyps_point_exchange_func( $atts ) {
   	} else {
 
   	//Output for when there is two points.
-  	$table_result_ouput = "<table id=\"$btn_name\">
+  	$table_result_ouput = "<table id=\"$vyps_meta_id\">
   				<tr><!-- First input -->
   					<td rowspan=\"2\"><div align=\"center\">Spend</div></td>
   					<td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
   					<td rowspan=\"2\">
   						<div align=\"center\">
   							<b><form method=\"post\">
-  								<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+  								<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
   								<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $format_pt_fAmount $destName. Are you sure?');\" />
   							</form></b>
   						</div>
@@ -613,7 +613,7 @@ function vyps_point_exchange_func( $atts ) {
     if ($secondPointID == 0){
 
       //Well we know we have only point input as no PID 0
-      $table_result_ouput = "<table id=\"$btn_name\">
+      $table_result_ouput = "<table id=\"$vyps_meta_id\">
             <tr><!-- First row -->
               <td><div align=\"center\">Spend</div></td>
               <td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
@@ -626,7 +626,7 @@ function vyps_point_exchange_func( $atts ) {
               <td colspan = 2>
                 <div align=\"center\">
                   <b><form method=\"post\">
-                    <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+                    <input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
                     <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName for $format_pt_dAmount $destName. Are you sure?');\" />
                   </form></b>
                 </div>
@@ -637,7 +637,7 @@ function vyps_point_exchange_func( $atts ) {
     } else {
 
     //Output for when there is two points. NOTE: No need for row/column spans
-    $table_result_ouput = "<table id=\"$btn_name\">
+    $table_result_ouput = "<table id=\"$vyps_meta_id\">
           <tr><!-- First input -->
             <td><div align=\"center\">Spend</div></td>
             <td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
@@ -654,7 +654,7 @@ function vyps_point_exchange_func( $atts ) {
             <td colspan = 2>
               <div align=\"center\">
                 <b><form method=\"post\">
-                  <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+                  <input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
                   <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $format_pt_fAmount $f_sourceName and $format_pt_sAmount $s_sourceName for $format_pt_dAmount $destName. Are you sure?');\" />
                 </form></b>
               </div>
@@ -677,7 +677,7 @@ function vyps_point_exchange_func( $atts ) {
   					<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
   				</tr>
   			</table>";
-  				//<br><br>$btn_name";	//Debug: I'm curious what it looks like.
+  				//<br><br>$vyps_meta_id";	//Debug: I'm curious what it looks like.
   } else {
 
     $table_close_output = "

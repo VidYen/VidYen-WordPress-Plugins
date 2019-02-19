@@ -181,7 +181,7 @@ function vyps_point_transfer_btn_func( $atts ) {
 	$pt_sAmount = $atts['samount'];
 	$pt_dAmount = $atts['damount'];
 
-	$btn_name = $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount;
+	$vyps_meta_id = $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount;
 
 	/*I don't know if this is some lazy coding but I am going to just return out if they haven't pressed the button
 	* Side note: And this is important. The button value should be dynamic to not interfer with other buttons on page
@@ -206,7 +206,7 @@ function vyps_point_transfer_btn_func( $atts ) {
 	$destName = $wpdb->get_var( $destName_query_prepared );
 
 
-	if (isset($_POST[ $btn_name ])){
+	if (isset($_POST[ $vyps_meta_id ])){
 
 		/* Nothing should happen */
 
@@ -224,10 +224,10 @@ function vyps_point_transfer_btn_func( $atts ) {
 		/* I added ability to have point names but for now. Just have the button say transfer and the warning give how much */
 
 		return "<form method=\"post\">
-                <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+                <input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer points $pt_sAmount $sourceName for $pt_dAmount $destName. Are you sure?');\" />
                 </form>";
-				//<br><br>$btn_name";	//Debug: I'm curious what it looks like.
+				//<br><br>$vyps_meta_id";	//Debug: I'm curious what it looks like.
 	}
 
 
@@ -329,13 +329,13 @@ function vyps_point_transfer_btn_func( $atts ) {
 	$wpdb->insert($table_log, $data);
 
 	return "<form method=\"post\">
-                <input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+                <input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer $pt_sAmount $sourceName for $pt_dAmount $destName. Are you sure?');\" />
             </form><br><br>
 			$pt_sAmount $sourceName spent for $pt_dAmount $destName earned";
 
 			/* since I have the point names I might as well use them. Also I put it below because its annoying to have button move. */
-			//<br><br>$btn_name"; //Debug stuff
+			//<br><br>$vyps_meta_id"; //Debug stuff
 
 
 }

@@ -62,7 +62,7 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 	$format_pt_dAmount = number_format($pt_dAmount);
 
 	//NOTE: the button name will be used for the log of that button to see who bought tickets.
-	$btn_name = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
+	$vyps_meta_id = "raffle" . $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount . $ticket_threshold;
 
 
 	//IMO the log doesn't have to show any particular game, but it can if you want.
@@ -106,13 +106,13 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 
 	//$number_of_log_rows = $wpdb->get_var( "SELECT max( id ) FROM $table_name_log" ); //No WHERE needed. All rows. No exceptions
 	$number_of_log_rows_query = "SELECT max( vyps_meta_subid1 ) FROM ". $table_name_log. " WHERE vyps_meta_id = %s";  //Technically we don' tneed to count as subid 2 tells us how many.
-	$number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query, $btn_name ); //btn name should tell us
+	$number_of_log_rows_query_prepared = $wpdb->prepare( $number_of_log_rows_query, $vyps_meta_id ); //btn name should tell us
 	$number_of_log_rows = $wpdb->get_var( $number_of_log_rows_query_prepared );
-	$current_game_id = $btn_name . $number_of_log_rows; //Maybe I should name it better, but shouldn't matter. I feel like I should name number_of_log_rows something else but it has two different uses.
+	$current_game_id = $vyps_meta_id . $number_of_log_rows; //Maybe I should name it better, but shouldn't matter. I feel like I should name number_of_log_rows something else but it has two different uses.
 
-	//So at this point we know vyps_meta_id which is the btn_name and now we just need to know how many tickets.
+	//So at this point we know vyps_meta_id which is the vyps_meta_id and now we just need to know how many tickets.
 	$number_of_ticket_rows_query = "SELECT max( vyps_meta_subid2 ) FROM ". $table_name_log. " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d";  //Technically we don' tneed to count as subid 2 tells us how many.
-	$number_of_ticket_rows_query_prepared = $wpdb->prepare( $number_of_ticket_rows_query, $btn_name, $number_of_log_rows ); //btn name should tell us
+	$number_of_ticket_rows_query_prepared = $wpdb->prepare( $number_of_ticket_rows_query, $vyps_meta_id, $number_of_log_rows ); //btn name should tell us
 	$number_of_ticket_rows = $wpdb->get_var( $number_of_ticket_rows_query_prepared ); //This tell us how many tickets have been bought
 
 	$begin_row = 1; //Not sure if I will have an off by one.
@@ -150,12 +150,12 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 
 		//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
 		$date_data_query = "SELECT time FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_subid2 = %d AND vyps_meta_data = %s";
-		$date_data_query_prepared = $wpdb->prepare( $date_data_query, $btn_name, $number_of_log_rows, $x_for_count, $vyps_meta_data_check ); //Yeah this is a 4 dimensional query. Also rafflebuy is hardcoded which might be questionable
+		$date_data_query_prepared = $wpdb->prepare( $date_data_query, $vyps_meta_id, $number_of_log_rows, $x_for_count, $vyps_meta_data_check ); //Yeah this is a 4 dimensional query. Also rafflebuy is hardcoded which might be questionable
 		$date_data = $wpdb->get_var( $date_data_query_prepared );
 
 		//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
 		$user_id_data_query = "SELECT user_id FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_subid2 = %d AND vyps_meta_data = %s";
-		$user_id_data_query_prepared = $wpdb->prepare( $user_id_data_query, $btn_name, $number_of_log_rows, $x_for_count, $vyps_meta_data_check ); //Yeah this is a 4 dimensional query. Also rafflebuy is hardcoded which might be questionable
+		$user_id_data_query_prepared = $wpdb->prepare( $user_id_data_query, $vyps_meta_id, $number_of_log_rows, $x_for_count, $vyps_meta_data_check ); //Yeah this is a 4 dimensional query. Also rafflebuy is hardcoded which might be questionable
 		$user_id_data = $wpdb->get_var( $user_id_data_query_prepared );
 
 		//NOTE: the one below didn't have to be changed becasue we know the user_id above and now just look at the $wpdb user table.
@@ -182,7 +182,7 @@ function vyps_point_threshold_raffle_log_func( $atts ) {
 				$vyps_meta_data_win = 'rafflewin';
 				//we know there is a winner in the list so we check each time
 				$winner_query = "SELECT vyps_meta_subid3 FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s";
-				$winner_query_prepared = $wpdb->prepare( $winner_query, $btn_name, $number_of_log_rows, $vyps_meta_data_win ); //Yeah this is a 4 dimensional query. Also rafflebuy is hardcoded which might be questionable
+				$winner_query_prepared = $wpdb->prepare( $winner_query, $vyps_meta_id, $number_of_log_rows, $vyps_meta_data_win ); //Yeah this is a 4 dimensional query. Also rafflebuy is hardcoded which might be questionable
 				$winner = $wpdb->get_var( $winner_query_prepared );
 
 				//So we have the id. So...

@@ -19,7 +19,7 @@ function vyps_deduct_func( $atts )
 				'to_user_id' => 0,
         'comment' => '',
     		'reason' => '',
-				'btn_name' => '',
+				'vyps_meta_id' => '',
     ), $atts, 'vyps-pe' );
 
 	//NOTE: Only adding. So do not need any input variables
@@ -33,7 +33,7 @@ function vyps_deduct_func( $atts )
 	$reason = sanitize_text_field($atts['reason']);
 
 	//Button Name. NOTE: This just not get passed by the shortcode, but rather PE
-	$btn_name = $atts['btn_name']; //TODO like add... Needs to be looked into
+	$vyps_meta_id = $atts['vyps_meta_id']; //TODO like add... Needs to be looked into
 
 	//NOTE: It dawned me I should check to see if point exists. Luckily I made a function that can Tell
 	$pointID = $first_point_id;
@@ -84,7 +84,7 @@ function vyps_deduct_func( $atts )
 	$table_name_points = $wpdb->prefix . 'vyps_points'; //I'm debating if we needed this but I realize I should check at some point if point actually array_key_exists
 
 	//BTN name as there are no referrals in deduct.
-	$meta_id = $btn_name;
+	$meta_id = $vyps_meta_id;
 
 	//NOTE: Going to check if they have both the amount of first point and second point.
 	//Lucky for me I created a balance function. The balance uses pid. Probaly not a great idea, but let's roll with interface

@@ -18,7 +18,7 @@ function vyps_add_func( $atts )
 				'to_user_id' => 0,
         'comment' => '',
     		'reason' => '',
-				'btn_name' => '',
+				'vyps_meta_id' => '',
     ), $atts, 'vyps-pe' );
 
 	//NOTE: Only adding. So do not need any input variables
@@ -41,7 +41,7 @@ function vyps_add_func( $atts )
 	$refer_rate = intval($atts['refer']);
 
 	//Button Name. NOTE: This just not get passed by the shortcode, but rather PE
-	$btn_name = $atts['btn_name']; //TODO Santize this better.... It works but I feel suspicious
+	$vyps_meta_id = $atts['vyps_meta_id']; //TODO Santize this better.... It works but I feel suspicious
 
 	//If this is not a transfer or a direct call, then we going to assume its the current id
 	if ( $to_user_id == 0 )
@@ -115,7 +115,7 @@ function vyps_add_func( $atts )
 		{
 			//If no referall, meta_id should remain blank for all intents and purposes
 			//And nothing will get inserted
-			$meta_id = $btn_name;
+			$meta_id = $vyps_meta_id;
 		}
 
 	//Code to do this insert. We are going to assume that adds only add rather than check to see if we need to add.

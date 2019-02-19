@@ -93,9 +93,9 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 	$destIcon = WOO_WALLET_ICON; //I didn't think that would work, but as long as WooWallet is installed it should work.
 
 	$btn_friendly_dAmount = $pt_dAmount * 100000; //Multiplying by this number should make anything below 0.009 a whole number while retaining the accuracy of site admin rather than chopping it off with an int conversion
-	$btn_name = $sourcePointID . $pt_sAmount . $btn_friendly_dAmount;
+	$vyps_meta_id = $sourcePointID . $pt_sAmount . $btn_friendly_dAmount;
 
-	if (isset($_POST[ $btn_name ])){
+	if (isset($_POST[ $vyps_meta_id ])){
 
 		/* Nothing should happen */
 
@@ -116,14 +116,14 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 
 		$results_message = "Press button to transfer points.";
 
-		return "<table id=\"$btn_name\">
+		return "<table id=\"$vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Spend</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer points $format_pt_sAmount $sourceName for \$$pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -135,7 +135,7 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 						<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
 					</tr>
 				</table>";
-					//<br><br>$btn_name";	//Debug: I'm curious what it looks like.
+					//<br><br>$vyps_meta_id";	//Debug: I'm curious what it looks like.
 	}
 
 
@@ -199,14 +199,14 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 
 		$results_message = "Not enough " . $sourceName . " to transfer! You need " . $need_points . " more.";
 
-		return "<table id=\"$btn_name\">
+		return "<table id=\"$vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Spend</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer points $format_pt_sAmount $sourceName for \$$pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -323,14 +323,14 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 
 	$results_message = "Success. Points exchanged at: ". date('Y-m-d H:i:s');
 
-	return "<table id=\"$btn_name\">
+	return "<table id=\"$vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Spend</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer points $format_pt_sAmount $sourceName for \$$pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -344,7 +344,7 @@ function vyps_point_transfer_woowallet_func( $atts ) {
 				</table>";
 
 			/* since I have the point names I might as well use them. Also I put it below because its annoying to have button move. */
-			//<br><br>$btn_name"; //Debug stuff
+			//<br><br>$vyps_meta_id"; //Debug stuff
 
 
 }

@@ -40,7 +40,7 @@ function vyps_point_transfer_tbl_func( $atts ) {
 	$format_pt_sAmount = number_format($pt_sAmount);
 	$format_pt_dAmount = number_format($pt_dAmount);
 
-	$btn_name = $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount;
+	$vyps_meta_id = $sourcePointID . $destinationPointID . $pt_sAmount . $pt_dAmount;
 
 	/*I don't know if this is some lazy coding but I am going to just return out if they haven't pressed the button
 	* Side note: And this is important. The button value should be dynamic to not interfer with other buttons on page
@@ -84,7 +84,7 @@ function vyps_point_transfer_tbl_func( $atts ) {
 	$destIcon_query_prepared = $wpdb->prepare( $destIcon_query, $destinationPointID );
 	$destIcon = $wpdb->get_var( $destIcon_query_prepared );
 
-	if (isset($_POST[ $btn_name ])){
+	if (isset($_POST[ $vyps_meta_id ])){
 
 		/* Nothing should happen */
 
@@ -105,14 +105,14 @@ function vyps_point_transfer_tbl_func( $atts ) {
 
 		$results_message = "Press button to transfer points.";
 
-		return "<table id=\"$btn_name\">
+		return "<table id=\"$vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Spend</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer points $format_pt_sAmount $sourceName for $pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -124,7 +124,7 @@ function vyps_point_transfer_tbl_func( $atts ) {
 						<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
 					</tr>
 				</table>";
-					//<br><br>$btn_name";	//Debug: I'm curious what it looks like.
+					//<br><br>$vyps_meta_id";	//Debug: I'm curious what it looks like.
 	}
 
 
@@ -183,14 +183,14 @@ function vyps_point_transfer_tbl_func( $atts ) {
 
 		$results_message = "Not enough " . $sourceName . " to transfer! You need " . $need_points . " more.";
 
-		return "<table id=\"$btn_name\">
+		return "<table id=\"$vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Spend</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer points $format_pt_sAmount $sourceName for $pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -251,14 +251,14 @@ function vyps_point_transfer_tbl_func( $atts ) {
 
 	$results_message = "Success. Points exchanged at: ". date('Y-m-d H:i:s');
 
-	return "<table id=\"$btn_name\">
+	return "<table id=\"$vyps_meta_id\">
 					<tr>
 						<td><div align=\"center\">Spend</div></td>
 						<td><div align=\"center\"><img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\"> $format_pt_sAmount</div></td>
 						<td>
 							<div align=\"center\">
 								<b><form method=\"post\">
-									<input type=\"hidden\" value=\"\" name=\"$btn_name\"/>
+									<input type=\"hidden\" value=\"\" name=\"$vyps_meta_id\"/>
 									<input type=\"submit\" class=\"button-secondary\" value=\"Transfer\" onclick=\"return confirm('You are about to transfer points $format_pt_sAmount $sourceName for $pt_dAmount $destName. Are you sure?');\" />
 								</form></b>
 							</div>
@@ -272,7 +272,7 @@ function vyps_point_transfer_tbl_func( $atts ) {
 				</table>";
 
 			/* since I have the point names I might as well use them. Also I put it below because its annoying to have button move. */
-			//<br><br>$btn_name"; //Debug stuff
+			//<br><br>$vyps_meta_id"; //Debug stuff
 
 
 }

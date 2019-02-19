@@ -165,7 +165,7 @@ function vyps_run_quads_action()
 				'to_user_id' => get_current_user_id(),
         'comment' => '',
     		'reason' => 'QUADBET',
-				'btn_name' => 'QUADRUN',
+				'vyps_meta_id' => 'QUADRUN',
         'raw' => FALSE,
         'cost' => 1,
         'pid' => $incoming_pointid_get,
