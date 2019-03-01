@@ -29,7 +29,7 @@ function vyps_vy256_solver_func($atts) {
             'wallet' => '',
             'site' => 'default',
             'pid' => 0,
-            'pool' => '', //moneroocean.stream
+            'pool' => 'moneroocean.stream', //moneroocean.stream
             'webpool' => '',
             'api' => '', //api.moneroocean.stream
             'threads' => 2,
@@ -71,8 +71,8 @@ function vyps_vy256_solver_func($atts) {
     $sm_site_key = $atts['wallet'];
     $sm_site_key_origin = $atts['wallet'];
     $siteName = $atts['site'];
-    //$mining_pool = $atts['pool'];
-    $mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
+    $mining_pool = $atts['pool']; //Overwrite rather than default
+    //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
     $sm_threads = $atts['threads'];
     $max_threads = $atts['maxthreads'];
     $sm_throttle = $atts['throttle'];
@@ -315,42 +315,11 @@ function vyps_vy256_solver_func($atts) {
 
         shuffle($server_name);
 
-        //Moving server up check here
-        for ($x_for_count = 0; $x_for_count < 4; $x_for_count = $x_for_count + 1 ) //NOTE: The $x_for_count < X coudl be programatic but the server list will be defined and known by us.
-        {
-          $remote_url = "http://" . $server_name[$x_for_count][0] ."/?userid=" . $miner_id;
-          $public_remote_url = "/?userid=" . $miner_id . " on count " . $x_for_count;
-          $remote_response =  wp_remote_get( esc_url_raw( $remote_url ) );
-
-          if(array_key_exists('headers', $remote_response))
-          {
-              //Checking to see if the response is a number. If not, probaly something from cloudflare or ngix messing up. As is a loop should just kick out unless its the error round.
-              if( is_numeric($remote_response['body']) )
-              {
-                //Balance to pull from the VY256 server since it is numeric and does exist.
-                //$balance =  intval($remote_response['body'] / $hash_per_point); //Commenting out since we not getting hashes from here anymore.
-                $used_server = $server_name[$x_for_count][0];
-                $used_port = $server_name[$x_for_count][1];
-                $x_for_count = 5; //Well. Need to escape out.
-              }
-              else
-              {
-                $server_fail = $server_fail + 1; //So if we got a response but it wasn't numeric. Bad gateway
-              }
-          }
-          else
-          {
-              $server_fail = $server_fail + 1; //We didn't get a response at all. Server failure +1.
-          }
-        }
-
-        if ( $server_fail >= 4)
-        {
-            //The last server will be error which means it tried all the servers.
-            return "Unable to establish connection with any VY256 server! Contact admin on the <a href=\"https://discord.gg/6svN5sS\" target=\"_blank\">VidYen Discord</a>!<!--$public_remote_url-->"; //NOTE: WP Shortcodes NEVER use echo. It says so in codex.
-        }
-
-
+        //Pick the first of the list by default
+        $public_remote_url = $server_name[0][0]; //Defaults for one server.
+        $used_server = $server_name[0][0];
+        $used_port = $server_name[0][1];
+        $remote_url = "https://" . $server_name[0][0].':'.$custom_server_ws_port; //Should be wss so https://
       }
       else //Going to allow for custom servers is admin wants. No need for redudance as its on them.
       {
@@ -361,8 +330,7 @@ function vyps_vy256_solver_func($atts) {
         $public_remote_url = $server_name[0][0]; //Defaults for one server.
         $used_server = $server_name[0][0];
         $used_port = $server_name[0][1];
-
-        //webminer.moneroocean.stream:443 is the placeholder
+        $remote_url = "https://" . $server_name[0][0].':'.$custom_server_ws_port; //Should be wss so https://
       }
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
@@ -494,7 +462,7 @@ function vyps_vy256_solver_func($atts) {
       }
 
       //Get the url for the solver
-      $vy256_solver_folder_url = plugins_url( 'js/solver/', __FILE__ );
+      $vy256_solver_folder_url = plugins_url( 'js/solver319/', __FILE__ );
       //$vy256_solver_url = plugins_url( 'js/solver/miner.js', __FILE__ ); //Ah it was the worker.
 
       //Need to take the shortcode out. I could be wrong. Just rip out 'shortcodes/'
@@ -555,8 +523,8 @@ function vyps_vy256_solver_func($atts) {
 
             activity_hashes = 0;
 
-            function start() {
-
+            function start()
+            {
               //Start the MO pull
               moAjaxTimerPrimus();
               pull_mo_stats();
