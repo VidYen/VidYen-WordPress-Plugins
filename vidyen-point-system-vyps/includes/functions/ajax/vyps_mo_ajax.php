@@ -39,7 +39,8 @@ function vyps_mo_api_action()
     if (array_key_exists('totalHash', $site_mo_response))
     {
       $site_total_hashes = floatval($site_mo_response['totalHash']); //I'm removing the number format as we need the raw data.
-      $site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
+      $site_valid_shares = floatval($site_mo_response['validShares']); //I'm removing the number format as we need the raw data.
+      $site_hash_per_second = number_format(intval($site_mo_response['hash2'])); //We already know site total hashes.
       $site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
 
       $_SESSION['attention_total'] = 0; //Do not want to over count if they refresh page.
@@ -48,6 +49,7 @@ function vyps_mo_api_action()
     {
       $site_hash_per_second = '';
       $site_total_hashes = 0;
+      $site_valid_shares = 0; //Moving to the share system as better to predict payments.
 
       //NOTE if we got an array but not data MO talked to us. which means I guess ok to do the following:
       //Side notes 30 should be reasonable without messing up. Once they get to actual hashes people be less antsy
@@ -63,6 +65,7 @@ function vyps_mo_api_action()
   $mo_array_server_response = array(
       'site_hashes' => $site_total_hashes,
       'site_hash_per_second' => $site_hash_per_second,
+      'site_validShares' => $site_valid_shares,
   );
 
   echo json_encode($mo_array_server_response); //Proper method to return json

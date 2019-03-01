@@ -216,10 +216,12 @@ function vyps_vy256_solver_func($atts) {
       if ($atts['attention'] > 0)
       {
         $_SESSION['attention'] = $atts['attention']; //This becomes a global for the session
+        $attention_add = $atts['attention'];
       }
       else
       {
         $_SESSION['attention'] = 0; //Setting to zero
+        $attention_add = 0;
       }
 
       //NOTE: THis is where the attention total is set if not set to keep an error from throwing. $_SESSION['attention_total'] = ; //This is balance
@@ -350,11 +352,17 @@ function vyps_vy256_solver_func($atts) {
         $site_mo_response = json_decode($site_mo_response, TRUE);
         if (array_key_exists('totalHash', $site_mo_response))
         {
-          $site_total_hashes = floatval($site_mo_response['totalHash']); //No formatted hashes.
-          $site_total_hashes_formatted = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
-          $site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
+          //$site_total_hashes = floatval($site_mo_response['totalHash']); //No formatted hashes.
+          //$site_total_hashes_formatted = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
+          //$site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
+          //$site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
+
+          $site_total_hashes = floatval($site_mo_response['totalHash']); //I'm removing the number format as we need the raw data.
+          $site_valid_shares = intval($site_mo_response['validShares']); //I'm removing the number format as we need the raw data.
+          $site_hash_per_second = number_format(intval($site_mo_response['hash2'])); //We already know site total hashes.
           $site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
-          $balance =  intval($site_total_hashes / $hash_per_point);
+
+          $balance =  $site_valid_shares;
         }
         else
         {
@@ -639,7 +647,7 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
+          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Hashes[0]</div></div>
         </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
@@ -700,6 +708,8 @@ function vyps_vy256_solver_func($atts) {
             var totalpoints = 0;
             var progresswidth = 0;
             var totalhashes = 0;
+            var valid_shares = 0;
+            var attention_add = $attention_add;
             var elemworkerbar = document.getElementById(\"workerBar\");
 
             function pull_mo_stats()
@@ -715,9 +725,11 @@ function vyps_vy256_solver_func($atts) {
                  output_response = JSON.parse(response);
                  //Progressbar for MO Pull
                  totalhashes = parseFloat(output_response.site_hashes);
-                 progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
+                 valid_shares = parseFloat(output_response.site_validShares);
+                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( totalhashes / $hash_per_point );
-                 document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
+                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
+                 document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                  document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
                  progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
                  elemworkerbar.style.width = progresswidth + '%';
@@ -738,6 +750,7 @@ function vyps_vy256_solver_func($atts) {
                   pull_mo_stats();
                   console.log('Ping MoneroOcean');
                   clearInterval(id);
+                  progresswidth = 0;
                   moAjaxTimerSecondus();
                 }
                 else
@@ -749,6 +762,10 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
+                  progresswidth = progresswidth + attention_add; //attention add
+                  elemworkerbar.style.width = progresswidth + '%';
+                  totalhashes = totalhashes + attention_add;
+                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                 }
               }
             }
@@ -766,6 +783,7 @@ function vyps_vy256_solver_func($atts) {
                   pull_mo_stats();
                   console.log('Ping MoneroOcean');
                   clearInterval(id);
+                  progresswidth = 0;
                   moAjaxTimerPrimus();
                 }
                 else
@@ -777,6 +795,10 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
+                  progresswidth = progresswidth + attention_add; //attention add
+                  elemworkerbar.style.width = progresswidth + '%';
+                  totalhashes = totalhashes + attention_add;
+                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                 }
               }
             }
