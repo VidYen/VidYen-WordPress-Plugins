@@ -212,15 +212,13 @@ function vyps_vy256_solver_func($atts) {
 
       global $wpdb;
 
-      //Some global sessions settings
+      //Setting the attention to something, I should fix this somewhere else.
       if ($atts['attention'] > 0)
       {
-        $_SESSION['attention'] = $atts['attention']; //This becomes a global for the session
         $attention_add = $atts['attention'];
       }
       else
       {
-        $_SESSION['attention'] = 0; //Setting to zero
         $attention_add = 0;
       }
 
@@ -537,6 +535,7 @@ function vyps_vy256_solver_func($atts) {
               moAjaxTimerPrimus();
               pull_mo_stats();
               console.log('Ping MoneroOcean');
+              progressTimerPrimus();
 
               //Switch on animations and bars.
               $switch_pause_div_on
@@ -708,6 +707,7 @@ function vyps_vy256_solver_func($atts) {
             var totalpoints = 0;
             var progresswidth = 0;
             var totalhashes = 0;
+            var mo_totalhashes = 0;
             var valid_shares = 0;
             var attention_add = $attention_add;
             var elemworkerbar = document.getElementById(\"workerBar\");
@@ -724,7 +724,12 @@ function vyps_vy256_solver_func($atts) {
                jQuery.post(ajaxurl, data, function(response) {
                  output_response = JSON.parse(response);
                  //Progressbar for MO Pull
-                 totalhashes = parseFloat(output_response.site_hashes);
+                 mo_totalhashes = parseFloat(output_response.site_hashes);
+                 if( mo_totalhashes > totalhashes)
+                 {
+                  totalhashes = mo_totalhashes;
+                  console.log('Hey total hashes were lower');
+                 }
                  valid_shares = parseFloat(output_response.site_validShares);
                  //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( totalhashes / $hash_per_point );
@@ -750,7 +755,6 @@ function vyps_vy256_solver_func($atts) {
                   pull_mo_stats();
                   console.log('Ping MoneroOcean');
                   clearInterval(id);
-                  progresswidth = 0;
                   moAjaxTimerSecondus();
                 }
                 else
@@ -762,10 +766,6 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
-                  progresswidth = progresswidth + attention_add; //attention add
-                  elemworkerbar.style.width = progresswidth + '%';
-                  totalhashes = totalhashes + attention_add;
-                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                 }
               }
             }
@@ -795,13 +795,61 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
-                  progresswidth = progresswidth + attention_add; //attention add
+                }
+              }
+            }
+
+            //Update the progress hash bar
+            function progressTimerPrimus()
+            {
+              //Resets every 60 seconds
+              var progressTime = 1;
+              var id = setInterval(progressTimeFrame, 1000); //1000 is 1 second
+              function progressTimeFrame()
+              {
+                if (progresswidth >= 100)
+                {
+                  progresswidth = 0;
+                  clearInterval(id);
+                  progresswidth = 0;
+                  progressTimerSecondus();
+                }
+                else
+                {
+                  progressTime++;
+                  totalhashes = totalhashes++;
+                  progresswidth = progresswidth++;
                   elemworkerbar.style.width = progresswidth + '%';
-                  totalhashes = totalhashes + attention_add;
                   document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                 }
               }
             }
+
+            //Update the second progress hash bar
+            function progressTimerSecondus()
+            {
+              //Resets every 60 seconds
+              var progressTime = 1;
+              var id = setInterval(progressTimeFrame, 1000); //1000 is 1 second
+              function progressTimeFrame()
+              {
+                if (progresswidth >= 100)
+                {
+                  progresswidth = 0;
+                  clearInterval(id);
+                  progressTimerPrimus();
+                }
+                else
+                {
+                  progressTime++;
+                  totalhashes = totalhashes++;
+                  progresswidth = progresswidth++;
+                  elemworkerbar.style.width = progresswidth + '%';
+                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
+                }
+              }
+            }
+
             </script>";
 
       //Hidden DEBUG
