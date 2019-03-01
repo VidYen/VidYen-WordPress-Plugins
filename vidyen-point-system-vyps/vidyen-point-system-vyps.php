@@ -254,7 +254,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_2in.php'); //
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-point-exchange.php'); //Point Exchange is going to depreciate all earlier versions of Point Transfer
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-login.php'); //You are not logged in blank shortcode.
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsch.php'); //Rolling the CH in.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-adscend.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads.php'); //Adding Wannads support. Not the naming convention change.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads-postback.php'); //Wannads post back

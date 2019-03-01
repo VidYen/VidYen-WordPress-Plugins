@@ -117,6 +117,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Change: `[vyps-pe]` will default to `mobile=TRUE` so this may change your site look, but got too many complaints about mobile use and not reading the instructions. Change to `mobile=FALSE` to get legacy.
 - Change: (experimental) Added `auto=TRUE` to `[vyps-pe]` which will automatically run the PE, but you can only have one shortcode of PE on that page to work right.
 - Change: Improvement of internal APIs to talk to other VidYen plugins.
+- Remove: All files related to Coinhive removed as they are shutting down there servers (make sure you get your funds withdrawn if you can)
 
 = 2.2.4 =
 
