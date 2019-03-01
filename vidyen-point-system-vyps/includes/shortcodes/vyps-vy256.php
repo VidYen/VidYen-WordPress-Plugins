@@ -799,6 +799,28 @@ function vyps_vy256_solver_func($atts) {
               }
             }
 
+
+            //Progress bar for hashes
+            function employeeProgressBar()
+            {
+              //Progressbar
+              var elem = document.getElementById(\"workerBar\");
+              var employerWidth = 0;
+              var employeeWidth = 0;
+              var employeeProgressTime = 0;
+              var id = setInterval(progressFrame, $clientBarTime);
+              function progressFrame() {
+                if (employeeWidth >= 100) {
+                  clearInterval(id);
+                } else {
+                  employeeWidth++;
+                  employeeProgressTime = employeeProgressTime +  Math.floor($client_progress_time / 100);
+                  elem.style.backgroundColor = \"$clientBar_color\";
+                  elem.style.width = employeeWidth + '%';
+                }
+              }
+            }
+
             //Update the progress hash bar
             function progressTimerPrimus()
             {
