@@ -549,7 +549,8 @@ function vyps_vy256_solver_func($atts) {
 
               /* keep us updated */
 
-              setInterval(function () {
+              setInterval(function ()
+              {
                 // for the definition of sendStack/receiveStack, see miner.js
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
@@ -559,7 +560,8 @@ function vyps_vy256_solver_func($atts) {
               document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
             }
 
-            function stop(){
+            function stop()
+            {
                 deleteAllWorkers();
                 document.getElementById(\"stop\").style.display = 'none'; // disable button
             }
@@ -662,7 +664,8 @@ function vyps_vy256_solver_func($atts) {
         var output = document.getElementById(\"cpu_stat\");
         output.innerHTML = slider.value;
 
-        slider.oninput = function() {
+        slider.oninput = function()
+        {
           output.innerHTML = this.value;
           throttleMiner = 100 - this.value;
           console.log(throttleMiner);
