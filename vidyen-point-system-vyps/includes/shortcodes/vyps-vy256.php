@@ -55,7 +55,6 @@ function vyps_vy256_solver_func($atts) {
             'debug' => FALSE,
             'twitch' => FALSE,
             'youtube' => FALSE,
-            'attention' => 0, //points to give to keep people from being attention deficiet. You should set to 30 as 1 H/s is the most unreasable i can think of
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -211,28 +210,6 @@ function vyps_vy256_solver_func($atts) {
     {
 
       global $wpdb;
-
-      //Some global sessions settings
-      if ($atts['attention'] > 0)
-      {
-        $_SESSION['attention'] = $atts['attention']; //This becomes a global for the session
-        $attention_add = $atts['attention'];
-      }
-      else
-      {
-        $_SESSION['attention'] = 0; //Setting to zero
-        $attention_add = 0;
-      }
-
-      //NOTE: THis is where the attention total is set if not set to keep an error from throwing. $_SESSION['attention_total'] = ; //This is balance
-      if(!isset($_SESSION['attention_total']))
-      {
-        $_SESSION['attention_total'] = 0; //If it isn't set, then we define it. else its set in MO ajax
-      }
-      else
-      {
-          //NOTE: I'm debating on if putting an atention total reset if greater than the hash since its a known, but it should reset when the MO gets a sucessful pull.
-      }
 
       //It is a bit of some SQL reads. Not writes so its not terrible, but unless its needed let's not run the function. If the shareholder is set to 1 or more it should fire
       if ( $share_holder_status > 0 )
@@ -707,9 +684,10 @@ function vyps_vy256_solver_func($atts) {
             var activity_progresspoints = 0;
             var totalpoints = 0;
             var progresswidth = 0;
-            var totalhashes = 0;
+            var totalhashes = 0; //NOTE: This is a notgiven688 variable.
+            var mo_totalhashes = 0;
             var valid_shares = 0;
-            var attention_add = $attention_add;
+            var prior_totalhashes = 0;
             var elemworkerbar = document.getElementById(\"workerBar\");
 
             function pull_mo_stats()
@@ -724,13 +702,18 @@ function vyps_vy256_solver_func($atts) {
                jQuery.post(ajaxurl, data, function(response) {
                  output_response = JSON.parse(response);
                  //Progressbar for MO Pull
-                 totalhashes = parseFloat(output_response.site_hashes);
+                 mo_totalhashes = parseFloat(output_response.site_hashes);
+                 if (mo_totalhashes > totalhashes)
+                 {
+                   totalhashes = mo_totalhashes;
+                   console.log('MO Hashes were greater.');
+                 }
                  valid_shares = parseFloat(output_response.site_validShares);
                  //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( totalhashes / $hash_per_point );
                  //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
-                 document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
+                 //document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
                  progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
                  elemworkerbar.style.width = progresswidth + '%';
                });
@@ -749,9 +732,10 @@ function vyps_vy256_solver_func($atts) {
                 {
                   pull_mo_stats();
                   console.log('Ping MoneroOcean');
-                  clearInterval(id);
+                  ajaxTime = 1;
+                  console.log('AjaxTime Reset');
                   progresswidth = 0;
-                  moAjaxTimerSecondus();
+                  //moAjaxTimerSecondus();
                 }
                 else
                 {
@@ -762,11 +746,19 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
-                  progresswidth = progresswidth + attention_add; //attention add
                   elemworkerbar.style.width = progresswidth + '%';
-                  totalhashes = totalhashes + attention_add;
                   document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                 }
+                //Hash work
+                hash_difference = totalhashes - prior_totalhashes;
+                prior_totalhashes = totalhashes;
+                //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
+                totalpoints = Math.floor( totalhashes / $hash_per_point );
+                //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
+                document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
+                document.getElementById('hash_rate').innerHTML = hash_difference;
+                progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
+                elemworkerbar.style.width = progresswidth + '%'
               }
             }
 
@@ -795,9 +787,9 @@ function vyps_vy256_solver_func($atts) {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
-                  progresswidth = progresswidth + attention_add; //attention add
+
                   elemworkerbar.style.width = progresswidth + '%';
-                  totalhashes = totalhashes + attention_add;
+
                   document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                 }
               }
