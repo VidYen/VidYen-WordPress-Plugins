@@ -23,6 +23,8 @@ var throttleMiner = 0;  // percentage of miner throttling. If you set this to 20
 var switchServer = 0;   //This is something to let js know to switch servers.
                         //By default we pull the 0 index of array and move up if it fails. -Felty
 
+var serverError = 0;    //No server error yet. This will go to one if error. -Felty
+
 var handshake = null;
 
 const wasmSupported = (() => {
@@ -75,7 +77,10 @@ var openWebSocket = function () {
     job = null;
     //VidYen Addition
     console.log('Server is down!');
+    serverError = 1;
+    console.log('serverError: ' +serverError );
     switchServer++; //Switch the server by moving index up one.
+    console.log('Server count is ' + switchServer );
   }
   ws.onclose = function () {
     if (connected < 2) connected = 2;

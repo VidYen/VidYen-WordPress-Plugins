@@ -283,13 +283,21 @@ function vyps_vy256_solver_func($atts) {
       //OK going to do a shuffle of servers to pick one at random from top.
       if(empty($custom_server))
       {
-        $server_random_pick = mt_rand(0,2); //not sure if this is needed?
-
+        /* DEBUG
         $server_name = array(
               array('vesalius.vy256.com', '8443'), //0,0 0,1
               array('daidem.vidhash.com', '8443'), //1,0 1,1
-              array('clarion.vidhash.com', '8184'), //her own
+              array('clarion.vidhash.com', '8186'), //her own
               array('savona.vy256.com', '8183'), //2,0 2,1
+        );
+
+        */
+
+        $server_name = array(
+              array('clarion.vidhash.com', '8286'), //her own
+              array('clarion.vidhash.com', '8186'), //her own
+              array('cadia.vidhash.com', '8666'), //her own
+
         );
 
         shuffle($server_name);
@@ -298,7 +306,7 @@ function vyps_vy256_solver_func($atts) {
         $public_remote_url = $server_name[0][0]; //Defaults for one server.
         $used_server = $server_name[0][0];
         $used_port = $server_name[0][1];
-        $remote_url = "https://" . $server_name[0][0].':'.$custom_server_ws_port; //Should be wss so https://
+        $remote_url = "https://" .$used_server.':'.$used_port; //Should be wss so https://
 
         $js_servername_array = json_encode($server_name);
       }
@@ -331,7 +339,7 @@ function vyps_vy256_solver_func($atts) {
       {
         $site_mo_response = $site_mo_response['body']; // use the content
         $site_mo_response = json_decode($site_mo_response, TRUE);
-        if (array_key_exists('totalHash', $site_mo_response))
+        if (array_key_exists('validShares', $site_mo_response))
         {
           //$site_total_hashes = floatval($site_mo_response['totalHash']); //No formatted hashes.
           //$site_total_hashes_formatted = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
@@ -510,7 +518,55 @@ function vyps_vy256_solver_func($atts) {
 
             throttleMiner = $sm_throttle;
 
-            activity_hashes = 0;
+            //This needs to happen on start to init.
+            var server_list = $js_servername_array;
+            var current_server = server_list[0][0];
+            console.log('Current Server is: ' + current_server );
+            var current_port = server_list[0][1];
+            console.log('Current port is: ' + current_port );
+
+            //This repicks server, does not fire unless error in connecting to server.
+            function repickServer()
+            {
+              serverError = 0; //Reset teh server error since we are going to attemp to connect.
+
+              document.getElementById('status-text').innerText = 'Error Connecting! Attemping other servers please wait.'; //set to working
+
+              " . /*//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array*/ "
+              function shuffle(array) {
+                var currentIndex = array.length, temporaryValue, randomIndex;
+
+                // While there remain elements to shuffle...
+                while (0 !== currentIndex) {
+
+                  // Pick a remaining element...
+                  randomIndex = Math.floor(Math.random() * currentIndex);
+                  currentIndex -= 1;
+
+                  // And swap it with the current element.
+                  temporaryValue = array[currentIndex];
+                  array[currentIndex] = array[randomIndex];
+                  array[randomIndex] = temporaryValue;
+                }
+
+                return array;
+              }
+
+              server_list = shuffle(server_list); //Why is it alwasy simple?
+
+              console.log('Shuff Results: ' + server_list );
+              current_server = server_list[0][0];
+              console.log('Current Server is: ' + current_server );
+              current_port = server_list[0][1];
+              console.log('Current port is: ' + current_port );
+
+              //Reset the server.
+              server = 'wss://' + current_server + ':' + current_port;
+
+              //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
+              startMining(\"$mining_pool\",
+                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads, \"$miner_id\");
+            }
 
             function start()
             {
@@ -526,12 +582,6 @@ function vyps_vy256_solver_func($atts) {
               moAjaxTimerPrimus();
               pull_mo_stats();
               console.log('Ping MoneroOcean');
-
-              //Convert server array into JS for JS switching if server down
-              function pickServer()
-              {
-
-              }
 
               //Switch on animations and bars.
               $switch_pause_div_on
@@ -781,38 +831,13 @@ function vyps_vy256_solver_func($atts) {
                 document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s';
                 progresswidth = (( reported_hashes / $hash_per_point  ) - Math.floor( reported_hashes / $hash_per_point )) * 100;
                 elemworkerbar.style.width = progresswidth + '%'
-              }
-            }
 
-            //Refresh the MO
-            function moAjaxTimerSecondus()
-            {
-              //Should call ajax every 30 seconds
-              var ajaxTime = 1;
-              var id = setInterval(moAjaxTimeFrame, 1000);
-              function moAjaxTimeFrame()
-              {
-                if (ajaxTime >= 30)
+                //Check server is up
+                if (serverError > 0)
                 {
-                  pull_mo_stats();
-                  console.log('Ping MoneroOcean');
-                  clearInterval(id);
-                  progresswidth = 0;
-                  moAjaxTimerPrimus();
-                }
-                else
-                {
-                  ajaxTime++;
-                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length; //Good as place as any.
-                  if ( Object.keys(workers).length > 1)
-                  {
-                    document.getElementById(\"add\").disabled = false; //enable the + button
-                    document.getElementById(\"sub\").disabled = false; //enable the - button
-                  }
-
-                  elemworkerbar.style.width = progresswidth + '%';
-
-                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
+                  console.log('Server is down attempting to repick!');
+                  repickServer();
+                  console.log('Server repicked!');
                 }
               }
             }
