@@ -118,6 +118,8 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Change: (experimental) Added `auto=TRUE` to `[vyps-pe]` which will automatically run the PE, but you can only have one shortcode of PE on that page to work right.
 - Change: Improvement of internal APIs to talk to other VidYen plugins.
 - Remove: All files related to Coinhive removed as they are shutting down there servers (make sure you get your funds withdrawn if you can)
+- Change: Rewards are based on `valid shares` from the MoneroOcean API rather than hashes. Explanation [here](https://www.vidyen.com/319changes)
+- Change: VY256 Miner now has client side tracking after I discovered notgiven688 had them but wasn't documented.
 
 = 2.2.4 =
 
