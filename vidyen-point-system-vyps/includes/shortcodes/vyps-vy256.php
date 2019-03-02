@@ -299,6 +299,8 @@ function vyps_vy256_solver_func($atts) {
         $used_server = $server_name[0][0];
         $used_port = $server_name[0][1];
         $remote_url = "https://" . $server_name[0][0].':'.$custom_server_ws_port; //Should be wss so https://
+
+        $js_servername_array = json_encode($server_name);
       }
       else //Going to allow for custom servers is admin wants. No need for redudance as its on them.
       {
@@ -310,6 +312,8 @@ function vyps_vy256_solver_func($atts) {
         $used_server = $server_name[0][0];
         $used_port = $server_name[0][1];
         $remote_url = "https://" . $server_name[0][0].':'.$custom_server_ws_port; //Should be wss so https://
+
+        $js_servername_array = json_encode($server_name); //Custom servers need the json array too
       }
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
@@ -510,10 +514,24 @@ function vyps_vy256_solver_func($atts) {
 
             function start()
             {
+              //This needs to happen on start to init.
+              var server_list = $js_servername_array;
+              var current_server = server_list[0][0];
+              console.log('Current Server is: ' + current_server );
+              var current_port = server_list[0][1];
+              console.log('Current port is: ' + current_port );
+
+
               //Start the MO pull
               moAjaxTimerPrimus();
               pull_mo_stats();
               console.log('Ping MoneroOcean');
+
+              //Convert server array into JS for JS switching if server down
+              function pickServer()
+              {
+
+              }
 
               //Switch on animations and bars.
               $switch_pause_div_on
@@ -528,7 +546,7 @@ function vyps_vy256_solver_func($atts) {
               document.getElementById('status-text').innerText = 'Working.'; //set to working
 
               /* start mining, use a local server */
-              server = \"wss://$used_server:$used_port\";
+              server = 'wss://' + current_server + ':' + current_port;
               startMining(\"$mining_pool\",
                 \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads, \"$miner_id\");
 

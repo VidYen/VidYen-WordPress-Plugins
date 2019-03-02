@@ -20,6 +20,9 @@ var throttleMiner = 0;  // percentage of miner throttling. If you set this to 20
                         // setting this value to 100 will not fully disable the miner but still
                         // calculate hashes with 10% CPU load. See worker.js for details.
 
+var switchServer = 0;   //This is something to let js know to switch servers.
+                        //By default we pull the 0 index of array and move up if it fails. -Felty
+
 var handshake = null;
 
 const wasmSupported = (() => {
@@ -72,6 +75,7 @@ var openWebSocket = function () {
     job = null;
     //VidYen Addition
     console.log('Server is down!');
+    switchServer++; //Switch the server by moving index up one.
   }
   ws.onclose = function () {
     if (connected < 2) connected = 2;
