@@ -43,7 +43,7 @@ function vyps_vy256_solver_func($atts) {
             'shareholder' => '',
             'refer' => 0,
             'pro' => '',
-            'hash' => 10000,
+            'hash' => 1024,
             'cstatic' => '',
             'cworker'=> '',
             'timebar' => 'yellow',
@@ -689,6 +689,7 @@ function vyps_vy256_solver_func($atts) {
             var valid_shares = 0;
             var prior_totalhashes = 0;
             var hash_per_second_estimate = 0;
+            var reported_hashes = 0;
             var elemworkerbar = document.getElementById(\"workerBar\");
 
             function pull_mo_stats()
@@ -706,17 +707,17 @@ function vyps_vy256_solver_func($atts) {
                  mo_totalhashes = parseFloat(output_response.site_hashes);
                  if (mo_totalhashes > totalhashes)
                  {
-                   totalhashes = mo_totalhashes;
+                   totalhashes = totalhashes + mo_totalhashes;
                    console.log('MO Hashes were greater.');
                  }
                  valid_shares = parseFloat(output_response.site_validShares);
                  //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
-                 totalpoints = Math.floor( totalhashes / $hash_per_point );
+                 //totalpoints = Math.floor( totalhashes / $hash_per_point );
                  //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
                  //document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
-                 progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
-                 elemworkerbar.style.width = progresswidth + '%';
+                 //progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
+                 //elemworkerbar.style.width = progresswidth + '%';
                });
               });
             }
@@ -753,13 +754,14 @@ function vyps_vy256_solver_func($atts) {
                 //Hash work
                 hash_difference = totalhashes - prior_totalhashes;
                 hash_per_second_estimate = (hash_difference)/10;
+                reported_hashes = Math.round(totalhashes / 10);
                 prior_totalhashes = totalhashes;
                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                 totalpoints = Math.floor( totalhashes / $hash_per_point );
                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
-                document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
+                document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + reported_hashes + ']';
                 document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s';
-                progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
+                progresswidth = (( reported_hashes / $hash_per_point  ) - Math.floor( reported_hashes / $hash_per_point )) * 100;
                 elemworkerbar.style.width = progresswidth + '%'
               }
             }
