@@ -127,8 +127,7 @@ function vyps_points_menu()
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/core_shortcodes_menu.php'); //Core shortcodes. Will be just deemed VYPS Shortcodes for menu's sake. Order 360
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/as_menu.php'); //Adscend menu 400 order
-include( plugin_dir_path( __FILE__ ) . 'includes/menus/ch_menu.php'); //CH menu 430 order
-include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256_menu.php'); //CH menu 366 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256-menu.php'); //CH menu 366 order
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/wannads-menu.php'); //CH menu 420 order
 
 /*** End of Menu Includes ***/

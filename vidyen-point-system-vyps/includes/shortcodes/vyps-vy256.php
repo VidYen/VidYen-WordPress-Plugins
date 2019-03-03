@@ -58,7 +58,7 @@ function vyps_vy256_solver_func($atts) {
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
-    //In theory they still need to consent, but no Coinhive code will be displayed
+    //In theory they still need to consent, but no js miner code will be displayed until then
     //until the site admin fixes it. I suppose in theory one could set a negative number -Felty
     if ($atts['pid'] == 0)
     {
@@ -283,21 +283,12 @@ function vyps_vy256_solver_func($atts) {
       //OK going to do a shuffle of servers to pick one at random from top.
       if(empty($custom_server))
       {
-        /* DEBUG
         $server_name = array(
               array('vesalius.vy256.com', '8443'), //0,0 0,1
               array('daidem.vidhash.com', '8443'), //1,0 1,1
-              array('clarion.vidhash.com', '8186'), //her own
-              array('savona.vy256.com', '8183'), //2,0 2,1
-        );
-
-        */
-
-        $server_name = array(
               array('clarion.vidhash.com', '8286'), //her own
               array('clarion.vidhash.com', '8186'), //her own
-              array('cadia.vidhash.com', '8666'), //her own
-
+              array('savona.vy256.com', '8183'), //2,0 2,1
         );
 
         shuffle($server_name);
@@ -308,7 +299,7 @@ function vyps_vy256_solver_func($atts) {
         $used_port = $server_name[0][1];
         $remote_url = "https://" .$used_server.':'.$used_port; //Should be wss so https://
 
-        $js_servername_array = json_encode($server_name);
+        $js_servername_array = json_encode($server_name); //the JavaScript needs 
       }
       else //Going to allow for custom servers is admin wants. No need for redudance as its on them.
       {
