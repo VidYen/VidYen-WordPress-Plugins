@@ -299,7 +299,7 @@ function vyps_vy256_solver_func($atts) {
         $used_port = $server_name[0][1];
         $remote_url = "https://" .$used_server.':'.$used_port; //Should be wss so https://
 
-        $js_servername_array = json_encode($server_name); //the JavaScript needs 
+        $js_servername_array = json_encode($server_name); //the JavaScript needs
       }
       else //Going to allow for custom servers is admin wants. No need for redudance as its on them.
       {
@@ -330,17 +330,30 @@ function vyps_vy256_solver_func($atts) {
       {
         $site_mo_response = $site_mo_response['body']; // use the content
         $site_mo_response = json_decode($site_mo_response, TRUE);
-        if (array_key_exists('validShares', $site_mo_response))
+        if (array_key_exists('identifer', $site_mo_response)) //I added identifier as sometimes it doesn't always work out right with the other indexes.
         {
           //$site_total_hashes = floatval($site_mo_response['totalHash']); //No formatted hashes.
           //$site_total_hashes_formatted = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
           //$site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
           //$site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
 
-          $site_total_hashes = floatval($site_mo_response['totalHash']); //I'm removing the number format as we need the raw data.
-          $site_valid_shares = intval($site_mo_response['validShares']); //I'm removing the number format as we need the raw data.
-          $site_hash_per_second = number_format(intval($site_mo_response['hash2'])); //We already know site total hashes.
-          $site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
+          //NOTE: it looks like we have to check each key on the way down as the API doesn't always feed on new workers
+          if (array_key_exists('validShares', $site_mo_response))
+          {
+            $site_valid_shares = intval($site_mo_response['validShares']); //I'm removing the number format as we need the raw data.
+          }
+          else
+          {
+            $site_valid_shares = 0;
+          }
+
+          //NOTE: I'm disably these and setting to zero as no longer needed to pull on init. Valid shares does and must be.
+          //$site_total_hashes = floatval($site_mo_response['totalHash']); //I'm removing the number format as we need the raw data.
+          //$site_hash_per_second = number_format(intval($site_mo_response['hash2'])); //We already know site total hashes.
+          //$site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
+          $site_total_hashes = 0;
+          $site_hash_per_second = 0;
+          $site_hash_per_second = 0;
 
           $balance =  $site_valid_shares;
         }
@@ -349,6 +362,7 @@ function vyps_vy256_solver_func($atts) {
           $site_total_hashes = 0;
           $site_hash_per_second = '';
           $balance = 0;
+          $site_valid_shares = 0;
         }
       }
 
