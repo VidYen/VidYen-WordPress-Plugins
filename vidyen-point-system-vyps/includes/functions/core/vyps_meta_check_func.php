@@ -7,8 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //It would be one of my to do's if i had a time machine...
 //To go back and berrate the inventor of the post back system and tell them its crap, always will be, and they they should use authenticated json systems
-//It's sad, when coin hive has a better system
-
 
 function vyps_meta_check_func( $meta_id_pull )
 {

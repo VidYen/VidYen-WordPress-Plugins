@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //NOTE: I feel somewhat motivated to get this to work now that I can get referrals transfered according to Adscend.
 
 //AS shortcode functons.
-//Need less disclaimers here as average people believe that Coinhive is evil. From my point of view, advertising is evil. -Felty
+//Need less disclaimers here as average people believe that mining is evil. From my point of view, advertising is evil. -Felty
 //Yeah that is a prequel reference.
 
 // Below is the Adscend watching shortcode itself
@@ -80,7 +80,7 @@ function vyps_adscend_func( $atts ) {
 add_shortcode( 'vyps-as-watch', 'vyps_adscend_func');
 
 
-//The redeem will need some cleansing but not much. BTW I trust Adscend less than I do Coinhive. -Felty
+//The redeem will need some cleansing but not much. -Felty
 function vyps_adscend_redeem_func( $atts ) {
 
 	/* Do the logged on check first as I guess it wastes less resources */
@@ -132,7 +132,7 @@ function vyps_adscend_redeem_func( $atts ) {
 	*  the integration page on your offer wall under API/SDK
 	*  integration. It doesn't even look like its a menu.
 	*  It's like that scend in HHG2G trying to get to the form.
-	*  It's a shame Adscend didn't copy Coin Hive.
+	*  It's a shame Adscend didn't copy CH
 	*/
 
 	//return $atts['api']; //return here to see why api key was not working
@@ -191,7 +191,7 @@ function vyps_adscend_redeem_func( $atts ) {
 	*/
 
 	/* Hrm... The below does generate the correct json but its not pulling for some reason soo... I'm going to use the CH version */
-	/* It dawned on me that the ' ' in arrays might be the problem but below is copy and paste from coin hive*/
+	/* It dawned on me that the ' ' in arrays might be the problem but below is copy and paste from CH */
 
 	$pub_id = $atts['pub'];
 	$adwall_id = $atts['profile'];

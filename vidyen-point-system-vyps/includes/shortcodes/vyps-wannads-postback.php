@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*** Wannads short code to make a postback page ***/
 
-//NOTE: As much as I hate post backs, its not hard to do and Wannads doesn't have the Adscend point api tracking system (nor like Coinhive)
+//NOTE: As much as I hate post backs, its not hard to do and Wannads doesn't have the Adscend point api tracking system
 //Of course since the wannads site won't have a wp login, has to be just just a shortcode with page. And you will have to wait on Wannads to talk to your server
 //Lots of terrible things can will go wrong, but the demand for this (due to Adscend just being.... well Adscend) keeps happening so I broke down and decided to do this
 //regardless of having to use a post back. I will have to do it in a way that is secure etc etc.
