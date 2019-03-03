@@ -87,6 +87,12 @@ function vyps_vy256_sub_menu_page()
     <p>The rates of XMR per hash is determined by them as well as the minimum payouts. An account is not required, but by default, the minimum payout is 0.3 XMR, and if you wish to adjust that, you will have to create an account through them.</p>
     <p>To see your progress toward payout, visit the <a href="https://moneroocean.stream/#/dashboard" target="_blank">dashboard</a> and add your XMR wallet where it says Enter Payment Address at the bottom of page. There, you can see total hashes, current hash rate, and account option if you wish to change payout rate.</p>
     <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort. VY256 has a range of 1%–5% developer fee, depending on the overall network rate.</p>
+    <h1>Worker Name Explanation</h1>
+    <p>Something I have never explained, but if you are looking on MoneroOcean dashboard, you will see worker names such as "3vidyenlive1297"</p>
+    <p>The leading 3 is the user id number on WordPress db, and the 1297 is the transaction id.</p>
+    <p>Since worker statistics are not meant to be kept long term on the pools, when a user redeems or refreshes the page, it will check to see how many valid shares are currently accounted for and then makes a new worker so that it does not double count.</p>
+    <p>This does cause issues with users mining on same account with different devices. If you have users who want to do this, then create different pages or accounts and have them transfer points between accounts.</p>
+    <p>This is an issue I would like to resolve, but if we used the worker name long term for the overall balance, it is possible that it gets wiped and user ends up with a negative balance.</p>
     <h1>Localization</h1>
     <p>The following will allow you change the text to a localized version in your language:</p>
     <p>Redeem: <b>redeembtn="Redimir"</b></p>
