@@ -1,11 +1,11 @@
 === VidYen Point System ===
 Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
-Tags: monetization, Adscend, Monero, Wannads, rewards, WooCommerce, GamiPress, myCred, mining, crypto, Bitcoin, credit, wallet
+Tags: Rewards, Mining, Crypto, Monero, Adscend, Wannads, monetization, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
 Requires at least: 4.9.8
 Tested up to: 5.1.0
 Requires PHP: 7.0
-Stable tag: 2.2.0
+Stable tag: 2.3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,7 +103,6 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Wannads - Offer Walls [Privacy Policy](https://publishers.wannads.com/privacy)
 - AdScend Media - Offer Walls [Privacy Policy](https://adscendmedia.com/notices/privacy-policy)
 - AdGate Media - Offer Walls [Privacy Policy](https://adgatemedia.com/pp.php)
-- Coinhive - To run websocket connections between your users client and put JS on your page. [Privacy Policy](https://coinhive.com/info/privacy)
 
 == Changelog ==
 
