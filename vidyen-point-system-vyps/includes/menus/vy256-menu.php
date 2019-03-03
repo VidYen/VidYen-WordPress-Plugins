@@ -12,7 +12,7 @@ add_action('admin_menu', 'vyps_vy256_submenu', 366 );
 function vyps_vy256_submenu() {
 
   $parent_menu_slug = 'vyps_points';
-  $page_title = "VYPS VY256 Shortcodes";
+  $page_title = "VY256 Miner Shortcodes";
   $menu_title = 'VY256 Miner Shortcodes';
   $capability = 'manage_options';
   $menu_slug = 'vyps_vy256_page';
@@ -37,18 +37,19 @@ function vyps_vy256_sub_menu_page()
 
   echo '
   <div class="wrap">
-    <h1>VidYen VY256 Miner</h1>
-    <p>This is a simple browser miner that uses VidYen’s VY256 pool. The UI, better hash tracking, and performance will be updated as development progresses.</p>
-    <p>This pool runs through vy256.com server and is in development mode, which means the server may crash or be down at any time. Please contact us through support if you have problems.</p>
-    <p>This allows you to use a local miner on WordPress that bypasses adblock or other AV software. That said, you should always explain what this is, and I’ve required the consent buttons by default.</p>
-    <p>There is now a CPU control. It is not as precise as Coinhive, but it allows you to know use 100% by cranking it up to 6 (it’s possible to lock up your computer with two browsers open at 10, so I’m leaving a cap on it), or you can turn it to 0 to pause</p>
-    <p><b>NOTE:</b> Hash updates sometimes come in waves as it has to go from your client’s browser to our stratum to the pool and then back each time.</p>
-    <p>The benefit, however, is that this version does not require any account like Coinhive. AND as far as my testing goes, this version does not get blocked by uBLock or Brave. Also, Malwarebytes never complained in premium mode (unlike Coinhive). That alone makes the low CPU worth it, but we are working on getting the code better.</p>
-    <p>All you need is an up to date Monero XMR wallet <a href="https://mymonero.com" target="_blank">MyMonero</a> and access to the <a href="https://moneroocean.stream/" target="_blank">MoneroOcean</a> pool, which only requires the XMR wallet to use.</p>
-    <p><b>NOTE:</b> You must use a wallet that is compatible with the latest fork of Monero. If you have a wallet older than October, 2018 you should create a new one for this purpose. There is a new fork planned on March 9th, but if you wallet is new then it should be ok as long as it is with a company who choses to follow fork.</p>
-    <p>The payouts and monitoring are through MoneroOcean (not VidYen). As the project progresses, we plan to add other pools, but currently, every seems fine with MoneroOcean.</p>
-    <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain, VidYen, LLC is against the removal or obfuscation of the user consent system.</p>
-    <p>You should make users aware that this miner may drain their battery and use their electrcity in your consent disclaimer.</p>
+    <h1>VidYen VY256 Algo Switching Miner</h1>
+    <p>With the closure of Coinhive and the March 9th, 2019 XMR fork, VidYen now gladly offers an algo switching web miner alternative to the market</p>
+    <p>By default the miner connects through VidYen servers to by passpass adblockers and now mines alt coins with various algorithms that the MoneroOcean pool finds most profitable at any given time.</p>
+    <p>This allows you to use a local web miner on your WordPress site to mine crypto payouts in XMR that bypasses adblock or other AV software while tracking your users efforts to reward them.</p>
+    <p>Prior to the March 9th fork, the VY256 miner would for the most part mine just Monero, but it is now more profitable to mine alt coins and payout in XMR. As a result, hashrates can vary widly depending on the coin being mined and its difficulty.</p>
+    <p>To make it easier on admins, reward payout are based on "Valid Shares" which is the amount of work over all done by your user to earn a payout rather than hashrates.</p>
+    <p>Hashes worked and hash rate are now tracked by the client rather than their now to give them feed back but do not determine their rewards, but you can view exact stats on the <a href="https://moneroocean.stream/#/dashboard" target="_blank">MoneroOcean dashboard</a>.</p>
+    <p><b>NOTE:</b>When you access MoneroOcean, your antivirus or malware software may say the site contains a trojan, but if you are switching from Coinhive, you would already be aware of this as it is a precauctionary measure by AV companies to block all Monero pools due to the fact malware creators will often use them to mine to even though the majority of the miners are legitimate miners. Always take precautionary measures.</p>
+    <p>Unless you link MoneroOcean on your site or you decide to use the MoneroOcean webminerpool server directly, your end users clients will never see those server and therefore never get an AV alert.</p>
+    <p>To get payouts, all you need is an up to date Monero XMR wallet compatiable with the most recent fork. <a href="https://mymonero.com" target="_blank">MyMonero</a> works well enough (or visit the <a href="https://www.reddit.com/r/Monero/" target="_blank">Monero Reddit</a> for altenrative options) and access to the <a href="https://moneroocean.stream/" target="_blank">MoneroOcean</a> pool, which only requires the XMR wallet to use and no KYC account.</p>
+    <p>The payouts and valid share monitoring are through MoneroOcean (not VidYen) and if you need to change your minimum payouts please refer to their <a href="https://moneroocean.stream/#/help/faq" target="_blank">FAQ</a>.</p>
+    <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain, you should take full advantage of the consent system so your site does not get blacklisted by mistake by causing CPU usage on users who were not aware this would happen.</p>
+    <p>You should make users aware that this miner may drain their battery and use their electrcity in your consent disclaimer. The consent system only loads the mining code to the client after it has been accepted.</p>
     <h1>Shortcodes and Syntax</h1>
     <p><b>NOTE:</b> To display the simple miner you need to place the consent button shortcode on your page to create a POST call that the simple miner shortcode will recognize.</p>
     <p>Users must be logged in to see any of these shortcode as the intent was to track user effort.</p>
@@ -92,11 +93,11 @@ function vyps_vy256_sub_menu_page()
     <p>Start: <b>startbtn="Comienzo"</b></p>
     <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 site=vidyen redeembtn="Redimir" startbtn="Comienzo"] Por favor consienta a la minería. [vyps-256-consent text="Yo Consiento"]</b></p>
     <h1>Custom Server</h1>
-    <p>If you want to run your own <a href="https://github.com/VidYen/webminerpool" target="_blank">webminerpool</a> you can, but it needs to support MoneroOcean.</p>
+    <p>If you want to run your own <a href="https://github.com/notgiven688/webminerpool/" target="_blank">webminerpool</a> you can, but it needs to support MoneroOcean.</p>
     <p>You can use MoneroOcean webminepool directly if you want, but your end users may get an AV or adblocker hit on it.</p>
     <p>Websocket Server URL: <b>server=yourserver.com</b></p>
     <p>Websocket Port: <b>wsport=8181</b></p>
-    <p>Nginx Port: <b>nxport=8081</b> (only needed if you do not want to use port 80 for hash tracking)</p>
+    <p>You will need to use the MoneroOcean pool and API currently.</p>
     <p>As this is rather complex, unless you want to learn Debian (or other Linux server) and host the server yourself, we recommend just using the VY256 default server.</p>
     <h1>Support</h1>
     <p>Since this is running on our servers and we expanded the code, VidYen, LLC is the one handling the support. Please go to <a href="https://www.vidyen.com/about/" target="_blank">VidYen About</a> or on our <a href="https://wordpress.org/support/plugin/vidyen-point-system-vyps" target="_blank">WordPress support page</a>.</p>
@@ -104,64 +105,22 @@ function vyps_vy256_sub_menu_page()
     <p>For anyone who is trying this, we want to thank you for testing and that please let us know if you have any problems!</p>
     <p>Keep in mind that we and the pools take some fees, but it is generally way less than the Coinhives 20% fee, and you can get a smaller minimum payout of 0.003 XMR on MoneroOcean.</p>
     <p>Our code is open source, so if you want to run your own version, just go to our <a href="https://github.com/VidYen/VYPS-Plugin" target="_blank">github</a> and grab the code.</p>
-    <h2>Supported pool list:</h2>
-    <p>moneroocean.stream</p>
     <h2>Notes about hash rates:</h2>
-    <p><b>It may take 60-120 seconds before MoneroOceans reports accepted hashes!</b></p>
-    <p>Yes we could lie to you or your users, but generally it is bad form. This is an open system and involves several servers to avoid Adblockers and AV.</p>
-    <p>You may have to let your users know that because we use a true pool (unlike Coinhive) that the hash rates need time to spool up before Monero Ocean gets at fool power.</p>
-    <p>Since the VY256 miner now uses Hashes Accepted and not hashes worked, users need to wait 60 to 120 seconds before being acknoledged as accepted.</p>
-    <p>And generally, if they let it run past 10 minutes it will go to maximum efficency. (I recently got up to 93 H/s on an i7 after 20 minutes at 6 threads and 80% cpu use on slider).</p>
-    <p>In theory, I could allow the use of more than 6 threads, but in testing it was easy to lock up my computer testing in multiple tabs so for now, I believe its a safe comprimise.</p>
-    <p>Because of the nature of the XMR network, hash rates do vary based on what random algo a block has decided to use. Other services such as Coinhive obfuscate this, but the idea is long term, not short term.</p>
-    <p>You may want to create an instructions page and test this yourself.</p>
+    <p>Hash rates displayed for the user are client side now, but the reward is pulled from the MoneroOcean every 60 seconds showing the valid shares which is the reward.</p>
+    <p>The hash rates may vary from client to what you see on the MoneroOcean dashboard as not all hashes are accepted.</p>
+    <p>There are some bugs with mobile devices which show an hash rate on client that is way higher than what MO says, but since the reward is now based on the shares, that is what they should be concerned about.</p>
+    <p>From testing, my iPhone 7 can earn about 5-10 valid shares at 100% CPU eveyr 5 minutes depending, but I would not recommend this as a primary method as it drained my battery fairly quickly.</p>
+    <p>For optimal rewards, please recommend to users to let it run over time as jobs will have to processed by not only MoneroOcean\'s server but whatever block chain is being mined currently.</p>
+    <p>In theory, I could allow the use of more than 6 threads, but in testing it was easy to lock up my computer testing in multiple tabs so for now, I believe its a safe comprimise. There is a way to override but is undocumented.</p>
+    <p></p>
     <br><img src="' . $mo_example_url . '" >
-    <h2>Future plans.</h2>
-    <p>We do have a goal to add more pools down the road, but for now, MoneroOcean works, and the developer of that pool is very responsive and fair.</p>
-    <p>Felty has a goal to add MSR support because of its unique method of mining, but that will be down the road when it gets mining branches.</p>' .
-    /*<p>xmrpool.eu</p>
-    <p>moneropool.com</p>
-    <p>monero.crypto-pool.fr</p>
-    <p>monerohash.com</p>
-    <p>minexmr.com</p>
-    <p>usxmrpool.com</p>
-    <p>supportxmr.com</p>
-    <p>moneroocean.stream</p>
-    <p>poolmining.org</p>
-    <p>minemonero.pro</p>
-    <p>xmr.prohash.net</p>
-    <p>minercircle.com</p>
-    <p>xmr.nanopool.org</p>
-    <p>xmrminerpro.com</p>
-    <p>clawde.xyz</p>
-    <p>dwarfpool.com</p>
-    <p>xmrpool.net</p>
-    <p>monero.hashvault.pro</p>
-    <p>osiamining.com</p>
-    <p>killallasics</p>
-    <p>arhash.xyz</p>
-    <p>aeon-pool.com</p>
-    <p>minereasy.com</p>
-    <p>aeon.sumominer.com</p>
-    <p>aeon.rupool.tk</p>
-    <p>aeon.hashvault.pro</p>
-    <p>aeon.n-engine.com</p>
-    <p>aeonpool.xyz</p>
-    <p>aeonpool.dreamitsystems.com</p>
-    <p>aeonminingpool.com</p>
-    <p>aeonhash.com</p>
-    <p>durinsmine.com</p>
-    <p>aeon.uax.io</p>
-    <p>aeon-pool.sytes.net</p>
-    <p>aeonpool.net</p>
-    <p>supportaeon.com</p>
-    <p>pooltupi.com</p>
-    <p>aeon.semipool.com</p>
-    <p>slowandsteady.fun</p>
-    <p>trtl.flashpool.club</p>
-    <p>etn.spacepools.org</p>
-    <p>etn.nanopool.org</p>
-    <p>etn.hashvault.pro</p>*/ '</div>';
+    <h2>Future plans</h2>
+    <p>We do have a goal to add more pools down the road, but they will now need to be algo switching pools. MoneroOcean has worked well for the plugin over the past year, and the developer of that pool is very responsive and fair.</p>
+    <p>I do plan on showing the current algo being used and there are talks in the Web Mining Pool developemenet git that Bit Tube will be added and I personally plan on supporting that. -Felty</p>
+    <p>Also, I do plan on having the API be a bit more flexible in which server it looks at.</p>
+    <h2>Hidden Features</h2>
+    <p>Setting <b>debug=true</b> well let you use the server being used and the MoneroOcean API link. Not really on the page for users to see, but hopeful for troubleshooting.</p>
+    </div>';
 
   	/* I may not want advertising, but I suppose putting it here never hurts */
   	//$credits_include = $VYPS_root_path . 'includes/credits.php';
