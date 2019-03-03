@@ -64,7 +64,6 @@ echo '
 <p>Wannads - Offer Walls <a href="https://publishers.wannads.com/privacy" target="_blank">[Privacy Policy]</a></p>
 <p>AdScend Media - Offer Walls <a href="https://adscendmedia.com/notices/privacy-policy" target="_blank">[Privacy Policy]</a></p>
 <p>AdGate Media - Offer Walls <a href="https://adgatemedia.com/pp.php" target="_blank">[Privacy Policy]</a></p>
-<p>Coinhive - To run websocket connections between your users client and put JS on your page. <a href="https://coinhive.com/info/privacy" target="_blank">[Privacy Policy]</a></p>
 ';
 
 /* You know I'm not entirely sure if the ending of this PHP will cause problems.
