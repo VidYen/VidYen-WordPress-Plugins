@@ -55,6 +55,8 @@ function vyps_vy256_solver_func($atts) {
             'debug' => FALSE,
             'twitch' => FALSE,
             'youtube' => FALSE,
+            'donate' => FALSE,
+            'reason' => 'VY256 Mining', //Not sure sure I never added it hear other than to prevent people from messing with the reason too much and blow up db
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -76,13 +78,13 @@ function vyps_vy256_solver_func($atts) {
     $max_threads = $atts['maxthreads'];
     $sm_throttle = $atts['throttle'];
     $pointID = $atts['pid'];
-    $password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
-    //$password = 'x';
+    $password = $atts['password']; //This gives option to set password on the miner on MO when setting up
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
-    $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName;
+    $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
     $hash_per_point = $atts['hash'];
+    $reason = sanitize_text_field($atts['reason']); //Gods only know what people will do with their text fields.
 
     //Custom Graphics variables for the miner. Static means start image, custom worker just means the one that goes on when you hit start
     $custom_worker_stat = $atts['cstatic'];
@@ -98,6 +100,8 @@ function vyps_vy256_solver_func($atts) {
     $redeem_btn_text = $atts['redeembtn']; //By default 'Redeem'
     $start_btn_text = $atts['startbtn']; //By default 'Start Mining'
 
+    //MODES
+    $donate_mode = $atts['donate']; //If this is on, and user has a referral... it goes all to them. Resolves the multi device mining issue once and for all. (mostly)
     $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
 
     //Player MODE. Either for youtube or twitch
@@ -317,6 +321,9 @@ function vyps_vy256_solver_func($atts) {
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
 
+
+
+
       //I feel like maybe should eventually functionize this.
       //MO remote get info for site
       $mo_site_wallet = $sm_site_key;
@@ -368,67 +375,72 @@ function vyps_vy256_solver_func($atts) {
 
       if ($balance > 0)
       {
-          //Ok we need to actually use $wpdb here as its going to feed into the log of course.
-          global $wpdb;
-          $table_log = $wpdb->prefix . 'vyps_points_log';
-          $reason = "VY256 Mining"; //I feel like this should be a shortcode attr but maybe pro version feature.
-          $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
-          $pointType = intval($pointID); //Point type should be int.
-          $user_id = get_current_user_id();
+        //I've been thinking of a more permant solution to the multi miner which has been bothering me for several months.
+        //So I'm going to create a donate mode which donates all the points to your refer. Only way I can think to keep it decentralized,
+        //but should work in theory. -felty
+        //Also I'm going to functionize this. I don't think we will need $wpdb, but I could be wrong
+        global $wpdb;
 
-          //Inserting VY256 hashes AS points! To main users
-          $data = [
-              'reason' => $reason,
-              'point_id' => $pointType,
-              'points_amount' => $amount,
-              'user_id' => $user_id,
-              'time' => date('Y-m-d H:i:s'),
-              'vyps_meta_data' => $siteName,
-          ];
-          $wpdb->insert($table_log, $data);
+        $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
+        $pointType = intval($pointID); //Point type should be int.
+        $user_id = get_current_user_id(); //Redudant, but ah well.
+        $refer_rate = intval($refer_rate);
 
-          //OK. Here is if you have a refer rate that it just thorws it at their referrable
-          //I'm not 100% sure that I can let the func behave nice like this. WCCW
-          if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 )
+        //Update the $atts array to feed into the add funciton
+        $atts['outputid'] = $pointType;
+        $atts['outputamount'] = $amount;
+        $atts['to_user_id'] = $user_id;
+        $atts['vyps_meta_data'] = $siteName;        
+        $atts['refer'] = $refer_rate; //It dawned on that I built the referral system into the function and could reduce the shortcode.
+        $atts['reason'] = $reason; //Redudant, but went through some santiization before it got here indirectly
+
+        if ($donate_mode != TRUE) //Donate mod is off. Or at least not true.
+        {
+          $add_result = vyps_add_func($atts);
+
+          if($add_result == 1)
           {
-            $reason = "VY256 Mining Referral"; //It shows in the log. NOTE: I am going to keep point exchange and referral seperate in the logs. I'm curious how this plays out. Can count both with an OR. AS and CH will never get a direct refer.
-            $amount = doubleval($balance); //Why do I do a doubleval here again? I think it was something with Wordfence.
-            $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
-            $pointType = intval($pointID); //Point type should be int.
-            $refer_user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
-
-            //Inserting VY256 hashes AS points! To referral user. NOTE: The meta_ud for 'refer' and meta_subid1 for the ud of the person who referred them
-            $data = [
-                'reason' => $reason,
-                'point_id' => $pointType,
-                'points_amount' => $amount,
-                'user_id' => $refer_user_id,
-                'vyps_meta_id' => 'refer',
-                'vyps_meta_subid1' => $user_id,
-                'time' => date('Y-m-d H:i:s')
-            ];
-            $wpdb->insert($table_log, $data);
-
-            //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
+            $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
+          }
+          else
+          {
+            $redeem_output = '<tr><td>Redemption Error!</td></tr>'; //Something went wrong.
           }
 
-          //Yeah a bit heavy on the SQL calls but need to check a second time if redeeming on load
-          $table_name_log = $wpdb->prefix . 'vyps_points_log';
-          $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s"; //Ok we find the id of the last VY256 mining
-          $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining" ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
-          $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
+        }
+        elseif ($donate_mode == TRUE AND vyps_current_refer_func($current_user_id) != 0 ) //Same as before but we changing the donate mode to give it all to other user if refer set
+        {
+          $atts['to_user_id'] = vyps_current_refer_func($current_user_id); //Simply change the user id to the referral. Saves a lot of messing.
 
-          //NOTE: I new something was messing up
-          //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
-          $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
-          $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
-          $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
+          $add_result = vyps_add_func($atts);
 
-          //Pulling the graphic
-          $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
+          if($add_result == 1)
+          {
+            $redeem_output = "<tr><td>$reward_icon $balance donated to referral!</td></tr>"; //I figured people should be aware that this is what it is doing.
+          }
+          else
+          {
+            $redeem_output = '<tr><td>Redemption Error!</td></tr>'; //Something went wrong.
+          }
+        }
 
-          $balance = 0; //This should be set to zero at this point.
+        //NOTE to self... I might want to functionalize the bllow.
+        //Yeah a bit heavy on the SQL calls but need to check a second time if redeeming on load
+        $table_name_log = $wpdb->prefix . 'vyps_points_log';
+        $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s"; //Ok we find the id of the last VY256 mining
+        $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining" ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+        $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
+        //NOTE: I new something was messing up
+        //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
+        $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+        $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
+        $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
+
+        //Pulling the graphic
+        $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
+
+        $balance = 0; //This should be set to zero at this point.
       }
       elseif($player_mode != TRUE)
       {
@@ -650,7 +662,8 @@ function vyps_vy256_solver_func($atts) {
               if (obj.identifier === \"job\")
               {
                 console.log(\"new job: \" + obj.job_id);
-                document.getElementById('status-text').innerText = 'New job.';
+                console.log(\"current algo: \" + job.algo);
+                document.getElementById('status-text').innerText = 'New job using ' + job.algo + ' algo.';
                 setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"solved\")
@@ -851,7 +864,14 @@ function vyps_vy256_solver_func($atts) {
       //Hidden DEBUG
       if($debug_mode==TRUE)
       {
-        $debug_html_output = '<br><br>' . $remote_url . '<br><br>' . $site_url . '<br><br>';
+        $debug_html_output = '<table>
+                                <tr>
+                                  <td>wss://'.$used_server.':'.$used_port.'</td>
+                                </tr>
+                                <tr>
+                                  <td><a href="'.$site_url.'" target="_blank">'.$site_url.'</a></td>
+                                </tr>
+                              </table>';
       }
       else
       {

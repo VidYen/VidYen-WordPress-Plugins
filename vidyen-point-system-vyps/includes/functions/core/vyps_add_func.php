@@ -19,6 +19,7 @@ function vyps_add_func( $atts )
         'comment' => '',
     		'reason' => '',
 				'vyps_meta_id' => '',
+				'vyps_meta_data' => '',
     ), $atts, 'vyps-pe' );
 
 	//NOTE: Only adding. So do not need any input variables
@@ -26,6 +27,12 @@ function vyps_add_func( $atts )
 	$add_point_id = intval($atts['outputid']);
 	$add_amount = intval($atts['outputamount']);
 	$to_user_id = intval($atts['to_user_id']);
+	$refer_rate = intval($atts['refer']); 	//Refer rate
+
+	//The Reason and meta Meta which should be somewhat text
+	$reason = sanitize_text_field($atts['reason']); //Feed into when mining or otherwise. For some reason I did not add the function into mining until recently.
+	$vyps_meta_data = sanitize_text_field($atts['vyps_meta_data']);
+	$vyps_meta_id = sanitize_text_field($atts['vyps_meta_id']);
 
 	//NOTE: It dawned me I should check to see if point exists. Luckily I made a function that can Tell
 	$pointID = $add_point_id;
@@ -33,15 +40,6 @@ function vyps_add_func( $atts )
 	{
 				return 0; //Need better error, but in theory if point does not work, it ceases. Also if they need to name the point.
 	}
-
-	//This should be fed in by the hook doing the call now. ie Mining, Adscend, PE, etc
-	$reason = sanitize_text_field($atts['reason']); //Santiized for text
-
-	//Refer rate
-	$refer_rate = intval($atts['refer']);
-
-	//Button Name. NOTE: This just not get passed by the shortcode, but rather PE
-	$vyps_meta_id = $atts['vyps_meta_id']; //TODO Santize this better.... It works but I feel suspicious
 
 	//If this is not a transfer or a direct call, then we going to assume its the current id
 	if ( $to_user_id == 0 )
@@ -58,7 +56,6 @@ function vyps_add_func( $atts )
 		{
 			// I guess we have some problems if the user login is empty. We got some problems
 			return 0; //I suppose have to figure that out later what to put as an error later on TODO
-
 		}
 		else
 		{
@@ -105,6 +102,7 @@ function vyps_add_func( $atts )
 				'points_amount' => $refer_amount,
 				'user_id' => $refer_id,
 				'vyps_meta_id' => $meta_id,
+				'vyps_meta_data' => $vyps_meta_data,
 				'vyps_meta_subid1' => $user_id,
 				'time' => date('Y-m-d H:i:s')
 		];
@@ -128,6 +126,7 @@ function vyps_add_func( $atts )
 			'points_amount' => $add_amount,
 			'user_id' => $user_id,
 			'vyps_meta_id' => $meta_id,
+			'vyps_meta_data' => $vyps_meta_data,
 			'time' => date('Y-m-d H:i:s')
 	];
 	$wpdb->insert($table_name_log, $data);
