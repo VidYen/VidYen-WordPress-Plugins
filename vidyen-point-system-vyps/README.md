@@ -110,6 +110,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 - Add: Created login option for ProfileGrid to make it easier for my own test site in login awareness. `[vyps-pg-lg]`
 - Add: Also made login option to show image while not loged in. `[vyps-lg-img url=https://vidyen.com/imgage/image.png]`
+- Add: To resolve the multi-device mining issue, admins can create a page with `donate=true` attribue and all the mining rewards go to the referral listed.
 - Fix: Changed a few function names that were short that may interfere with some other plugin I do no know about.
 - Fix: Second point in multi point transfers had a centering issue fixed.
 - Change: `[vyps-pe]` will default to `mobile=TRUE` so this may change your site look, but got too many complaints about mobile use and not reading the instructions. Change to `mobile=FALSE` to get legacy.
