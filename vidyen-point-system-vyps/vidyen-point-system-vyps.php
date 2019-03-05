@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads, offer walls, or browser mining.
-Version:      2.3.0.24
+Version:      2.3.0.28
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -279,6 +279,8 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_public_log_
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_add_func.php'); //Functionalized adds to the log
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_deduct_func.php'); //Functionalized deducts to the log
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_meta_check_func.php'); //Meta checking. See if there is a duplicate transaction.
+/*** MO API ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now
 /*** REFER ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_current_refer_func.php'); //General function to check if current user has a refer set, is valid, and returns it.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_current_refer_name_func.php'); //I needed a function to tell who is the current refer since we needed it for multi device mining.

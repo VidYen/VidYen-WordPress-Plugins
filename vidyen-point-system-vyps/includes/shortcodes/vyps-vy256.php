@@ -57,6 +57,7 @@ function vyps_vy256_solver_func($atts) {
             'youtube' => FALSE,
             'donate' => FALSE,
             'reason' => 'VY256 Mining', //Not sure sure I never added it hear other than to prevent people from messing with the reason too much and blow up db
+            'marketmulti' => 0, //market mode. Checks XMR price.
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -103,6 +104,7 @@ function vyps_vy256_solver_func($atts) {
     //MODES
     $donate_mode = $atts['donate']; //If this is on, and user has a referral... it goes all to them. Resolves the multi device mining issue once and for all. (mostly)
     $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
+    $market_multi = floatval($atts['marketmulti']); //Making this easier for people to see on their own the results if have to troubleshoot with them
 
     //Player MODE. Either for youtube or twitch
     if ($atts['twitch'] == TRUE OR $atts['youtube'] == TRUE)
@@ -371,6 +373,14 @@ function vyps_vy256_solver_func($atts) {
           $balance = 0;
           $site_valid_shares = 0;
         }
+      }
+
+      //NOTE: If you want your points payout tied to the XMR price
+      if($market_multi > 0)
+      {
+        $xmr_usd_price = vyps_mo_xmr_usd_api();
+        $multi = $xmr_usd_price * $market_multi; //1 = market price times, .01 franction 2 = 2x etc
+        $balance =  intval($balance * $multi); //Int val to round, but the idea is to make the price determine the points
       }
 
       if ($balance > 0)
@@ -903,6 +913,9 @@ function vyps_vy256_solver_func($atts) {
                                 </tr>
                                 <tr>
                                   <td>'.$mo_site_worker.'</td>
+                                </tr>
+                                <tr>
+                                  <td>'.vyps_mo_xmr_usd_api().'</td>
                                 </tr>
                               </table>';
       }
