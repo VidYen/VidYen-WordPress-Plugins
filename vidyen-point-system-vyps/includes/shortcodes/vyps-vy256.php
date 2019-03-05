@@ -152,12 +152,15 @@ function vyps_vy256_solver_func($atts) {
           '1' => 'vyworker_001.gif',
           '2' => 'vyworker_002.gif',
           '3' => 'vyworker_003.gif',
+          '4' => 'vyworker_003.gif',
+          '3' => 'vyworker_004.gif',
+          '4' => 'vyworker_004.gif',
     );
 
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
     if ($graphic_choice == 'rand')
     {
-      $rand_choice = mt_rand(1,2);
+      $rand_choice = mt_rand(1,4);
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
     }
     else
