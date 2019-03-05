@@ -114,6 +114,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: VY256 algo miner now shows which algo mining every new job (or in js console)
 - Fix: Changed a few function names that were short that may interfere with some other plugin I do no know about.
 - Fix: Second point in multi point transfers had a centering issue fixed.
+- Fix: Reported of hashes mined on mobile devices have been correct for iOS WASM.
 - Change: `[vyps-pe]` will default to `mobile=TRUE` so this may change your site look, but got too many complaints about mobile use and not reading the instructions. Change to `mobile=FALSE` to get legacy.
 - Change: (experimental) Added `auto=TRUE` to `[vyps-pe]` which will automatically run the PE, but you can only have one shortcode of PE on that page to work right.
 - Change: Improvement of internal APIs to talk to other VidYen plugins.

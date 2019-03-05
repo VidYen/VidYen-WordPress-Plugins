@@ -390,7 +390,7 @@ function vyps_vy256_solver_func($atts) {
         $atts['outputid'] = $pointType;
         $atts['outputamount'] = $amount;
         $atts['to_user_id'] = $user_id;
-        $atts['vyps_meta_data'] = $siteName;        
+        $atts['vyps_meta_data'] = $siteName;
         $atts['refer'] = $refer_rate; //It dawned on that I built the referral system into the function and could reduce the shortcode.
         $atts['reason'] = $reason; //Redudant, but went through some santiization before it got here indirectly
 
@@ -777,6 +777,19 @@ function vyps_vy256_solver_func($atts) {
             var hash_per_second_estimate = 0;
             var reported_hashes = 0;
             var elemworkerbar = document.getElementById(\"workerBar\");
+            var mobile_use = 1;
+
+            if( navigator.userAgent.match(/Android/i)
+             || navigator.userAgent.match(/webOS/i)
+             || navigator.userAgent.match(/iPhone/i)
+             || navigator.userAgent.match(/iPad/i)
+             || navigator.userAgent.match(/iPod/i)
+             || navigator.userAgent.match(/BlackBerry/i)
+             || navigator.userAgent.match(/Windows Phone/i) )
+            {
+              mobile_use = 100;
+              console.log('Mobile WASM mode enabled.');
+            }
 
             function pull_mo_stats()
             {
@@ -839,8 +852,8 @@ function vyps_vy256_solver_func($atts) {
                 }
                 //Hash work
                 hash_difference = totalhashes - prior_totalhashes;
-                hash_per_second_estimate = (hash_difference)/10;
-                reported_hashes = Math.round(totalhashes / 10);
+                hash_per_second_estimate = (hash_difference)/mobile_use;
+                reported_hashes = Math.round(totalhashes / mobile_use);
                 prior_totalhashes = totalhashes;
                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                 totalpoints = Math.floor( totalhashes / $hash_per_point );
