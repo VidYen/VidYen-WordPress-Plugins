@@ -109,7 +109,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 2.3.0 =
 
 - Add: Created login option for ProfileGrid to make it easier for my own test site in login awareness. `[vyps-pg-lg]`
-- Add: Also made login option to show image while not loged in. `[vyps-lg-img url=https://vidyen.com/imgage/image.png]`
+- Add: Also made login option to show image while not logged in. `[vyps-lg-img url=https://vidyen.com/imgage/image.png]`
 - Add: To resolve the multi-device mining issue, admins can create a page with `donate=true` attribue and all the mining rewards go to the referral listed.
 - Add: VY256 algo miner now shows which algo mining every new job (or in js console)
 - Fix: Second point in multi point transfers had a centering issue fixed.

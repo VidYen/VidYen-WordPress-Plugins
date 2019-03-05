@@ -125,5 +125,8 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>It is complicated to test as someone else’s software is being used, but it does a user-to-user off-blockchain transfer on your site. The user will still need to use the third-party wallet via Dashed Slug’s plugin to withdraw it off your site.</p>
   <p>For this particular feature as the rest of VYPS,</p>
   <p>No Warranty. EXCEPT AS OTHERWISE EXPRESSLY SET FORTH IN THIS AGREEMENT, NEITHER PARTY HERETO MAKES ANY REPRESENTATION AND EXTENDS NO WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, WITH RESPECT TO THE SUBJECT MATTER OF THIS AGREEMENT, INCLUDING WITHOUT LIMITATION WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND ANY WARRANTY ARISING OUT OF PRIOR COURSE OF DEALING AND USAGE OF TRADE. IN PARTICULAR, BUT WITHOUT LIMITATION, VidYen, LLC MAKES NO REPRESENTATION AND EXTENDS NO WARRANTY CONCERNING WHETHER THE LICENSED COMPOUND OR A LICENSED PRODUCT IS FIT FOR ANY PARTICULAR PURPOSE OR SAFE FOR HUMAN CONSUMPTION.</p>
+  <h2>Utility Shortcodes</h2>
+  <p>Login menu if using Profile Grid: <b>[vyps-pg-lg]</b></p>
+  <p>Images that only show when not logged in: <b>[vyps-lg-img url=https://vidyen.com/imgage/image.png]</b></p>
   ";
 }
