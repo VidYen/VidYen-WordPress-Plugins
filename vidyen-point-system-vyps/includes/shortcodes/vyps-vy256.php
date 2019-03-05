@@ -394,7 +394,7 @@ function vyps_vy256_solver_func($atts) {
         $atts['refer'] = $refer_rate; //It dawned on that I built the referral system into the function and could reduce the shortcode.
         $atts['reason'] = $reason; //Redudant, but went through some santiization before it got here indirectly
 
-        if ($donate_mode != TRUE) //Donate mod is off. Or at least not true.
+        if ($donate_mode != TRUE OR vyps_current_refer_func($current_user_id) == 0) //Donate mod is off. Or at least not true. Or... Its is true, but refer is 0 meaning there is no refer
         {
           $add_result = vyps_add_func($atts);
 
@@ -411,16 +411,20 @@ function vyps_vy256_solver_func($atts) {
         elseif ($donate_mode == TRUE AND vyps_current_refer_func($current_user_id) != 0 ) //Same as before but we changing the donate mode to give it all to other user if refer set
         {
           $atts['to_user_id'] = vyps_current_refer_func($current_user_id); //Simply change the user id to the referral. Saves a lot of messing.
-
           $add_result = vyps_add_func($atts);
 
-          if($add_result == 1)
+          $atts['to_user_id'] = get_current_user_id(); //Ok running a second operation
+          $atts['outputamount'] = 0; //Goign to add a transaction to the existing user with 0. See what I did there.
+          $donate_result = vyps_add_func($atts);
+
+          if($add_result == 1 AND $donate_result == 1)
           {
-            $redeem_output = "<tr><td>$reward_icon $balance donated to referral!</td></tr>"; //I figured people should be aware that this is what it is doing.
+            $current_refer_name = vyps_current_refer_name_func($user_id);
+            $redeem_output = "<tr><td>$reward_icon $balance donated to $current_refer_name!</td></tr>"; //I figured people should be aware that this is what it is doing.
           }
           else
           {
-            $redeem_output = '<tr><td>Redemption Error!</td></tr>'; //Something went wrong.
+            $redeem_output = '<tr><td>Redemption Error! Codes: '.$add_result.' + '.$donate_result.'</td></tr>'; //Something went wrong.
           }
         }
 
@@ -436,9 +440,6 @@ function vyps_vy256_solver_func($atts) {
         $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
         $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
         $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
-
-        //Pulling the graphic
-        $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
 
         $balance = 0; //This should be set to zero at this point.
       }
@@ -511,7 +512,6 @@ function vyps_vy256_solver_func($atts) {
       //Ok some issues we need to know the path to the js file so will have to ess with that.
       $simple_miner_output = "
       <!-- $public_remote_url -->
-      <table>
         $site_warning
         $graphics_html_ouput
           <script>
@@ -874,6 +874,23 @@ function vyps_vy256_solver_func($atts) {
             }
             </script>";
 
+        //Donation mode. Should be made aware who you are donating too
+        if ($donate_mode == TRUE AND vyps_current_refer_func($current_user_id) != 0 )
+        {
+          $user_id = $current_user_id;
+
+          $current_refer_name = vyps_current_refer_name_func($user_id);
+
+          $donate_html_output = '<tr>
+                                  <td>Donate Mode On - Rewards go to: '.$current_refer_name.'</td>
+                                </tr>
+                                ';
+        }
+        else
+        {
+          $donate_html_output = '';
+        }
+
       //Hidden DEBUG
       if($debug_mode==TRUE)
       {
@@ -884,6 +901,9 @@ function vyps_vy256_solver_func($atts) {
                                 <tr>
                                   <td><a href="'.$site_url.'" target="_blank">'.$site_url.'</a></td>
                                 </tr>
+                                <tr>
+                                  <td>'.$mo_site_worker.'</td>
+                                </tr>
                               </table>';
       }
       else
@@ -891,7 +911,7 @@ function vyps_vy256_solver_func($atts) {
         $debug_html_output = '';
       }
 
-      $final_return = $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>' . $debug_html_output; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
+      $final_return = '<table>' . $donate_html_output . $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>' . $debug_html_output; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
 
 
     } else {

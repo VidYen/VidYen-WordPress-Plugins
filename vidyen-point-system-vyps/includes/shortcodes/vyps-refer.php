@@ -5,13 +5,12 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //OK. We are having a gui for stanard egnlish and the three break downs afterwards
-function vyps_refer_gui_short_func() {
-
+function vyps_refer_gui_short_func()
+{
   //Boot user out if not logged in. BTW my code is evolving. -Felty
-  if ( ! is_user_logged_in() ) {
-
+  if ( ! is_user_logged_in() )
+  {
     return; //Not logged in. You see nothing.
-
   }
   //Set variables
   //Get current user Id obviously
@@ -34,19 +33,19 @@ function vyps_refer_gui_short_func() {
 
   //I realize I should post before I pull. Since requires refresh.
 
-  if (isset($_POST['update_refer'])) {
-
+  if (isset($_POST['update_refer']))
+  {
     //As the post is the only thing that edits data, I suppose this is the best place to the noce
     $vyps_nonce_check = $_POST['vypsnoncepost'];
 
     //Make sure no one is being tricked into updating their Wallet Address
-    if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) ) {
-
+    if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) )
+    {
         // This nonce is not valid.
         die( 'Security check! Nonce check failed!' );
-
-    } else {
-
+    }
+    else
+    {
         // The nonce was valid.
         //Carry on.
         //Do the dew.
@@ -58,17 +57,15 @@ function vyps_refer_gui_short_func() {
 
     //Ok we just check via the function to see if it actually works. Otherwise, it does not update.
     //I'm on the fence whether or not we actually tell the user when its wrong or when they have nothing.
-    if (vyps_is_refer_func($current_refer) > 0){
-
+    if (vyps_is_refer_func($current_refer) > 0)
+    {
       //Ok now we update in hell! (Hell = usermeta table) I wonder if anyone reads these coments. -Felty
       update_user_meta( $current_user_id, $key, $current_refer );
-
-    } else {
-
-      $message_output = "<p><b>$current_refer not found!</p>";
-
     }
-
+    else
+    {
+      $message_output = "<p><b>$current_refer not found!</p>";
+    }
   }
 
   //Ok now we can get it from the meta post post.
@@ -77,20 +74,19 @@ function vyps_refer_gui_short_func() {
 
 
   //Checking to see if function returned and ID.
-  if ( $current_refer_user_id != 0 ) {
-
+  if ( $current_refer_user_id != 0 )
+  {
     //Get that data!
     $current_refer_data = get_userdata( $current_refer_user_id );
 
     //This following data call should work. In theory.
     $current_refer_name = $current_refer_data->display_name; //Just the display name. I know I hate -> but its having issues.
-
-  } else {
-
+  }
+  else
+  {
     //If not found, then well
     $current_refer_name = 'No referral!';
     $display_refer = '';
-
   }
 
   //Now we pull what the users current refer was
@@ -134,7 +130,6 @@ function vyps_refer_gui_short_func() {
 
   //Remember kids. Always return shortcodes. Never echo or you are going to have a bad time.
   return $form_result_ouput;
-
 }
 
 //Adding the shortcode.
@@ -151,10 +146,9 @@ add_shortcode( 'vyps-refer', 'vyps_refer_gui_short_func');
 function vyps_refer_code_short_func() {
 
   //Boot user out if not logged in. BTW my code is evolving. -Felty
-  if ( ! is_user_logged_in() ) {
-
+  if ( ! is_user_logged_in() )
+  {
     return; //Not logged in. You see nothing.
-
   }
   //Set variables
   //Get current user Id obviously
@@ -165,20 +159,18 @@ function vyps_refer_code_short_func() {
   $user_refer = vyps_create_refer_func($user_id);
 
   return $user_refer; //Yep you just see you code
-
 }
 
 //Adding the shortcode.
 add_shortcode( 'vyps-refer-code', 'vyps_refer_code_short_func');
 
 /*** The code of the person you are set to ***/
-function vyps_current_refer_short_func() {
-
+function vyps_current_refer_short_func()
+{
   //Boot user out if not logged in. BTW my code is evolving. -Felty
-  if ( ! is_user_logged_in() ) {
-
+  if ( ! is_user_logged_in() )
+  {
     return; //Not logged in. You see nothing.
-
   }
 
   $current_user_id = get_current_user_id();
@@ -197,7 +189,6 @@ function vyps_current_refer_short_func() {
   $current_refer = get_user_meta( $current_user_id, $key, $single ); //I'm guessing if it doesn't exist, that it will show a blank? WCCW
 
   return $current;
-
 }
 
 //Adding the shortcode.

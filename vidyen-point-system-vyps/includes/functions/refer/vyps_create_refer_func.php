@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //But let us hide that so users are forced to interact rather than pick codes from a board.
 
 /*** CREATE REFER FUNCTION ***/
-function vyps_create_refer_func($user_id) {
-
+function vyps_create_refer_func($user_id)
+{
   //I Have decided to make this more generic.
   //Rather than having pull userid, I will pull from outside call
   //Which, at least if I am still around, will pull from $current_user_id
@@ -16,10 +16,9 @@ function vyps_create_refer_func($user_id) {
 
   //As was having issues, I thought might as well check to see if the $user_id was an int and actually 1 or greater.
   //If it isn't either of those. It tis input garbage!
-  if ( !is_int($user_id) OR $user_id < 1 ){
-
+  if ( !is_int($user_id) OR $user_id < 1 )
+  {
     return 0; //If the id had nothing in it, then we just throw out a 0 as it is incorrect. I'd rather work with zero than something else.
-
   }
 
   //Need to add just a bit of non numerical database
@@ -31,5 +30,4 @@ function vyps_create_refer_func($user_id) {
 
   //And out it goes.
   return $user_refer;
-
 }

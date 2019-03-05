@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  VidYen Point System [VYPS] allows you to create a rewards site using video ads, offer walls, or browser mining.
-Version:      2.3.0.19
+Version:      2.3.0.24
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -262,7 +262,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspb.php'); //Poin
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-vy256.php'); //VYPS WMP shortcode
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsxmr_wallet.php'); //Let's user add XMR wallet to usermeta table in WP
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); //Shareholder pick. Is shortcode but used elsewhere
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer.php'); //Referal shortcode display shortcode.
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-refer.php'); //Referal shortcode display shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer_balance.php'); //Referal balance shortcdoe. I really need to functionize this.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-quads.php'); //QUADS the game. Moving to a new tomorrow!
 
@@ -281,6 +281,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_deduct_func
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_meta_check_func.php'); //Meta checking. See if there is a duplicate transaction.
 /*** REFER ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_current_refer_func.php'); //General function to check if current user has a refer set, is valid, and returns it.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_current_refer_name_func.php'); //I needed a function to tell who is the current refer since we needed it for multi device mining.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_create_refer_func.php'); //Function to create encode based off user id.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_is_refer_func.php'); //Function to make sure it is really a refer.
 
