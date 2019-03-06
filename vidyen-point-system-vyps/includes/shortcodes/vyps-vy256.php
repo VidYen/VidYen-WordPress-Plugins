@@ -30,7 +30,7 @@ function vyps_vy256_solver_func($atts) {
             'site' => 'default',
             'pid' => 0,
             'pool' => 'moneroocean.stream', //moneroocean.stream
-            'webpool' => '',
+            'webpool' => '', //wss://webminer.moneroocean.stream/
             'api' => '', //api.moneroocean.stream
             'threads' => 2,
             'maxthreads' => 6,
