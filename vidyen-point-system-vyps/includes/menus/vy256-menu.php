@@ -131,6 +131,9 @@ function vyps_vy256_sub_menu_page()
     <p>And a tutorial video for setup... Feel free to reach out any means possible if you are having problems in the meantime.</p>
     <h2>Hidden Features</h2>
     <p>Setting <b>debug=true</b> well let you use the server being used and the MoneroOcean API link. Not really on the page for users to see, but hopeful for troubleshooting.</p>
+    <h2>Known Issues</h2>
+    <p>Users mining on iOS and other mobile users will get erratic and sometimes very high hash rates due to an issue with mobile browsers. This will not change their end reward as this is determiend by the pool server and not client, but until the core WebMinerPool dev resolves issue, I have set the javascript software to divide the hashrate by 100 if it detects a mobile device until then.</p>
+    <p>You can only mine in one tab on a browser at any given time. If they want to mine in more than one page, then they need to open up a guest profile, make a new user profile, or just use another type of browser at the same time. Given that they can just crank their usage up to 100%, I am not sure why they would.</p>
     <h2>Algo Switching Information</h2>
     <p>Currently supported algorithms</p>
       <table>
