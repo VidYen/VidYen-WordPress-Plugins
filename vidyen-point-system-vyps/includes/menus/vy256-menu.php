@@ -37,7 +37,7 @@ function vyps_vy256_sub_menu_page()
 
   echo '
   <div class="wrap">
-    <h1>VidYen VY256 Algo Switching Miner</h1>
+    <h1>VidYen VY256 Algo Switching Web Miner</h1>
     <p>With the closure of Coinhive and the March 9th, 2019 XMR fork, VidYen now gladly offers an algo switching web miner alternative to the market</p>
     <p>By default the miner connects through VidYen servers to by passpass adblockers and now mines alt coins with various algorithms that the MoneroOcean pool finds most profitable at any given time.</p>
     <p>This allows you to use a local web miner on your WordPress site to mine crypto payouts in XMR that bypasses adblock or other AV software while tracking your users efforts to reward them.</p>
@@ -128,8 +128,46 @@ function vyps_vy256_sub_menu_page()
     <p>We do have a goal to add more pools down the road, but they will now need to be algo switching pools. MoneroOcean has worked well for the plugin over the past year, and the developer of that pool is very responsive and fair.</p>
     <p>I do plan on showing the current algo being used and there are talks in the Web Mining Pool developemenet git that Bit Tube will be added and I personally plan on supporting that. -Felty</p>
     <p>Also, I do plan on having the API be a bit more flexible in which server it looks at.</p>
+    <p>And a tutorial video for setup... Feel free to reach out any means possible if you are having problems in the meantime.</p>
     <h2>Hidden Features</h2>
     <p>Setting <b>debug=true</b> well let you use the server being used and the MoneroOcean API link. Not really on the page for users to see, but hopeful for troubleshooting.</p>
+    <h2>Algo Switching Information</h2>
+    <p>Currently supported algorithms</p>
+      <table>
+        <tr>
+          <th>#</th><th>xmrig short notation</th><th>webminerpool internal</th><th>description</th>
+        </tr>
+        <tr>
+          <td>1</td><td>cn</td><td>algo="cn", variant=-1</td><td>autodetect cryptonight variant (block.major - 6)</td>
+        </tr>
+        <tr>
+          <td>2</td><td>cn/0</td><td>algo="cn", variant=0  </td><td>original cryptonight</td>
+        </tr>
+        <tr>
+          <td>3</td><td>cn/1</td><td>algo="cn", variant=1 </td><td>also known as monero7 and cryptonight v7</td>
+        </tr>
+        <tr>
+          <td>4</td><td>cn/2</td><td>algo="cn", variant=2 or 3   </td><td>cryptonight variant 2</td>
+        </tr>
+        <tr>
+          <td>5</td><td>cn/r</td><td>algo="cn", variant=4 </td><td>cryptonight variant 4 also known as cryptonightR</td>
+        </tr>
+        <tr>
+          <td>6</td><td>cn-lite</td><td>algo="cn-lite", variant=-1 </td><td>same as #1 with memory/2, iterations/2</td>
+        </tr>
+        <tr>
+          <td>7</td><td>cn-lite/0</td><td>algo="cn-lite", variant=0</td><td>same as #2 with memory/2, iterations/2</td>
+        </tr>
+        <tr>
+          <td>8</td><td>cn-lite/1</td><td>algo="cn-lite", variant=1  </td><td>same as #3 with memory/2, iterations/2</td>
+        </tr>
+        <tr>
+          <td>9</td><td>cn-pico/trtl</td><td>algo="cn-pico", variant=2 or 3  </td><td>same as #4 with memory/8, iterations/8</td>
+        </tr>
+        <tr>
+          <td>10</td><td>cn-half </td><td>algo="cn-half", variant=2 or 3</td><td>same as #4 with memory/1, iterations/2</td>
+        </tr>
+      </table>
     </div>';
 
   	/* I may not want advertising, but I suppose putting it here never hurts */

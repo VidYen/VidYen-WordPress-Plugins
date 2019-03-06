@@ -9,17 +9,17 @@ Stable tag: 2.3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-VidYen Point System [VYPS] allows you to create a rewards site using video ads or browser mining.
+VidYen Point System allows you to reward users for web mining crypto, watching video ads, or other money making activities on your site.
 
 == Description ==
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Wannads, and our own VY256 miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store with points earned from doing those activities.
+The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Wannads, and our own VY256 web miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store or other systems with points earned from doing those activities.
 
 [youtube https://youtu.be/yfV4qN1m0Fs]
 
 This is a multi-part system, similar to WooCommerce, that allows WordPress administrators to track points for rewards using monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
-Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising, Wannads, or even the VidYen VY256 Miner (adblock friendly!). It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
+Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising, Wannads, or even the VidYen VY256 Miner (adblock  and AV friendly!). It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
 == Features ==
 
@@ -71,7 +71,7 @@ Yes, with the VY256 Miner, you can setup up shareholder mining so users get a ch
 
 You can, but you need to setup [Dashed Slug's](https://wordpress.org/plugins/wallets/) wallet which is rather complex and go through the VYPS point exchange through a previously setup bank user to do a user to user off blockchain transfer and then use the aforementioned plugin to do the withdrawal.
 
-=Can I use my own server for the webminer?=
+=Can I use my own server for the web miner?=
 
 Yes, you can. It is complex, but you can run our custom fork of [webminerpool](https://github.com/VidYen/webminerpool) on a Debian server to track your own hashes. We'd ask for a donation if you need our help with it though. See the VY256 shortcode instructions for details.
 
