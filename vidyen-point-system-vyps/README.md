@@ -1,7 +1,7 @@
 === VidYen Point System ===
 Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
-Tags: Rewards, Mining, Crypto, Monero, Adscend, Wannads, monetization, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
+Tags: Rewards, Miner, Crypto, Monero, Adscend, Wannads, mining, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
 Requires at least: 4.9.8
 Tested up to: 5.1.0
 Requires PHP: 7.0
