@@ -29,9 +29,9 @@ function vyps_vy256_solver_func($atts) {
             'wallet' => '',
             'site' => 'default',
             'pid' => 0,
-            'pool' => 'moneroocean.stream', //moneroocean.stream
-            'webpool' => '', //wss://webminer.moneroocean.stream/
-            'api' => '', //api.moneroocean.stream
+            'pool' => 'moneroocean.stream', // pool moneroocean.stream
+            'webpool' => '', // websocket wss://webminer.moneroocean.stream:443
+            'api' => '', // API api.moneroocean.stream
             'threads' => 2,
             'maxthreads' => 6,
             'throttle' => 50,
