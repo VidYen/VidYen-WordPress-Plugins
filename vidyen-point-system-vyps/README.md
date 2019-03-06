@@ -9,11 +9,11 @@ Stable tag: 2.3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-VidYen Point System allows you to reward users for web mining crypto, watching video ads, or other money making activities on your site.
+Reward users for web mining crypto, watching video ads, or other money making activities on your site.
 
 == Description ==
 
-The VidYen Point System [VYPS] allows you to create your own rewards site on WordPress. It supports both Adscend Media, Wannads, and our own VY256 web miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store or other systems with points earned from doing those activities.
+The VidYen Point System allows you to create your own rewards site on WordPress which you can reward users for web mining crypto, watching video ads, or other money making activities on your site.. It supports both Adscend Media, Wannads, and our own VY256 web miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store or other systems with points earned from doing those activities.
 
 [youtube https://youtu.be/yfV4qN1m0Fs]
 
