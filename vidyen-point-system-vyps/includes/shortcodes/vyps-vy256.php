@@ -792,13 +792,9 @@ function vyps_vy256_solver_func($atts) {
             var elemworkerbar = document.getElementById(\"workerBar\");
             var mobile_use = 1;
 
-            if( navigator.userAgent.match(/Android/i)
-             || navigator.userAgent.match(/webOS/i)
-             || navigator.userAgent.match(/iPhone/i)
+            if( navigator.userAgent.match(/iPhone/i)
              || navigator.userAgent.match(/iPad/i)
-             || navigator.userAgent.match(/iPod/i)
-             || navigator.userAgent.match(/BlackBerry/i)
-             || navigator.userAgent.match(/Windows Phone/i) )
+             || navigator.userAgent.match(/iPod/i) )
             {
               mobile_use = 100;
               console.log('Mobile WASM mode enabled.');
