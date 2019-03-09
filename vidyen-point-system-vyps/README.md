@@ -106,6 +106,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.3.1 =
+
+- Fix: Start button on Vy256 made more theme friendly.
+
 = 2.3.0 =
 
 - Add: Created login option for ProfileGrid to make it easier for my own test site in login awareness. `[vyps-pg-lg]`

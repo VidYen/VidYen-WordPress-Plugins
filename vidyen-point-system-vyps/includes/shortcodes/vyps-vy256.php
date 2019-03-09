@@ -285,10 +285,6 @@ function vyps_vy256_solver_func($atts) {
 
       $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
-      $server_fail = 0; //Going into this we should have 0 server fails until we tested
-      //NOTE: I am going to have a for loop for each of the servers and it should check which one is up. The server it checks first is cloud=X in shortcodes
-      //Also ports have changed to 42198 to be out of the way of other programs found on Google Cloud
-
       //OK going to do a shuffle of servers to pick one at random from top.
       if(empty($custom_server))
       {
@@ -470,7 +466,7 @@ function vyps_vy256_solver_func($atts) {
       }
 
       $start_button_html ="
-        <button id=\"startb\" style=\"width:100%;\" onclick=\"start()\">$start_btn_text</button>
+        <form id=\"startb\" style=\"display:block;width:100%;\"><input type=\"reset\" style=\"width:100%;\" onclick=\"start()\" value=\"$start_btn_text\"/></form>        
         <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
       ";
 
