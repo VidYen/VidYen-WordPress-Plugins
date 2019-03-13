@@ -43,7 +43,7 @@ function vyps_vy256_solver_func($atts) {
             'shareholder' => '',
             'refer' => 0,
             'pro' => '',
-            'hash' => 1024,
+            'multi' => 0,
             'cstatic' => '',
             'cworker'=> '',
             'timebar' => 'yellow',
@@ -58,6 +58,8 @@ function vyps_vy256_solver_func($atts) {
             'donate' => FALSE,
             'reason' => 'VY256 Mining', //Not sure sure I never added it hear other than to prevent people from messing with the reason too much and blow up db
             'marketmulti' => 0, //market mode. Checks XMR price.
+            'shares' => 1,
+            'hash' => 10000,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -85,6 +87,7 @@ function vyps_vy256_solver_func($atts) {
     $current_user_id = get_current_user_id();
     $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
     $hash_per_point = $atts['hash'];
+    $shares_per_point = floatval($atts['shares']);
     $reason = sanitize_text_field($atts['reason']); //Gods only know what people will do with their text fields.
 
     //Custom Graphics variables for the miner. Static means start image, custom worker just means the one that goes on when you hit start
@@ -105,6 +108,12 @@ function vyps_vy256_solver_func($atts) {
     $donate_mode = $atts['donate']; //If this is on, and user has a referral... it goes all to them. Resolves the multi device mining issue once and for all. (mostly)
     $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
     $market_multi = floatval($atts['marketmulti']); //Making this easier for people to see on their own the results if have to troubleshoot with them
+    $hash_multi = floatval($atts['multi']);
+
+    if ( $shares_per_point == 0 )
+    {
+      return 'Shares per point cannot be 0!';
+    }
 
     //Player MODE. Either for youtube or twitch
     if ($atts['twitch'] == TRUE OR $atts['youtube'] == TRUE)
@@ -323,9 +332,6 @@ function vyps_vy256_solver_func($atts) {
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
 
-
-
-
       //I feel like maybe should eventually functionize this.
       //MO remote get info for site
       $mo_site_wallet = $sm_site_key;
@@ -364,7 +370,7 @@ function vyps_vy256_solver_func($atts) {
           $site_hash_per_second = 0;
           $site_hash_per_second = 0;
 
-          $balance =  $site_valid_shares;
+          $balance =  $site_valid_shares / $shares_per_point; //Almost forgot to divide.
         }
         else
         {
@@ -375,13 +381,16 @@ function vyps_vy256_solver_func($atts) {
         }
       }
 
-      //NOTE: If you want your points payout tied to the XMR price
+      //NOTE: If you want your points payout tied to the XMR price - Forgot this was here.
       if($market_multi > 0)
       {
         $xmr_usd_price = vyps_mo_xmr_usd_api();
         $multi = $xmr_usd_price * $market_multi; //1 = market price times, .01 franction 2 = 2x etc
-        $balance =  intval($balance * $multi); //Int val to round, but the idea is to make the price determine the points
+        $balance =  $balance * $multi; //Int val to round, but the idea is to make the price determine the points
       }
+
+      //NOTE: here is where we round before checking if greater than 0
+      $balance = intval($balance);  //I intvaled here to prevent rounding errors.
 
       if ($balance > 0)
       {
@@ -788,6 +797,7 @@ function vyps_vy256_solver_func($atts) {
             var reported_hashes = 0;
             var elemworkerbar = document.getElementById(\"workerBar\");
             var mobile_use = 1;
+            var jsMarketMulti = 1;
 
             if( navigator.userAgent.match(/iPhone/i)
              || navigator.userAgent.match(/iPad/i)
@@ -810,12 +820,22 @@ function vyps_vy256_solver_func($atts) {
                  output_response = JSON.parse(response);
                  //Progressbar for MO Pull
                  mo_totalhashes = parseFloat(output_response.site_hashes);
+                 mo_XMRprice = parseFloat(output_response.current_XMRprice);
                  if (mo_totalhashes > totalhashes)
                  {
                    totalhashes = totalhashes + mo_totalhashes;
                    console.log('MO Hashes were greater.');
                  }
-                 valid_shares = parseFloat(output_response.site_validShares);
+                 if ($market_multi > 0)
+                 {
+                   jsMarketMulti = ( mo_XMRprice * $market_multi );
+                 }
+                 else
+                 {
+                   jsMarketMulti = 1; //May not be necessary.
+                 }
+
+                 valid_shares = Math.floor( (parseFloat(output_response.site_validShares) / $shares_per_point) * jsMarketMulti ); //Multipass goes here. Realized oder of oeprations should be fine.
                  //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                  //totalpoints = Math.floor( totalhashes / $hash_per_point );
                  //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
@@ -902,16 +922,22 @@ function vyps_vy256_solver_func($atts) {
       {
         $debug_html_output = '<table>
                                 <tr>
-                                  <td>wss://'.$used_server.':'.$used_port.'</td>
+                                  <td>Current Websocket server wss://'.$used_server.':'.$used_port.'</td>
                                 </tr>
                                 <tr>
-                                  <td><a href="'.$site_url.'" target="_blank">'.$site_url.'</a></td>
+                                  <td>MO Worker API: <a href="'.$site_url.'" target="_blank">'.$site_url.'</a></td>
                                 </tr>
                                 <tr>
-                                  <td>'.$mo_site_worker.'</td>
+                                  <td>Worker Name: '.$mo_site_worker.'</td>
                                 </tr>
                                 <tr>
-                                  <td>'.vyps_mo_xmr_usd_api().'</td>
+                                  <td>Price of XMR: $'.vyps_mo_xmr_usd_api().'</td>
+                                </tr>
+                                <tr>
+                                  <td>Share per point: '.$shares_per_point.'</td>
+                                </tr>
+                                <tr>
+                                  <td>Market Multi: '.vyps_mo_xmr_usd_api() * $market_multi / $shares_per_point.'</td>
                                 </tr>
                               </table>';
       }

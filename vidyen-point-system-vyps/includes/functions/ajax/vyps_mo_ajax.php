@@ -51,10 +51,15 @@ function vyps_mo_api_action()
     }
   }
 
+  //Let's get the price of XMR now if we can:
+
+  $current_xmr_price = vyps_mo_xmr_usd_api();
+
   $mo_array_server_response = array(
       'site_hashes' => $site_total_hashes,
       'site_hash_per_second' => $site_hash_per_second,
       'site_validShares' => $site_valid_shares,
+      'current_XMRprice' => $current_xmr_price,
   );
 
   echo json_encode($mo_array_server_response); //Proper method to return json

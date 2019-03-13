@@ -3,7 +3,7 @@ Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
 Tags: Rewards, Miner, Crypto, Monero, Adscend, Wannads, mining, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
 Requires at least: 4.9.8
-Tested up to: 5.1.0
+Tested up to: 5.1.1
 Requires PHP: 7.0
 Stable tag: 2.3.0
 License: GPLv2
@@ -109,6 +109,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 2.3.1 =
 
 - Fix: Start button on Vy256 made more theme friendly.
+- Fix: Only iOS will have hash reporting fix until WMP is fixed.
+- Included valid shares multi. In case one wish a really low point to valid shares ratio or to make it higher.
+- Documentation: I included the intended uses of what mining rewards should be. You do not have to take my advice, but if you want to make money, please listen.
+- Add: More `debug=true` options. Personally, I think its useful for users to see, but if you do not want them to see too much data. Leave it off except for your test pages.
+- Add: Experimental - `marketmulti=0.05` This will take the price of XMR in USD and times it but the market multi and then multiply the valid shares. Have no thorougly teste
 
 = 2.3.0 =
 

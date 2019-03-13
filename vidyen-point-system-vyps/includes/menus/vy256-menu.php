@@ -50,6 +50,23 @@ function vyps_vy256_sub_menu_page()
     <p>The payouts and valid share monitoring are through MoneroOcean (not VidYen) and if you need to change your minimum payouts please refer to their <a href="https://moneroocean.stream/#/help/faq" target="_blank">FAQ</a>.</p>
     <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain, you should take full advantage of the consent system so your site does not get blacklisted by mistake by causing CPU usage on users who were not aware this would happen.</p>
     <p>You should make users aware that this miner may drain their battery and use their electrcity in your consent disclaimer. The consent system only loads the mining code to the client after it has been accepted.</p>
+    <h1>Virtual Rewards vs Tangible Rewards Philosophy</h1>
+    <p>Due to the confusion and frustration of users, I would like to take a moment to explain what the miner is good for and what it is not. For the sake of proper understanding when I say virutal reward, I mean a digital reward that costs nothing for you to reproduce or sell. Tangible, even if digital, it goods that cost you money to obtain even if digital like crypto currency.</p>
+    <p>Although I have plans on adding a more dynamic point system based on the price of Monero, I inteded it to be used for virtual rewards because of the nature of mining and crypto currency, knowing exactly how much a point earned from mining is worth is diffuclty because not only doe sthe price of Monero changes but so does the difficulty of the block being mined making hashes and shares worth more or lesss depending.</p>
+    <p>So as mining costs you nothing more than the bandwidth and hosting costs I am going to list items that I believe are good rewards for crypto mining</p>
+    <h2>Rewards That Are Good For Mining</h2>
+    <p>Donations (obvious)</p>
+    <p>Digital Downloads (images, musics, and videos)</p>
+    <p>Game currency that costs nothing to make (say the VidYen Poker game)</p>
+    <p>Coupons that still allow for end profit</p>
+    <p>Intagible rewards like premium accounts or various other perks</p>
+    <h2>Rewards that are a bad idea to use for crypto mining</h2>
+    <p>USD</p>
+    <p>Actual Crypto</p>
+    <p>Gift cards</p>
+    <p>Physical items that require shipping</p>
+    <p>Anything that you had to pay to put on your store</p>
+    <p>NOTE: It might still be ok if you use a raffle system or gambling system where 1 out of 1,000 users get the rewards, but you need to make the threshold really high.</p>
     <h1>Shortcodes and Syntax</h1>
     <p><b>NOTE:</b> To display the simple miner you need to place the consent button shortcode on your page to create a POST call that the simple miner shortcode will recognize.</p>
     <p>Users must be logged in to see any of these shortcode as the intent was to track user effort.</p>
@@ -62,14 +79,17 @@ function vyps_vy256_sub_menu_page()
     <p>This will display the simple miner after the button on the consent shortcode has been pressed.</p>
     <p>wallet: Your XMR wallet.</p>
     <p>pid: The VYPS point ID found in the “VYPS Point List” of the point type you want to redeem to.</p>
-    <p>hash: Hashes by default redeemed for a 10000 hashes for 1 of your points. You can use the shortcode attribute hash= to set the has to any number above or below 10000. This was originaly set to 1024, but the 10000 hash worked out better with new speeds and GUI.</p>
+    <p>shares: Shares by default redeemed for a 1 valid share for 1 of your points. You can use the shortcode attribute shares= which can be higher than 1 or less than 1 depending on how you want it to go. Ex: shares=2 means 2 shars per point or shares=.5 means 1 point for every half of a share (min 1 share) Again, we are using valid shares for payout now and not hashes. MoneroOcean decides this number and is updated every 30 seconds but may take 5 minutes before it is determined.</p>
+    <p>hash: This still is around to give visual. By default its set to hash=10000 to have an xp bar that goes to 0 to 10,000 for visual, but rewards are determined by server so this is more of a cosmetic. Of course more hashes = more valid shares.</p>
+    <p>marketmulti: This turns on the marketmultiplier based on the USD price of XMR. Ex: marketmulti=1 will times every point earned by 50 if that were the current price of XMR. marketmulti=2 will times it by 100 or market marketmulti=.001 will dividen the points earned by half. This number will changed based on market price so lower the market price, the lower the returns or higher depending.</p>
     <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices. Users can change this with the + or - buttons.</p>
     <p>throttle: The default is 50, which reduces CPU use by 50%, so they only use 50% for mining. I would also recommend leaving this set to 50 and allowing the user to increase it if they want to mine faster via the slider on the menu.</p>
     <p>timebar: The colored part of the top status bar. The default is timebar=yellow. As its CSS, it can be set to anything as such.</p>
     <p>workerbar: The colored part of the bottom status bar. The default is workerbar=orange. As its CSS, it can be set to anything as such.</p>
     <p>timebartext: The colored part of the top text status bar. The default is timebartext=white. As its CSS, it can be set to anything as such.</p>
     <p>workerbartext: The colored part of the bottom text status bar. The default is workerbartext=white. As its CSS, it can be set to anything as such.</p>
-    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen hash=1024 timebar=yellow workerbar=orange][vyps-256-consent]</b></p>
+    <p>debug=true: This turns on optons so you can see the MoneroOcean API and other stats. Mostly for development, but can be useful for seeing what is happening in background</p>
+    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen shares=2 timebar=yellow workerbar=orange][vyps-256-consent]</b></p>
     <p>This will show the miner after the consent button has been clicked.</p>
     <h2>Graphics</h2>
     <p>You can use the shortcode graphic=0 to turn off animated worker or graphic=1 or 2 if you want to select a particular one. Plans for holidays coming soon!</p>
