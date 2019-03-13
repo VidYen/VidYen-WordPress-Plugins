@@ -289,14 +289,15 @@ function vyps_vy256_solver_func($atts) {
       if(empty($custom_server))
       {
         $server_name = array(
+              array('savona.vy256.com', '8183'), //2,0 2,1
               array('vesalius.vy256.com', '8443'), //0,0 0,1
               array('daidem.vidhash.com', '8443'), //1,0 1,1
               array('clarion.vidhash.com', '8286'), //her own
               array('clarion.vidhash.com', '8186'), //her own
-              array('savona.vy256.com', '8183'), //2,0 2,1
         );
 
-        shuffle($server_name);
+        //shuffle($server_name); //NOTE: I'm going to turn shuffle off for now. It will always use Savona. If it breaks it will pick a server at random.
+        //I feel perhaps this was a big mistake not to have a central server.
 
         //Pick the first of the list by default
         $public_remote_url = $server_name[0][0]; //Defaults for one server.
@@ -466,7 +467,7 @@ function vyps_vy256_solver_func($atts) {
       }
 
       $start_button_html ="
-        <form id=\"startb\" style=\"display:block;width:100%;\"><input type=\"reset\" style=\"width:100%;\" onclick=\"start()\" value=\"$start_btn_text\"/></form>        
+        <form id=\"startb\" style=\"display:block;width:100%;\"><input type=\"reset\" style=\"width:100%;\" onclick=\"start()\" value=\"$start_btn_text\"/></form>
         <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
       ";
 
