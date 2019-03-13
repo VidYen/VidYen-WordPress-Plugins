@@ -113,7 +113,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Included valid shares multi. In case one wish a really low point to valid shares ratio or to make it higher.
 - Documentation: I included the intended uses of what mining rewards should be. You do not have to take my advice, but if you want to make money, please listen.
 - Add: More `debug=true` options. Personally, I think its useful for users to see, but if you do not want them to see too much data. Leave it off except for your test pages.
-- Add: Experimental - `marketmulti=0.05` This will take the price of XMR in USD and times it but the market multi and then multiply the valid shares. Have no thorougly teste
+- Add: Experimental shortcode `marketmulti=0.05` This will take the price of XMR in USD and times it but the market multi and then multiply the valid shares. Have not thoroughly tested!
 
 = 2.3.0 =
 
