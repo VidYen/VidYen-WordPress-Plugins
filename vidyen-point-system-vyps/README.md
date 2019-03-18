@@ -108,6 +108,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.3.1 =
 
+- Add: Custom WooCommerce currency function.
+
+= 2.3.1 =
+
 - Fix: Start button on Vy256 made more theme friendly.
 - Fix: Only iOS will have hash reporting fix until WMP is fixed.
 - Included valid shares multi. In case one wish a really low point to valid shares ratio or to make it higher.
