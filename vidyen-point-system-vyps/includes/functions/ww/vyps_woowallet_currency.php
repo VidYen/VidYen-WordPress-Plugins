@@ -1,3 +1,9 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+//I needed a way to add my own currency in WooCommerce. I'm going to just use copper for the first. -Felty
+
 //I needed a way to add my own currency in WooCommerce. I'm going to just use copper for the first. -Felty
 
 /**
@@ -47,7 +53,7 @@ add_filter( 'woocommerce_currencies', 'add_vyps_gold_currency' );
 
 function add_vyps_gold_currency( $currencies )
 {
-    $currencies['GOLD'] = __( 'Currency name', 'woocommerce' );
+    $currencies['GOLD'] = __( 'Gold Peices', 'woocommerce' );
     return $currencies;
 }
 
