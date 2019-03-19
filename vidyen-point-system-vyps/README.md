@@ -108,6 +108,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.3.2 =
 
+- Revert: Switched back to hash as core count. Yes, it will make everyone who got used to it angry, but I got push back over shares as it was hard to understand. Use the `marketmult=` to mitigate market price swings and `hash=` for your point per hash rate. I am still working on a better solution.
 - Add: More instructions on multi device mining.
 - Add: Added device drop down option in consent for multi device miner. You get 6 devices and user must remember it. `multidevice=TRUE`
 

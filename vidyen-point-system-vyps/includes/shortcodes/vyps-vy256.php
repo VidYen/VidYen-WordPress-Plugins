@@ -50,6 +50,8 @@ function vyps_vy256_solver_func($atts) {
             'timebartext' => 'white',
             'workerbar' => 'orange',
             'workerbartext' => 'white',
+            'poolbar' => '#ff8432',
+            'poolbartext' => 'white',
             'redeembtn' => 'Redeem',
             'startbtn' => 'Start Mining',
             'debug' => FALSE,
@@ -99,6 +101,8 @@ function vyps_vy256_solver_func($atts) {
     $workerBar_text_color = $atts['timebartext'];
     $workerBar_color = $atts['workerbar'];
     $workerBar_text_color = $atts['workerbartext'];
+    $poolBar_color = $atts['poolbar'];
+    $poolBar_text_color = $atts['poolbartext'];
 
     //De-English-fication section. As we have a great deal of non-english admins, I wanted to add in options to change the miner text hereby
     $redeem_btn_text = $atts['redeembtn']; //By default 'Redeem'
@@ -278,13 +282,6 @@ function vyps_vy256_solver_func($atts) {
       $reward_icon = vyps_point_icon_func($pointID); //Thank the gods. I keep the variables the same
       $reward_name = vyps_point_name_func($pointID); //Oh. My naming conventions are working better these days.
 
-      /*** Unique mining ***/
-      //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
-      $table_name_log = $wpdb->prefix . 'vyps_points_log';
-      $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
-      $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
-      $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
-
       //NOTE: Ok. Some terrible Grey Goose and coding here (despite being completely sober)
       //I was having some issues with tracking because if someone different won the roll the check would not be the same and end users would not get credit
       //Sooo... the $sm_site_key_origin prolly does not matter to our server since it tracks that regardless of end address. The user mining needs to get more rewarded
@@ -343,6 +340,13 @@ function vyps_vy256_solver_func($atts) {
         $siteName = $device_name . $siteName;
       }
 
+      /*** Unique mining ***/
+      //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
+      $table_name_log = $wpdb->prefix . 'vyps_points_log';
+      $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
+      $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+      $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
+
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
 
       //I feel like maybe should eventually functionize this.
@@ -366,12 +370,14 @@ function vyps_vy256_solver_func($atts) {
           //$site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
 
           //NOTE: it looks like we have to check each key on the way down as the API doesn't always feed on new workers
-          if (array_key_exists('validShares', $site_mo_response))
+          if (array_key_exists('totalHash', $site_mo_response))
           {
+            $site_total_hashes = intval($site_mo_response['totalHash']);  //I've decided this gets less complicated
             $site_valid_shares = intval($site_mo_response['validShares']); //I'm removing the number format as we need the raw data.
           }
           else
           {
+            $site_total_hashes = 0;
             $site_valid_shares = 0;
           }
 
@@ -379,11 +385,14 @@ function vyps_vy256_solver_func($atts) {
           //$site_total_hashes = floatval($site_mo_response['totalHash']); //I'm removing the number format as we need the raw data.
           //$site_hash_per_second = number_format(intval($site_mo_response['hash2'])); //We already know site total hashes.
           //$site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
-          $site_total_hashes = 0;
-          $site_hash_per_second = 0;
-          $site_hash_per_second = 0;
+          //$site_total_hashes = 0;
+          //$site_hash_per_second = 0;
+          //$site_hash_per_second = 0;
 
-          $balance =  $site_valid_shares / $shares_per_point; //Almost forgot to divide.
+          //$balance =  $site_valid_shares / $shares_per_point; //Almost forgot to divide
+
+          $balance =  $site_total_hashes / $hash_per_point; //Yeah yeah, I'm reverting. Too many complaints. Multi and market multi should still work.
+
         }
         else
         {
@@ -461,10 +470,11 @@ function vyps_vy256_solver_func($atts) {
         }
 
         //NOTE to self... I might want to functionalize the bllow.
-        //Yeah a bit heavy on the SQL calls but need to check a second time if redeeming on load
+        /*** Unique mining ***/ //Derr i frogt part of this in the redeem. No wonder I was having bugs. Still need to functionalize. -Felty
+        //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
         $table_name_log = $wpdb->prefix . 'vyps_points_log';
-        $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s"; //Ok we find the id of the last VY256 mining
-        $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining" ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+        $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
+        $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
         $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
         //NOTE: I new something was messing up
@@ -696,6 +706,7 @@ function vyps_vy256_solver_func($atts) {
                 console.log(\"new job: \" + obj.job_id);
                 console.log(\"current algo: \" + job.algo);
                 document.getElementById('status-text').innerText = 'New job using ' + job.algo + ' algo.';
+                document.getElementById('current-algo-text').innerText = 'Current Algo: ' + job.algo + ' - ';
                 setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"solved\")
@@ -742,10 +753,10 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Client Hashes[0]</div></div>
+          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"current-algo-text\"></span><span id=\"progress_text\"> Client Hashes[0]</span></div></div>
         </div>
         <div id=\"poolProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"poolBar\" style=\"width:0%; height: 30px; background-color: $timeBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Accepted Hashes[0]</div></div>
+          <div id=\"poolBar\" style=\"width:0%; height: 30px; background-color: $poolBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$poolBar_text_color;\">Reward[$reward_icon 0] - Reward Progress[0/$hash_per_point]</div></div>
         </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
@@ -806,6 +817,7 @@ function vyps_vy256_solver_func($atts) {
             var activity_progresspoints = 0;
             var totalpoints = 0;
             var progresswidth = 0;
+            var poolProgresswidth = 0;
             var totalhashes = 0; //NOTE: This is a notgiven688 variable.
             var mo_totalhashes = 0;
             var valid_shares = 0;
@@ -813,6 +825,7 @@ function vyps_vy256_solver_func($atts) {
             var hash_per_second_estimate = 0;
             var reported_hashes = 0;
             var elemworkerbar = document.getElementById(\"workerBar\");
+            var elempoolbar = document.getElementById(\"poolBar\");
             var mobile_use = 1;
             var jsMarketMulti = 1;
 
@@ -853,13 +866,13 @@ function vyps_vy256_solver_func($atts) {
                  }
 
                  valid_shares = Math.floor( (parseFloat(output_response.site_validShares) / $shares_per_point) * jsMarketMulti ); //Multipass goes here. Realized oder of oeprations should be fine.
-                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
-                 //totalpoints = Math.floor( totalhashes / $hash_per_point );
-                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
-                 document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
+                 progresspoints = mo_totalhashes - ( Math.floor( mo_totalhashes / $hash_per_point ) * $hash_per_point );
+                 totalpoints = Math.floor( mo_totalhashes / $hash_per_point );
+                 document.getElementById('pool_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Reward Progress[' + progresspoints + '/' + $hash_per_point + ']';
+                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']'; //This needs to remain not on the MO pull
                  //document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
-                 //progresswidth = (( totalhashes / $hash_per_point  ) - Math.floor( totalhashes / $hash_per_point )) * 100;
-                 //elemworkerbar.style.width = progresswidth + '%';
+                 poolProgresswidth = (( mo_totalhashes / $hash_per_point  ) - Math.floor( mo_totalhashes / $hash_per_point )) * 100;
+                 elempoolbar.style.width = poolProgresswidth + '%';
                });
               });
             }
@@ -901,7 +914,7 @@ function vyps_vy256_solver_func($atts) {
                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                 totalpoints = Math.floor( totalhashes / $hash_per_point );
                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
-                document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + reported_hashes + ']';
+                document.getElementById('progress_text').innerHTML = 'Client Hashes[' + reported_hashes + ']';
                 document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s';
                 progresswidth = (( reported_hashes / $hash_per_point  ) - Math.floor( reported_hashes / $hash_per_point )) * 100;
                 elemworkerbar.style.width = progresswidth + '%'
