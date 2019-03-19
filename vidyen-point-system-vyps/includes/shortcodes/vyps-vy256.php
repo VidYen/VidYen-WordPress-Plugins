@@ -969,10 +969,10 @@ function vyps_vy256_solver_func($atts) {
                                   <td>Price of XMR: $'.vyps_mo_xmr_usd_api().'</td>
                                 </tr>
                                 <tr>
-                                  <td>Share per point: '.$shares_per_point.'</td>
+                                  <td>Hash per point: '.$hash_per_point.'</td>
                                 </tr>
                                 <tr>
-                                  <td>Market Multi: '.vyps_mo_xmr_usd_api() * $market_multi / $shares_per_point.'</td>
+                                  <td>Market Multi: '.vyps_mo_xmr_usd_api() * $market_multi.'</td>
                                 </tr>
                               </table>';
       }
