@@ -106,9 +106,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
-= 2.3.1 =
+= 2.3.2 =
 
-- Add: Custom WooCommerce currency function.
+- Add: More instructions on multi device mining.
+- Add: Added device drop down option in consent for multi device miner. You get 6 devices and user must remember it. `multidevice=TRUE`
 
 = 2.3.1 =
 

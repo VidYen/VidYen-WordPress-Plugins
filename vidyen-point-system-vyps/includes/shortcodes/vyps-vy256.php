@@ -85,7 +85,7 @@ function vyps_vy256_solver_func($atts) {
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
-    $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
+    //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
     $hash_per_point = $atts['hash'];
     $shares_per_point = floatval($atts['shares']);
     $reason = sanitize_text_field($atts['reason']); //Gods only know what people will do with their text fields.
@@ -292,7 +292,7 @@ function vyps_vy256_solver_func($atts) {
       //But you can just look at the pools and see the winner. I'm not sure if people want their XMR visible to other user.
       //I will do an unscientific poll. By poll...  I'm going to ask my only known user admin.
 
-      $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+      //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
       //OK going to do a shuffle of servers to pick one at random from top.
       if(empty($custom_server))
@@ -328,6 +328,19 @@ function vyps_vy256_solver_func($atts) {
         $remote_url = "https://" . $server_name[0][0].':'.$custom_server_ws_port; //Should be wss so https://
 
         $js_servername_array = json_encode($server_name); //Custom servers need the json array too
+      }
+
+      //Init the device name if it exists. Else
+      if (isset($_POST['device']))
+      {
+        $device_name = sanitize_text_field($_POST['device']);
+        $siteName = $device_name . $siteName;
+
+      }
+      else
+      {
+        $device_name = 'A';
+        $siteName = $device_name . $siteName;
       }
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
@@ -456,7 +469,7 @@ function vyps_vy256_solver_func($atts) {
 
         //NOTE: I new something was messing up
         //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
-        $miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+        //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
         $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
         $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
@@ -477,7 +490,7 @@ function vyps_vy256_solver_func($atts) {
 
       $start_button_html ="
         <form id=\"startb\" style=\"display:block;width:100%;\"><input type=\"reset\" style=\"width:100%;\" onclick=\"start()\" value=\"$start_btn_text\"/></form>
-        <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
+        <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"hidden\" value=\"$device_name\" name=\"device\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
       ";
 
       $start_message_verbage = 'Press Start to begin.';
@@ -543,10 +556,10 @@ function vyps_vy256_solver_func($atts) {
           <script src=\"$vy256_solver_js_url\"></script>
           <script>
 
-            function get_user_id()
-            {
-                return \"$miner_id\";
-            }
+            //function get_user_id()
+            //{
+            //    return \"miner_id\"; //There was a $ in front of it
+            //}
             var sendstackId = 0;
             function clearSendStack(){
               clearInterval(sendstackId);
@@ -601,7 +614,7 @@ function vyps_vy256_solver_func($atts) {
 
               //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
               startMining(\"$mining_pool\",
-                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads, \"$miner_id\");
+                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
             }
 
             function start()
@@ -634,7 +647,7 @@ function vyps_vy256_solver_func($atts) {
               /* start mining, use a local server */
               server = 'wss://' + current_server + ':' + current_port;
               startMining(\"$mining_pool\",
-                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads, \"$miner_id\");
+                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
 
               /* keep us updated */
 
@@ -729,7 +742,10 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Hashes[0]</div></div>
+          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div id=\"progress_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Client Hashes[0]</div></div>
+        </div>
+        <div id=\"poolProgress\" style=\"width:100%; background-color: grey; \">
+          <div id=\"poolBar\" style=\"width:0%; height: 30px; background-color: $timeBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$workerBar_text_color;\">Reward[$reward_icon 0] - Accepted Hashes[0]</div></div>
         </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
@@ -737,13 +753,14 @@ function vyps_vy256_solver_func($atts) {
           <button type=\"button\" id=\"add\" style=\"display:inline;position:absolute;right:50px;\" class=\"add\" disabled>+</button>
           <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
             <input type=\"hidden\" value=\"\" name=\"redeem\"/>
+            <input type=\"hidden\" value=\"$device_name\" name=\"device\"/>
             <!--<input type=\"submit\" class=\"button-secondary\" value=\"$redeem_btn_text Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
           </form>
         </div>
       <tr>
         <td>
           <div class=\"slidecontainer\">
-            <p>CPU Power: <span id=\"cpu_stat\"></span>%</p>
+            <p>Device $device_name CPU Power: <span id=\"cpu_stat\"></span>%</p>
             <input type=\"range\" min=\"0\" max=\"100\" value=\"$sm_throttle\" class=\"slider\" id=\"cpuRange\">
           </div>
         </td>
@@ -978,7 +995,7 @@ function vyps_solver_consent_button_func( $atts ) {
 
               'text' => 'I agree and consent',
               'disclaimer' => "By clicking the button you consent to have your browser mine cryptocurrency and to exchange it with $site_disclaim_name for points. This will use your device’s resources, so we ask you to be mindful of your CPU and battery use.",
-
+              'multidevice' => FALSE,
             ), $atts, 'vyps-ch-consent' );
 
         $button_text = $atts['text'];
@@ -986,18 +1003,42 @@ function vyps_solver_consent_button_func( $atts ) {
 
         /* User needs to be logged into consent. NO EXCEPTIONS */
 
-        if ( is_user_logged_in() ) {
+        if ( is_user_logged_in() )
+        {
 
-            return "$disclaimer_text<br><br>
-                <form method=\"post\">
-                <input type=\"hidden\" value=\"\" name=\"consent\"/>
-                <input type=\"submit\" class=\"button-secondary\" value=\"$button_text\" onclick=\"return confirm('Did you read everything and consent to letting this page browser mine with your CPU?');\" />
-                </form>";
+          if ($atts['multidevice'] == TRUE)
+          {
+            $multi_device_html = '
+            <br><br>Device worker selection:<br>
+            <select name="device">
+              <option value="A" selected>A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="G">G</option>
+              <option value="H">H</option>
+              <option value="I">I</option>
+              <option value="J">J</option>
+              <option value="K">K</option>
+              <option value="F">F</option>
+              <option value="M">M</option>
+            </select>';
+          }
 
-        } else {
+          $consent_html_output = $disclaimer_text.'<br><br>
+                <form method="post">
+                <input type="hidden" value="" name="consent"/>
+                <input type="submit" class="button-secondary" value="'.$button_text.'" onclick="return confirm(\'Did you read everything and consent to letting this page browser mine with your CPU?\');" />
+                '.$multi_device_html.'
+                </form>';
 
-            return; //NOTE: Admin should use a [vyps-lg] code.
-
+          return $consent_html_output;
+        }
+        else
+        {
+          return; //NOTE: Admin should use a [vyps-lg] code.
         }
     }
 

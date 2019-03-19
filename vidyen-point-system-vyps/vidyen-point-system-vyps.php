@@ -295,7 +295,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_sl
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_credit_func.php'); //Function to credit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_debit_func.php'); //Function to debit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_bal_func.php'); //Function to check bal the WooWallet.
-//include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_currency.php'); //Function to add copper as a currency symbol Doesn't work.
+//include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_currency.php'); //This needs an if I realized. This might not go in 2.3.2
 
 /*** AJAX ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_ajaxurl.php'); //Forces ajax to be called regardless of installation

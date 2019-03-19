@@ -96,9 +96,11 @@ function vyps_vy256_sub_menu_page()
     <p>Also you can use your own graphics with cstatic=https://yourwordpresssite.com/your_still_image.gif and cworker=https://yourworedpresssite.com/your_animated_image.gif</p>
     <p>This will have a stopped miner who then animates after your user hits the start button.</p>
     <h2>Mining on multiple devices.</h2>
-    <p>To mine on multiple devices you need to tell your users to create one WordPress acocunt per device. Then you need to use the [vyps-refer] referral system with the shortcode addtion in the miner shortcode:</p>
+    <p>On the conent shortcode set to <b>[vyps-256-consent multidevice=TRUE]</b></p>
+    <h2>Donate mode</h2>
+    <p>If users wish to mine but donate points to another user then you can use the [vyps-refer] referral system with the shortcode addtion in the miner shortcode:</p>
     <p><b>donate=TRUE</b></p>
-    <p>Then have users set their accounts to the referral to the main account to donate the rewards to that. A bit complicated, but because we do not run the pool, it is required to prevent over rewarding or loss of rewards.</p>
+    <p>Then have users set their accounts to the referral to the main account to donate the rewards to that. A bit complicated, but because we do not run the pool, it is required to prevent over rewarding or loss of rewards.</p>    
     <h2>Referral Mining</h2>
     <p>You can set shortcode option to <b>refer=10</b> to give 10% mining bonus to their referral code invite. This shortcode accepts whole numbers only and rounds down. In theory, a site admin could set refer=200 to give a 200% mining bonus, but I am not sure why you would as that could be abused.</p>
     <p>Users can set their referral code with the shortcode <b>[vyps-refer]</b>, which should give them a page to give and get their referral code. This is not an automatic system, and your users will have to manually add the code. There are plenty of login customization and user account plugins an admin can use to integrate this system with.</p>
