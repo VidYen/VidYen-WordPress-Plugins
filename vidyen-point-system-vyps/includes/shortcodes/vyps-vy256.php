@@ -48,8 +48,10 @@ function vyps_vy256_solver_func($atts) {
             'cworker'=> '',
             'timebar' => 'yellow',
             'timebartext' => 'white',
+            'clienthashes' => 'block',
             'workerbar' => 'orange',
             'workerbartext' => 'white',
+            'poolhashes' => 'block',
             'poolbar' => '#ff8432',
             'poolbartext' => 'white',
             'redeembtn' => 'Redeem',
@@ -101,8 +103,11 @@ function vyps_vy256_solver_func($atts) {
     $workerBar_text_color = $atts['timebartext'];
     $workerBar_color = $atts['workerbar'];
     $workerBar_text_color = $atts['workerbartext'];
+    $workerBar_display = $atts['clienthashes'];
+
     $poolBar_color = $atts['poolbar'];
     $poolBar_text_color = $atts['poolbartext'];
+    $poolBar_display = $atts['poolhashes'];
 
     //De-English-fication section. As we have a great deal of non-english admins, I wanted to add in options to change the miner text hereby
     $redeem_btn_text = $atts['redeembtn']; //By default 'Redeem'
@@ -752,11 +757,11 @@ function vyps_vy256_solver_func($atts) {
         <div id=\"timeProgress\" style=\"display:none;width:100%; background-color: grey; \">
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
-        <div id=\"workerProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"width:0%; height: 30px; background-color: $workerBar_color; c\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"current-algo-text\"></span><span id=\"progress_text\"> Client Hashes[0]</span></div></div>
+        <div id=\"workerProgress\" style=\"display: $workerBar_display;width:100%; background-color: grey; \">
+          <div id=\"workerBar\" style=\"display: $workerBar_display;width:0%; height: 30px; background-color: $workerBar_color; c\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"current-algo-text\"></span><span id=\"progress_text\"> Client Hashes[0]</span></div></div>
         </div>
-        <div id=\"poolProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"poolBar\" style=\"width:0%; height: 30px; background-color: $poolBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$poolBar_text_color;\">Reward[$reward_icon 0] - Reward Progress[0/$hash_per_point]</div></div>
+        <div id=\"poolProgress\" style=\"display: $poolBar_display;width:100%; background-color: grey; \">
+          <div id=\"poolBar\" style=\"display: $poolBar_display;width:0%; height: 30px; background-color: $poolBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$poolBar_text_color;\">Reward[$reward_icon 0] - Reward Progress[0/$hash_per_point]</div></div>
         </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
