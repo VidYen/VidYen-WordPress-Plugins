@@ -1023,6 +1023,7 @@ function vyps_solver_consent_button_func( $atts ) {
 
         if ( is_user_logged_in() )
         {
+          $multi_device_html = '';
 
           if ($atts['multidevice'] == TRUE)
           {
@@ -1043,10 +1044,6 @@ function vyps_solver_consent_button_func( $atts ) {
               <option value="F">F</option>
               <option value="M">M</option>
             </select>';
-          }
-          else
-          {
-            $multi_device_html = '';
           }
 
           $consent_html_output = $disclaimer_text.'<br><br>
