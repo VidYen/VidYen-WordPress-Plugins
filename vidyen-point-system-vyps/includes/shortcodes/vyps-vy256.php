@@ -1044,6 +1044,10 @@ function vyps_solver_consent_button_func( $atts ) {
               <option value="M">M</option>
             </select>';
           }
+          else
+          {
+            $multi_device_html = '';
+          }
 
           $consent_html_output = $disclaimer_text.'<br><br>
                 <form method="post">
