@@ -47,7 +47,7 @@ function vyps_vy256_sub_menu_page()
     <p><b>NOTE:</b>When you access MoneroOcean, your antivirus or malware software may say the site contains a trojan, but if you are switching from Coinhive, you would already be aware of this as it is a precauctionary measure by AV companies to block all Monero pools due to the fact malware creators will often use them to mine to even though the majority of the miners are legitimate miners. Always take precautionary measures.</p>
     <p>Unless you link MoneroOcean on your site or you decide to use the MoneroOcean webminerpool server directly, your end users clients will never see those server and therefore never get an AV alert.</p>
     <p>To get payouts, all you need is an up to date Monero XMR wallet compatiable with the most recent fork. <a href="https://mymonero.com" target="_blank">MyMonero</a> works well enough (or visit the <a href="https://www.reddit.com/r/Monero/" target="_blank">Monero Reddit</a> for altenrative options) and access to the <a href="https://moneroocean.stream/" target="_blank">MoneroOcean</a> pool, which only requires the XMR wallet to use and no KYC account.</p>
-    <p>The payouts and valid share monitoring are through MoneroOcean (not VidYen) and if you need to change your minimum payouts please refer to their <a href="https://moneroocean.stream/#/help/faq" target="_blank">FAQ</a>.</p>
+    <p>The payouts and accepted hash monitoring are through MoneroOcean (not VidYen) and if you need to change your minimum payouts please refer to their <a href="https://moneroocean.stream/#/help/faq" target="_blank">FAQ</a>.</p>
     <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain, you should take full advantage of the consent system so your site does not get blacklisted by mistake by causing CPU usage on users who were not aware this would happen.</p>
     <p>You should make users aware that this miner may drain their battery and use their electrcity in your consent disclaimer. The consent system only loads the mining code to the client after it has been accepted.</p>
     <h1>Virtual Rewards vs Tangible Rewards Philosophy</h1>
@@ -79,8 +79,7 @@ function vyps_vy256_sub_menu_page()
     <p>This will display the simple miner after the button on the consent shortcode has been pressed.</p>
     <p>wallet: Your XMR wallet.</p>
     <p>pid: The VYPS point ID found in the “VYPS Point List” of the point type you want to redeem to.</p>
-    <p>shares: Shares by default redeemed for a 1 valid share for 1 of your points. You can use the shortcode attribute shares= which can be higher than 1 or less than 1 depending on how you want it to go. Ex: shares=2 means 2 shars per point or shares=.5 means 1 point for every half of a share (min 1 share) Again, we are using valid shares for payout now and not hashes. MoneroOcean decides this number and is updated every 30 seconds but may take 5 minutes before it is determined.</p>
-    <p>hash: This still is around to give visual. By default its set to hash=10000 to have an xp bar that goes to 0 to 10,000 for visual, but rewards are determined by server so this is more of a cosmetic. Of course more hashes = more valid shares.</p>
+    <p>hash: Hashes by default redeemed for a 10,000 hashes for for 1 of your points. MoneroOcean decides this number and is updated every 30 seconds but may take 3 minutes before it is determined.</p>
     <p>marketmulti: This turns on the marketmultiplier based on the USD price of XMR. Ex: marketmulti=1 will times every point earned by 50 if that were the current price of XMR. marketmulti=2 will times it by 100 or market marketmulti=.001 will dividen the points earned by half. This number will changed based on market price so lower the market price, the lower the returns or higher depending.</p>
     <p>threads: Default is 1 to only mine one thread. We would recommend leaving it set to 1 in the event your users have slow devices. Users can change this with the + or - buttons.</p>
     <p>throttle: The default is 50, which reduces CPU use by 50%, so they only use 50% for mining. I would also recommend leaving this set to 50 and allowing the user to increase it if they want to mine faster via the slider on the menu.</p>
@@ -89,18 +88,22 @@ function vyps_vy256_sub_menu_page()
     <p>timebartext: The colored part of the top text status bar. The default is timebartext=white. As its CSS, it can be set to anything as such.</p>
     <p>workerbartext: The colored part of the bottom text status bar. The default is workerbartext=white. As its CSS, it can be set to anything as such.</p>
     <p>debug=true: This turns on optons so you can see the MoneroOcean API and other stats. Mostly for development, but can be useful for seeing what is happening in background</p>
-    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen shares=2 timebar=yellow workerbar=orange][vyps-256-consent]</b></p>
+    <p>Example: <b>[vyps-256 wallet=48Vi6kadiTtTyemhzigSDrZDKcH6trUTA7zXzwamziSmAKWYyBpacMjWbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm3wL5K5a pid=4 throttle=10 site=vidyen hash=20000 timebar=yellow workerbar=orange][vyps-256-consent]</b></p>
     <p>This will show the miner after the consent button has been clicked.</p>
     <h2>Graphics</h2>
     <p>You can use the shortcode graphic=0 to turn off animated worker or graphic=1 or 2 if you want to select a particular one. Plans for holidays coming soon!</p>
     <p>Also you can use your own graphics with cstatic=https://yourwordpresssite.com/your_still_image.gif and cworker=https://yourworedpresssite.com/your_animated_image.gif</p>
     <p>This will have a stopped miner who then animates after your user hits the start button.</p>
+    <h2>Client Hashes</h2>
+    <p>As I have added a third bar for better understanding by end user of client versus pool rewards, I have added option to turn it off and on with due to user feedback.</p>
+    <p>clienthashes=none will turn it off.</p>
+    <p>poolhashes=none will also turn off the rewards bar, but not sure why you would do that.</p>
     <h2>Mining on multiple devices.</h2>
     <p>On the conent shortcode set to <b>[vyps-256-consent multidevice=TRUE]</b></p>
     <h2>Donate mode</h2>
     <p>If users wish to mine but donate points to another user then you can use the [vyps-refer] referral system with the shortcode addtion in the miner shortcode:</p>
     <p><b>donate=TRUE</b></p>
-    <p>Then have users set their accounts to the referral to the main account to donate the rewards to that. A bit complicated, but because we do not run the pool, it is required to prevent over rewarding or loss of rewards.</p>    
+    <p>Then have users set their accounts to the referral to the main account to donate the rewards to that. A bit complicated, but because we do not run the pool, it is required to prevent over rewarding or loss of rewards.</p>
     <h2>Referral Mining</h2>
     <p>You can set shortcode option to <b>refer=10</b> to give 10% mining bonus to their referral code invite. This shortcode accepts whole numbers only and rounds down. In theory, a site admin could set refer=200 to give a 200% mining bonus, but I am not sure why you would as that could be abused.</p>
     <p>Users can set their referral code with the shortcode <b>[vyps-refer]</b>, which should give them a page to give and get their referral code. This is not an automatic system, and your users will have to manually add the code. There are plenty of login customization and user account plugins an admin can use to integrate this system with.</p>
@@ -116,7 +119,7 @@ function vyps_vy256_sub_menu_page()
     <h1>Worker Name Explanation</h1>
     <p>Something I have never explained, but if you are looking on MoneroOcean dashboard, you will see worker names such as "3vidyenlive1297"</p>
     <p>The leading 3 is the user id number on WordPress db, and the 1297 is the transaction id.</p>
-    <p>Since worker statistics are not meant to be kept long term on the pools, when a user redeems or refreshes the page, it will check to see how many valid shares are currently accounted for and then makes a new worker so that it does not double count.</p>
+    <p>Since worker statistics are not meant to be kept long term on the pools, when a user redeems or refreshes the page, it will check to see how many hashes are currently accounted for and then makes a new worker so that it does not double count.</p>
     <p>This does cause issues with users mining on same account with different devices. If you have users who want to do this, then create different pages or accounts and have them transfer points between accounts.</p>
     <p>This is an issue I would like to resolve, but if we used the worker name long term for the overall balance, it is possible that it gets wiped and user ends up with a negative balance.</p>
     <h1>Localization</h1>
@@ -138,10 +141,9 @@ function vyps_vy256_sub_menu_page()
     <p>Keep in mind that we and the pools take some fees, but it is generally way less than the Coinhives 20% fee, and you can get a smaller minimum payout of 0.003 XMR on MoneroOcean.</p>
     <p>Our code is open source, so if you want to run your own version, just go to our <a href="https://github.com/VidYen/VYPS-Plugin" target="_blank">github</a> and grab the code.</p>
     <h2>Notes about hash rates:</h2>
-    <p>Hash rates displayed for the user are client side now, but the reward is pulled from the MoneroOcean every 60 seconds showing the valid shares which is the reward.</p>
+    <p>Hash rates displayed for the user are client side now, but the reward is pulled from the MoneroOcean every 60 seconds showing the hashes which is the reward divided by your hash= shortcode attribute.</p>
     <p>The hash rates may vary from client to what you see on the MoneroOcean dashboard as not all hashes are accepted.</p>
     <p>There are some bugs with mobile devices which show an hash rate on client that is way higher than what MO says, but since the reward is now based on the shares, that is what they should be concerned about.</p>
-    <p>From testing, my iPhone 7 can earn about 5-10 valid shares at 100% CPU eveyr 5 minutes depending, but I would not recommend this as a primary method as it drained my battery fairly quickly.</p>
     <p>For optimal rewards, please recommend to users to let it run over time as jobs will have to processed by not only MoneroOcean\'s server but whatever block chain is being mined currently.</p>
     <p>In theory, I could allow the use of more than 6 threads, but in testing it was easy to lock up my computer testing in multiple tabs so for now, I believe its a safe comprimise. There is a way to override but is undocumented.</p>
     <p></p>
