@@ -64,6 +64,7 @@ function vyps_vy256_solver_func($atts) {
             'marketmulti' => 0, //market mode. Checks XMR price.
             'shares' => 1,
             'hash' => 10000,
+            'roundup' => FALSE,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -90,7 +91,7 @@ function vyps_vy256_solver_func($atts) {
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
     //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
-    $hash_per_point = $atts['hash'];
+    $hash_per_point = intval($atts['hash']); //intvaling this since would be odd as decimal
     $shares_per_point = floatval($atts['shares']);
     $reason = sanitize_text_field($atts['reason']); //Gods only know what people will do with their text fields.
 
@@ -118,6 +119,9 @@ function vyps_vy256_solver_func($atts) {
     $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
     $market_multi = floatval($atts['marketmulti']); //Making this easier for people to see on their own the results if have to troubleshoot with them
     $hash_multi = floatval($atts['multi']);
+
+    //Roundup mode
+    $roundup_mode = floatval($atts['roundup']);
 
     if ( $shares_per_point == 0 )
     {
@@ -416,6 +420,11 @@ function vyps_vy256_solver_func($atts) {
         $balance =  $balance * $multi; //Int val to round, but the idea is to make the price determine the points
       }
 
+      //NOTE: Round up mode for hostile users. I will use this. Not all admins will
+      if ($roundup_mode == TRUE AND $balance > 1) //Users must at least mine at most one whole point in hashes plus some
+      {
+        $balance = ceil($balance); //This should be an interger which should make next redu
+      }
       //NOTE: here is where we round before checking if greater than 0
       $balance = intval($balance);  //I intvaled here to prevent rounding errors.
 
@@ -981,7 +990,7 @@ function vyps_vy256_solver_func($atts) {
         $debug_html_output = '';
       }
 
-      $final_return = '<table>' . $donate_html_output . $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>' . $debug_html_output; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>' . $debug_html_output; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
 
 
     } else {
