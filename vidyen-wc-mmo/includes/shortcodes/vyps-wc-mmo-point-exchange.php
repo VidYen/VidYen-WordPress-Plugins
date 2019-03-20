@@ -10,13 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //Oh. Maybe I should put this elsewhere but I have foudn this nifty code off https://stackoverflow.com/questions/8273804/convert-seconds-into-days-hours-minutes-and-seconds
 //So I'm putting it here as a function. Will use elsewhere mayhaps. If so will fix later.
 //NOTE: This is the time converstion
+
+/* Vyps should already be installed so this should already exist
 function vyps_secondsToTime($seconds) {
     $dtF = new \DateTime('@0');
     $dtT = new \DateTime("@$seconds");
     return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes, and %s seconds');
 }
 
-function vyps_point_exchange_func( $atts ) {
+*/
+
+function vyps_wc_mmo_point_exchange_func( $atts ) {
 
 	//The shortcode attributes need to come before the button as they determine the button value
 
@@ -115,97 +119,44 @@ function vyps_point_exchange_func( $atts ) {
   $gamipress_point_amount = $atts['outputamount'];
 
 
-  //Normal Check. Order of operations issue. Just need to check if any of the 3rd party stuff is on.
+  //In normal mode... Save DS... Which is kind of normal or no?
+  $vyps_pe_normal_mode = TRUE;
 
-  if ( $mycred_mode == TRUE OR $woowallet_mode == TRUE OR $gamipress_mode == TRUE ) {
-
-    //Definatley not normal mode
-    $vyps_pe_normal_mode = FALSE;
-
-  } else {
-
-    //In normal mode... Save DS... Which is kind of normal or no?
-    $vyps_pe_normal_mode = TRUE;
-
-  }
-
-  //Just some Dash slug logic checks. To make sure if they are setting a symbol that it has an amount and a bank user.
-  if ( $ds_symbol != '' AND $ds_amount == 0  ) {
-
-    return "You are attempting to use the Dash Slug attributes without setting an amount!";
-
-  } elseif ( $ds_symbol != '' AND $ds_bank_user == 0  ) {
-
-    return "You are attempting to use the Dash Slug attributes without setting a bank user!";
-
-  }
 
 	//The usual suspects check to see if admin has set their short codes right.
 	//Ok I'm lazy here, but the admins should know which of the three they did not set.
-	if ( $pt_dAmount == 0) {
-
+	if ( $pt_dAmount == 0)
+  {
 		return "Admin Error: Output amount set to 0. Please set.";
-
 	}
 
 	//Oh yeah. Checking to see if source pid was set
 
   //NOTE: I have a realization, this might not be valid, but who knows.
-	if ( $firstPointID == 0 OR ( $destinationPointID == 0 AND $woowallet_mode != TRUE AND $mycred_mode != TRUE AND $gamipress_mode != TRUE )) {
-
+	if ( $firstPointID == 0 OR ( $destinationPointID == 0 AND $woowallet_mode != TRUE AND $mycred_mode != TRUE AND $gamipress_mode != TRUE ))
+  {
 		return "Admin Error: A required id was set to 0! Please set all ids.";
-
-	} elseif ( $firstPointID == 0 ) {
-
+	}
+  elseif ( $firstPointID == 0 )
+  {
     //In case we have $woowallet_mode == true
     return "Admin Error: A required id was set to 0! First point id.";
-
   }
 
-	if ($time_seconds < 0 ) {
-
+	if ($time_seconds < 0 )
+  {
 		//I feel like this should be not needed but I feel that it would blow up one of my ifs down below catastrophically
 		return "Admin Error: You have a negative time somewhere.";
-
 	}
 
 	//Not seeing comma number seperators annoys me
 	$format_pt_fAmount = number_format($pt_fAmount);
 	$format_pt_sAmount = number_format($pt_sAmount);
 
-  //NOTE Ok. Some assumption code. By default if you set a ds amount, that you intend to use a decimal so no number formatting.
-  //If they put in an amount for the ds then we assume they don't want it formatted.
-  //The logic with the OR neded to be implicit with an AND.  As if there is a DS amount you can't use woowallet. Sooo... May the gods save me from my users.
-  //NOTE: As we are moving up in the world. We need to check to see if any of these are true. Then ds amount will be not invoked.
-  if (  $ds_amount == 0 AND $woowallet_mode != TRUE ){
+  $format_pt_dAmount = number_format($pt_dAmount);
 
-    $format_pt_dAmount = number_format($pt_dAmount);
-
-    //OK this needed go go here. Because the post just was not happening
-    $vyps_meta_id = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $pt_dAmount;
-
-  } elseif ($woowallet_mode == true ) {
-
-    //We can assume (most likely incorrectly) that if a user has woowallet to true that they want decimals but not the dashed slug part below
-    $format_pt_dAmount = '$' . money_format('%i', $pt_dAmount); //Where we are going we are formating for $
-
-    //Almost forgot, we need a button without the out put as may be decimals
-    $vyps_meta_id = $firstPointID .  $pt_fAmount  . 'ww' . $mobile_view; //I am going to assume that you only have one button of each. I could be wrong. Yes. I was. I was testing with mobile and non mobile on same page, but.... That doesn't work.
-
-  } else {
-
-    //This is Dashed slug checking
-    //Need to have it but not formatted!
-    $format_pt_dAmount = $pt_dAmount;
-
-    //Also good place to do this since we know we have a $ds_amount
-    $ds_bal_check = vyps_dashed_slug_bal_check_func($atts); //This should return a 1 or a zero.
-
-    //Ok some herpy derpy here as I realized that the btn did not like decimals so we threw all that out.
-    //And set some nondecimal and text stuff. Should be unique enough.
-    $vyps_meta_id = $firstPointID . $secondPointID . $destinationPointID . $pt_fAmount . $pt_sAmount . $ds_symbol;
-
-  }
+  //Almost forgot, we need a button without the out put as may be decimals
+  $vyps_meta_id = $firstPointID .  $pt_fAmount  . 'ww' . $mobile_view; //I am going to assume that you only have one button of each. I could be wrong. Yes. I was. I was testing with mobile and non mobile on same page, but.... That doesn't work.
 
   //Array hook for the add
   $atts['vyps_meta_id'] = $vyps_meta_id; //Seems like I can pull this in reverse? Just a guess
@@ -230,49 +181,20 @@ function vyps_point_exchange_func( $atts ) {
 
 	//NOTE: Second source point. Perhaps I should write something more to differentiate.
 	//Only does the the WPDB if the the secondPointID actually exists. I thought but perhaps greater than 0 is best to rule out negative numbers
-	if ($secondPointID > 0){
-
+	if ($secondPointID > 0)
+  {
     //Second source point name and Icon
     $s_sourceName = vyps_point_name_func($secondPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
     $s_sourceIcon = vyps_point_icon_func($secondPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
-
 	}
 
 	//NOTE: Output point
   //LOGIC: As long as the $woowallet_mode is not turned on it will do this.
 
-  if ($vyps_pe_normal_mode == TRUE ) {
+  //Destination source point name and Icon
+  $destName = vyps_point_name_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
+  $destIcon = vyps_point_icon_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.p
 
-    //Destination source point name and Icon
-    $destName = vyps_point_name_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.php
-    $destIcon = vyps_point_icon_func($destinationPointID);  //I'm 80% sure that the $atts will be the same. From vyps_point_func.p
-
-  } elseif($woowallet_mode == TRUE ) {
-
-    //WooWallet mode must be true then. Or 1.
-    $destName = 'My Wallet';
-
-    //So we know WooWallet mod is true so we know it can do this:
-    //<span class=\"woo-wallet-icon-wallet\"></span>
-    $destIcon = '<span class=\"woo-wallet-icon-wallet\"></span>'; //Huh the '' vs "" came in handy.
-
-  } elseif ($mycred_mode == TRUE ) {
-
-    //Mycred on.... honestly... I know I have a 2nd or 3rd conciousness but didn't really think that would be a 3rd possiblity here... Oh well.
-    $destName = 'myCred Points';
-
-    //Mycred wallet icon. ERE WE GO!
-    $destIcon = '<span class="dashicons dashicons-star-filled static"></span>';
-
-  } elseif ($gamipress_mode == TRUE ) {
-
-    //Mycred on.... honestly... I know I have a 2nd or 3rd conciousness but didn't really think that would be a 3rd possiblity here... Oh well.
-    $destName = 'GamiPress Points';
-
-    //Mycred wallet icon. ERE WE GO!
-    $destIcon = '<span class="dashicons dashicons-star-filled static"></span>';
-
-  }
 
 	//NOTE: I will have two inputs on two different row and the output and transfer button will be spread accross
 	//As my coding skills have improved greatly in the past 2 months I am redoing this next bit to be more modernized
@@ -282,21 +204,20 @@ function vyps_point_exchange_func( $atts ) {
 	//I'm putting this here as you might want to know you still have time before you can click the button before you click the button
 	//Should only check if we have a time check in 'teh' short codes
 	//No miliseconds. I'm not sorry.
-	if ($time_seconds > 0 ){
-
+	if ($time_seconds > 0 )
+  {
 		$last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND vyps_meta_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
 		$last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $current_user_id, $vyps_meta_id );
 		$last_transfer = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
 
 		//return $last_transfer; //DEBUG I think there is something going on here that I'm not aware of.
 
-		if ($last_transfer == ''){
-
+		if ($last_transfer == '')
+    {
 			//Well nothing should happen. There was no prior entry. Go ahead and check entries
-
-
-		} else {
-
+		}
+    else
+    {
 			//We now know the id exists so an entry exists so we need ot check its timed
 			$last_posted_time_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
 			$last_posted_time_query_prepared = $wpdb->prepare($last_posted_time_query, $last_transfer ); //The ids should all be unique. In theory and in practice.
@@ -312,17 +233,14 @@ function vyps_point_exchange_func( $atts ) {
 
 			$time_left_seconds = $time_seconds - $time_passed; //NOTE: if this number is positive it means they still need to wait.
 			$display_time = vyps_secondsToTime($time_left_seconds); //This converts the seconds left into something more human readable. Master race machines and replicants need not use.
-
 		}
-
 	}
 
 	$results_message = "Press button to transfer.";
 
-	if ( $time_left_seconds > 0 ) {
-
+	if ( $time_left_seconds > 0 )
+  {
 		$results_message = "You have $display_time before another transfer.";
-
 	}
 
 	if (isset($_POST[ $vyps_meta_id ]) OR $auto_mode == TRUE ) //I'm 90% sure that this will work with automode. As the idea was that we needed to know which button to press, but if its auto it means it loads every time the page is loaded.
@@ -342,8 +260,8 @@ function vyps_point_exchange_func( $atts ) {
 		$f_need_points = number_format($pt_fAmount - $f_balance_points);
 
 		//Check the second inputs
-		if ($secondPointID > 0){
-
+		if ($secondPointID > 0)
+    {
 			$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
 			$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $secondPointID );
 			$s_balance_points = $wpdb->get_var( $balance_points_query_prepared );
@@ -351,11 +269,11 @@ function vyps_point_exchange_func( $atts ) {
 			/* I do not ever see the need for a non-formatted need point */
 			$s_need_points = number_format($pt_sAmount - $s_balance_points);
 
-		} else {
-
+		}
+    else
+    {
 			$s_balance_points = 0; //Need to zero this out if there was no second point
 			$s_need_points = 0; //And this as well. Methinks mayhaps I should have thought this through better
-
 		}
 
 
@@ -696,7 +614,7 @@ function vyps_point_exchange_func( $atts ) {
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-pe', 'vyps_point_exchange_func');
+add_shortcode( 'vyps-wc-mmo', 'vyps_wc_mmo_point_exchange_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */
