@@ -121,7 +121,7 @@ function vyps_vy256_solver_func($atts) {
     $hash_multi = floatval($atts['multi']);
 
     //Roundup mode
-    $roundup_mode = floatval($atts['roundup']);
+    $roundup_mode = $atts['roundup'];
 
     if ( $shares_per_point == 0 )
     {
