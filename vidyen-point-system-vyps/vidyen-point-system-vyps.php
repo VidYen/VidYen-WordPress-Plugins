@@ -273,12 +273,14 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-quads.php'); //
 /*** CORE ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_procheck_func.php'); //Pro checking.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_wannads_pro_func.php'); //Wannads Pro checking.
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_balance_func.php'); //Functionalized balance (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_public_log_func.php'); //Functionalized public log (This should have been months ago! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_add_func.php'); //Functionalized adds to the log
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_deduct_func.php'); //Functionalized deducts to the log
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_meta_check_func.php'); //Meta checking. See if there is a duplicate transaction.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_name_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_icon_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
+
 /*** MO API ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now
 /*** REFER ***/

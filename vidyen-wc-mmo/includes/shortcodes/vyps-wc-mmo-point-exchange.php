@@ -1,8 +1,5 @@
 <?php
 
-//VIDYEN Points Exchange Shortcode
-//Advanced version with timer
-
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Added prepare() to all SQL SELECT calls 7.1.2018 */
@@ -20,7 +17,8 @@ function vyps_secondsToTime($seconds) {
 
 */
 
-function vyps_wc_mmo_point_exchange_func( $atts ) {
+function vyps_wc_mmo_point_exchange_func( $atts )
+{
 
 	//The shortcode attributes need to come before the button as they determine the button value
 
@@ -57,11 +55,7 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
 
   //Check if user is logged in and stop the code.
 	//NOTE:I moved this here. I realized, its more likely that 10,000 users are bashing site mem while the admin is almost always logged in.
-	if ( is_user_logged_in() )
-  {
-	//I probaly don't have to have this part of the if
-	}
-  else
+	if ( !is_user_logged_in() )
   {
 		return; //You get nothing. Use the LG code.
 	}
@@ -118,10 +112,8 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
   $gamipress_point_type = $atts['outputid'];
   $gamipress_point_amount = $atts['outputamount'];
 
-
   //In normal mode... Save DS... Which is kind of normal or no?
   $vyps_pe_normal_mode = TRUE;
-
 
 	//The usual suspects check to see if admin has set their short codes right.
 	//Ok I'm lazy here, but the admins should know which of the three they did not set.
@@ -326,97 +318,26 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
 
       $deduct_result=  vyps_deduct_func( $atts );
 
-      //NOTE: OK we are putting in the DS call. Good luck! You'll need it!
-      //Also we already checked to see if it had enough balance and the function should do it again anyways.
-      if( $ds_amount > 0 ) {
-
-        //Wasn't that nice we made a function for it!
-        $dash_move_result = vyps_dashed_slug_move_func($atts);
-
-        //I'm making this more informative to me as something is not right.
-        if ($dash_move_result == 1){
-
-          //Doing balance update check.
-          vyps_balance_func( $atts );
-
-          //Results message output for dashed result transfer.
-          $add_result = 1;
-          $results_message = "Success. Crypto payout at: ". date('Y-m-d H:i:s'); //NOTE I need to fix this later down the page. I don't have time today and not really that needed.
-
-          //NOTE: Was requested that we do a refer for crypto payouts but its doing to be the original
-          //Refer transfer below.
-          if ($refer_rate > 0 AND vyps_current_refer_func($current_user_id) != 0 ){
-
-            //Note this is a referral... So its an add. Deal with later
-            $PointType = $firstPointID; //I believe this should work? A refer with crypto payout should do it.
-            $reason = "Point Transfer Referral"; //It feels like this reason is legnth... But I shows that it was a refer rather than someone on your account transferring you points away
-            $amount = doubleval($pt_fAmount); //Why do I do a doubleval here again? I think it was something with Wordfence.
-            $amount = intval($amount * ( $refer_rate / 100 )); //Yeah we make a decimal of the $refer_rate and then smash it into the $amount and cram it back into an int. To hell with your rounding.
-            $refer_user_id = vyps_current_refer_func($current_user_id); //Ho ho! See the functions for what this does. It checks their meta and see if this have a valid refer code.
-
-            //Inserting VY256 hashes AS points! To referral user. NOTE: The meta_ud for 'refer' and meta_subid1 for the ud of the person who referred them
-            $data = [
-                'reason' => $reason,
-                'point_id' => $PointType,
-                'points_amount' => $amount,
-                'user_id' => $refer_user_id,
-                'vyps_meta_id' => 'refer',
-                'vyps_meta_subid1' => $user_id,
-                'time' => date('Y-m-d H:i:s')
-            ];
-            $wpdb->insert($table_log, $data);
-
-            //NOTE: I am not too concerned with showing the user they are giving out points to their referral person. They can always check the logs.
-            $add_result = 1;
-
-          }
-
-        } else {
-
-          $results_message = "Transfer error.";
-          $add_result = 0;
-
-        }
-
-      } elseif( $woowallet_mode == true ){
-
+ 		if( $woowallet_mode == true )
+		{
         //This catch is if its not DS but is a woowallet output which has no VYPS destination
         //I'm going to hope the WW dev didn't mess up his tables.
         //I am assuming (WCCW) that the it checked for input points way before now.
         $woowallet_result = vyps_woowallet_credit_func( $atts );
 
-        if ($woowallet_result == 0){
-
+        if ($woowallet_result == 0)
+				{
           $results_message = "WooWallet transfer error."; //Not sure if it will do any good, but may help me troubleshoot down the road.
           $add_result = 0;
-
-        } else {
-
+        }
+				else
+				{
           //If WooWallet works lets say it does.
           $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
-
         }
-
-      } elseif( $mycred_mode == TRUE ){
-
-        //NOTE: mycred stuff goes here
-        //Developer note... Look at the woowallet stuff above... I seem to have lucked out with my subconcious Developement
-        //Note WW had its own functions but mycred had a bit better api
-        $mycred_result = mycred_add( $mycred_reason, $user_id, $pt_dAmount, $vyps_reason );
-
-        //Then it must have worked in practice
-        $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
-
-      } elseif( $gamipress_mode == TRUE ){
-
-        //Gamipress function call. Doing the output to gamipress
-        $gamipress_result = gamipress_award_points_to_user( $user_id, $gamipress_point_amount, $gamipress_point_type, array( 'reason' => $gamipress_reason ) );
-
-        //Then it must have worked in practice
-        $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
-
-      } else {
-
+      }
+			else
+			{
         //NOTE: Below is the adds for everything after the checks for non-vyps
         //AKA this is pure VYPS to VYPS exchanges.
 
@@ -425,32 +346,23 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
 
         //In theory I just now have to run the add and it all works! In theory...
         $add_result = vyps_add_func($atts);
-
-
       }
 
       //Note $add_result may not matter... I'm just seeing if its defined change the result message... otherwise... It's not that bad.
-      if ( isset( $add_result )){
+      if ( isset( $add_result ))
+			{
 
-        if ( $add_result == 1 ) {
-
+        if ( $add_result == 1 )
+				{
             //Then it must have worked in practice
             $results_message = "Success. Exchanged at: ". date('Y-m-d H:i:s');
-        } else {
-
+        }
+				else
+				{
             $results_message = "Uknown Error: " . $add_result; //Yeah I would have no clue. Maybe $add_result could tell us.
-
         }
       } //End of if defined
-
 		} //End of the if for proceeding with transfer. Line 360
-
-
-
-	} else {
-
-		//This is what shows if button has yet to be pressed
-
 	}
 
 	//Down here is where the end result goes in the returned
@@ -459,30 +371,24 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
   //Here is the destination icon code. As it was become a problem to change every 4 possiblities now * 2 for woo_wallet_transactions
   //I decided to just make the destination icon a mini operation variables
 
-  if ($woowallet_mode != true ) {
-
+  if ($woowallet_mode != true )
+	{
     //I am 99.99996% sure that this same for all 4 versions mobile and not.
     //With the wonders of ctrl+f I confirmed it is.
     $destIcon_output = $destIcon;
-
-  } elseif($mycred_mode == TRUE) {
-
-    //We do the mycred icon TODO I need to fix this as in two places has to update
-    $destIcon_output = "<span class=\"dashicons dashicons-star-filled static\"></span>";
-
-  } else {
-
-    //We do the woowallet mode icon
-    $destIcon_output = "<span class=\"woo-wallet-icon-wallet\"></span>";
+  }
+ 	else
+	{
+		$destIcon_output = $destIcon; //We are making a custom icon
   }
 
 
   //Classic view.
-  if ($mobile_view == false ) {
-
+  if ($mobile_view == false )
+	{
     //NOTE: Doing a if then, to have two different versions for 1 or 2 inputs
-  	if ($secondPointID == 0){
-
+  	if ($secondPointID == 0)
+		{
   		//Well we know we have only point input as no PID 0
   		$table_result_ouput = "<table id=\"$vyps_meta_id\">
   					<tr><!-- First input -->
@@ -500,9 +406,9 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
   						<td><div align=\"center\">Receive</div></td>
   					</tr>
   					";
-
-  	} else {
-
+  	}
+		else
+		{
   	//Output for when there is two points.
   	$table_result_ouput = "<table id=\"$vyps_meta_id\">
   				<tr><!-- First input -->
@@ -522,14 +428,13 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
   				<tr><!-- Second input -->
   					<td><div align=\"center\">$s_sourceIcon $format_pt_sAmount</div></td>
   				</tr>";
-
   	} //End of the non mobile view
-
-  } else {
-
+  }
+	else
+	{
     //NOTE: Repeat of the final 2 of the 4 possiblities if mobile view
-    if ($secondPointID == 0){
-
+    if ($secondPointID == 0)
+		{
       //Well we know we have only point input as no PID 0
       $table_result_ouput = "<table id=\"$vyps_meta_id\">
             <tr><!-- First row -->
@@ -551,9 +456,9 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
               </td>
             </tr>
             ";
-
-    } else {
-
+    }
+		else
+		{
     //Output for when there is two points. NOTE: No need for row/column spans
     $table_result_ouput = "<table id=\"$vyps_meta_id\">
           <tr><!-- First input -->
@@ -580,7 +485,6 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
           </tr>
           ";
       } //End of double input
-
   } //End of the mobile view table. I do not believe the other parts need working.
 
 	//NOTE: I'm ending the table here and the next is ends
@@ -588,28 +492,25 @@ function vyps_wc_mmo_point_exchange_func( $atts ) {
 	//I just have to remember to close the damn table or it all blows up.
 
   //Need to check if we are in mobile view and put the span at two.
-  if ($mobile_view == false ) {
-
+  if ($mobile_view == false )
+	{
   	$table_close_output = "
   				<tr>
   					<td colspan = 5><div align=\"center\"><b>$results_message</b></div></td>
   				</tr>
   			</table>";
   				//<br><br>$vyps_meta_id";	//Debug: I'm curious what it looks like.
-  } else {
-
+  }
+	else
+	{
     $table_close_output = "
           <tr>
             <td colspan = 2><div align=\"center\"><b>$results_message</b></div></td>
           </tr>
         </table>";
-
   } //End of mobile view check.
-
 	//Lets see if it works:
 	return $table_result_ouput . $table_close_output;
-
-
 }
 
 /* Telling WP to use function for shortcode */
@@ -618,5 +519,3 @@ add_shortcode( 'vyps-wc-mmo', 'vyps_wc_mmo_point_exchange_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */
-
-/* WW shortcode was here but moved it out */
