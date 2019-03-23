@@ -23,7 +23,7 @@ function vyps_wc_ww_bal_func($atts)
 
 	$ww_current_balance = vyps_woowallet_bal_func();
 
-	$ww_bal_html_output =  '<img src="'.vyps_point_icon_func($pointID).'" width="16" hight="16" title="'.vyps_point_name_func($pointID).'"> '.$ww_current_balance.'<br>"';
+	$ww_bal_html_output =  vyps_point_icon_func($pointID). ' ' . vyps_woowallet_bal_func();
 
 	return $ww_bal_html_output;
 }
