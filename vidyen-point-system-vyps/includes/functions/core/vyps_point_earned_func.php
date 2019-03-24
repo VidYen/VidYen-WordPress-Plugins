@@ -2,12 +2,12 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//vyps_point_balance function
-//NOTE: Rather than do the user checks here we have to get the user_id passed from the calling function.
-//There could be a possible reason to get balance when user not logged in ,but for now this works well enough.
+//vyps_pointearned function
+//NOTE: I realized I needed a function with all the adds without subtracted to see total amount earned at some point.
+//:ike a historical earnings
 
-/*** POINT Balance FUNCTION ***/
-function vyps_point_balance_func($point_id, $user_id)
+/*** POINT Earned FUNCTION ***/
+function vyps_point_earned_func($point_id, $user_id)
 {
   //The usual suspects to get the sql calls up
   global $wpdb;
@@ -15,7 +15,7 @@ function vyps_point_balance_func($point_id, $user_id)
 
   //balance
 	//$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_vyps_log WHERE user_id = $userID AND points = $point_id"); //Oooh. I love it when I get my variable names the same.
-	$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
+	$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d AND points_amount > 0"; //NOTE: Only summing positive numbers
 	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $user_id, $point_id ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
 	$balance_points = $wpdb->get_var( $balance_points_query_prepared );
 
