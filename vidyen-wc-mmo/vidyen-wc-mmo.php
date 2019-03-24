@@ -3,7 +3,7 @@
 Plugin Name:  VYPS WooCommerce MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RPG like currencies to WooCommerce for VYPS
-Version:      0.0.10
+Version:      0.0.15
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -42,8 +42,8 @@ function vidyen_wc_mmo_sql_install() {
 
     $sql = "CREATE TABLE {$table_name_wc_mmo} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		input_id mediumint(9) NOT NULL,
-		input_amount mediumint(9) NOT NULL,
+		point_id mediumint(9) NOT NULL,
+		point_amount mediumint(9) NOT NULL,
 		output_id mediumint(9) NOT NULL,
 		output_amount mediumint(9) NOT NULL,
 		PRIMARY KEY  (id)
@@ -55,8 +55,8 @@ function vidyen_wc_mmo_sql_install() {
 
 		//Default data
 		$data_insert = [
-				'input_id' => 1,
-				'input_amount' => 1,
+				'point_id' => 1,
+				'point_amount' => 100,
 				'output_id' => 2,
 				'output_amount' => 1,
 		];
@@ -89,16 +89,15 @@ function vidyen_wc_mmo_menu_page()
 		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) ) {
 				// This nonce is not valid.
 				die( 'Security check' );
-		} else {
-				// The nonce was valid.
-				// Do stuff here.
 		}
+
+    echo '<br><br>Post was set!<br><br>';
 
 		//ID Text value
 		$point_id = abs(intval($_POST['point_id'])); //Even though I am in the believe if an admin sql injects himself, we got bigger issues, but this has been sanitized.
 
 		//The icon. I'm suprised this works so well
-		$input_amount = abs(intval($_POST['input_amount']));
+		$point_amount = abs(intval($_POST['point_amount']));
 
 		//The icon. I'm suprised this works so well
 		$output_amount = abs(floatval($_POST['output_amount']));
@@ -107,7 +106,7 @@ function vidyen_wc_mmo_menu_page()
 
 	    $data = [
 	        'point_id' => $point_id,
-	        'input_amount' => $input_amount,
+	        'point_amount' => $point_amount,
 					'output_amount' => $output_amount,
 	    ];
 
@@ -120,25 +119,18 @@ function vidyen_wc_mmo_menu_page()
 
 	//the $wpdb stuff to find what the current name and icons are
 	$table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
-
 	$first_row = 1; //Note sure why I'm setting this.
 
-	//Point_id pull
-	$point_id_query = "SELECT point_id FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-	$point_id_query_prepared = $wpdb->prepare( $point_id_query, $first_row );
-	$point_id = $wpdb->get_var( $point_id_query_prepared );
+	//Input ID pull
+	$point_id = vyps_mmo_sql_point_id_func();
 
-	//max bet pull
-	$input_amount_query = "SELECT input_amount FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-	$input_amount_query_prepared = $wpdb->prepare( $input_amount_query, $first_row );
-	$input_amount = $wpdb->get_var( $input_amount_query_prepared );
+	//Input Amount
+	$point_amount = vyps_mmo_sql_point_amount_func();
 
-	//multi pull
-	$output_amount_query = "SELECT output_amount FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-	$output_amount_query_prepared = $wpdb->prepare( $output_amount_query, $first_row );
-	$output_amount = $wpdb->get_var( $output_amount_query_prepared );
+	//Ouput Amount
+	$output_amount = vyps_mmo_sql_output_amount_func();
 
-
+  /* I suspect something is goin gon here
 	//Just setting to 1 if nothing else I suppose, but should always be something
 	if ($point_id == '')
 	{
@@ -146,9 +138,9 @@ function vidyen_wc_mmo_menu_page()
 	}
 
 	//Just setting to 1 if nothing else I suppose, but should always be something
-	if ($input_amount == '')
+	if ($point_amount == '')
 	{
-		$input_amount = 1;
+		$point_amount = 1;
 	}
 
 	//Just setting to 1 if nothing else I suppose, but should always be something
@@ -157,6 +149,8 @@ function vidyen_wc_mmo_menu_page()
 		$output_amount = 1;
 	}
 
+  */
+
 	//It's possible we don't use the VYPS logo since no points.
   $vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
 	$vidyen_wc_mmo_logo_url = plugins_url( 'includes/images/vyvp-logo.png', __FILE__ );
@@ -164,25 +158,26 @@ function vidyen_wc_mmo_menu_page()
 	//Adding a nonce to the post
 	$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
 
+  //Save for later //<img src="' . $vidyen_wc_mmo_logo_url . '">
 
 	//Static text for the base plugin
 	echo
-	'<br><br><img src="' . $vidyen_wc_mmo_logo_url . '">
+	'<br><br>
 	<h1>VidYen WC MMO Sub-Plugin</h1>
 	<p>Exchange Rates</p>
 	<table>
 		<form method="post">
 			<tr>
-				<th>Point ID</th>
-				<th>Max Bet</th>
-				<th>Win Multi</th>
+				<th>VidYen Point ID</th>
+				<th>Input Amount</th>
+				<th>WooWallet Amount</th>
 				<th>Submit</th>
 			</tr>
 			<tr>
 				<td><input type="number" name="point_id" type="number" id="point_id" min="1" step="1" value="' . $point_id .  '" required="true">
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'. $vyps_nonce_check . '"/></td>
-				<td><input type="number" name="input_amount" type="number" id="input_amount" min="1" max="1000000" step="1" value="' . $input_amount . '" required="true"></td>
-				<td><input type="number" name="output_amount" type="number" id="output_amount" min="0.01" max="10" step=".01" value="' . $output_amount . '" required="true"></td>
+				<td><input type="number" name="point_amount" type="number" id="point_amount" min="1" max="1000000" step="1" value="' . $point_amount . '" required="true"></td>
+				<td><input type="number" name="output_amount" type="number" id="output_amount" min="1" max="1000000" step="1" value="' . $output_amount . '" required="true"></td>
 				<td><input type="submit" value="Submit"></td>
 			</tr>
 		</form>
@@ -201,10 +196,12 @@ function vidyen_wc_mmo_menu_page()
 
 /*** Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_woowallet_currency.php'); //Custom Currencies to WooCommerce
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_sql_call_func.php'); //Custom Currencies to WooCommerce
 
 /*** Shortcodes ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Point Exchange
+//include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Point Exchange
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ww-bal.php'); //Point Exchange
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ajax-bal.php'); //Point Exchange
 
 /*** Menu Includes ***/
 //NOTE: Note really needed //include( plugin_dir_path( __FILE__ ) . 'includes/menus/adgate-menu.php'); //Order 450 (residual from the extraction for core VYPS)
