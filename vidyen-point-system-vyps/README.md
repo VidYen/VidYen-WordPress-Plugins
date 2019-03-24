@@ -110,6 +110,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 - Fix: CSS fix for VY256 to be more theme compatible
 - Add: Shortcode `roundup=TRUE` which rounds up to nearest point as after 1 point as currently you lose hashes in between after the first point you earned (not a default)
+- Add: Earned function to allow to show total earned over all time rather than a sum of current. (Useful for book keeping)
 
 = 2.3.2 =
 

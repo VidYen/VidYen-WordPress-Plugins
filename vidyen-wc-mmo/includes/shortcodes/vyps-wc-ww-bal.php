@@ -30,7 +30,7 @@ function vyps_wc_ww_bal_func($atts)
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-mmo-bal', 'vyps_wc_ww_bal_func');
+add_shortcode( 'vyps-mmo-wc-bal', 'vyps_wc_ww_bal_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */
