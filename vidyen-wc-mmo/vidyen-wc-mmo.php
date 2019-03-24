@@ -3,7 +3,7 @@
 Plugin Name:  VYPS WooCommerce MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RPG like currencies to WooCommerce for VYPS
-Version:      0.0.15
+Version:      0.0.16
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -82,16 +82,18 @@ function vidyen_wc_mmo_menu_page()
 {
 	global $wpdb;
 
+  echo 'Anything?';
+
 	if (isset($_POST['point_id']))
 	{
+    echo 'Post was set for some reason.';
 		//As the post is the only thing that edits data, I suppose this is the best place to the noce
 		$vyps_nonce_check = $_POST['vypsnoncepost'];
-		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) ) {
+		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) )
+    {
 				// This nonce is not valid.
 				die( 'Security check' );
 		}
-
-    echo '<br><br>Post was set!<br><br>';
 
 		//ID Text value
 		$point_id = abs(intval($_POST['point_id'])); //Even though I am in the believe if an admin sql injects himself, we got bigger issues, but this has been sanitized.
@@ -100,7 +102,7 @@ function vidyen_wc_mmo_menu_page()
 		$point_amount = abs(intval($_POST['point_amount']));
 
 		//The icon. I'm suprised this works so well
-		$output_amount = abs(floatval($_POST['output_amount']));
+		$output_amount = abs(intval($_POST['output_amount']));
 
     $table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
 
@@ -117,18 +119,22 @@ function vidyen_wc_mmo_menu_page()
 	    $message = "Added successfully.";
 	}
 
-	//the $wpdb stuff to find what the current name and icons are
-	$table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
-	$first_row = 1; //Note sure why I'm setting this.
+  echo 'Below the nonce??';
 
+  //Repulls from SQL
 	//Input ID pull
 	$point_id = vyps_mmo_sql_point_id_func();
 
 	//Input Amount
 	$point_amount = vyps_mmo_sql_point_amount_func();
 
+  //Ouput id
+  $output_id = vyps_mmo_sql_ouput_id_func();
+
 	//Ouput Amount
 	$output_amount = vyps_mmo_sql_output_amount_func();
+
+
 
   /* I suspect something is goin gon here
 	//Just setting to 1 if nothing else I suppose, but should always be something
@@ -161,8 +167,7 @@ function vidyen_wc_mmo_menu_page()
   //Save for later //<img src="' . $vidyen_wc_mmo_logo_url . '">
 
 	//Static text for the base plugin
-	echo
-	'<br><br>
+	$vyps_wc_mmo_menu_html_ouput ='<br><br>
 	<h1>VidYen WC MMO Sub-Plugin</h1>
 	<p>Exchange Rates</p>
 	<table>
@@ -170,6 +175,7 @@ function vidyen_wc_mmo_menu_page()
 			<tr>
 				<th>VidYen Point ID</th>
 				<th>Input Amount</th>
+        <th>WooWallet Icon</th>
 				<th>WooWallet Amount</th>
 				<th>Submit</th>
 			</tr>
@@ -177,6 +183,7 @@ function vidyen_wc_mmo_menu_page()
 				<td><input type="number" name="point_id" type="number" id="point_id" min="1" step="1" value="' . $point_id .  '" required="true">
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'. $vyps_nonce_check . '"/></td>
 				<td><input type="number" name="point_amount" type="number" id="point_amount" min="1" max="1000000" step="1" value="' . $point_amount . '" required="true"></td>
+        <td><input type="number" name="output_id" type="number" id="output_id" min="1" step="1" value="' . $output_id .  '" required="true"></td>
 				<td><input type="number" name="output_amount" type="number" id="output_amount" min="1" max="1000000" step="1" value="' . $output_amount . '" required="true"></td>
 				<td><input type="submit" value="Submit"></td>
 			</tr>
@@ -192,6 +199,8 @@ function vidyen_wc_mmo_menu_page()
 	<p>Requires the <a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank">VidYen Point System</a> for any point record keeping.</p>
 	<br><br><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="' . $vyps_logo_url . '"></a>
 	';
+
+  echo $vyps_wc_mmo_menu_html_ouput;
 }
 
 /*** Includes ***/

@@ -49,6 +49,27 @@ function vyps_mmo_sql_input_amount_func()
 	return $input_amount;
 }
 
+/*** OUTPUT ID SQL Call ***/
+function vyps_mmo_sql_ouput_id_func()
+{
+	global $wpdb;
+
+	//the $wpdb stuff to find what the current name and icons are
+	$table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
+
+	$first_row = 1; //Note sure why I'm setting this.
+
+	//Ouput Amount NOTE: For now this is just for WooWallet
+	$ouput_id_query = "SELECT ouput_id FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$ouput_id_query_prepared = $wpdb->prepare( $ouput_id_query, $first_row );
+	$ouput_id = $wpdb->get_var( $ouput_id_query_prepared );
+
+
+	$ouput_id = intval($ouput_id); //Extra sanitzation
+
+	return $ouput_id;
+}
+
 /*** OUTPUT AMOUNT SQL Call ***/
 function vyps_mmo_sql_output_amount_func()
 {
