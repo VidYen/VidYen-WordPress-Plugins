@@ -36,17 +36,17 @@ function vyps_deduct_func( $atts )
 	$vyps_meta_id = $atts['vyps_meta_id']; //TODO like add... Needs to be looked into
 
 	//NOTE: It dawned me I should check to see if point exists. Luckily I made a function that can Tell
-	$pointID = $first_point_id;
+	$point_id = $first_point_id;
 
-	if ( empty(vyps_point_name_func($pointID)) )
+	if ( empty(vyps_point_name_func($point_id)) )
 	{
 				return 0; //Need better error, but in theory if point does not work, it ceases. Also if they need to name the point.
 	}
 	elseif ( $second_point_id != 0 )
 	{
 			//Testing to see if second point id since called for exists.
-			$pointID = $second_point_id;
-			if ( empty(vyps_point_name_func($pointID)) )
+			$point_id = $second_point_id;
+			if ( empty(vyps_point_name_func($point_id)) )
 			{
 				return 0; //Well this is empty as well so done for. I should work on this better TODO
 			} //End second point

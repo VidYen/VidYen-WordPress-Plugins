@@ -26,8 +26,8 @@ function vyps_worker_shareholder_pick( $atts ) {
 
 
 	//PID set.
-	//$pointID = $atts['pid']; //See what I did there. I got the shareholder pid from the vy256 so you can switch who own what pid rather than into mining. So adscend people can get XMR.
-	$pointID = $atts['shareholder'];
+	//$point_id = $atts['pid']; //See what I did there. I got the shareholder pid from the vy256 so you can switch who own what pid rather than into mining. So adscend people can get XMR.
+	$point_id = $atts['shareholder'];
 
 
 
@@ -48,7 +48,7 @@ function vyps_worker_shareholder_pick( $atts ) {
 
 	//NOTE: need a sum of all points of id. So we can get a percent.
 	$total_amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d";
-	$total_amount_data_query_prepared = $wpdb->prepare( $total_amount_data_query, $pointID ); //pulling this from the shortcode atts, by default its 1. Technically it won't work without a coin, but *shrugs*
+	$total_amount_data_query_prepared = $wpdb->prepare( $total_amount_data_query, $point_id ); //pulling this from the shortcode atts, by default its 1. Technically it won't work without a coin, but *shrugs*
 	$total_amount_data = $wpdb->get_var( $total_amount_data_query_prepared );
 
 	$total_amount_data = intval($total_amount_data); //Need to make it int
@@ -62,7 +62,7 @@ function vyps_worker_shareholder_pick( $atts ) {
 		//We do need this.
 		//$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count'" );
     $amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
-    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $x_for_count, $pointID ); //Note current user id is the x_for_count
+    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $x_for_count, $point_id ); //Note current user id is the x_for_count
     $amount_data = $wpdb->get_var( $amount_data_query_prepared );
 
 		$amount_data = intval($amount_data); //need to set this a int and if it's zero then ignore the output. BTW I should put less than, but I think negative numbers and zeroes have their place

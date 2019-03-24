@@ -35,8 +35,8 @@ function vyps_add_func( $atts )
 	$vyps_meta_id = sanitize_text_field($atts['vyps_meta_id']);
 
 	//NOTE: It dawned me I should check to see if point exists. Luckily I made a function that can Tell
-	$pointID = $add_point_id;
-  if ( empty(vyps_point_name_func($pointID)))
+	$point_id = $add_point_id;
+  if ( empty(vyps_point_name_func($point_id)))
 	{
 				return 0; //Need better error, but in theory if point does not work, it ceases. Also if they need to name the point.
 	}

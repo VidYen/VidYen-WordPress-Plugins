@@ -31,9 +31,9 @@ function vyps_rng_quads_func( $atts )
   }
 
   //Just making sure the pid is set valid or something odd
-  $pointID = intval($atts['pid']);
+  $point_id = intval($atts['pid']);
 
-  if ( $pointID < 1 OR !is_numeric($pointID))
+  if ( $point_id < 1 OR !is_numeric($point_id))
   {
       return "Point ID (pid=) not set correctly!";
   }
@@ -62,7 +62,7 @@ function vyps_rng_quads_func( $atts )
   $font_size = 'font-size:' . intval($atts['font']) . 'px;';
 
   //Setting up point ID to be passed through hostile territory
-  $pointID_passed = base64_encode($pointID + 100256);
+  $point_id_passed = base64_encode($point_id + 100256);
 
   //Setting the intervals of bets
   $bet_base = intval($atts['betbase']);
@@ -74,7 +74,7 @@ function vyps_rng_quads_func( $atts )
   $bet_third = $bet_base * $bet_multi * $bet_multi;
   $bet_fourth = $bet_base * $bet_multi * $bet_multi * $bet_multi;
 
-  $icon_url = vyps_point_icon_func($pointID);
+  $icon_url = vyps_point_icon_func($point_id);
 
   $vyps_rng_quads_html_output = "
     <script>
@@ -94,7 +94,7 @@ function vyps_rng_quads_func( $atts )
          var data = {
            'action': 'vyps_run_quads_action',
            'multicheck': multi,
-           'pointid': '$pointID_passed',
+           'pointid': '$point_id_passed',
            'vypsnoncepost': '$vyps_nonce_check',
          };
          // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php

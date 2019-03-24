@@ -31,7 +31,7 @@ function vyps_public_log_func( $atts ) {
 				'current' => FALSE,
 		), $atts, 'vyps-pl' );
 
-	$pointID = $atts['pid'];
+	$point_id = $atts['pid'];
 	$reason = $atts['reason'];
 	$table_row_limit = $atts['rows']; //50 by default
 	$user_id = $atts['userid'];

@@ -30,7 +30,7 @@ function vyps_balance_func( $atts ) {
 				'decimal' => 0,
 		), $atts, 'vyps-balance' );
 
-	$pointID = $atts['pid'];
+	$point_id = $atts['pid'];
 	$userID = $atts['uid'];
 	$isRaw = $atts['raw'];
 	$decimal_format_modifier = intval($atts['decimal']); //This has to be a int or will throw the number format
@@ -47,7 +47,7 @@ function vyps_balance_func( $atts ) {
 
 	}
 
-	if ( $pointID == 0 )
+	if ( $point_id == 0 )
 	{
 
 		return "Admin Error: pid not set!";
@@ -59,7 +59,7 @@ function vyps_balance_func( $atts ) {
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 	$table_name_points = $wpdb->prefix . 'vyps_points';
 
-	$sourcePointID = $pointID; //reuse of code //I do not mind $pointID being called $sourcePointID rather than the current versus userID semantic.
+	$sourcePointID = $point_id; //reuse of code //I do not mind $point_id being called $sourcePointID rather than the current versus userID semantic.
 
 	//name and icon
 
@@ -74,7 +74,7 @@ function vyps_balance_func( $atts ) {
 	$sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
 
 	//balance
-	//$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_vyps_log WHERE user_id = $userID AND points = $pointID"); //Oooh. I love it when I get my variable names the same.
+	//$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_vyps_log WHERE user_id = $userID AND points = $point_id"); //Oooh. I love it when I get my variable names the same.
 	$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
 	$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $userID, $sourcePointID ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
 	$balance_points = $wpdb->get_var( $balance_points_query_prepared );

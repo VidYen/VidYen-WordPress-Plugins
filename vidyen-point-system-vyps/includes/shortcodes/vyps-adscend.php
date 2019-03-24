@@ -274,14 +274,14 @@ function vyps_adscend_redeem_func( $atts ) {
       $amount = intval($amount); //In theory both $balance and $payout_clean have been intval() but who knows.
 
 
-      $pointID = $atts['pid']; //Yeah I'm doing some cleanings and renamed some variables.
-      $pointID = intval($pointID); //was originally named $pointType
+      $point_id = $atts['pid']; //Yeah I'm doing some cleanings and renamed some variables.
+      $point_id = intval($point_id); //was originally named $pointType
 			$user_id = get_current_user_id();
 
       //Insert into the vyps_points_log table. My OCD is getting upset at the plural. But I don't think most users will even know.
       $data = [
 					'reason' => $reason,
-					'point_id' => $pointID,
+					'point_id' => $point_id,
 					'points_amount' => $amount,
 					'user_id' => $user_id,
 					'time' => date('Y-m-d H:i:s')

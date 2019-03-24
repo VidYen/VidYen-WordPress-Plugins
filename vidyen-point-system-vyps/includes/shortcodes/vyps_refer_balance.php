@@ -35,7 +35,7 @@ function vyps_refer_balance_short_func( $atts ) {
 		), $atts, 'vyps-refer-bal' );
 
 	$current_user_id = get_current_user_id(); //This is specific to the user id since we need to know which of these are their refers.
-	$pointID = $atts['pid'];
+	$point_id = $atts['pid'];
 	$reason = $atts['reason'];
 	$table_row_limit = $atts['rows']; //50 by default
 	$user_id = $atts['userid']; //Not the same as above. Just if you wanted a shortcode for a particular users.
@@ -71,12 +71,12 @@ function vyps_refer_balance_short_func( $atts ) {
 	//Because I'm OCD, I want the icons.
 	//$sourceName = $wpdb->get_var( "SELECT name FROM $table_vyps_points WHERE id= '$sourcePointID'" );
 	$sourceName_query = "SELECT name FROM ". $table_name_points . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-	$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $pointID );
+	$sourceName_query_prepared = $wpdb->prepare( $sourceName_query, $point_id );
 	$sourceName = $wpdb->get_var( $sourceName_query_prepared );
 
 	//$sourceIcon = $wpdb->get_var( "SELECT icon FROM $table_vyps_points WHERE id= '$sourcePointID'" );
 	$sourceIcon_query = "SELECT icon FROM ". $table_name_points . " WHERE id= %d";
-	$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $pointID );
+	$sourceIcon_query_prepared = $wpdb->prepare( $sourceIcon_query, $point_id );
 	$sourceIcon = $wpdb->get_var( $sourceIcon_query_prepared );
 
 	/* Although normally against totally going programatic. Since I know I'm going to reuse this for the public log I'm going to put the headers into variables */
@@ -146,7 +146,7 @@ function vyps_refer_balance_short_func( $atts ) {
 	//NOTE NOTE: I realized what my issue is. We aren't looking for user ID, but rather the vyps_meta_subid1 where it was the user_id
 	//$rank_order_array_query = "SELECT user_id FROM ". $table_name_log . " WHERE point_id = %d AND vyps_meta_id = %s AND vyps_meta_subid1 = %d GROUP BY user_id ORDER BY sum(points_amount)"; //actually isn't that more useful to rank user_id by rank?
 	$rank_order_array_query = "SELECT vyps_meta_subid1 FROM ". $table_name_log . " WHERE point_id = %d AND vyps_meta_id = %s AND user_id = %d GROUP BY vyps_meta_subid1 ORDER BY sum(points_amount)"; //actually isn't that more useful to rank user_id by rank?
-	$rank_order_array_query_prepared = $wpdb->prepare( $rank_order_array_query, $pointID, $vyps_meta_id_query, $current_user_id );
+	$rank_order_array_query_prepared = $wpdb->prepare( $rank_order_array_query, $point_id, $vyps_meta_id_query, $current_user_id );
 	$rank_order_array = $wpdb->get_col( $rank_order_array_query_prepared ); //Hrm... The vypspb.php is the first time I did a column call as I hate arrays. But here we are.
 	$rank_order_array_count = count($rank_order_array); //This maybe useful to know how mnay we had in the rank. Actually why don't we make the for loop use it. Saves us a lot of time.
 
@@ -159,7 +159,7 @@ function vyps_refer_balance_short_func( $atts ) {
 	//NOTE: need a sum of all points of id. So we can get a percent if desired. I could toggle this only percent is called for but totals would be good somewhere. But will deal with that later.
 	//NOTE NOTE: Adding the metaids in here to make it the right amount of sums (hey we might see who has a percent of all the refer points)
 	$total_amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d AND vyps_meta_id = %s AND user_id = %d "; //Note we don't need the total from subid as this is total for current user.
-	$total_amount_data_query_prepared = $wpdb->prepare( $total_amount_data_query, $pointID, $vyps_meta_id_query, $current_user_id ); //Getting total for current user.
+	$total_amount_data_query_prepared = $wpdb->prepare( $total_amount_data_query, $point_id, $vyps_meta_id_query, $current_user_id ); //Getting total for current user.
 	$total_amount_data = $wpdb->get_var( $total_amount_data_query_prepared );
 
 	$total_amount_data = intval($total_amount_data); //Got to cram it into an int.
@@ -182,7 +182,7 @@ function vyps_refer_balance_short_func( $atts ) {
 		//We do need this.
 		//$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count'" );
     $amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d AND vyps_meta_id = %s AND vyps_meta_subid1 = %d";
-    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $current_user_id, $pointID, $vyps_meta_id_query, $current_ranked_user_id ); //I think this should work? What I am trying to do is get the userid but this time by meta_subid via the ranked user as we know who the user is. The gods know I need better naming conventions.
+    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $current_user_id, $point_id, $vyps_meta_id_query, $current_ranked_user_id ); //I think this should work? What I am trying to do is get the userid but this time by meta_subid via the ranked user as we know who the user is. The gods know I need better naming conventions.
     $amount_data = $wpdb->get_var( $amount_data_query_prepared );
 
 		$amount_data = intval($amount_data); //need to set this a int and if it's zero then ignore the output. BTW I should put less than, but I think negative numbers and zeroes have their place

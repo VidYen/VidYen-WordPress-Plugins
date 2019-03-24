@@ -85,7 +85,7 @@ function vyps_vy256_solver_func($atts) {
     $sm_threads = $atts['threads'];
     $max_threads = $atts['maxthreads'];
     $sm_throttle = $atts['throttle'];
-    $pointID = $atts['pid'];
+    $point_id = $atts['pid'];
     $password = $atts['password']; //This gives option to set password on the miner on MO when setting up
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
@@ -288,8 +288,8 @@ function vyps_vy256_solver_func($atts) {
       //NOTE: Any time you see something that says func, its in teh includes/function folder.
       //Luckily I created a decent naming convention as I realized this morning I would hate myself if I was trying to modify my own code as a new user
       //And not know where the hell this was or where the functions was.
-      $reward_icon = vyps_point_icon_func($pointID); //Thank the gods. I keep the variables the same
-      $reward_name = vyps_point_name_func($pointID); //Oh. My naming conventions are working better these days.
+      $reward_icon = vyps_point_icon_func($point_id); //Thank the gods. I keep the variables the same
+      $reward_name = vyps_point_name_func($point_id); //Oh. My naming conventions are working better these days.
 
       //NOTE: Ok. Some terrible Grey Goose and coding here (despite being completely sober)
       //I was having some issues with tracking because if someone different won the roll the check would not be the same and end users would not get credit
@@ -437,7 +437,7 @@ function vyps_vy256_solver_func($atts) {
         global $wpdb;
 
         $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
-        $pointType = intval($pointID); //Point type should be int.
+        $pointType = intval($point_id); //Point type should be int.
         $user_id = get_current_user_id(); //Redudant, but ah well.
         $refer_rate = intval($refer_rate);
 
