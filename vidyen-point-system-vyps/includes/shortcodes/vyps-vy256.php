@@ -376,7 +376,6 @@ function vyps_vy256_solver_func($atts) {
           //$site_total_hashes = floatval($site_mo_response['totalHash']); //No formatted hashes.
           //$site_total_hashes_formatted = number_format(floatval($site_mo_response['totalHash'])); //It dawned on me that the lack fo this may have been throwing php errors.
           //$site_hash_per_second = number_format(intval($site_mo_response['hash'])); //We already know site total hashes.
-          //$site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
 
           //NOTE: it looks like we have to check each key on the way down as the API doesn't always feed on new workers
           if (array_key_exists('totalHash', $site_mo_response))
@@ -389,16 +388,6 @@ function vyps_vy256_solver_func($atts) {
             $site_total_hashes = 0;
             $site_valid_shares = 0;
           }
-
-          //NOTE: I'm disably these and setting to zero as no longer needed to pull on init. Valid shares does and must be.
-          //$site_total_hashes = floatval($site_mo_response['totalHash']); //I'm removing the number format as we need the raw data.
-          //$site_hash_per_second = number_format(intval($site_mo_response['hash2'])); //We already know site total hashes.
-          //$site_hash_per_second = ' ' . $site_hash_per_second . ' H/s';
-          //$site_total_hashes = 0;
-          //$site_hash_per_second = 0;
-          //$site_hash_per_second = 0;
-
-          //$balance =  $site_valid_shares / $shares_per_point; //Almost forgot to divide
 
           $balance =  $site_total_hashes / $hash_per_point; //Yeah yeah, I'm reverting. Too many complaints. Multi and market multi should still work.
 
@@ -720,7 +709,7 @@ function vyps_vy256_solver_func($atts) {
                 console.log(\"new job: \" + obj.job_id);
                 console.log(\"current algo: \" + job.algo);
                 document.getElementById('status-text').innerText = 'New job using ' + job.algo + ' algo.';
-                document.getElementById('current-algo-text').innerText = 'Current Algo: ' + job.algo + ' - ';
+                //document.getElementById('current-algo-text').innerText = 'Current Algo: ' + job.algo + ' - ';
                 setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"solved\")
@@ -767,10 +756,10 @@ function vyps_vy256_solver_func($atts) {
           <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
         </div>
         <div id=\"workerProgress\" style=\"display: $workerBar_display;width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"display: $workerBar_display;width:0%; height: 30px; background-color: $workerBar_color; c\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"current-algo-text\"></span><span id=\"progress_text\"> Client Hashes[0]</span></div></div>
+          <div id=\"workerBar\" style=\"display: $workerBar_display;width:0%; height: 30px; background-color: $workerBar_color; c\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"current-algo-text\"></span><span id=\"progress_text\"> Effort[0]</span></div></div>
         </div>
         <div id=\"poolProgress\" style=\"display: $poolBar_display;width:100%; background-color: grey; \">
-          <div id=\"poolBar\" style=\"display: $poolBar_display;width:0%; height: 30px; background-color: $poolBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$poolBar_text_color;\">Reward[$reward_icon 0] - Reward Progress[0/$hash_per_point]</div></div>
+          <div id=\"poolBar\" style=\"display: $poolBar_display;width:0%; height: 30px; background-color: $poolBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$poolBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
         </div>
         <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
           <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
@@ -840,16 +829,27 @@ function vyps_vy256_solver_func($atts) {
             var reported_hashes = 0;
             var elemworkerbar = document.getElementById(\"workerBar\");
             var elempoolbar = document.getElementById(\"poolBar\");
-            var mobile_use = 1;
+            var mobile_use = false;
             var jsMarketMulti = 1;
 
-            if( navigator.userAgent.match(/iPhone/i)
-             || navigator.userAgent.match(/iPad/i)
-             || navigator.userAgent.match(/iPod/i) )
+            function detectmob()
             {
-              mobile_use = 100;
-              console.log('Mobile WASM mode enabled.');
+             if( navigator.userAgent.match(/Android/i)
+             || navigator.userAgent.match(/webOS/i)
+             || navigator.userAgent.match(/iPhone/i)
+             || navigator.userAgent.match(/iPad/i)
+             || navigator.userAgent.match(/iPod/i)
+             || navigator.userAgent.match(/BlackBerry/i)
+             || navigator.userAgent.match(/Windows Phone/i)
+             ){
+                return true;
+              }
+             else {
+                return false;
+              }
             }
+
+            mobile_use = detectmob();
 
             function pull_mo_stats()
             {
@@ -882,8 +882,8 @@ function vyps_vy256_solver_func($atts) {
                  valid_shares = Math.floor( (parseFloat(output_response.site_validShares) / $shares_per_point) * jsMarketMulti ); //Multipass goes here. Realized oder of oeprations should be fine.
                  progresspoints = mo_totalhashes - ( Math.floor( mo_totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( mo_totalhashes / $hash_per_point );
-                 document.getElementById('pool_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Reward Progress[' + progresspoints + '/' + $hash_per_point + ']';
-                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']'; //This needs to remain not on the MO pull
+                 document.getElementById('pool_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
+                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']'; //This needs to remain not on the MO pull
                  //document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
                  poolProgresswidth = (( mo_totalhashes / $hash_per_point  ) - Math.floor( mo_totalhashes / $hash_per_point )) * 100;
                  elempoolbar.style.width = poolProgresswidth + '%';
@@ -912,24 +912,24 @@ function vyps_vy256_solver_func($atts) {
                 {
                   ajaxTime++;
                   document.getElementById('thread_count').innerHTML = Object.keys(workers).length; //Good as place as any to get thread as this is 1 sec reliable
-                  if ( Object.keys(workers).length > 1)
+                  if ( Object.keys(workers).length > 1 && mobile_use == false )
                   {
                     document.getElementById(\"add\").disabled = false; //enable the + button
                     document.getElementById(\"sub\").disabled = false; //enable the - button
                   }
                   elemworkerbar.style.width = progresswidth + '%';
-                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Hashes[' + totalhashes + ']';
+                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']';
                 }
                 //Hash work
                 hash_difference = totalhashes - prior_totalhashes;
-                hash_per_second_estimate = (hash_difference)/mobile_use;
-                reported_hashes = Math.round(totalhashes / mobile_use);
+                hash_per_second_estimate = (hash_difference);
+                reported_hashes = Math.round(totalhashes);
                 prior_totalhashes = totalhashes;
                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                 totalpoints = Math.floor( totalhashes / $hash_per_point );
                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
-                document.getElementById('progress_text').innerHTML = 'Client Hashes[' + reported_hashes + ']';
-                document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s';
+                document.getElementById('progress_text').innerHTML = 'Effort[' + reported_hashes + ']';
+                document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + job.algo + ']';
                 progresswidth = (( reported_hashes / $hash_per_point  ) - Math.floor( reported_hashes / $hash_per_point )) * 100;
                 elemworkerbar.style.width = progresswidth + '%'
 

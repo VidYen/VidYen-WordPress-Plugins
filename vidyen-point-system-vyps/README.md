@@ -112,6 +112,8 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: Shortcode `roundup=TRUE` which rounds up to nearest point as after 1 point as currently you lose hashes in between after the first point you earned (not a default)
 - Add: Earned function to allow to show total earned over all time rather than a sum of current. (Useful for book keeping)
 - Fix: Logo and branding adjustment.
+- Fix: If mobile is detected with the browser, threads are locked to 2 threads. This fixes some issues with the WASM issue that is known. NOTE: This will be disabled once the bug is resolved.
+- Fix: Less emphasis on the hash rate as changed wording to 'Effort' and moved the Current Algo to the hash rate bar.
 
 = 2.3.2 =
 
