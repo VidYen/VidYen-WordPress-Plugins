@@ -66,7 +66,7 @@ function vidyen_wc_mmo_sub_menu_page()
 	    $message = "Added successfully.";
 	}
 
-  echo 'Below the nonce??';
+  echo '<br>Below the nonce?<br>';
 
   //Repulls from SQL
 	//Input ID pull
