@@ -5,15 +5,16 @@ function pull_mmo_stats()
   {
    var data =
    {
-     'action': 'vyps_mmo_bal_api_action',
-     'point_id': point_id,
+     'action': 'vyps_mmo_bal_api_action',     
    };
    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
    jQuery.post(ajaxurl, data, function(response)
    {
      output_response = JSON.parse(response);
      //MMO Pull
-     mmo_point_balance = parseFloat(output_response.point_balance).toLocaleString('en'); //To remove the number commands remove the .toLocaleString
+     mmo_point_balance = parseFloat(output_response.point_balance); //To remove the number commands remove the .toLocaleString
+     //mmo_point_balance = mmo_point_balance.toLocaleString('en');
+
      if (mmo_point_balance > 0)
      {
        console.log('Point Balance is: ' + mmo_point_balance);
