@@ -29,14 +29,12 @@ function vidyen_wc_mmo_sub_menu_page()
 {
 	global $wpdb;
 
-  echo 'Anything?';
-
 	if (isset($_POST['point_id']))
 	{
     echo 'Post was set for some reason.';
 		//As the post is the only thing that edits data, I suppose this is the best place to the noce
 		$vyps_nonce_check = $_POST['vypsnoncepost'];
-		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-nonce' ) )
+		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-mmo-nonce' ) )
     {
 				// This nonce is not valid.
 				die( 'Security check' );
@@ -66,8 +64,6 @@ function vidyen_wc_mmo_sub_menu_page()
 	    $message = "Added successfully.";
 	}
 
-  echo '<br>Below the nonce?<br>';
-
   //Repulls from SQL
 	//Input ID pull
 	$point_id = intval(vyps_mmo_sql_point_id_func());
@@ -76,12 +72,10 @@ function vidyen_wc_mmo_sub_menu_page()
 	$point_amount = intval(vyps_mmo_sql_point_amount_func());
 
   //Ouput id
-  $output_id = intval(vyps_mmo_sql_ouput_id_func());
+  $output_id = intval(vyps_mmo_sql_output_id_func());
 
 	//Ouput Amount
 	$output_amount = intval(vyps_mmo_sql_output_amount_func());
-
-
 
   /* I suspect something is goin gon here
 	//Just setting to 1 if nothing else I suppose, but should always be something
@@ -109,7 +103,7 @@ function vidyen_wc_mmo_sub_menu_page()
 	$vidyen_wc_mmo_logo_url = plugins_url( 'includes/images/vyvp-logo.png', __FILE__ );
 
 	//Adding a nonce to the post
-	$vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
+	$vyps_nonce_check = wp_create_nonce( 'vyps-mmo-nonce' );
 
   //Save for later //<img src="' . $vidyen_wc_mmo_logo_url . '">
 

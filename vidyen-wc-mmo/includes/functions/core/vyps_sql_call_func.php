@@ -29,7 +29,7 @@ function vyps_mmo_sql_point_id_func()
 }
 
 /*** INPUT AMOUNT SQL Call ***/
-function vyps_mmo_sql_input_amount_func()
+function vyps_mmo_sql_point_amount_func()
 {
 	global $wpdb;
 
@@ -39,18 +39,18 @@ function vyps_mmo_sql_input_amount_func()
 	$first_row = 1; //Note sure why I'm setting this.
 
 	//Input Amount
-	$input_amount_query = "SELECT input_amount FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-	$input_amount_query_prepared = $wpdb->prepare( $input_amount_query, $first_row );
-	$input_amount = $wpdb->get_var( $input_amount_query_prepared );
+	$point_amount_query = "SELECT point_amount FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$point_amount_query_prepared = $wpdb->prepare( $point_amount_query, $first_row );
+	$point_amount = $wpdb->get_var( $point_amount_query_prepared );
 
 
-	$input_amount = intval($input_amount); //Extra sanitzation
+	$point_amount = intval($point_amount); //Extra sanitzation
 
-	return $input_amount;
+	return $point_amount;
 }
 
 /*** OUTPUT ID SQL Call ***/
-function vyps_mmo_sql_ouput_id_func()
+function vyps_mmo_sql_output_id_func()
 {
 	global $wpdb;
 
@@ -60,14 +60,14 @@ function vyps_mmo_sql_ouput_id_func()
 	$first_row = 1; //Note sure why I'm setting this.
 
 	//Ouput Amount NOTE: For now this is just for WooWallet
-	$ouput_id_query = "SELECT ouput_id FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
-	$ouput_id_query_prepared = $wpdb->prepare( $ouput_id_query, $first_row );
-	$ouput_id = $wpdb->get_var( $ouput_id_query_prepared );
+	$output_id_query = "SELECT output_id FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$output_id_query_prepared = $wpdb->prepare( $output_id_query, $first_row );
+	$output_id = $wpdb->get_var( $output_id_query_prepared );
 
 
-	$ouput_id = intval($ouput_id); //Extra sanitzation
+	$output_id = intval($output_id); //Extra sanitzation
 
-	return $ouput_id;
+	return $output_id;
 }
 
 /*** OUTPUT AMOUNT SQL Call ***/
