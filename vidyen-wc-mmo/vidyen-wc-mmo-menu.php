@@ -70,16 +70,16 @@ function vidyen_wc_mmo_sub_menu_page()
 
   //Repulls from SQL
 	//Input ID pull
-	$point_id = vyps_mmo_sql_point_id_func();
+	$point_id = intval(vyps_mmo_sql_point_id_func());
 
 	//Input Amount
-	$point_amount = vyps_mmo_sql_point_amount_func();
+	$point_amount = intval(vyps_mmo_sql_point_amount_func());
 
   //Ouput id
-  $output_id = vyps_mmo_sql_ouput_id_func();
+  $output_id = intval(vyps_mmo_sql_ouput_id_func());
 
 	//Ouput Amount
-	$output_amount = vyps_mmo_sql_output_amount_func();
+	$output_amount = intval(vyps_mmo_sql_output_amount_func());
 
 
 
