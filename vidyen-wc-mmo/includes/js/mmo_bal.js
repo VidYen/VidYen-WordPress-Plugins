@@ -13,10 +13,11 @@ function pull_mmo_stats()
    {
      output_response = JSON.parse(response);
      //MMO Pull
-     mmo_point_balance = parseFloat(output_response.point_balance);
+     mmo_point_balance = parseFloat(output_response.point_balance).toLocaleString('en'); //To remove the number commands remove the .toLocaleString
      if (mmo_point_balance > 0)
      {
        console.log('Point Balance is: ' + mmo_point_balance);
+       document.getElementById('vyps_points').innerHTML = mmo_point_balance; //This needs to remain not on the MO pull
      }
      else
      {
