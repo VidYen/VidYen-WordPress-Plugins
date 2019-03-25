@@ -30,8 +30,7 @@ function vidyen_wc_mmo_sub_menu_page()
 	global $wpdb;
 
 	if (isset($_POST['point_id']))
-	{
-    echo 'Post was set for some reason.';
+	{  
 		//As the post is the only thing that edits data, I suppose this is the best place to the noce
 		$vyps_nonce_check = $_POST['vypsnoncepost'];
 		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-mmo-nonce' ) )

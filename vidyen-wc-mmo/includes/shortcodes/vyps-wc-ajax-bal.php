@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //I'm going to do this all in a slew of both the balance if ww or not
 //NOTE: I've decided to this this with just one point and the WooWallet output for simplicity. If people want more they can ask.
 
-function vyps_mmo_ajax_bal_func($atts)
+function vyps_mmo_ajax_bal_func()
 {
 	//Check if user is logged in and stop the code.
 	//NOTE:I moved this here. I realized, its more likely that 10,000 users are bashing site mem while the admin is almost always logged in.
@@ -14,14 +14,11 @@ function vyps_mmo_ajax_bal_func($atts)
 		return; //You get nothing. Use the LG code.
 	}
 
-	//Only need to get the output id to show
-	$atts = shortcode_atts(
-		array(
-				'pointid' => '0',
-		), $atts, 'vyps-pe' );
+	//NOTE: Guess what. We pull for SQL instead of short code. This helps with the AJAX
 
-	$point_id = $atts['pointid'];
-	$div_id = $point_id.'mmobaldiv';
+	$point_id = vyps_mmo_sql_point_id_func();
+	$output_id = vyps_mmo_sql_output_id_func();
+	$div_id = $point_id.'vymmodiv';
 	$user_id = get_current_user_id();
 
 	//Get the url for the solver
@@ -29,7 +26,7 @@ function vyps_mmo_ajax_bal_func($atts)
 
 	$vyps_bal_html_output = '<div id="'.$div_id.'">'.vyps_point_icon_func($point_id).' '.vyps_point_balance_func($point_id, $user_id).'</div>';
 	$www_bal_html_output = '<div id="'.$div_id.'">'.vyps_point_icon_func($point_id).' '.vyps_point_balance_func($point_id, $user_id).'</div>';
-	$js_html_output = '<script src="'.$mmo_ajax_js_url.'"></script><script>var point_id = '.$point_id.';</script>'; //this sets the poitn id for the mmo_bal.js 
+	$js_html_output = '<script src="'.$mmo_ajax_js_url.'"></script><script>var point_id = '.$point_id.';</script>'; //this sets the poitn id for the mmo_bal.js
 
 	return $ww_bal_html_output;
 }

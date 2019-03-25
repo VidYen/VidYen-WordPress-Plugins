@@ -3,7 +3,7 @@
 Plugin Name:  VidYen WooCommerce MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RPG like currencies to WooCommerce for VidYen Point System
-Version:      0.0.19
+Version:      0.0.20
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -28,40 +28,40 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 register_activation_hook(__FILE__, 'vidyen_wc_mmo_sql_install');
 
 //Install the SQL tables for VYPS.
-function vidyen_wc_mmo_sql_install() {
+function vidyen_wc_mmo_sql_install()
+{
+  global $wpdb;
 
-    global $wpdb;
+	//I have no clue why this is needed. I should learn, but I wasn't the original author. -Felty
+	$charset_collate = $wpdb->get_charset_collate();
 
-		//I have no clue why this is needed. I should learn, but I wasn't the original author. -Felty
-		$charset_collate = $wpdb->get_charset_collate();
+	//NOTE: I have the mind to make mediumint to int, but I wonder if you get 8 million log transactios that you should consider another solution than VYPS.
 
-		//NOTE: I have the mind to make mediumint to int, but I wonder if you get 8 million log transactios that you should consider another solution than VYPS.
+	//vidyen_wc_mmo table creation
+  $table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
 
-		//vidyen_wc_mmo table creation
-    $table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
+  $sql = "CREATE TABLE {$table_name_wc_mmo} (
+	id mediumint(9) NOT NULL AUTO_INCREMENT,
+	point_id mediumint(9) NOT NULL,
+	point_amount mediumint(9) NOT NULL,
+	output_id mediumint(9) NOT NULL,
+	output_amount mediumint(9) NOT NULL,
+	PRIMARY KEY  (id)
+      ) {$charset_collate};";
 
-    $sql = "CREATE TABLE {$table_name_wc_mmo} (
-		id mediumint(9) NOT NULL AUTO_INCREMENT,
-		point_id mediumint(9) NOT NULL,
-		point_amount mediumint(9) NOT NULL,
-		output_id mediumint(9) NOT NULL,
-		output_amount mediumint(9) NOT NULL,
-		PRIMARY KEY  (id)
-        ) {$charset_collate};";
+  require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I never did investigate why the original outsource dev used this.
 
-    require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I never did investigate why the original outsource dev used this.
+  dbDelta($sql);
 
-    dbDelta($sql);
+	//Default data
+	$data_insert = [
+			'point_id' => 1,
+			'point_amount' => 100,
+			'output_id' => 2,
+			'output_amount' => 1,
+	];
 
-		//Default data
-		$data_insert = [
-				'point_id' => 1,
-				'point_amount' => 100,
-				'output_id' => 2,
-				'output_amount' => 1,
-		];
-
-		$wpdb->insert($table_name_wc_mmo, $data_insert);
+	$wpdb->insert($table_name_wc_mmo, $data_insert);
 }
 
 /*** Includes ***/
