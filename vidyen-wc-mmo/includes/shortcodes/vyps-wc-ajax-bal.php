@@ -7,33 +7,40 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 function vyps_mmo_ajax_bal_func()
 {
+	/*
 	//Check if user is logged in and stop the code.
 	//NOTE:I moved this here. I realized, its more likely that 10,000 users are bashing site mem while the admin is almost always logged in.
 	if ( !is_user_logged_in() )
 	{
 		return; //You get nothing. Use the LG code.
 	}
+	*/
 
 	//NOTE: Guess what. We pull for SQL instead of short code. This helps with the AJAX
 
-	$point_id = vyps_mmo_sql_point_id_func();
-	$output_id = vyps_mmo_sql_output_id_func();
+	$point_id = intval(vyps_mmo_sql_point_id_func());
+	$output_id = intval(vyps_mmo_sql_output_id_func());
 	$div_id = $point_id.'vymmodiv';
 	$user_id = get_current_user_id();
+	$vyps_points_output = number_format(vyps_point_balance_func($point_id, $user_id), 0);
+	//$vyps_points_output = vyps_point_balance_func($point_id, $user_id);
 
 	//Get the url for the solver
 	$mmo_ajax_js_url = plugins_url( 'js/mmo_bal.js', dirname(__FILE__) );
 
-	$vyps_bal_html_output = '<div id="'.$div_id.'">'.vyps_point_icon_func($point_id).' '.vyps_point_balance_func($point_id, $user_id).'</div>';
-	$www_bal_html_output = '<div id="'.$div_id.'">'.vyps_point_icon_func($point_id).' '.vyps_point_balance_func($point_id, $user_id).'</div>';
-	$js_html_output = '<script src="'.$mmo_ajax_js_url.'"></script><script>var point_id = '.$point_id.';</script>'; //this sets the poitn id for the mmo_bal.js
+	//Concatenate the values into the output
+	$ww_bal_html_output =
+		'<div id="'.$div_id.'" style="font-size: 21px;">'.vyps_point_icon_func($point_id).' <span id="vyps_points">'.$vyps_points_output.'</span>
+		<span id="ww_points">'.vyps_point_icon_func($output_id).' '.vidyen_mmo_woowallet_bal_func($user_id).'</span></div>';
+
+	$ww_bal_html_output .= '<script src="'.$mmo_ajax_js_url.'"></script><script>var point_id = '.$point_id.';</script>';
 
 	return $ww_bal_html_output;
 }
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-mmo-bal', 'vyps_wc_ajax_bal_func');
+add_shortcode( 'vyps-mmo-bal', 'vyps_mmo_ajax_bal_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */

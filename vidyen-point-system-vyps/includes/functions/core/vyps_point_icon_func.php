@@ -23,7 +23,7 @@ function vyps_point_icon_func($point_id)
 
   //since 99.9999% of time I need to format it, I'm going to put it in here as well.
   //It's not like I couldn't just return the above and not the below in its own function later
-  $icon_html = "<img src=\"$sourceIcon\" width=\"16\" hight=\"16\" title=\"$sourceName\">";
+  $icon_html = '<img src="'.$sourceIcon.'" width="16" height="16" title="'.$sourceName.'">';
 
   return $icon_html;
 }

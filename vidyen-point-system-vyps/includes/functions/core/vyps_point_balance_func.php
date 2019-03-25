@@ -11,7 +11,7 @@ function vyps_point_balance_func($point_id, $user_id)
 {
   //The usual suspects to get the sql calls up
   global $wpdb;
-	$table_name_points = $wpdb->prefix . 'vyps_points';
+	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 
   //balance
 	//$balance_points = $wpdb->get_var( "SELECT sum(points_amount) FROM $table_vyps_log WHERE user_id = $userID AND points = $point_id"); //Oooh. I love it when I get my variable names the same.
