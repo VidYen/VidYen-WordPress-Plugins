@@ -14,15 +14,17 @@ function pull_mmo_stats()
      //MMO Pull
      mmo_point_balance = parseFloat(output_response.point_balance); //To remove the number commands remove the .toLocaleString
      mmo_point_balance_string = mmo_point_balance.toLocaleString('en');
+     ww_point_balance = output_response.ww_balance;
 
      if (mmo_point_balance > 0)
      {
-       console.log('Point Balance is: ' + mmo_point_balance);
+       console.log('Point Balance is: ' + mmo_point_balance); //Remove soon
        document.getElementById('vyps_points').innerHTML = mmo_point_balance_string; //This needs to remain not on the MO pull
+       document.getElementById('ww_points').innerHTML = ww_point_balance; //This needs to remain not on the MO pull
      }
      else
      {
-       console.log('Point Balance is: 0');
+       console.log('Point Balance is: 0'); //Remove soon
      }
    });
   });

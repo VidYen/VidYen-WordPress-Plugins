@@ -208,6 +208,8 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_name_
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_icon_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_balance_func.php'); //I neeced a raw balance function
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_earned_func.php'); //More for the MMO but it should go here since sites could use it.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_deduct_func.php'); //Streamlined deduct
+
 
 /*** MO API ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now
@@ -221,10 +223,13 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/refer/vyps_is_refer_f
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_bal_check_func.php'); //Tie in to Dashed Slug's wallet to check if transfer balance is possible
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_slug_move_func.php'); //Function to transfer points between users if points allow.
 
-/*** WW ***/
+/*** WooWallet ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_credit_func.php'); //Function to credit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_debit_func.php'); //Function to debit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_bal_func.php'); //Function to check bal the WooWallet.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_ww_point_credit_func.php'); //Credit for the ajax system. More modern version
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_ww_point_bal_func.php'); //Updated balance feature. Can be used more than the get current user
+
 
 /*** AJAX ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_ajaxurl.php'); //Forces ajax to be called regardless of installation

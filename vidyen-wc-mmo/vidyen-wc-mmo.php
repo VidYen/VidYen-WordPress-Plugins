@@ -3,7 +3,7 @@
 Plugin Name:  VidYen WooCommerce MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RPG like currencies to WooCommerce for VidYen Point System
-Version:      0.0.32
+Version:      0.0.33
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
