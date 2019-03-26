@@ -32,7 +32,7 @@ function vyps_mmo_exchange_api_action()
     $deduct_result = vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id );
     $lacking_balance = 0;
     $point_balance = vyps_point_balance_func($point_id, $user_id);
-    $add_result = vyps_ww_point_credit_func( $user_id, $ouput_amount, $reason );
+    $add_result = vyps_ww_point_credit_func( $user_id, $output_amount, $reason );
   }
   else
   {

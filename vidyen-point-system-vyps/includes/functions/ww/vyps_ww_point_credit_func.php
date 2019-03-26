@@ -8,9 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 */
 
 /*** WOOWALLET CREDIT FUNCTION ***/
-function vyps_ww_point_credit_func( $user_id, $ouput_amount, $reason )
+function vyps_ww_point_credit_func( $user_id, $output_amount, $reason )
 {
-    $amount = intval($ouput_amount);
+    $amount = intval($output_amount);
     $details = sanitize_text_field($reason);
 
     //Well this was 100% easier. I should have did this years ago.

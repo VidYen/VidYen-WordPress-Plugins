@@ -40,7 +40,7 @@ function vyps_wc_mmo_point_exchange_func()
 	//Get the url for the js
 	$mmo_ajax_js_url = plugins_url( 'js/mmo_exchange.js', dirname(__FILE__) );
 
-	$mmo_wc_exchange_table_html_output = '<table>';
+	$mmo_wc_exchange_table_html_output = '<table width="100%">';
 	$mmo_wc_exchange_table_html_output .=
 	'<tr><!-- Input -->
 			<td><div align="center">Spend:</div></td>
@@ -53,7 +53,7 @@ function vyps_wc_mmo_point_exchange_func()
 		<tr>
 			<td colspan = 2>
 				<div align="center">
-					<form style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="vidyen_mmo_exchange()" value="Exchange"/></form>
+					<form style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="vidyen_confirm_exchange()" value="Exchange"/></form>
 				</div>
 			</td>
 		</tr>

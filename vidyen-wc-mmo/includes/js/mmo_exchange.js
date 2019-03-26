@@ -1,3 +1,18 @@
+//Exchange Ajax code with confirmation button
+
+//Confirm exchange button
+function vidyen_confirm_exchange()
+{
+  if (confirm("Do you wish to exchange copper for silver?"))
+  {
+    vidyen_mmo_exchange();
+  }
+  else
+  {
+    //Nothing. Placeholder for lader.
+  }
+}
+
 //Sets the method to update to the refresh I'm debatin gto make this universial or by point.
 function vidyen_mmo_exchange()
 {
@@ -13,14 +28,15 @@ function vidyen_mmo_exchange()
    jQuery.post(ajaxurl, data, function(response)
    {
      output_response = JSON.parse(response);
-     point_balance => output_response.point_balance;
-     needed_balance => output_response.needed_balance;
-     deduct_result => output_response.deduct_result;
-     add_result => output_response.add_result;
+     point_balance = parseFloat(output_response.point_balance);
+     needed_balance = parseFloat(output_response.needed_balance);
+     deduct_result = output_response.deduct_result;
+     add_result = output_response.add_result;
 
      if ( needed_balance > 0 )
      {
        results_string = 'Need ' + needed_balance + ' more to exchange!';
+       success_message = 'Not enough!';
      }
 
      if ( add_result > 0 )
@@ -29,9 +45,11 @@ function vidyen_mmo_exchange()
        humdate = numdate.toString();
        results_string = 'Points exchanged! ' + humdate;
        pull_mmo_stats(); //Make sure the balances are updated.
+       success_message = 'Sucess!';
      }
 
-     document.getElementById('exchange_results').innerHTML = results_string; //This needs to remain not on the MO pull
+     window.alert(results_string);
+     document.getElementById('exchange_results').innerHTML = success_message; //This needs to remain not on the MO pull
    });
   });
 }
