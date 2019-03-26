@@ -30,8 +30,13 @@ function vyps_mmo_ajax_bal_func()
 
 	//Concatenate the values into the output
 	$ww_bal_html_output =
-		'<div id="'.$div_id.'" style="font-size: 21px;">'.vyps_point_icon_func($point_id).' <span id="vyps_points">'.$vyps_points_output.'</span>
-		<span id="ww_points">'.vyps_point_icon_func($output_id).' '.vidyen_mmo_woowallet_bal_func($user_id).'</span></div>';
+		'<table>
+			<tr>
+			<td><div id="'.$div_id.'" style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($point_id).'</span> <span id="vyps_points" style="vertical-align: bottom;">'.$vyps_points_output.'</span>
+			<span id="ww_points"><span style="vertical-align: top;">'.vyps_point_icon_func($output_id).' </span><span id="ww_points" style="vertical-align: bottom;"> '.vidyen_mmo_woowallet_bal_func($user_id).'</span></div>
+			</td>
+			</tr>
+		</table>';
 
 	$ww_bal_html_output .= '<script src="'.$mmo_ajax_js_url.'"></script><script>var point_id = '.$point_id.';</script>';
 
