@@ -33,7 +33,7 @@ function vyps_mmo_ajax_bal_func()
 		'<table>
 			<tr>
 			<td><div id="'.$div_id.'" style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($point_id).'</span> <span id="vyps_points" style="vertical-align: bottom;">'.$vyps_points_output.'</span>
-			<span id="ww_points"><span style="vertical-align: top;">'.vyps_point_icon_func($output_id).' </span><span id="ww_points" style="vertical-align: bottom;"> '.vidyen_mmo_woowallet_bal_func($user_id).'</span></div>
+			<span id="ww_points"><span style="vertical-align: top;">'.vyps_point_icon_func($output_id).' </span><span id="ww_points" style="vertical-align: bottom;"> '.vyps_ww_point_bal_func($user_id).'</span></div>
 			</td>
 			</tr>
 		</table>';
