@@ -36,7 +36,7 @@ function vyps_mmo_exchange_api_action()
   }
   else
   {
-    $lacking_balance = intval($point_amount - $current_balance);
+    $lacking_balance = intval($point_amount - $prior_balance);
     $point_balance = vyps_point_balance_func($point_id, $user_id);
     $deduct_result = 'Not run';
     $add_result = 'Not run';
