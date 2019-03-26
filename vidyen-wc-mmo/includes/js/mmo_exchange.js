@@ -7,7 +7,7 @@ function vidyen_mmo_exchange()
    var data =
    {
      'action': 'vyps_mmo_exchange_api_action',
-     'multi': multi_exchange,
+     //'multi': multi_exchange,
    };
    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
    jQuery.post(ajaxurl, data, function(response)
@@ -20,7 +20,7 @@ function vidyen_mmo_exchange()
 
      if ( needed_balance > 0 )
      {
-       results_string = 'Need ' + needed_balance ' more to exchange!';
+       results_string = 'Need ' + needed_balance + ' more to exchange!';
      }
 
      if ( add_result > 0 )
@@ -28,7 +28,8 @@ function vidyen_mmo_exchange()
        var numdate = Date(Date.now());
        humdate = numdate.toString();
        results_string = 'Points exchanged! ' + humdate;
-     }     
+       pull_mmo_stats(); //Make sure the balances are updated.
+     }
 
      document.getElementById('exchange_results').innerHTML = results_string; //This needs to remain not on the MO pull
    });

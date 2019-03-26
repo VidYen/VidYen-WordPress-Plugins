@@ -43,12 +43,12 @@ function vyps_wc_mmo_point_exchange_func()
 	$mmo_wc_exchange_table_html_output = '<table>';
 	$mmo_wc_exchange_table_html_output .=
 	'<tr><!-- Input -->
-			<td><div align="center">Spend</div></td>
+			<td><div align="center">Spend:</div></td>
 			<td><div align="center">'.$source_icon.' '.$point_amount.'</div></td>
 		</tr>
 		<tr><!-- Output -->
+			<td><div align="center">Receive:</div></td>
 			<td><div align="center">'.$output_icon.' '.$output_amount.'</div></td>
-			<td><div align=\"center\">Receive</div></td>
 		</tr>
 		<tr>
 			<td colspan = 2>
@@ -58,7 +58,7 @@ function vyps_wc_mmo_point_exchange_func()
 			</td>
 		</tr>
 		<tr>
-			<td colspan = 2><div id="exchange_results"align="center">Press Exchange to Trade</div></td>
+			<td colspan = 2><div id="exchange_results" align="center">Press Exchange to Trade</div></td>
   	</tr>';
 		$mmo_wc_exchange_table_html_output .= '</table>';
 		$mmo_wc_exchange_table_html_output .= '<script src="'.$mmo_ajax_js_url.'"></script>';
