@@ -267,7 +267,7 @@ function vyps_vy256_solver_func($atts) {
       $VYPS_stat_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . 'stat_'. $current_graphic; //Stationary version!
       $VYPS_power_url = plugins_url( 'images/', dirname(__FILE__) ) . 'powered_by_vyps.png'; //Well it should work out.
 
-      $VYPS_power_row = "<tr><td>Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\" alt=\"Powered by VYPS\"></a></td></tr>";
+      $VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
 
       //Procheck here. Do not forget the ==
       if (vyps_procheck_func($atts) == 1)

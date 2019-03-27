@@ -42,7 +42,7 @@ function vyps_rng_quads_func( $atts )
   $vyps_nonce_check = wp_create_nonce( 'vyps-nonce-quads' );
 
   $VYPS_power_url = plugins_url( 'images/', dirname(__FILE__) ) . 'powered_by_vyps.png'; //Well it should work out.
-  $VYPS_power_row = "<div align=\"left\">Powered by <a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\" alt=\"Powered by VYPS\"></a></div>";
+  $VYPS_power_row = "<div align=\"left\"><a href=\"https://wordpress.org/plugins/vidyen-point-system-vyps/\" target=\"_blank\"><img src=\"$VYPS_power_url\" alt=\"Powered by VYPS\"></a></div>";
 
   //Procheck here. Do not forget the ==
   if (vyps_procheck_func($atts) == 1) {

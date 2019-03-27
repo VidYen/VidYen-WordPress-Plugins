@@ -86,7 +86,7 @@ function vyps_mmo_sql_output_amount_func()
 	$output_amount = $wpdb->get_var( $output_amount_query_prepared );
 
 
-	$output_amount = intval($output_amount); //Extra sanitzation
+	$output_amount = floatval($output_amount); //Extra sanitzation
 
 	return $output_amount;
 }
