@@ -30,7 +30,7 @@ function vidyen_wc_mmo_sub_menu_page()
 	global $wpdb;
 
 	if (isset($_POST['point_id']))
-	{  
+	{
 		//As the post is the only thing that edits data, I suppose this is the best place to the noce
 		$vyps_nonce_check = $_POST['vypsnoncepost'];
 		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-mmo-nonce' ) )
@@ -46,7 +46,7 @@ function vidyen_wc_mmo_sub_menu_page()
 		$point_amount = abs(intval($_POST['point_amount']));
 
 		//The icon. I'm suprised this works so well
-		$output_amount = abs(intval($_POST['output_amount']));
+		$output_amount = abs(floatval($_POST['output_amount']));
 
     $table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
 
@@ -74,28 +74,8 @@ function vidyen_wc_mmo_sub_menu_page()
   $output_id = intval(vyps_mmo_sql_output_id_func());
 
 	//Ouput Amount
-	$output_amount = intval(vyps_mmo_sql_output_amount_func());
+	$output_amount = floatval(vyps_mmo_sql_output_amount_func());
 
-  /* I suspect something is goin gon here
-	//Just setting to 1 if nothing else I suppose, but should always be something
-	if ($point_id == '')
-	{
-		$point_id = 1;
-	}
-
-	//Just setting to 1 if nothing else I suppose, but should always be something
-	if ($point_amount == '')
-	{
-		$point_amount = 1;
-	}
-
-	//Just setting to 1 if nothing else I suppose, but should always be something
-	if ($output_amount == '')
-	{
-		$output_amount = 1;
-	}
-
-  */
 
 	//It's possible we don't use the VYPS logo since no points.
   $vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
@@ -124,7 +104,7 @@ function vidyen_wc_mmo_sub_menu_page()
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'. $vyps_nonce_check . '"/></td>
 				<td><input type="number" name="point_amount" type="number" id="point_amount" min="1" max="1000000" step="1" value="' . $point_amount . '" required="true"></td>
         <td><input type="number" name="output_id" type="number" id="output_id" min="1" step="1" value="' . $output_id .  '" required="true"></td>
-				<td><input type="number" name="output_amount" type="number" id="output_amount" min="1" max="1000000" step="1" value="' . $output_amount . '" required="true"></td>
+				<td><input type="number" name="output_amount" type="number" id="output_amount" min="0.0000001" max="1000000" step="0.0000001" value="' . $output_amount . '" required="true"></td>
 				<td><input type="submit" value="Submit"></td>
 			</tr>
 		</form>

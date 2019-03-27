@@ -29,7 +29,7 @@ function vyps_wc_mmo_point_exchange_func()
 	$point_id = intval(vyps_mmo_sql_point_id_func());
 	$point_amount = intval(vyps_mmo_sql_point_amount_func());
 	$output_id = intval(vyps_mmo_sql_output_id_func());
-	$output_amount = intval(vyps_mmo_sql_output_amount_func());
+	$output_amount = floatval(vyps_mmo_sql_output_amount_func());
 	$div_id = $point_id.'vymmodiv';
 	$user_id = get_current_user_id();
 	$vyps_points_output = number_format(vyps_point_balance_func($point_id, $user_id), 0);

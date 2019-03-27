@@ -21,7 +21,7 @@ function vyps_mmo_exchange_api_action()
   //$point_id = intval($_POST['point_id']);
   $point_id = vyps_mmo_sql_point_id_func();
   $point_amount = intval(vyps_mmo_sql_point_amount_func()); //Get how much we are deducting
-  $output_amount = intval(vyps_mmo_sql_output_amount_func()); //The amount we give to WooWallet
+  $output_amount = floatval(vyps_mmo_sql_output_amount_func()); //The amount we give to WooWallet
   $user_id = get_current_user_id();
   $reason = 'VidYen Point Exchange';
 
