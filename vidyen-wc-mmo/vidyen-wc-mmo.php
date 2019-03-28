@@ -72,7 +72,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_b
 
 
 /*** Shortcodes ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ww-bal.php'); //Point Exchange NOTE: DELETETHIS!
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ajax-bal.php'); //Ajax Balance
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Ajax Point Exchange
 

@@ -68,7 +68,7 @@ function vyps_wc_mmo_point_exchange_func()
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-wc-mmo', 'vyps_wc_mmo_point_exchange_func');
+add_shortcode( 'vyps-mmo-pe', 'vyps_wc_mmo_point_exchange_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */

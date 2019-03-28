@@ -110,7 +110,8 @@ function vidyen_wc_mmo_sub_menu_page()
 		</form>
 	</table>
 	<h2>Shortcode</h2>
-	<p><b>[vidyen-wc-mmo]</b></p>
+	<p><b>[vyps-mmo-bal]</b> for live balance.</p>
+	<p><b>[vyps-mmo-pe]</b> for live point exchange.</p>
 	<p>Simply put the shortcode <b>[vidyen-wc-mmo]</b> on a page and let it run with the point id from the VidYen point system.</p>
 	<p>Point ID is the point ID from the VidYen System. Found in Manage Points section of VYPS</p>
 	<p>Max bet is how much you want to let them bet in a single hand. Requires session refresh.</p>
