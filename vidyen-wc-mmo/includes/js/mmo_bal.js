@@ -18,13 +18,13 @@ function pull_mmo_stats()
 
      if (mmo_point_balance > 0)
      {
-       console.log('Point Balance is: ' + mmo_point_balance); //Remove soon
+       //console.log('Point Balance is: ' + mmo_point_balance); //Remove soon
        document.getElementById('vyps_points').innerHTML = mmo_point_balance_string; //This needs to remain not on the MO pull
        document.getElementById('ww_points').innerHTML = ww_point_balance; //This needs to remain not on the MO pull
      }
      else
      {
-       console.log('Point Balance is: 0'); //Remove soon
+       //console.log('Point Balance is: 0'); //Remove soon
      }
    });
   });

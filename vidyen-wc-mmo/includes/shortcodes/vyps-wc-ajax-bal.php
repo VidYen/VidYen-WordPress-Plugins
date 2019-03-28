@@ -7,14 +7,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 function vyps_mmo_ajax_bal_func()
 {
-	/*
+
 	//Check if user is logged in and stop the code.
 	//NOTE:I moved this here. I realized, its more likely that 10,000 users are bashing site mem while the admin is almost always logged in.
 	if ( !is_user_logged_in() )
 	{
 		return; //You get nothing. Use the LG code.
 	}
-	*/
 
 	//NOTE: Guess what. We pull for SQL instead of short code. This helps with the AJAX
 
