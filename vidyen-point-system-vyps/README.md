@@ -1,5 +1,5 @@
 === VidYen Point System ===
-Contributors: vidyen, felty
+Contributors: vidyen, felty, shanevidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: Rewards, Miner, Crypto, Monero, Adscend, Wannads, mining, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
 Requires at least: 4.9.8
