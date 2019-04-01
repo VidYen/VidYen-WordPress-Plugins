@@ -106,6 +106,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.3.4 =
+
+- Fix: Graphic minor rotation bug. `Why did no one tell me?`
+
 = 2.3.3 =
 
 - Fix: If mobile is detected with the browser, threads are locked to 2 threads. This has been tested with 7 different phones (Thanks `@Radioactive3D` ) to resolve mobile mining issues on iPhone and Android.

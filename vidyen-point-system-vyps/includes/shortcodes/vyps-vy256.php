@@ -174,8 +174,6 @@ function vyps_vy256_solver_func($atts) {
           '1' => 'vyworker_001.gif',
           '2' => 'vyworker_002.gif',
           '3' => 'vyworker_003.gif',
-          '4' => 'vyworker_003.gif',
-          '3' => 'vyworker_004.gif',
           '4' => 'vyworker_004.gif',
     );
 
