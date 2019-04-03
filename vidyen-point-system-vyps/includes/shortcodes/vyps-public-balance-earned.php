@@ -137,7 +137,7 @@ function vyps_public_balance_earned_func( $atts )
 	//This shouldn't be too hard in theory. It's not going to be get gar though. Probaly column and feed into array.
 	//$rank_order_array_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d GROUP BY user_id ORDER BY sum(points_amount)"; //This should list users by their sum and order them into an array.
 	$rank_order_arrary = "SELECT SUM(CASE WHEN points_amount < 0 THEN 0 ELSE points_amount END)";
-	$rank_order_array_query = "SELECT user_id FROM ". $table_name_log . " WHERE point_id = %d AND EXISTS (SELECT ID FROM ". $table_name_users . " WHERE ID = " . $table_name_log .".user_id) AND points_amount>0 GROUP BY user_id ORDER BY sum(points_amount)"; //actually isn't that more useful to rank user_id by rank?
+	$rank_order_array_query = "SELECT user_id FROM ". $table_name_log . " WHERE point_id = %d AND EXISTS (SELECT ID FROM ". $table_name_users . " WHERE ID = " . $table_name_log .".user_id) AND points_amount > 0 GROUP BY user_id ORDER BY sum(points_amount)"; //actually isn't that more useful to rank user_id by rank?
 	$rank_order_array_query_prepared = $wpdb->prepare( $rank_order_array_query, $point_id );
 	$rank_order_array = $wpdb->get_col( $rank_order_array_query_prepared ); //Hrm... The vypspb.php is the first time I did a column call as I hate arrays. But here we are.
 	$rank_order_array_count = count($rank_order_array); //This maybe useful to know how mnay we had in the rank. Actually why don't we make the for loop use it. Saves us a lot of time.
@@ -149,7 +149,7 @@ function vyps_public_balance_earned_func( $atts )
 	//return "The count is ". $rank_order_array_count . "<br>" . $rank_order_array['0'] . "<br>". $rank_order_array['1'] . "<br>". $rank_order_array['2'] . "<br>" . $rank_order_array['3'] . "<br>". $rank_order_array['4']; //testing this. //requires 4 users or gives error
 
 	//NOTE: need a sum of all points of id. So we can get a percent if desired. I could toggle this only percent is called for but totals would be good somewhere. But will deal with that later.
-	$total_amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d AND points_amount>0";
+	$total_amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE point_id = %d AND points_amount > 0";
 	$total_amount_data_query_prepared = $wpdb->prepare( $total_amount_data_query, $point_id ); //pulling this from the shortcode atts, by default its 1. Technically it won't work without a coin, but *shrugs*
 	$total_amount_data = $wpdb->get_var( $total_amount_data_query_prepared );
 
@@ -171,7 +171,7 @@ function vyps_public_balance_earned_func( $atts )
 		//there needs to be a rank() function soemwhere.
 		//We do need this.
 		//$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count'" );
-    $amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d AND points_amount>0";
+    $amount_data_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d AND points_amount > 0";
     $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $current_ranked_user_id, $point_id ); //pulling this from the shortcode atts, by default its 1. Technically it won't work without a coin, but *shrugs*
     $amount_data = $wpdb->get_var( $amount_data_query_prepared );
 
