@@ -108,7 +108,9 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.3.5 =
 
-- Add: Leaderboard options for lifetime earnings and not current balance `[vyps-pbe]`
+- Add: Leaderboard options for lifetime earnings and not current balance `[vyps-pbe pid=1]`
+- Fix: Slider should now be 100% wide on all themes.
+- Fix: Miner text should not be off somewhere in right hand side on certain themes. `Again why did no one tell me?`
 
 = 2.3.4 =
 

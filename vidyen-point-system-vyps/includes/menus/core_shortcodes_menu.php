@@ -58,6 +58,9 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>The number of rows can be set, up to a maximum of 50, rows=50, and it is 50 by default, i.e., <b>[vyps-pb pid=3 rows=10]</b></p>
   <p>NOTE: The number of row/transactions in the log may slow the site, depending on the amount of users.</p>
   <p>You can also show the amount by percent of total with percent=yes, [vyps-pb pid=2 percent=yes]. This way, you can see who owns the most by percent, which is useful for the mining share option in the VY256 Miner.</p>
+  <h2>Public Earnings Leaderboard</h2>
+  <p><b>[vyps-pbe pid=1]</b></p>
+  <p>Same as above except you see all earnings without their expenditures to show who earned the most but maybe spent more than everyone else.(Good for a rewards site rather than gaming site)</p>
   <h2>Point Exchange</h2>
  	<p>This plugin requires VYPS Base and two point types to function. The intention is to allow a quick and easy way for users to transfer one type of point to another at varying rates.</p>
  	<p><b>[vyps-pe firstid=1 outputid=3 firstamount=1 outputamount=900]</b></p>

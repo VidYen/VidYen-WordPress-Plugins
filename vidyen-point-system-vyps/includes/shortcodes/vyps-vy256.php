@@ -287,6 +287,7 @@ function vyps_vy256_solver_func($atts) {
       //Luckily I created a decent naming convention as I realized this morning I would hate myself if I was trying to modify my own code as a new user
       //And not know where the hell this was or where the functions was.
       $reward_icon = vyps_point_icon_func($point_id); //Thank the gods. I keep the variables the same
+      $reward_icon_url = vyps_point_icon_url_func($point_id); //Need just the url without the html
       $reward_name = vyps_point_name_func($point_id); //Oh. My naming conventions are working better these days.
 
       //NOTE: Ok. Some terrible Grey Goose and coding here (despite being completely sober)
@@ -744,39 +745,41 @@ function vyps_vy256_solver_func($atts) {
     </script>
     <tr>
        <td>
-         <div>
-          $start_button_html
-        </div><br>
-        <div id=\"pauseProgress\" style=\"width:100%; background-color: grey; \">
-          <div id=\"pauseBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"pause-text\">$start_message_verbage</span></div></div>
+         <div>"
+         .$start_button_html. //I have added a small bit of code here to move over to the '.$variable.' system rather than the "" which is horrid for HTML 4/3/19 -Felty
+        '</div><br>
+        <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
+          <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text\">'.$start_message_verbage.'</span></div></div>
         </div>
-        <div id=\"timeProgress\" style=\"display:none;width:100%; background-color: grey; \">
-          <div id=\"timeBar\" style=\"width:1%; height: 30px; background-color: $timeBar_color;\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"status-text\">Spooling up.</span><span id=\"wait\">.</span><span id=\"hash_rate\"></span></div></div>
+        <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
+          <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span></div></div>
         </div>
-        <div id=\"workerProgress\" style=\"display: $workerBar_display;width:100%; background-color: grey; \">
-          <div id=\"workerBar\" style=\"display: $workerBar_display;width:0%; height: 30px; background-color: $workerBar_color; c\"><div style=\"position: absolute; right:12%; color:$workerBar_text_color;\"><span id=\"current-algo-text\"></span><span id=\"progress_text\"> Effort[0]</span></div></div>
+        <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
+          <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="progress_text"> Effort[0]</span></div></div>
         </div>
-        <div id=\"poolProgress\" style=\"display: $poolBar_display;width:100%; background-color: grey; \">
-          <div id=\"poolBar\" style=\"display: $poolBar_display;width:0%; height: 30px; background-color: $poolBar_color; c\"><div id=\"pool_text\"style=\"position: absolute; right:12%; color:$poolBar_text_color;\">Reward[$reward_icon 0] - Progress[0/$hash_per_point]</div></div>
+        <div id="poolProgress" style="position:relative; display: '.$poolBar_display.';width:100%; background-color: grey; ">
+          <div id="poolBar" style="display: '.$poolBar_display.';width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%; color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
         </div>
-        <div id=\"thread_manage\" style=\"display:inline;margin:5px !important;display:block;\">
-          <button type=\"button\" id=\"sub\" style=\"display:inline;\" class=\"sub\" disabled>-</button>
-          Threads:&nbsp;<span style=\"display:inline;\" id=\"thread_count\">0</span>
-          <button type=\"button\" id=\"add\" style=\"display:inline;position:absolute;right:50px;\" class=\"add\" disabled>+</button>
-          <form method=\"post\" style=\"display:none;margin:5px !important;\" id=\"redeem\">
-            <input type=\"hidden\" value=\"\" name=\"redeem\"/>
-            <input type=\"hidden\" value=\"$device_name\" name=\"device\"/>
-            <!--<input type=\"submit\" class=\"button-secondary\" value=\"$redeem_btn_text Hashes\" onclick=\"return confirm('Did you want to sync your mined hashes with this site?');\" />-->
+        <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
+          <button type="button" id="sub" style="display:inline;" class="sub" disabled>-</button>
+          Threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
+          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" disabled>+</button>
+          <form method="post" style="display:none;margin:5px !important;" id="redeem">
+            <input type="hidden" value="" name="redeem"/>
+            <input type="hidden" value="$device_name" name="device"/>
           </form>
         </div>
+      </td>
+    </tr>
       <tr>
         <td>
-          <div class=\"slidecontainer\">
-            <p>Device $device_name - CPU Power: <span id=\"cpu_stat\"></span>%</p>
-            <input type=\"range\" min=\"0\" max=\"100\" value=\"$sm_throttle\" class=\"slider\" id=\"cpuRange\">
+          <div class="slidecontainer">
+            <p>Device '.$device_name.' - CPU Power: <span id="cpu_stat"></span>%</p>
+            <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$sm_throttle.'" class="slider" id="cpuRange">
           </div>
         </td>
-      </tr>
+      </tr>'
+      ./*Working on making this all '' rather than "" to parse the php to html better*/"
       <script>
         //CPU throttle
         var slider = document.getElementById(\"cpuRange\");

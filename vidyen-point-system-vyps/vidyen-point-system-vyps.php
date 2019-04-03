@@ -207,6 +207,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_deduct_func
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_meta_check_func.php'); //Meta checking. See if there is a duplicate transaction.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_name_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_icon_func.php'); //Functionalized point name and icon calls (FINALLY! -Felty)
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_icon_url_func.php'); //Need to get the url just by itself.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_balance_func.php'); //I neeced a raw balance function
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_earned_func.php'); //More for the MMO but it should go here since sites could use it.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_deduct_func.php'); //Streamlined deduct
