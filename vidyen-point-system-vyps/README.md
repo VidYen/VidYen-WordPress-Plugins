@@ -106,6 +106,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.3.5 =
+
+- Add: Leaderboard options for lifetime earnings and not current balance `[vyps-pbe]`
+
 = 2.3.4 =
 
 - Fix: Graphic minor rotation bug. `Why did no one tell me?`
