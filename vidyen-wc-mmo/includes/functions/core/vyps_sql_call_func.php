@@ -90,3 +90,24 @@ function vyps_mmo_sql_output_amount_func()
 
 	return $output_amount;
 }
+
+/*** API KEY SQL Call ***/
+function vyps_mmo_sql_api_key_func()
+{
+	global $wpdb;
+
+	//the $wpdb stuff to find what the current name and icons are
+	$table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
+
+	$first_row = 1; //Note sure why I'm setting this.
+
+	//Ouput Amount NOTE: For now this is just for WooWallet
+	$api_key_query = "SELECT api_key FROM ". $table_name_wc_mmo . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$api_key_query_prepared = $wpdb->prepare( $api_key_query, $first_row );
+	$api_key = $wpdb->get_var( $api_key_query_prepared );
+
+
+	$api_key = sanitize_text_field($api_key); //Extra sanitzation
+
+	return $api_key;
+}

@@ -48,12 +48,22 @@ function vidyen_wc_mmo_sub_menu_page()
 		//The icon. I'm suprised this works so well
 		$output_amount = abs(floatval($_POST['output_amount']));
 
+		if($_POST['api_key'] == '' OR !isset($_POST['api_key']))
+		{
+			$api_key = sanitize_text_field(str_replace('-', '', implode('-', str_split(substr(strtolower(md5(microtime().rand(1000, 9999))), 0, 30), 6))));
+		}
+		else
+		{
+				$api_key = sanitize_text_field(($_POST['api_key']));
+		}
+
     $table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
 
 	    $data = [
 	        'point_id' => $point_id,
 	        'point_amount' => $point_amount,
 					'output_amount' => $output_amount,
+					'api_key' => $api_key,
 	    ];
 
 			$wpdb->update($table_name_wc_mmo, $data, ['id' => 1]);
@@ -76,6 +86,8 @@ function vidyen_wc_mmo_sub_menu_page()
 	//Ouput Amount
 	$output_amount = floatval(vyps_mmo_sql_output_amount_func());
 
+	$api_key = sanitize_text_field(vyps_mmo_sql_api_key_func());
+
 
 	//It's possible we don't use the VYPS logo since no points.
   $vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
@@ -97,6 +109,7 @@ function vidyen_wc_mmo_sub_menu_page()
 				<th>Input Amount</th>
         <th>WooWallet Icon</th>
 				<th>WooWallet Amount</th>
+				<th>API Key (To Reset Leave Blank)</th>
 				<th>Submit</th>
 			</tr>
 			<tr>
@@ -105,13 +118,17 @@ function vidyen_wc_mmo_sub_menu_page()
 				<td><input type="number" name="point_amount" type="number" id="point_amount" min="1" max="1000000" step="1" value="' . $point_amount . '" required="true"></td>
         <td><input type="number" name="output_id" type="number" id="output_id" min="1" step="1" value="' . $output_id .  '" required="true"></td>
 				<td><input type="number" name="output_amount" type="number" id="output_amount" min="0.0000001" max="1000000" step="0.0000001" value="' . $output_amount . '" required="true"></td>
+				<td><input type="text" name="api_key"  id="api_key" value="' . $api_key . '"></td>
 				<td><input type="submit" value="Submit"></td>
 			</tr>
 		</form>
 	</table>
+	<h2>API Key Copy and Paste</h2>
+	<p>'.$api_key.'</p>
 	<h2>Shortcode</h2>
 	<p><b>[vyps-mmo-bal]</b> for live balance.</p>
 	<p><b>[vyps-mmo-pe]</b> for live point exchange.</p>
+	<p><b>[vidyen-mmo-postback]</b> For the post back page. Use like Wannads with MMO template.</p>
 	<p>Simply put the shortcodes on a page and let it run with the point id from the VidYen point system.</p>
 	<p>Point ID is the point ID from the VidYen System. Found in Manage Points section of VYPS</p>
 	<p>NOTE: If you change this settings while a game is in play, they must close browser or tab and reload page as is server session based.</p>

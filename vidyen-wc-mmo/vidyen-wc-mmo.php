@@ -3,7 +3,7 @@
 Plugin Name:  VidYen WooCommerce MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RPG like currencies to WooCommerce for VidYen Point System
-Version:      0.0.43
+Version:      0.0.47
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -46,6 +46,7 @@ function vidyen_wc_mmo_sql_install()
 	point_amount mediumint(9) NOT NULL,
 	output_id mediumint(9) NOT NULL,
 	output_amount decimal(32,8) NOT NULL,
+  api_key varchar(128) NOT NULL,
 	PRIMARY KEY  (id)
       ) {$charset_collate};";
 
@@ -53,12 +54,17 @@ function vidyen_wc_mmo_sql_install()
 
   dbDelta($sql);
 
+  //create random api_key. Shall be santizied.
+
+  $key = sanitize_text_field(str_replace('-', '', implode('-', str_split(substr(strtolower(md5(microtime().rand(1000, 9999))), 0, 30), 6))));
+
 	//Default data
 	$data_insert = [
 			'point_id' => 1,
 			'point_amount' => 100,
 			'output_id' => 2,
 			'output_amount' => 1,
+      'api_key' => $key,
 	];
 
 	$wpdb->insert($table_name_wc_mmo, $data_insert);
@@ -81,3 +87,6 @@ include( plugin_dir_path( __FILE__ ) . 'vidyen-wc-mmo-menu.php'); //Order 600
 /*** AJAX ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mmo_bal_ajax.php');
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mmo_exchange_ajax.php');
+
+/*** Templater ***/
+include( plugin_dir_path( __FILE__ ) . 'vidyen-wc-mmo-template-function.php'); //Order 600
