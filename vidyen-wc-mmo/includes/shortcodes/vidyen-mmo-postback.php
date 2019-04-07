@@ -21,8 +21,8 @@ function vidyen_mmo_postback_func( $atts )
 		array(
 				'apikey' => $api_key,
 				'profile' => '',
-				'ip1' => '163.182.175.208	',
-				'ip2' => '163.182.175.208	',
+				'ip1' => '163.182.175.208',
+				'ip2' => '163.182.175.208',
 				'ip3' => '208.253.87.210',
 				'outputid' => 0,
 				'outputamount' => 0,
@@ -111,7 +111,7 @@ function vidyen_mmo_postback_func( $atts )
 		$vyps_meta_id = 'mmo'  . $userId_sanitized . $transactionId_sanitized; //the meta_id will be adgate with userid plus the transaction id. To see if its unique.
 
 		$current_balance = vyps_point_balance_func($point_id, $user_id); //need to check to see if they have an actual balance to report //NOTE: I opted with letting the other site tell how much it will withdraw at a time.
-		
+
 		if($action == 0 AND $current_balance >= $point_amount) // action = 1 CREDITED // action = 0 charge back
 		{
 				return vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id ); //I knew I had a good reason to use this
