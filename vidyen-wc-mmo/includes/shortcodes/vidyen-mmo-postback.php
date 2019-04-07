@@ -41,12 +41,6 @@ function vidyen_mmo_postback_func( $atts )
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 
-	//This is the point id that the post back should go to. ie. the Point ID
-	if ( $atts['outputid'] == 0 )
-	{
-		return "You did not set output point ID! outputid=";
-	}
-
 	//NOTE: Due to the lax nature of AdGate security methods. I am adding my own API system.
 	//EX: https://vidyen.com/fabius/adgate-postback/?tx_id={transaction_id}&user_id={s1}&point_value={points}&usd_value={payout}&offer_title={vc_titlpoe}&point_value={points}&status={status}&api=7xB944
 	//The api=7xB944 has to be the same on both your shortcode and post back. Its not required, but if you set a shortcode for it. Then it has to have it.
@@ -72,40 +66,37 @@ function vidyen_mmo_postback_func( $atts )
 	//NOTE: Checking to make sure the post back ips match and if there is a user api key then check that.
 	if(in_array($post_ip, $atts)) //Some old greygoose and bad coding. I'm just checking to see if the ip address exists in shortcode.
 	{
-		if(!empty($site_api_key))
+		if (isset($_GET['api_key']))
 		{
-			//Ok so we know the IP addy is fine, so lets check the api key
-			$postback_api_key = $_GET['api'];
-
-			if($site_api_key != $postback_api_key)
-			{
-				// Throw either a custom Exception or just throw a generic \Exception
-			 header('HTTP/1.1 203 Partial Information');
-			 exit(); //NOTE: I put exit as the AdGate method was bad
-			}
+				if($site_api_key !=  $_GET['api_key'])
+				{
+					// Throw either a custom Exception or just throw a generic \Exception
+				 //header('HTTP/1.1 203 Partial Information');
+				 //exit(); //NOTE: I put exit as the AdGate method was bad
+				 return 'Invalid API key';
+				}
 		}
-    	//$data = array($_GET);
-	    // Process or Persist Data here inline or via a function call.
-	} else {
-	     // Throw either a custom Exception or just throw a generic \Exception
-			header('HTTP/1.1 203 Partial Information');
-	    exit(); //NOTE: I put exit as the AdGate method was bad.
+	}
+	else
+	{
+	    // Throw either a custom Exception or just throw a generic \Exception
+			//header('HTTP/1.1 203 Partial Information');
+	    //exit(); //NOTE: I put exit as the AdGate method was bad.
+			return 'Invalid IP address.';
 	}
 
 	//We are getting the email and then get the user id from that since they might be different between servers. I'm just guessing
 	if ( isset($_GET['email']) AND isset($_GET['point_value']) AND isset($_GET['status']) AND isset($_GET['tx_id']))
 	{
-
-		$user_email = sanitize_email($_GET['email']); //Huh they actualyly had this
+		$user_email = sanitize_email($_GET['email']); //Huh they actualyly had this. Hrm.... honestly it doesn't seem to care about the email in the get. Learn something every day.
 		$user_data = get_user_by('email', $user_email);
 		$user_id = $user_data->ID;
+		//$user_id = 2;
 
 		$points = isset($_GET['point_value']) ? $_GET['point_value'] : null;
 		$action = isset($_GET['status']) ? $_GET['status'] : null; //Determines if added (1) or subtracted (0) NOTE: This is different than Adgate where 2 is a chargeback
-		$action = isset($_GET['tx_id']) ? $_GET['tx_id'] : null; //This will be EPOCH time stamp being fed so yeah
+		$tx_id = isset($_GET['tx_id']) ? $_GET['tx_id'] : null; //This will be EPOCH time stamp being fed so yeah
 		//$ipuser = isset($_GET['ip']) ? $_GET['ip'] : null; //Note used or needed.
-
-
 
 		//NOTE: Ok we got that post back. And if the keys match in theory we have the variables above. But there is no hell in way I'm trusting adgate to SQL the users Database with that data
 		//Yeah its unlikely adgate may try an SQL injection their user base, but if the user is lax with their secret key and someone knows what this is, they can have an injection fest
@@ -118,11 +109,9 @@ function vidyen_mmo_postback_func( $atts )
 		$reason = sanitize_text_field($atts['reason']);
 
 		$vyps_meta_id = 'mmo'  . $userId_sanitized . $transactionId_sanitized; //the meta_id will be adgate with userid plus the transaction id. To see if its unique.
-		$vyps_meta_id = $vyps_meta_id
 
-		$current_balance = vyps_point_balance_func($point_id, $user_id); //need to check to see if they have an actual balance to report
-																																		 //NOTE: I opted with letting the other site tell how much it will withdraw at a time.
-
+		$current_balance = vyps_point_balance_func($point_id, $user_id); //need to check to see if they have an actual balance to report //NOTE: I opted with letting the other site tell how much it will withdraw at a time.
+		
 		if($action == 0 AND $current_balance >= $point_amount) // action = 1 CREDITED // action = 0 charge back
 		{
 				return vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id ); //I knew I had a good reason to use this

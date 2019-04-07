@@ -1,9 +1,9 @@
 <?php
  /*
-Plugin Name:  VidYen WooCommerce MMO Plugin
+Plugin Name:  VidYen MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
-Description:  Adds RPG like currencies to WooCommerce for VidYen Point System
-Version:      0.0.47
+Description:  MMO Support Plugin
+Version:      0.0.53
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -80,6 +80,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_b
 /*** Shortcodes ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ajax-bal.php'); //Ajax Balance
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Ajax Point Exchange
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-postback.php'); //Post back for game transfers
 
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-wc-mmo-menu.php'); //Order 600
