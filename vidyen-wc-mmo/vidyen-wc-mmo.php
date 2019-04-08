@@ -3,7 +3,7 @@
 Plugin Name:  VidYen MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  MMO Support Plugin
-Version:      0.0.61
+Version:      0.0.65
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -81,6 +81,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_b
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ajax-bal.php'); //Ajax Balance
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Ajax Point Exchange
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-postback.php'); //Post back for game transfers
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-api-bal.php'); //Post back for game transfers
 
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-wc-mmo-menu.php'); //Order 600

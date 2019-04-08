@@ -2,14 +2,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-/*** adgate short code to make a postback page ***/
+//Ok this is for the balance and to tell you if the account is right. For now it will just check email
 
-//NOTE: As much as I hate post backs, its not hard to do and adgate doesn't have the Adscend point api tracking system (nor like Coinhive)
-//Of course since the adgate site won't have a wp login, has to be just just a shortcode with page. And you will have to wait on adgate to talk to your server
-//Lots of terrible things can will go wrong, but the demand for this (due to Adscend just being.... well Adscend) keeps happening so I broke down and decided to do this
-//regardless of having to use a post back. I will have to do it in a way that is secure etc etc.
-
-function vidyen_mmo_postback_deduct_func( $atts )
+function vidyen_mmo_postback_api_bal_func( $atts )
 {
 	//NOTE: The admin needs to set the post back correctly. We will have no idea what the user id will be as it will be fed into the system by the post back
 	//We will need the secret
@@ -33,6 +28,8 @@ function vidyen_mmo_postback_deduct_func( $atts )
 				'meta_id' => '',
 				'round' => 'default',
 				'pro'=> FALSE,
+				'mode' => 'post',
+				'gui'=> FALSE,
 		), $atts, 'vyps-adgate' );
 
 	$round_direction_decision = $atts['round']; //By default this is default, which just takes the direction its closest too.
@@ -40,6 +37,35 @@ function vidyen_mmo_postback_deduct_func( $atts )
 	//The scarcy thing is... This post back can be writing to your SQL tables. SO we HAVE to be careful with it.
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
+
+	//I got fed up with this so I'm just making the balance public withotu api.
+	//You would only need to know email, but you'd have to know the email in advance
+
+	if ($atts['mode']=='GET')
+	{
+		if (isset($_GET['email']))
+		{
+			$point_id = intval($atts['point_id']);
+			$user_email = sanitize_email($_GET['email']); //Huh they actualyly had this. Hrm.... honestly it doesn't seem to care about the email in the get. Learn something every day.
+			$user_data = get_user_by('email', $user_email);
+			$user_id = $user_data->ID;
+			$mmo_get_balance = vyps_point_balance_func($point_id, $user_id);
+		}
+		else
+		{
+			$mmo_get_balance = 0;
+		}
+
+		if ($atts['gui']==TRUE)
+		{
+			$get_html_output = '<div style="color:white">Transfer CT DM: '.$mmo_get_balance.' </div>';
+			return $get_html_output;
+		}
+		else
+		{
+			return $mmo_get_balance;
+		}
+	}
 
 	$site_vidyen_api = $atts['apikey'];
 
@@ -107,18 +133,7 @@ function vidyen_mmo_postback_deduct_func( $atts )
 
 		$current_balance = vyps_point_balance_func($point_id, $user_id); //need to check to see if they have an actual balance to report //NOTE: I opted with letting the other site tell how much it will withdraw at a time.
 
-		if( $current_balance >= $point_amount) // action = 1 CREDITED // action = 0 charge back
-		{
-				return vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id ); //I knew I had a good reason to use this
-				//The above should resturn a 1 if successful. I'm not going to add an add here just yet. This is an output system.
-				//If the get gets a 1 then it adds the points on the other side. I would recommend not doing an all system just like 100 points.
-				//I am going to add a balance api, but may not be needed.
-		}
-		else
-		{
-			return 0; //simple enough. It didn't work. Did not add points.
-		}
-
+		return $current_balance; //simple enough. It didn't work. Did not add points.
 		//The rest of the post back isn't needed. I will delete but will make a different page for ads or balances.
 	}
 
@@ -126,4 +141,4 @@ function vidyen_mmo_postback_deduct_func( $atts )
 }
 
 /* Telling WP to use function for shortcode */
-add_shortcode( 'vidyen-mmo-deduct', 'vidyen_mmo_postback_deduct_func');
+add_shortcode( 'vidyen-mmo-api-bal', 'vidyen_mmo_postback_api_bal_func');
