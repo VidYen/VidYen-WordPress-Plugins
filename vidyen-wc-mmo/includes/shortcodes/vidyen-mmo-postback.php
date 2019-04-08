@@ -9,17 +9,17 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //Lots of terrible things can will go wrong, but the demand for this (due to Adscend just being.... well Adscend) keeps happening so I broke down and decided to do this
 //regardless of having to use a post back. I will have to do it in a way that is secure etc etc.
 
-function vidyen_mmo_postback_func( $atts )
+function vidyen_mmo_postback_deduct_func( $atts )
 {
 	//NOTE: The admin needs to set the post back correctly. We will have no idea what the user id will be as it will be fed into the system by the post back
 	//We will need the secret
 	//Also NOTE: I changed pid to outputid because i think going forward pid is a bit nondescriptive
 
 	//THis needs to called to get the api key.
-	$api_key = sanitize_text_field(vyps_mmo_sql_api_key_func());
+	$vidyen_api = sanitize_text_field(vyps_mmo_sql_api_key_func());
 	$atts = shortcode_atts(
 		array(
-				'apikey' => $api_key,
+				'apikey' => $vidyen_api,
 				'profile' => '',
 				'ip1' => '163.182.175.208',
 				'ip2' => '163.182.175.208',
@@ -44,13 +44,13 @@ function vidyen_mmo_postback_func( $atts )
 	//NOTE: Due to the lax nature of AdGate security methods. I am adding my own API system.
 	//EX: https://vidyen.com/fabius/adgate-postback/?tx_id={transaction_id}&user_id={s1}&point_value={points}&usd_value={payout}&offer_title={vc_titlpoe}&point_value={points}&status={status}&api=7xB944
 	//The api=7xB944 has to be the same on both your shortcode and post back. Its not required, but if you set a shortcode for it. Then it has to have it.
-	$site_api_key = $atts['apikey'];
+	$site_vidyen_api = $atts['apikey'];
 
 	//Copied and pasted from https://github.com/adgatemedia/adgaterewards/blob/master/postback_pdo_example.php
 	//Modified to deal with my format and OCD
 	/**
 	 * For a plain PHP page to receive the postback data from AdGate Media you may simply
-	 * retrieve the array from the global $_GET variable. To ensure that the data is coming
+	 * retrieve the array from the global $_POST variable. To ensure that the data is coming
 	 * from AdGate Media check that the server sending the data is from AdGate Media by the ip
 	 * address as listed on your affiliate panel at http://adgatemedia.com under
 	 * the Postbacks Section and the Postback Information heading.
@@ -66,15 +66,19 @@ function vidyen_mmo_postback_func( $atts )
 	//NOTE: Checking to make sure the post back ips match and if there is a user api key then check that.
 	if(in_array($post_ip, $atts)) //Some old greygoose and bad coding. I'm just checking to see if the ip address exists in shortcode.
 	{
-		if (isset($_GET['api_key']))
+		if (isset($_POST['apikey']))
 		{
-				if($site_api_key !=  $_GET['api_key'])
+				if($site_vidyen_api !=  $_POST['apikey'])
 				{
 					// Throw either a custom Exception or just throw a generic \Exception
 				 //header('HTTP/1.1 203 Partial Information');
 				 //exit(); //NOTE: I put exit as the AdGate method was bad
 				 return 'Invalid API key';
 				}
+		}
+		else
+		{
+			return 'Api Key not Set!!';
 		}
 	}
 	else
@@ -85,34 +89,43 @@ function vidyen_mmo_postback_func( $atts )
 			return 'Invalid IP address.';
 	}
 
-	//We are getting the email and then get the user id from that since they might be different between servers. I'm just guessing
-	if ( isset($_GET['email']) AND isset($_GET['point_value']) AND isset($_GET['status']) AND isset($_GET['tx_id']))
+	if (!isset($_POST['email']))
 	{
-		$user_email = sanitize_email($_GET['email']); //Huh they actualyly had this. Hrm.... honestly it doesn't seem to care about the email in the get. Learn something every day.
+		return 'Email not set!';
+	}
+	elseif (!isset($_POST['points']))
+	{
+		return 'Point value not set!';
+	}
+
+	//We are getting the user and then get the user id from that since they might be different between servers. I'm just guessing
+	if ( isset($_POST['email']) AND isset($_POST['points']))
+	{
+		$user_email = sanitize_email($_POST['email']); //Huh they actualyly had this. Hrm.... honestly it doesn't seem to care about the email in the get. Learn something every day.
 		$user_data = get_user_by('email', $user_email);
 		$user_id = $user_data->ID;
 		//$user_id = 2;
 
-		$points = isset($_GET['point_value']) ? $_GET['point_value'] : null;
-		$action = isset($_GET['status']) ? $_GET['status'] : null; //Determines if added (1) or subtracted (0) NOTE: This is different than Adgate where 2 is a chargeback
-		$tx_id = isset($_GET['tx_id']) ? $_GET['tx_id'] : null; //This will be EPOCH time stamp being fed so yeah
-		//$ipuser = isset($_GET['ip']) ? $_GET['ip'] : null; //Note used or needed.
+		$points = intval($_POST['points']);
+		//$action = isset($_POST['status']) ? $_POST['status'] : null; //Determines if added (1) or subtracted (0) NOTE: This is different than Adgate where 2 is a chargeback
+		//$tx_id = isset($_POST['tx_id']) ? $_POST['tx_id'] : null; //This will be EPOCH time stamp being fed so yeah
+		//$ipuser = isset($_POST['ip']) ? $_POST['ip'] : null; //Note used or needed.
 
 		//NOTE: Ok we got that post back. And if the keys match in theory we have the variables above. But there is no hell in way I'm trusting adgate to SQL the users Database with that data
 		//Yeah its unlikely adgate may try an SQL injection their user base, but if the user is lax with their secret key and someone knows what this is, they can have an injection fest
-		$userId_sanitized = intval($userId); //User Id should be an int
-		$transactionId_sanitized = sanitize_text_field($transactionId); //This actually doesn't have to be collected but could be useful in one of the metas columsn
-		$action_sanitized = intval($action); //Good thing I read the documentation. According to adgate, if this is 1 there should be a reward and 2 if there is punishment for some reason. Should be int
+		//$userId_sanitized = intval($userId); //User Id should be an int
+		//$transactionId_sanitized = sanitize_text_field($transactionId); //This actually doesn't have to be collected but could be useful in one of the metas columsn
+		//$action_sanitized = intval($action); //Good thing I read the documentation. According to adgate, if this is 1 there should be a reward and 2 if there is punishment for some reason. Should be int
 
 		$point_id = intval(vyps_mmo_sql_point_id_func()); //this is set by the wpdb so only one point at a time.
 		$point_amount = intval($points);
 		$reason = sanitize_text_field($atts['reason']);
 
-		$vyps_meta_id = 'mmo'  . $userId_sanitized . $transactionId_sanitized; //the meta_id will be adgate with userid plus the transaction id. To see if its unique.
+		$vyps_meta_id = 'mmo'  . $user_id . $transactionId_sanitized; //the meta_id will be adgate with userid plus the transaction id. To see if its unique.
 
 		$current_balance = vyps_point_balance_func($point_id, $user_id); //need to check to see if they have an actual balance to report //NOTE: I opted with letting the other site tell how much it will withdraw at a time.
 
-		if($action == 0 AND $current_balance >= $point_amount) // action = 1 CREDITED // action = 0 charge back
+		if( $current_balance >= $point_amount) // action = 1 CREDITED // action = 0 charge back
 		{
 				return vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id ); //I knew I had a good reason to use this
 				//The above should resturn a 1 if successful. I'm not going to add an add here just yet. This is an output system.
@@ -127,8 +140,8 @@ function vidyen_mmo_postback_func( $atts )
 		//The rest of the post back isn't needed. I will delete but will make a different page for ads or balances.
 	}
 
-	return "Invalid postback URL!";
+	return "Unknown error!";
 }
 
 /* Telling WP to use function for shortcode */
-add_shortcode( 'vidyen-mmo-postback', 'vidyen_mmo_postback_func');
+add_shortcode( 'vidyen-mmo-deduct', 'vidyen_mmo_postback_deduct_func');
