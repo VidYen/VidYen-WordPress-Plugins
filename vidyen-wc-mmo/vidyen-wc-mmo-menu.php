@@ -128,7 +128,8 @@ function vidyen_wc_mmo_sub_menu_page()
 	<h2>Shortcode</h2>
 	<p><b>[vyps-mmo-bal]</b> for live balance.</p>
 	<p><b>[vyps-mmo-pe]</b> for live point exchange.</p>
-	<p><b>[vidyen-mmo-deduct]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
+	<p><b>[vidyen-mmo-deduct point_id=2]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
+	<p><b>[vidyen-mmo-api-bal point_id=2]</b> This is a postback page for external curls. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
 	<p>Simply put the shortcodes on a page and let it run with the point id from the VidYen point system.</p>
 	<p>Point ID is the point ID from the VidYen System. Found in Manage Points section of VYPS</p>
 	<p>NOTE: If you change this settings while a game is in play, they must close browser or tab and reload page as is server session based.</p>

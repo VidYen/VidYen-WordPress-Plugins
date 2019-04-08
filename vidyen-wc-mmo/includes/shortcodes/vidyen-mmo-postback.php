@@ -24,7 +24,7 @@ function vidyen_mmo_postback_deduct_func( $atts )
 				'ip1' => '163.182.175.208',
 				'ip2' => '163.182.175.208',
 				'ip3' => '208.253.87.210',
-				'outputid' => 0,
+				'point_id' => 0,
 				'outputamount' => 0,
 				'refer' => 0,
 				'to_user_id' => 0,
@@ -41,27 +41,10 @@ function vidyen_mmo_postback_deduct_func( $atts )
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 
-	//NOTE: Due to the lax nature of AdGate security methods. I am adding my own API system.
-	//EX: https://vidyen.com/fabius/adgate-postback/?tx_id={transaction_id}&user_id={s1}&point_value={points}&usd_value={payout}&offer_title={vc_titlpoe}&point_value={points}&status={status}&api=7xB944
-	//The api=7xB944 has to be the same on both your shortcode and post back. Its not required, but if you set a shortcode for it. Then it has to have it.
 	$site_vidyen_api = $atts['apikey'];
 
-	//Copied and pasted from https://github.com/adgatemedia/adgaterewards/blob/master/postback_pdo_example.php
-	//Modified to deal with my format and OCD
-	/**
-	 * For a plain PHP page to receive the postback data from AdGate Media you may simply
-	 * retrieve the array from the global $_POST variable. To ensure that the data is coming
-	 * from AdGate Media check that the server sending the data is from AdGate Media by the ip
-	 * address as listed on your affiliate panel at http://adgatemedia.com under
-	 * the Postbacks Section and the Postback Information heading.
-	 */
 	//define('AdGate_IP', $postback_ip_address); // Note: as noted above change the IP to match what is in your affiliate panel.
 	$post_ip = $_SERVER['REMOTE_ADDR'];
-	//$data = null; //Don'te need this.
-		/**
-	 * Check the Remote Address is AdGate Media
-	 * if it is not throw an Exception
-	 */
 
 	//NOTE: Checking to make sure the post back ips match and if there is a user api key then check that.
 	if(in_array($post_ip, $atts)) //Some old greygoose and bad coding. I'm just checking to see if the ip address exists in shortcode.
@@ -107,17 +90,16 @@ function vidyen_mmo_postback_deduct_func( $atts )
 		//$user_id = 2;
 
 		$points = intval($_POST['points']);
-		//$action = isset($_POST['status']) ? $_POST['status'] : null; //Determines if added (1) or subtracted (0) NOTE: This is different than Adgate where 2 is a chargeback
-		//$tx_id = isset($_POST['tx_id']) ? $_POST['tx_id'] : null; //This will be EPOCH time stamp being fed so yeah
-		//$ipuser = isset($_POST['ip']) ? $_POST['ip'] : null; //Note used or needed.
 
-		//NOTE: Ok we got that post back. And if the keys match in theory we have the variables above. But there is no hell in way I'm trusting adgate to SQL the users Database with that data
-		//Yeah its unlikely adgate may try an SQL injection their user base, but if the user is lax with their secret key and someone knows what this is, they can have an injection fest
-		//$userId_sanitized = intval($userId); //User Id should be an int
-		//$transactionId_sanitized = sanitize_text_field($transactionId); //This actually doesn't have to be collected but could be useful in one of the metas columsn
-		//$action_sanitized = intval($action); //Good thing I read the documentation. According to adgate, if this is 1 there should be a reward and 2 if there is punishment for some reason. Should be int
+		if (intval($atts['point_id']) != 0 OR )
+		{
+				$point_id = intval($atts['point_id'])
+		}
+		else
+		{
+			$point_id = intval(vyps_mmo_sql_point_id_func()); //give the option, for shortcodes. the api will be universal.
+		}
 
-		$point_id = intval(vyps_mmo_sql_point_id_func()); //this is set by the wpdb so only one point at a time.
 		$point_amount = intval($points);
 		$reason = sanitize_text_field($atts['reason']);
 
