@@ -20,16 +20,12 @@ function vidyen_mmo_postback_api_bal_func( $atts )
 				'ip2' => '163.182.175.208',
 				'ip3' => '208.253.87.210',
 				'point_id' => 0,
-				'outputamount' => 0,
-				'refer' => 0,
-				'to_user_id' => 0,
-				'comment' => '',
 				'reason' => 'MMO Transfer',
 				'meta_id' => '',
-				'round' => 'default',
 				'pro'=> FALSE,
 				'mode' => 'post',
 				'gui'=> FALSE,
+				'response_text' => 'Dark Matter Balance: ',
 		), $atts, 'vyps-adgate' );
 
 	$round_direction_decision = $atts['round']; //By default this is default, which just takes the direction its closest too.
@@ -58,7 +54,7 @@ function vidyen_mmo_postback_api_bal_func( $atts )
 
 		if ($atts['gui']==TRUE)
 		{
-			$get_html_output = '<div style="color:white">Transfer CT DM: '.$mmo_get_balance.' </div>';
+			$get_html_output = '<div style="color:white">'.$atts['response_text'].$mmo_get_balance.' </div>';
 			return $get_html_output;
 		}
 		else
