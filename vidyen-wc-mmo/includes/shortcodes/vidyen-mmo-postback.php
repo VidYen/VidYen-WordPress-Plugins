@@ -46,30 +46,19 @@ function vidyen_mmo_postback_deduct_func( $atts )
 	//define('AdGate_IP', $postback_ip_address); // Note: as noted above change the IP to match what is in your affiliate panel.
 	$post_ip = $_SERVER['REMOTE_ADDR'];
 
-	//NOTE: Checking to make sure the post back ips match and if there is a user api key then check that.
-	if(in_array($post_ip, $atts)) //Some old greygoose and bad coding. I'm just checking to see if the ip address exists in shortcode.
+	if (isset($_POST['apikey']))
 	{
-		if (isset($_POST['apikey']))
-		{
-				if($site_vidyen_api !=  $_POST['apikey'])
-				{
-					// Throw either a custom Exception or just throw a generic \Exception
-				 //header('HTTP/1.1 203 Partial Information');
-				 //exit(); //NOTE: I put exit as the AdGate method was bad
-				 return 'Invalid API key';
-				}
-		}
-		else
-		{
-			return 'Api Key not Set!!';
-		}
+			if($site_vidyen_api !=  $_POST['apikey'])
+			{
+				// Throw either a custom Exception or just throw a generic \Exception
+			 //header('HTTP/1.1 203 Partial Information');
+			 //exit(); //NOTE: I put exit as the AdGate method was bad
+			 return 'Invalid API key';
+			}
 	}
 	else
 	{
-	    // Throw either a custom Exception or just throw a generic \Exception
-			//header('HTTP/1.1 203 Partial Information');
-	    //exit(); //NOTE: I put exit as the AdGate method was bad.
-			return 'Invalid IP address.';
+		return 'Api Key not Set!!';
 	}
 
 	if (!isset($_POST['email']))
