@@ -54,7 +54,26 @@ function vidyen_mmo_postback_api_bal_func( $atts )
 
 		if ($atts['gui']==TRUE)
 		{
-			$get_html_output = '<div style="color:white">'.$atts['response_text'].$mmo_get_balance.' </div>';
+			//If GUI mode is on we know we are pulling raw data.
+			$get_html_output = "
+				<!DOCTYPE html>
+				<html>
+				<head>
+				<link href='https://fonts.googleapis.com/css?family=Droid Sans Mono' rel='stylesheet'>
+				<style>
+				body {
+				    font-family: 'Droid Sans Mono';font-size: 12px;
+				}
+				</style>
+				</head>";
+
+			$get_html_output .='
+				<body>';
+
+			$get_html_output .= '<div style="color:white">'.$atts['response_text'].$mmo_get_balance.' </div>
+				</body>
+				</html>';
+
 			return $get_html_output;
 		}
 		else
