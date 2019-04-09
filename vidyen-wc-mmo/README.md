@@ -14,6 +14,14 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
+= 0.1.1 =
+
+- Fixed font because of my OCD
+
+= 0.1.0 =
+
+- Release for Coin-Target
+
 = 0.0.43 =
 
 - Almost released.
