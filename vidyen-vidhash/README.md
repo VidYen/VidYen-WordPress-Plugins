@@ -87,6 +87,12 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.3.0 =
+
+- Add: Added thread and throttle control for non-logged in users to allow better experience
+- Fix: Made compatible with latest version of VidYen Point System
+- Fix: Mobile fix
+
 = 1.2.0 =
 
 - Fix: Made compatible with the March, 9th Monero Hard fork. Also uses Algo switching now.
