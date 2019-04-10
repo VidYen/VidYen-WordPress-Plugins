@@ -17,7 +17,8 @@ function vidyen_vidhash_video_player_func($atts) {
           'site' => 'vidhash',
           'pid' => 0,
           'pool' => 'moneroocean.stream',
-          'threads' => 2,
+          'threads' => 1,
+          'maxthreads' => 6,
           'throttle' => '50',
           'password' => 'x',
           'disclaimer' => 'By using this site, you agree to let the site use your device resources and accept cookies.',
@@ -93,7 +94,7 @@ function vidyen_vidhash_video_player_func($atts) {
   //This are actually diagnostics. Needed to be defined.
   $used_server = $atts['server'];
   $used_port = $atts['wsport'];
-
+  $max_threads = $atts['maxthreads'];
   $vy_throttle = $atts['throttle'];
 
   //I'm using the same code as vyps here. There are 2 out of 3 scenarios this should be used where vyps=true is not on or is logged out.
@@ -151,14 +152,27 @@ function vidyen_vidhash_video_player_func($atts) {
         <span><p>CPU Power: <span id="cpu_stat"></span>%</span</p>
         <input type="range" min="0" max="100" value="'.$vy_throttle.'" style="width:80%;" class="slider" id="cpuRange">
       </div>
-      <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
-          <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
-          Threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
-          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" disabled>+</button>
+        <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
+          <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" enabled>-</button>
+          threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
+          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" enabled>+</button>
           <form method="post" style="display:none;margin:5px !important;" id="redeem">
             <input type="hidden" value="" name="redeem"/>
           </form>
       </div>
+      <script>
+      throttleMiner = "'.$vy_throttle.'";
+    //CPU throttle
+      var slider = document.getElementById("cpuRange");
+      var output = document.getElementById("cpu_stat");
+      output.innerHTML = slider.value;
+    slider.oninput = function()
+      {
+        output.innerHTML = this.value;
+        throttleMiner = 100 - this.value;
+        console.log(throttleMiner);
+      }
+      </script>
       ';
     //Eventually I will make all this '' down the road.
     $youtube_html_load .= "<script>
@@ -203,20 +217,33 @@ function vidyen_vidhash_video_player_func($atts) {
           if (event.data == YT.PlayerState.PLAYING && !done) {
             console.log('Hey it is playing');
             vidhashstart();
+            setTimeout(function(){
+              document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+              console.log(Object.keys(workers).length);
+            }, 2000);
           }
           if (event.data == YT.PlayerState.PAUSED && !done) {
             console.log('Hey it is paused');
             removeWorker();
             removeWorker();
+            document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+            document.getElementById(\"add\").disabled = true;
+            document.getElementById(\"sub\").disabled = true;
           }
           if (event.data == YT.PlayerState.ENDED) {
             console.log('Hey it is done');
             removeWorker();
             removeWorker();
+            document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+            document.getElementById(\"add\").disabled = true;
+            document.getElementById(\"sub\").disabled = true;
           }
+          //Order of operations issue. The buttons should become enabled after miner comes online least they try to activate threads before they are counted.
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
         }
         function stopVideo() {
           player.stopVideo();
+          document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
           console.log('Hey it is stopped');
           vidhashstop();
         }
@@ -262,7 +289,8 @@ function vidyen_vidhash_video_player_func($atts) {
           console.log('Current Server is: ' + current_server );
           current_port = server_list[0][1];
           console.log('Current port is: ' + current_port );
-
+          document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+                    //Reset the server.
           //Reset the server.
           server = 'wss://' + current_server + ':' + current_port;
 
@@ -395,7 +423,7 @@ function vidyen_vidhash_video_player_func($atts) {
           }
           if (event.data == YT.PlayerState.PAUSED && !done) {
             console.log('The video is paused');
-            document.getElementById('thread_count').value = 0;
+            document.getElementById('thread_count').value = 1;
             deleteAllWorkers();
             document.getElementById(\"timeProgress\").style.display = 'none'; // enable time
             document.getElementById(\"pauseProgress\").style.display = 'block'; // hide pause
