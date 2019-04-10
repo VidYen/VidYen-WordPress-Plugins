@@ -713,7 +713,7 @@ function vyps_vy256_solver_func($atts) {
               if (obj.identifier === "job")
               {
                 '.vyps_point_debug_func($debug_mode, "console.log('new job: ' + obj.job_id);")
-                .vyps_point_debug_func($debug_mode, "console.log('current algo: '' + job.algo);");
+                .vyps_point_debug_func($debug_mode, "console.log('current algo: ' + job.algo);");
 
       $simple_miner_output .="
                 document.getElementById('status-text').innerText = 'New job using ' + job.algo + ' algo.';
