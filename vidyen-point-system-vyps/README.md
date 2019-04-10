@@ -110,6 +110,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 - Fix: Console log information should only display in miner when `debug=TRUE` is on reducing memory footprint.
 - Fix: Removed error in console about null ago before it has been switched to.
+- Change: VY256 Miner is now referred to VidYen Webminer
 
 = 2.3.5 =
 
