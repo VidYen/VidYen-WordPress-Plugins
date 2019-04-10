@@ -150,12 +150,12 @@ function vidyen_vidhash_video_player_func($atts) {
       <div id="player"></div>
       <div class="slidecontainer">
         <span><p>CPU Power: <span id="cpu_stat"></span>%</span</p>
-        <input type="range" min="0" max="100" value="'.$vy_throttle.'" style="width:80%;" class="slider" id="cpuRange">
+        <input type="range" min="0" max="100" value="'.$vy_throttle.'" style="width:55%;" class="slider" id="cpuRange">
       </div>
         <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
           <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" enabled>-</button>
           threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
-          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" enabled>+</button>
+          <button type="button" id="add" style="display:inline;position:static;" class="add" onclick="vidyen_add()" enabled>+</button>
           <form method="post" style="display:none;margin:5px !important;" id="redeem">
             <input type="hidden" value="" name="redeem"/>
           </form>
