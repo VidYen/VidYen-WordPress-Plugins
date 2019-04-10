@@ -501,7 +501,7 @@ function vyps_vy256_solver_func($atts) {
       }
 
       $start_button_html ="
-        <form id=\"startb\" style=\"display:block;width:100%;\"><input type=\"reset\" style=\"width:100%;\" onclick=\"start()\" value=\"$start_btn_text\"/></form>
+        <form id=\"startb\" style=\"display:block;width:100%;\"><input type=\"reset\" style=\"width:100%;\" onclick=\"vidyen_start()\" value=\"$start_btn_text\"/></form>
         <form id=\"stop\" style=\"display:none;width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"hidden\" value=\"$device_name\" name=\"device\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>
       ";
 
@@ -513,7 +513,7 @@ function vyps_vy256_solver_func($atts) {
       if ($player_mode==TRUE)
       {
         $start_button_html = "
-        <button id=\"startb\" style=\"display:none;width:100%;\" onclick=\"start()\">$start_btn_text</button>
+        <button id=\"startb\" style=\"display:none;width:100%;\" onclick=\"vidyen_start()\">$start_btn_text</button>
         <form id=\"stop\" style=\"width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>";
 
         $start_message_verbage = 'Press Play to begin.';
@@ -554,37 +554,38 @@ function vyps_vy256_solver_func($atts) {
       }
 
       //Ok some issues we need to know the path to the js file so will have to ess with that.
-      $simple_miner_output = "
-      <!-- $public_remote_url -->
-        $site_warning
-        $graphics_html_ouput
-          <script>
+      $simple_miner_output = '
+      <!-- '.$public_remote_url.' -->
+        '.$site_warning.
+          '<script>
                   function get_worker_js()
             {
-                return \"$vy256_solver_worker_url\";
+                return "'.$vy256_solver_worker_url.'";
             }
 
             </script>
-          <script src=\"$vy256_solver_js_url\"></script>
+          <script src="'.$vy256_solver_js_url.'"></script>
           <script>
 
             //function get_user_id()
             //{
-            //    return \"miner_id\"; //There was a $ in front of it
+            //    return "miner_id"; //There was a $ in front of it
             //}
             var sendstackId = 0;
             function clearSendStack(){
               clearInterval(sendstackId);
             }
 
-            throttleMiner = $sm_throttle;
+            throttleMiner = '.$sm_throttle.';
 
             //This needs to happen on start to init.
-            var server_list = $js_servername_array;
+            var server_list = '.$js_servername_array.';
             var current_server = server_list[0][0];
-            console.log('Current Server is: ' + current_server );
+            '.vyps_point_debug_func($debug_mode, "console.log('Current Server is: ' + current_server );").'
             var current_port = server_list[0][1];
-            console.log('Current port is: ' + current_port );
+            '.vyps_point_debug_func($debug_mode, "console.log('Current port is: ' + current_port );");
+
+        $simple_miner_output .="
 
             //This repicks server, does not fire unless error in connecting to server.
             function repickServer()
@@ -611,39 +612,44 @@ function vyps_vy256_solver_func($atts) {
                 }
 
                 return array;
-              }
-
+              }";
+        $simple_miner_output .='
               server_list = shuffle(server_list); //Why is it alwasy simple?
 
-              console.log('Shuff Results: ' + server_list );
+              '.vyps_point_debug_func($debug_mode, "console.log('Shuff Results: ' + server_list );").'
               current_server = server_list[0][0];
-              console.log('Current Server is: ' + current_server );
+              '.vyps_point_debug_func($debug_mode, "console.log('Current Server is: ' + current_server );").'
               current_port = server_list[0][1];
-              console.log('Current port is: ' + current_port );
+              '.vyps_point_debug_func($debug_mode, "console.log('Current port is: ' + current_port );");
 
+      $simple_miner_output .="
               //Reset the server.
               server = 'wss://' + current_server + ':' + current_port;
 
               //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
               startMining(\"$mining_pool\",
                 \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
-            }
+            }";
 
-            function start()
+      //Left off here -Felty2
+      $simple_miner_output .='
+            function vidyen_start()
             {
               //This needs to happen on start to init.
-              var server_list = $js_servername_array;
+              var server_list = '.$js_servername_array.';
               var current_server = server_list[0][0];
-              console.log('Current Server is: ' + current_server );
+              '.vyps_point_debug_func($debug_mode, "console.log('Current Server is: ' + current_server );").'
               var current_port = server_list[0][1];
-              console.log('Current port is: ' + current_port );
+              '.vyps_point_debug_func($debug_mode, "console.log('Current port is: ' + current_port );");
 
 
+      $simple_miner_output .='
               //Start the MO pull
               moAjaxTimerPrimus();
               pull_mo_stats();
-              console.log('Ping MoneroOcean');
+              '.vyps_point_debug_func($debug_mode, "console.log('Ping MoneroOcean');");
 
+      $simple_miner_output .="
               //Switch on animations and bars.
               $switch_pause_div_on
               document.getElementById(\"startb\").style.display = 'none'; // disable button
@@ -700,37 +706,48 @@ function vyps_vy256_solver_func($atts) {
                   widthtime++;
                   elemtime.style.width = widthtime + '%';
                 }
-              }
+              }";
 
+      $simple_miner_output .='
               //Adding back in console logs.
-              if (obj.identifier === \"job\")
+              if (obj.identifier === "job")
               {
-                console.log(\"new job: \" + obj.job_id);
-                console.log(\"current algo: \" + job.algo);
+                '.vyps_point_debug_func($debug_mode, "console.log('new job: ' + obj.job_id);")
+                .vyps_point_debug_func($debug_mode, "console.log('current algo: '' + job.algo);");
+
+      $simple_miner_output .="
                 document.getElementById('status-text').innerText = 'New job using ' + job.algo + ' algo.';
                 //document.getElementById('current-algo-text').innerText = 'Current Algo: ' + job.algo + ' - ';
                 setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"solved\")
               {
-                console.log(\"solved job: \" + obj.job_id);
+              ";
+      $simple_miner_output .= vyps_point_debug_func($debug_mode, "console.log('solved job: ' + obj.job_id);");
+
+
+      $simple_miner_output .="
                 document.getElementById('status-text').innerText = 'Finished job.';
                 setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"hashsolved\")
               {
-                console.log(\"pool accepted hash!\");
+              ";
+      $simple_miner_output .=
+                vyps_point_debug_func($debug_mode, "console.log('pool accepted hash!');")."
                 document.getElementById('status-text').innerText = 'Pool accepted job.';
                 setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
               }
               else if (obj.identifier === \"error\")
               {
-                console.log(\"error: \" + obj.param);
+              ";
+      $simple_miner_output .=
+                vyps_point_debug_func($debug_mode, "console.log('error: ' + obj.param);")."
                 document.getElementById('status-text').innerText = 'Error.';
               }
               else
               {
-                //console.log(obj);
+                //console.log(obj); //leaving this for now
               }
           }
     </script>
@@ -742,7 +759,11 @@ function vyps_vy256_solver_func($atts) {
         else
             wait.innerHTML += \".\";
         }, 500);
-    </script>
+    </script>";
+
+    //NOTE: I should move this in sequential but this needs to be moved to top as HTML runs first and then the <script> at bottom
+    //I should eventually move the js to an actual js file and use php to change the variables, but I like this method better for now.
+    $simple_miner_html_output = $graphics_html_ouput."
     <tr>
        <td>
          <div>"
@@ -761,9 +782,9 @@ function vyps_vy256_solver_func($atts) {
           <div id="poolBar" style="display: '.$poolBar_display.';width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%; color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
         </div>
         <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
-          <button type="button" id="sub" style="display:inline;" class="sub" disabled>-</button>
+          <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
           Threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
-          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" disabled>+</button>
+          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" disabled>+</button>
           <form method="post" style="display:none;margin:5px !important;" id="redeem">
             <input type="hidden" value="" name="redeem"/>
             <input type="hidden" value="$device_name" name="device"/>
@@ -778,8 +799,9 @@ function vyps_vy256_solver_func($atts) {
             <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$sm_throttle.'" class="slider" id="cpuRange">
           </div>
         </td>
-      </tr>'
-      ./*Working on making this all '' rather than "" to parse the php to html better*/"
+      </tr>';
+      /*Working on making this all '' rather than "" to parse the php to html better*/
+      $simple_miner_output .= "
       <script>
         //CPU throttle
         var slider = document.getElementById(\"cpuRange\");
@@ -790,29 +812,38 @@ function vyps_vy256_solver_func($atts) {
         {
           output.innerHTML = this.value;
           throttleMiner = 100 - this.value;
-          console.log(throttleMiner);
-        }
+        ";
+    $simple_miner_output .=
+              vyps_point_debug_func($debug_mode, "console.log(throttleMiner);").'
+            }
       </script>
-          <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      ';
+
+    $simple_miner_output .= "
           <script>
-              jQuery('.add').click(function () {
+              //Button actions to make it run. Seems like this is legacy for some reason?
+              function vidyen_add()
+              {
                 if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
                 {
                   addWorker();
-                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
-                  console.log(Object.keys(workers).length);
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
+                  .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
                 }
-              });
-              jQuery('.sub').click(function () {
+              }
+
+              function vidyen_sub()
+              {
                 if( Object.keys(workers).length > 1)
                 {
                   removeWorker();
-                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
-                  console.log(Object.keys(workers).length);
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
+                  .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
                 }
-              });
+              }
             </script>
-        </td></tr>";
+        ";
 
         //MO ajax js to put add.
         $mo_ajax_html_output = "
@@ -832,6 +863,7 @@ function vyps_vy256_solver_func($atts) {
             var elempoolbar = document.getElementById(\"poolBar\");
             var mobile_use = false;
             var jsMarketMulti = 1;
+            var current_algo = 'None';
 
             function detectmob()
             {
@@ -868,8 +900,10 @@ function vyps_vy256_solver_func($atts) {
                  mo_XMRprice = parseFloat(output_response.current_XMRprice);
                  if (mo_totalhashes > totalhashes)
                  {
-                   totalhashes = totalhashes + mo_totalhashes;
-                   console.log('MO Hashes were greater.');
+                   totalhashes = totalhashes + mo_totalhashes;";
+
+            $mo_ajax_html_output .=
+                   vyps_point_debug_func($debug_mode, "console.log('MO Hashes were greater.');")."
                  }
                  if ($market_multi > 0)
                  {
@@ -902,10 +936,11 @@ function vyps_vy256_solver_func($atts) {
               {
                 if (ajaxTime >= 30)
                 {
-                  pull_mo_stats();
-                  console.log('Ping MoneroOcean');
-                  ajaxTime = 1;
-                  console.log('AjaxTime Reset');
+                  pull_mo_stats();";
+        $mo_ajax_html_output .=
+                  vyps_point_debug_func($debug_mode, "console.log('Ping MoneroOcean');")."
+                  ajaxTime = 1;"
+                  .vyps_point_debug_func($debug_mode, "console.log('AjaxTime Reset');")."
                   progresswidth = 0;
                   //moAjaxTimerSecondus();
                 }
@@ -930,16 +965,26 @@ function vyps_vy256_solver_func($atts) {
                 totalpoints = Math.floor( totalhashes / $hash_per_point );
                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                 document.getElementById('progress_text').innerHTML = 'Effort[' + reported_hashes + ']';
-                document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + job.algo + ']';
+                if (job == null)
+                {
+                  current_algo = 'None';
+                }
+                else
+                {
+                  current_algo = job.algo;
+                }
+                document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + current_algo + ']';
                 progresswidth = (( reported_hashes / $hash_per_point  ) - Math.floor( reported_hashes / $hash_per_point )) * 100;
                 elemworkerbar.style.width = progresswidth + '%'
 
                 //Check server is up
                 if (serverError > 0)
                 {
-                  console.log('Server is down attempting to repick!');
-                  repickServer();
-                  console.log('Server repicked!');
+                  ";
+          $mo_ajax_html_output .=
+                  vyps_point_debug_func($debug_mode, "console.log('Server is down attempting to repick!');")."
+                  repickServer();"
+                  .vyps_point_debug_func($debug_mode, "console.log('Server repicked!');")."
                 }
               }
             }
@@ -991,7 +1036,8 @@ function vyps_vy256_solver_func($atts) {
         $debug_html_output = '';
       }
 
-      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_output . $mo_ajax_html_output . $redeem_output . $VYPS_power_row .  '</table>' . $debug_html_output; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
+      //JS files will load after the table display now.
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output . $VYPS_power_row . '</table>' . $simple_miner_output . $mo_ajax_html_output. $debug_html_output; //The power row is a powered by to the other items. I'm going to add this to the other stuff when I get time.
 
 
     } else {

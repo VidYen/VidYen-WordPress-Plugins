@@ -106,6 +106,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.3.6 =
+
+- Fix: Console log information should only display in miner when `debug=TRUE` is on reducing memory footprint.
+- Fix: Removed error in console about null ago before it has been switched to.
+
 = 2.3.5 =
 
 - Add: Leaderboard options for lifetime earnings and not current balance `[vyps-pbe pid=1]`

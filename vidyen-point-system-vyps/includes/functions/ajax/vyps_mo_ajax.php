@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 add_action('wp_ajax_vyps_mo_api_action', 'vyps_mo_api_action');
 
 //register the ajax for non authenticated users
+//NOTE: I need to get feed back if nonautheneticaed users should actually be able to use this.
 add_action( 'wp_ajax_nopriv_vyps_mo_api_action', 'vyps_mo_api_action' );
 
 // handle the ajax request

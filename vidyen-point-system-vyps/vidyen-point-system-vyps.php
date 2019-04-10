@@ -211,7 +211,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_icon_
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_balance_func.php'); //I neeced a raw balance function
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_earned_func.php'); //More for the MMO but it should go here since sites could use it.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_deduct_func.php'); //Streamlined deduct
-
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_debug_func.php'); //Debug mode. Reduces memory footprint of miner.
 
 /*** MO API ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now

@@ -12,8 +12,8 @@ add_action('admin_menu', 'vyps_vy256_submenu', 366 );
 function vyps_vy256_submenu() {
 
   $parent_menu_slug = 'vyps_points';
-  $page_title = "VY256 Miner Shortcodes";
-  $menu_title = 'VY256 Miner Shortcodes';
+  $page_title = "VidYen Miner Shortcodes";
+  $menu_title = 'VidYen Miner Shortcodes';
   $capability = 'manage_options';
   $menu_slug = 'vyps_vy256_page';
   $function = 'vyps_vy256_sub_menu_page';
@@ -37,7 +37,7 @@ function vyps_vy256_sub_menu_page()
 
   echo '
   <div class="wrap">
-    <h1>VidYen VY256 Algo Switching Web Miner</h1>
+    <h1>VidYen Algo Switching Web Miner</h1>
     <p>With the closure of Coinhive and the March 9th, 2019 XMR fork, VidYen now gladly offers an algo switching web miner alternative to the market</p>
     <p>By default the miner connects through VidYen servers to by passpass adblockers and now mines alt coins with various algorithms that the MoneroOcean pool finds most profitable at any given time.</p>
     <p>This allows you to use a local web miner on your WordPress site to mine crypto payouts in XMR that bypasses adblock or other AV software while tracking your users efforts to reward them.</p>
