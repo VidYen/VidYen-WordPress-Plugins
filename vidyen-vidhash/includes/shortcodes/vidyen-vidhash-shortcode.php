@@ -156,8 +156,8 @@ function vidyen_vidhash_video_player_func($atts) {
       </div>
         <div id="thread_manage" style="position:relative;display:flex;flex:wrap;margin:5px align-content:space-evenly; !important;display:block;">
           <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" enabled>-</button>
-          threads:&nbsp;<span style="display:center;" id="thread_count">0</span>
-          <button type="button" id="add" style="display:inline-flex;position:relative;justify-content:space-evenly;" class="add" onclick="vidyen_add()" enabled>+</button>
+          Threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
+          <button type="button" id="add" style="display:inline;position:static;" class="add" onclick="vidyen_add()" enabled>+</button>
           <form method="post" style="display:none;margin:5px !important;" id="redeem">
             <input type="hidden" value="" name="redeem"/>
           </form>
@@ -431,7 +431,7 @@ function vidyen_vidhash_video_player_func($atts) {
         function onPlayerStateChange(event) {
           if (event.data == YT.PlayerState.PLAYING && !done) {
             console.log('The video is playing');
-            start();
+            vidyen_start();
             document.getElementById(\"pauseProgress\").style.display = 'none'; // hide pause
             document.getElementById(\"timeProgress\").style.display = 'block'; // begin time
           }
