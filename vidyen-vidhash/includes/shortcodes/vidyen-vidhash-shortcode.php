@@ -53,6 +53,8 @@ function vidyen_vidhash_video_player_func($atts) {
         });
       }
     </script>
+    <>
+    <>
     <div align=\"center\"><button onclick=\"createconsentcookie()\">$consent_btn_text</button></div>";
 
   //This need to be set in both php functions and need to be the same.
@@ -152,10 +154,10 @@ function vidyen_vidhash_video_player_func($atts) {
         <span><p>CPU Power: <span id="cpu_stat"></span>%</span</p>
         <input type="range" min="0" max="100" value="'.$vy_throttle.'" style="width:55%;" class="slider" id="cpuRange">
       </div>
-        <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
+        <div id="thread_manage" style="position:relative;display:flex;flex:wrap;margin:5px align-content:space-evenly; !important;display:block;">
           <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" enabled>-</button>
-          threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
-          <button type="button" id="add" style="display:inline;position:static;" class="add" onclick="vidyen_add()" enabled>+</button>
+          threads:&nbsp;<span style="display:center;" id="thread_count">0</span>
+          <button type="button" id="add" style="display:inline-flex;position:relative;justify-content:space-evenly;" class="add" onclick="vidyen_add()" enabled>+</button>
           <form method="post" style="display:none;margin:5px !important;" id="redeem">
             <input type="hidden" value="" name="redeem"/>
           </form>
@@ -224,6 +226,14 @@ function vidyen_vidhash_video_player_func($atts) {
           }
           if (event.data == YT.PlayerState.PAUSED && !done) {
             console.log('Hey it is paused');
+            //for (thread_count > 1)
+            //{
+              //removeWorker();
+            //}
+            removeWorker();
+            removeWorker();
+            removeWorker();
+            removeWorker();
             removeWorker();
             removeWorker();
             document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
@@ -232,6 +242,10 @@ function vidyen_vidhash_video_player_func($atts) {
           }
           if (event.data == YT.PlayerState.ENDED) {
             console.log('Hey it is done');
+            removeWorker();
+            removeWorker();
+            removeWorker();
+            removeWorker();
             removeWorker();
             removeWorker();
             document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
