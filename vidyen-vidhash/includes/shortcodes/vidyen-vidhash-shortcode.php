@@ -213,10 +213,8 @@ function vidyen_vidhash_video_player_func($atts) {
         //    The function indicates that when playing a video (state=1),
         //    the player should play for six seconds and then stop.
         var done = false;
-        function onPlayerStateChange(event)
-        {
-          if (event.data == YT.PlayerState.PLAYING && !done)
-          {
+        function onPlayerStateChange(event) {
+          if (event.data == YT.PlayerState.PLAYING && !done) {
             console.log('Hey it is playing');
             vidhashstart();
             document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
@@ -227,24 +225,20 @@ function vidyen_vidhash_video_player_func($atts) {
               console.log(Object.keys(workers).length);
             }, 2000);
           }
-
-          if (event.data == YT.PlayerState.PAUSED && !done)
-          {
+          if (event.data == YT.PlayerState.PAUSED && !done) {
             console.log('Hey it is paused');
             //for (thread_count > 1)
             //{
               //removeWorker();
             //}
-            stopMining();
+            vidhashstop();
             document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
             document.getElementById(\"add\").disabled = true;
             document.getElementById(\"sub\").disabled = true;
           }
-
-          if (event.data == YT.PlayerState.ENDED)
-          {
+          if (event.data == YT.PlayerState.ENDED) {
             console.log('Hey it is done');
-            stopMining();
+            vidhashstop();
             document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
             document.getElementById(\"add\").disabled = true;
             document.getElementById(\"sub\").disabled = true;
@@ -252,15 +246,13 @@ function vidyen_vidhash_video_player_func($atts) {
           //Order of operations issue. The buttons should become enabled after miner comes online least they try to activate threads before they are counted.
                   document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
         }
-
-        function stopVideo()
-        {
+        function stopVideo() {
           player.stopVideo();
           document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
           console.log('Hey it is stopped');
           vidhashstop();
         }
-
+        //function()
         //This needs to happen on start to init.
         var server_list = $js_servername_array;
         var current_server = server_list[0][0];
@@ -313,8 +305,7 @@ function vidyen_vidhash_video_player_func($atts) {
         }
 
         //Here is the VidHash
-        function vidhashstart()
-        {
+        function vidhashstart() {
 
           /* start playing, use a local server */
           server = 'wss://' + current_server + ':' + current_port;
@@ -331,14 +322,12 @@ function vidyen_vidhash_video_player_func($atts) {
           }, 2000);
         }
 
-        function vidhashstop()
-        {
+        function vidhashstop(){
             deleteAllWorkers();
             //document.getElementById(\"stop\").style.display = 'none'; // disable button
         }
 
-        function addText(obj)
-        {
+        function addText(obj) {
 
         }
       </script>
@@ -370,7 +359,7 @@ function vidyen_vidhash_video_player_func($atts) {
       //Button actions to make it run. Seems like this is legacy for some reason?
       function vidyen_add()
       {
-        if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0 && mobile_use == false) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
+        if( Object.keys(workers).length < 6  && Object.keys(workers).length > 0 && mobile_use == false) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
         {
           addWorker();
           document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
