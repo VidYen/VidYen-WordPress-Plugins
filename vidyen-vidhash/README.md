@@ -87,6 +87,10 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.3.1 =
+
+-Fix: Made it possible to change threads after pausing video and restarting
+
 = 1.3.0 =
 
 - Add: Added thread and throttle control for non-logged in users to allow better experience
