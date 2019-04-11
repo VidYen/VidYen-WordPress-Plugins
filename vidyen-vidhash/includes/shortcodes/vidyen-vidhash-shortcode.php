@@ -53,8 +53,6 @@ function vidyen_vidhash_video_player_func($atts) {
         });
       }
     </script>
-    <>
-    <>
     <div align=\"center\"><button onclick=\"createconsentcookie()\">$consent_btn_text</button></div>";
 
   //This need to be set in both php functions and need to be the same.
@@ -222,8 +220,8 @@ function vidyen_vidhash_video_player_func($atts) {
             console.log('Hey it is playing');
             vidhashstart();
             document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
-            document.getElementById(\"add\").disabled = false;
-            document.getElementById(\"sub\").disabled = false;
+            document.getElementById('add').disabled = false;
+            document.getElementById('sub').disabled = false;
             setTimeout(function(){
               document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
               console.log(Object.keys(workers).length);
