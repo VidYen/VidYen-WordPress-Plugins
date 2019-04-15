@@ -52,14 +52,7 @@ function vidyen_vidhash_url_parse_func($atts) {
       }
     </script>";
 
-  //This need to be set in both php functions and need to be the same.
-  $cookie_name = "vidhashconsent";
-  $cookie_value = "consented";
-  if(!isset($_COOKIE[$cookie_name]))
-  {
-      $vidhash_consent_cookie_html = $disclaimer_text . $consent_button_html;
-      return $vidhash_consent_cookie_html;
-  }
+
 
   //Ok everything after this happens if they consented etc etc ad naseum.
 
@@ -75,7 +68,31 @@ function vidyen_vidhash_url_parse_func($atts) {
   }
   else
   {
-    return 'URL and Wallet Not Set.';
+    $xmr_address_form_html = '
+    <div>Create a URL to paste into your YouTube video description so you can have users mine to your XMR Wallet.</div>
+    <form method="get">
+      XMR Wallet Address:<br>
+      <input type="text" name="xmrwallet" value="" required>
+      <br>
+      YouTube URL:<br>
+      <input type="text" name="yt_url" value="worker" required>
+      <br>
+      <input type="hidden" name="action" id="action" value="generate">
+      <br><br>
+      <input type="submit" value="Submit">
+    </form>
+      ';
+    return $xmr_address_form_html;
+  }  
+
+  //NOTE: It dawned on me that this doesn't need to fire until after the above forms. To check when miners are loading.
+  //This need to be set in both php functions and need to be the same.
+  $cookie_name = "vidhashconsent";
+  $cookie_value = "consented";
+  if(!isset($_COOKIE[$cookie_name]))
+  {
+      $vidhash_consent_cookie_html = $disclaimer_text . $consent_button_html;
+      return $vidhash_consent_cookie_html;
   }
 
   //Make it so that if they pasted the entire url from teh youtube share it should be fine.
@@ -143,10 +160,11 @@ function vidyen_vidhash_url_parse_func($atts) {
 
   //NOTE: Here is where we pull the local js files
   //Get the url for the solver
-  $vy256_solver_folder_url = plugins_url( 'js/solver319/', dirname(__FILE__) ); //Fixing like the images should work. Going to test.
-
+  $vy256_solver_folder_url = plugins_url( 'js/solver319/', dirname(__FILE__) );
   $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
   $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
+
+  $vy_hash_rate_url = plugins_url( 'js/interface/', dirname(__FILE__) ) . 'vy-hashrate.js';
 
   $youtube_html_load = '
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
@@ -164,6 +182,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         </form>
     </div>
     <div id="hash_count"></div>
+    <div id="hash_rate"></div>
     <script>
     throttleMiner = "'.$vy_throttle.'";
   //CPU throttle
@@ -375,7 +394,8 @@ function vidyen_vidhash_url_parse_func($atts) {
         console.log(Object.keys(workers).length);
       }
     }
-  </script>";
+  </script>
+  <script src=\"$vy_hash_rate_url\"></script>";
 
   return $youtube_html_load;
 }
