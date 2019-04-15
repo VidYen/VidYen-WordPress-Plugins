@@ -3,7 +3,7 @@
 Plugin Name:  VidYen VidHash
 Plugin URI: https://wordpress.org/plugins/vidyen-vidhash/
 Description:  Have users mine crypto currency while watching your embedded YouTube videos
-Version:      1.3.1
+Version:      1.4.0
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -88,3 +88,7 @@ function vy_vidhash_parent_menu_page()
 
 /*** BEGIN SHORTCODE INCLUDES ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-vidhash-shortcode.php'); //For now just the actual SC [vy-vidhash]
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-vidhash-get-shortcode.php'); //For now just the actual SC [vy-vidhash]
+
+/*** BEGIN FUNCTION INCLUDES ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/vidyen-vidhash-functions.php'); //Adds the ajax for cookie consent
