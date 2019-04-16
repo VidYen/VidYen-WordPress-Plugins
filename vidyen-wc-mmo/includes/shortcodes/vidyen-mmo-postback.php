@@ -75,7 +75,7 @@ function vidyen_mmo_postback_deduct_func( $atts )
 			$user_data = get_user_by('email', $user_email);
 			$user_id = $user_data->ID;
 		}
-		else ( !isset($_POST['email']) AND isset($_POST['userid']) )
+		elseif ( !isset($_POST['email']) AND isset($_POST['userid']) )
 		{
 			$loa_user_id = sanitize_text_field($_POST['userid']);
 			$user_id = vidyen_mmo_loa_user_query_func($loa_user_id);
