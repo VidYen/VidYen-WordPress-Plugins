@@ -36,5 +36,6 @@ function vidyen_timer()
         current_algo = job.algo;
       }
       document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + current_algo + ']';
+    }
   }
 }

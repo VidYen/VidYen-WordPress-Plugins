@@ -219,7 +219,7 @@ function vidyen_vidhash_url_parse_func($atts) {
   $vy256_solver_js_url =  $vy256_solver_folder_url. 'solver.js';
   $vy256_solver_worker_url = $vy256_solver_folder_url. 'worker.js';
 
-  $vy_hash_rate_url = plugins_url( 'js/interface/', dirname(__FILE__) ) . 'vy-hashrate.js';
+  $vy_hash_rate_url = plugins_url( 'js/interface/', dirname(__FILE__) ) . 'vy-hash-rate.js';
 
   $youtube_html_load = '
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
