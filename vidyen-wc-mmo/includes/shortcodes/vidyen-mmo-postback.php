@@ -2,12 +2,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-/*** adgate short code to make a postback page ***/
-
-//NOTE: As much as I hate post backs, its not hard to do and adgate doesn't have the Adscend point api tracking system (nor like Coinhive)
-//Of course since the adgate site won't have a wp login, has to be just just a shortcode with page. And you will have to wait on adgate to talk to your server
-//Lots of terrible things can will go wrong, but the demand for this (due to Adscend just being.... well Adscend) keeps happening so I broke down and decided to do this
-//regardless of having to use a post back. I will have to do it in a way that is secure etc etc.
+//NOTE: This is designed for post backs of MMO systems with VidYen
 
 function vidyen_mmo_postback_deduct_func( $atts )
 {
@@ -71,11 +66,22 @@ function vidyen_mmo_postback_deduct_func( $atts )
 	}
 
 	//We are getting the user and then get the user id from that since they might be different between servers. I'm just guessing
-	if ( isset($_POST['email']) AND isset($_POST['points']))
+	//So we need to see if email and points or just a user id wihcih work different.
+	if ( (isset($_POST['email']) AND isset($_POST['points'])) OR (isset($_POST['userid']) AND isset($_POST['points'])))
 	{
-		$user_email = sanitize_email($_POST['email']); //Huh they actualyly had this. Hrm.... honestly it doesn't seem to care about the email in the get. Learn something every day.
-		$user_data = get_user_by('email', $user_email);
-		$user_id = $user_data->ID;
+		if ( isset($_POST['email']) AND !isset($_POST['userid']) )
+		{
+			$user_email = sanitize_email($_POST['email']); //Huh they actualyly had this. Hrm.... honestly it doesn't seem to care about the email in the get. Learn something every day.
+			$user_data = get_user_by('email', $user_email);
+			$user_id = $user_data->ID;
+		}
+		else ( !isset($_POST['email']) AND isset($_POST['userid']) )
+		{
+			$loa_user_id = sanitize_text_field($_POST['userid']);
+			$user_id = vidyen_mmo_loa_user_query_func($loa_user_id);
+			//$user_id = 1; //Hard coded for now
+		}
+
 		//$user_id = 2;
 
 		$points = intval($_POST['points']);

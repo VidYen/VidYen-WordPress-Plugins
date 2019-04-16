@@ -75,6 +75,7 @@ function vidyen_wc_mmo_sql_install()
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_woowallet_currency.php'); //Custom Currencies to WooCommerce
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_sql_call_func.php'); //SQL Call functions
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_bal_func.php'); //Custom WooWallet balance function for this purpose
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_loa_user_query_func.php'); //Adds meta check
 
 
 /*** Shortcodes ***/
@@ -82,6 +83,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ajax-bal.php
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Ajax Point Exchange
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-postback.php'); //Post back for game transfers
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-api-bal.php'); //Post back for game transfers
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-player-id.php'); //Stores the LOA Player ID
 
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-wc-mmo-menu.php'); //Order 600
