@@ -52,8 +52,6 @@ function vidyen_vidhash_url_parse_func($atts) {
       }
     </script>";
 
-
-
   //Ok everything after this happens if they consented etc etc ad naseum.
 
   //The get version (this whole thing will be gets)
@@ -64,26 +62,83 @@ function vidyen_vidhash_url_parse_func($atts) {
   if (isset($_GET['xmrwallet']) AND isset($_GET['youtube']))
   {
     $vy_site_key = sanitize_text_field($_GET['xmrwallet']);
-    $youtube_url = $_GET['youtube'];
+    $youtube_url = sanitize_text_field($_GET['youtube']);
+    if (isset($_GET['pool']))
+    {
+      $atts['pool'] = sanitize_url($_GET['pool']); //If there is a pool, sanitize it
+    }
   }
   else
   {
+    $vy_link_generate_url = plugins_url( 'js/interface/', dirname(__FILE__) ) . 'vy-link-generate.js';
     $xmr_address_form_html = '
     <div>Create a URL to paste into your YouTube video description so you can have users mine to your XMR Wallet.</div>
-    <form method="get">
+    <form style = "width: 100%;" id="input_form" method="get">
       XMR Wallet Address:<br>
-      <input type="text" name="xmrwallet" value="" required>
+      <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="xmrwallet" type="text" name="xmrwallet" value="">
       <br>
       YouTube URL:<br>
-      <input type="text" name="yt_url" value="worker" required>
+      <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="yt_url" type="text" name="yt_url" value="" width="600">
       <br>
-      <input type="hidden" name="action" id="action" value="generate">
-      <br><br>
-      <input type="submit" value="Submit">
+      Pool - Defaults to MoneroOcean.Stream if none selected.
+      <br><b>Payouts handled by your pool. Not VidHash!</b><br>
+      <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="poolinput" list="pools" width="600">
+      <datalist id="pools">
+        <option selected value="moneroocean.stream">
+        <option value="xmrpool.eu">
+        <option value="moneropool.com">
+        <option value="monero.crypto-pool.fr">
+        <option value="monerohash.com">
+        <option value="minexmr.com">
+        <option value="usxmrpool.com">
+        <option value="supportxmr.com">
+        <option value="moneroocean.stream:100">
+        <option value="moneroocean.stream">
+        <option value="poolmining.org">
+        <option value="minemonero.pro">
+        <option value="xmr.prohash.net">
+        <option value="minercircle.com">
+        <option value="xmr.nanopool.org">
+        <option value="xmrminerpro.com">
+        <option value="clawde.xyz">
+        <option value="dwarfpool.com">
+        <option value="xmrpool.net">
+        <option value="monero.hashvault.pro">
+        <option value="osiamining.com">
+        <option value="killallasics">
+        <option value="arhash.xyz">
+        <option value="aeon-pool.com">
+        <option value="minereasy.com">
+        <option value="aeon.sumominer.com">
+        <option value="aeon.rupool.tk">
+        <option value="aeon.hashvault.pro">
+        <option value="aeon.n-engine.com">
+        <option value="aeonpool.xyz">
+        <option value="aeonpool.dreamitsystems.com">
+        <option value="aeonminingpool.com">
+        <option value="aeonhash.com">
+        <option value="durinsmine.com">
+        <option value="aeon.uax.io">
+        <option value="aeon-pool.sytes.net">
+        <option value="aeonpool.net">
+        <option value="supportaeon.com">
+        <option value="pooltupi.com">
+        <option value="aeon.semipool.com">
+        <option value="turtlepool.space">
+        <option value="masari.miner.rocks">
+        <option value="etn.spacepools.org">
+        <option value="etn.nanopool.org">
+        <option value="etn.hashvault.pro">
+      </datalist>
     </form>
+    <button onclick="vidyen_link_generate()">Generate Link</button>
+    <br>
+    <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type=text" value="" id="url_output" width="600" readonly>
+    <button onclick="copy_link()">Copy</i></button>
+    <script src="'.$vy_link_generate_url.'"></script>
       ';
     return $xmr_address_form_html;
-  }  
+  }
 
   //NOTE: It dawned on me that this doesn't need to fire until after the above forms. To check when miners are loading.
   //This need to be set in both php functions and need to be the same.
@@ -287,11 +342,13 @@ function vidyen_vidhash_url_parse_func($atts) {
         document.getElementById('status-text').innerText = 'Error Connecting! Attemping other servers please wait.'; //set to working
 
         " . /*//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array*/ "
-        function shuffle(array) {
+        function shuffle(array)
+        {
           var currentIndex = array.length, temporaryValue, randomIndex;
 
           // While there remain elements to shuffle...
-          while (0 !== currentIndex) {
+          while (0 !== currentIndex)
+          {
 
             // Pick a remaining element...
             randomIndex = Math.floor(Math.random() * currentIndex);
@@ -320,6 +377,7 @@ function vidyen_vidhash_url_parse_func($atts) {
 
         //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
         startMining(\"$mining_pool\", \"$vy_site_key$siteName\", \"$password\", $vy_threads);
+        vidyen_timer();
       }
 
       //Here is the VidHash
@@ -339,14 +397,15 @@ function vidyen_vidhash_url_parse_func($atts) {
         }, 2000);
       }
 
-      function vidhashstop(){
+      function vidhashstop()
+      {
           deleteAllWorkers();
           //document.getElementById(\"stop\").style.display = 'none'; // disable button
       }
 
       function addText(obj)
       {
-        document.getElementById('hash_count').innerHTML = totalhashes;
+        //document.getElementById('hash_count').innerHTML = totalhashes;
       }
     </script>
     ";
