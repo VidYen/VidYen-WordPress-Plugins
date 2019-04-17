@@ -23,13 +23,22 @@ function vyps_mmo_bal_api_action()
   $user_id = get_current_user_id();
 
   $point_balance = intval(vyps_point_balance_func($point_id, $user_id)); //Yes we always be santising so whelp
-  $ww_balance = sanitize_text_field(vyps_woowallet_bal_func($user_id)); //Sadly WooWallet returns a text field. I need to figure this out down the road.
 
-
-  $mmo_bal_array_server_response = array(
-      'point_balance' => $point_balance,
-      'ww_balance' => $ww_balance,
-  );
+  //Checking if woocommerce installed.
+  if (vidyen_mmo_woocommerce_check_func())
+  {
+    $ww_balance = sanitize_text_field(vyps_woowallet_bal_func($user_id)); //Sadly WooWallet returns a text field. I need to figure this out down the road.
+    $mmo_bal_array_server_response = array(
+        'point_balance' => $point_balance,
+        'ww_balance' => $ww_balance,
+    );
+  }
+  else
+  {
+    $mmo_bal_array_server_response = array(
+        'point_balance' => $point_balance,
+    );
+  }
 
   echo json_encode($mmo_bal_array_server_response); //Proper method to return json
 

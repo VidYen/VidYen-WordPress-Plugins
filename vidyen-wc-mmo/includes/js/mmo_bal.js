@@ -14,13 +14,25 @@ function pull_mmo_stats()
      //MMO Pull
      mmo_point_balance = parseFloat(output_response.point_balance); //To remove the number commands remove the .toLocaleString
      mmo_point_balance_string = mmo_point_balance.toLocaleString('en');
-     ww_point_balance = output_response.ww_balance;
+
+     //Check to see if wocommerce installed
+     if (woo_installed == 1)
+     {
+       ww_point_balance = output_response.ww_balance;
+     }
+
 
      if (mmo_point_balance > 0)
      {
        //console.log('Point Balance is: ' + mmo_point_balance); //Remove soon
        document.getElementById('vyps_points').innerHTML = mmo_point_balance_string; //This needs to remain not on the MO pull
-       document.getElementById('ww_points').innerHTML = ww_point_balance; //This needs to remain not on the MO pull
+
+       //Checking to see if woo installed and if not will display.
+       if (woo_installed == 1)
+       {
+          document.getElementById('ww_points').innerHTML = ww_point_balance; //This needs to remain not on the MO pull
+       }
+
      }
      else
      {

@@ -17,97 +17,101 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  *
  */
 
- /*** Copper ***/
-add_filter( 'woocommerce_currencies', 'add_vyps_copper_currency' );
-
-function add_vyps_copper_currency( $currencies )
+//I'm going to check to see if woocommerce is actually installed now as have need to turn it on and off without blowing everythign up
+if (vidyen_mmo_woocommerce_check_func())
 {
-     $currencies['COPPER'] = __( 'Copper Pieces', 'woocommerce' );
+  /*** Copper ***/
+ add_filter( 'woocommerce_currencies', 'add_vyps_copper_currency' );
+
+ function add_vyps_copper_currency( $currencies )
+ {
+      $currencies['COPPER'] = __( 'Copper Pieces', 'woocommerce' );
+      return $currencies;
+ }
+
+ add_filter('woocommerce_currency_symbol', 'add_vyps_copper_currency_symbol', 10, 2);
+
+ function add_vyps_copper_currency_symbol( $currency_symbol, $currency )
+ {
+      switch( $currency ) {
+           case 'COPPER': $currency_symbol = 'Copper'; break;
+      }
+      return $currency_symbol;
+ }
+
+ /*** Silver ***/
+ add_filter( 'woocommerce_currencies', 'add_vyps_silver_currency' );
+
+ function add_vyps_silver_currency( $currencies )
+ {
+     $currencies['SILVER'] = __( 'Silver Pieces', 'woocommerce' );
      return $currencies;
-}
+ }
 
-add_filter('woocommerce_currency_symbol', 'add_vyps_copper_currency_symbol', 10, 2);
+ add_filter('woocommerce_currency_symbol', 'add_vyps_silver_currency_symbol', 10, 2);
 
-function add_vyps_copper_currency_symbol( $currency_symbol, $currency )
-{
+ function add_vyps_silver_currency_symbol( $currency_symbol, $currency )
+ {
      switch( $currency ) {
-          case 'COPPER': $currency_symbol = 'Copper'; break;
+          case 'SILVER': $currency_symbol = 'Silver'; break;
      }
      return $currency_symbol;
-}
+ }
 
-/*** Silver ***/
-add_filter( 'woocommerce_currencies', 'add_vyps_silver_currency' );
+ /*** Gold ***/
+ add_filter( 'woocommerce_currencies', 'add_vyps_gold_currency' );
 
-function add_vyps_silver_currency( $currencies )
-{
-    $currencies['SILVER'] = __( 'Silver Pieces', 'woocommerce' );
-    return $currencies;
-}
+ function add_vyps_gold_currency( $currencies )
+ {
+     $currencies['GOLD'] = __( 'Gold Pieces', 'woocommerce' );
+     return $currencies;
+ }
 
-add_filter('woocommerce_currency_symbol', 'add_vyps_silver_currency_symbol', 10, 2);
+ add_filter('woocommerce_currency_symbol', 'add_vyps_gold_currency_symbol', 10, 2);
 
-function add_vyps_silver_currency_symbol( $currency_symbol, $currency )
-{
-    switch( $currency ) {
-         case 'SILVER': $currency_symbol = 'Silver'; break;
-    }
-    return $currency_symbol;
-}
+ function add_vyps_gold_currency_symbol( $currency_symbol, $currency )
+ {
+     switch( $currency ) {
+          case 'GOLD': $currency_symbol = 'Gold'; break;
+     }
+     return $currency_symbol;
+ }
 
-/*** Gold ***/
-add_filter( 'woocommerce_currencies', 'add_vyps_gold_currency' );
+ /*** Gems ***/
+ add_filter( 'woocommerce_currencies', 'add_vyps_gems_currency' );
 
-function add_vyps_gold_currency( $currencies )
-{
-    $currencies['GOLD'] = __( 'Gold Pieces', 'woocommerce' );
-    return $currencies;
-}
+ function add_vyps_gems_currency( $currencies )
+ {
+     $currencies['GEMS'] = __( 'Gems', 'woocommerce' );
+     return $currencies;
+ }
 
-add_filter('woocommerce_currency_symbol', 'add_vyps_gold_currency_symbol', 10, 2);
+ add_filter('woocommerce_currency_symbol', 'add_vyps_gems_currency_symbol', 10, 2);
 
-function add_vyps_gold_currency_symbol( $currency_symbol, $currency )
-{
-    switch( $currency ) {
-         case 'GOLD': $currency_symbol = 'Gold'; break;
-    }
-    return $currency_symbol;
-}
+ function add_vyps_gems_currency_symbol( $currency_symbol, $currency )
+ {
+     switch( $currency ) {
+          case 'GEMS': $currency_symbol = 'Gems'; break;
+     }
+     return $currency_symbol;
+ }
 
-/*** Gems ***/
-add_filter( 'woocommerce_currencies', 'add_vyps_gems_currency' );
+ /*** VidYen ***/
+ add_filter( 'woocommerce_currencies', 'add_vyps_vidyen_currency' );
 
-function add_vyps_gems_currency( $currencies )
-{
-    $currencies['GEMS'] = __( 'Gems', 'woocommerce' );
-    return $currencies;
-}
+ function add_vyps_vidyen_currency( $currencies )
+ {
+     $currencies['VIDYEN'] = __( 'VidYen', 'woocommerce' );
+     return $currencies;
+ }
 
-add_filter('woocommerce_currency_symbol', 'add_vyps_gems_currency_symbol', 10, 2);
+ add_filter('woocommerce_currency_symbol', 'add_vyps_vidyen_currency_symbol', 10, 2);
 
-function add_vyps_gems_currency_symbol( $currency_symbol, $currency )
-{
-    switch( $currency ) {
-         case 'GEMS': $currency_symbol = 'Gems'; break;
-    }
-    return $currency_symbol;
-}
-
-/*** VidYen ***/
-add_filter( 'woocommerce_currencies', 'add_vyps_vidyen_currency' );
-
-function add_vyps_vidyen_currency( $currencies )
-{
-    $currencies['VIDYEN'] = __( 'VidYen', 'woocommerce' );
-    return $currencies;
-}
-
-add_filter('woocommerce_currency_symbol', 'add_vyps_vidyen_currency_symbol', 10, 2);
-
-function add_vyps_vidyen_currency_symbol( $currency_symbol, $currency )
-{
-    switch( $currency ) {
-         case 'VIDYEN': $currency_symbol = 'V¥'; break;
-    }
-    return $currency_symbol;
+ function add_vyps_vidyen_currency_symbol( $currency_symbol, $currency )
+ {
+     switch( $currency ) {
+          case 'VIDYEN': $currency_symbol = 'V¥'; break;
+     }
+     return $currency_symbol;
+ }
 }

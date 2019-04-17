@@ -27,17 +27,32 @@ function vyps_mmo_ajax_bal_func()
 	//Get the url for the solver
 	$mmo_ajax_js_url = plugins_url( 'js/mmo_bal.js', dirname(__FILE__) );
 
+
+
 	//Concatenate the values into the output
 	$ww_bal_html_output =
 		'<table>
 			<tr>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($point_id).'</span> <span id="vyps_points" style="vertical-align: bottom;">'.$vyps_points_output.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($output_id).' </span><span id="ww_points" style="vertical-align: bottom;"> '.vyps_ww_point_bal_func($user_id).'</span></div></td>
+			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($point_id).'</span> <span id="vyps_points" style="vertical-align: bottom;">'.$vyps_points_output.'</span></div></td>';
+
+	//Check if its true and then add teh line.
+	if (vidyen_mmo_woocommerce_check_func())
+	{
+		$ww_bal_html_output .= '<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($output_id).' </span><span id="ww_points" style="vertical-align: bottom;"> '.vyps_ww_point_bal_func($user_id).'</span></div></td>';
+	}
+
+	$ww_bal_html_output .='
 			</td>
 			</tr>
 		</table>';
 
 	$ww_bal_html_output .= '<script src="'.$mmo_ajax_js_url.'"></script><script>var point_id = '.$point_id.';</script>';
+
+	//A simple hack to run the part that if woocommerce installed.
+	if (vidyen_mmo_woocommerce_check_func())
+	{
+		$ww_bal_html_output .= '<script>var woo_installed = 1;</script>';
+	}
 
 	return $ww_bal_html_output;
 }
