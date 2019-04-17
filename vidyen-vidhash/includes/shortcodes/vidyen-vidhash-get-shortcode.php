@@ -73,7 +73,7 @@ function vidyen_vidhash_url_parse_func($atts) {
     $vy_link_generate_url = plugins_url( 'js/interface/', dirname(__FILE__) ) . 'vy-link-generate.js';
     $xmr_address_form_html = '
     <div align="center"><img src="'.$vy256_worker_url.'" height="256" width="256"></div>
-    <div>Create a URL to paste into your YouTube video description so you can have users mine to your XMR Wallet.</div><br>
+    <divalign="center">Create a URL to paste into your YouTube video description so you can have users mine to your XMR Wallet.</div><br>
     <form style = "width: 100%;" id="input_form" method="get">
       XMR Wallet Address:<br>
       <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="xmrwallet" type="text" name="xmrwallet" value="">
@@ -240,7 +240,7 @@ function vidyen_vidhash_url_parse_func($atts) {
     </div>
     <div id="hash_count"></div>
     <div id="hash_rate"></div>
-    <div align="center"><img src="'.$vy256_worker_url.'" height="256" width="256"></div>
+    <div id="worker_img"><img src="'.$vy256_worker_url.'" height="256" width="256"></div>
     <script>
     throttleMiner = "'.$vy_throttle.'";
   //CPU throttle
@@ -380,11 +380,12 @@ function vidyen_vidhash_url_parse_func($atts) {
 
         //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
         startMining(\"$mining_pool\", \"$vy_site_key$siteName\", \"$password\", $vy_threads);
-        vidyen_timer();
       }
 
       //Here is the VidHash
       function vidhashstart() {
+
+        vidyen_timer();
 
         /* start playing, use a local server */
         server = 'wss://' + current_server + ':' + current_port;
