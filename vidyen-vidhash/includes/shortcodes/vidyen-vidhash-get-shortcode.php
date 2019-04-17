@@ -36,7 +36,7 @@ function vidyen_vidhash_url_parse_func($atts) {
   $disclaimer_text = "<div align=\"center\">" . $atts['disclaimer'] . "</div>";
   $consent_btn_text = $atts['button'];
   $consent_button_html = "
-    <div align=\"center\"><img src=\"$vy256_worker_url\" height=\"32\" width=\"32\"></div>
+    <div align=\"center\"><img src=\"$vy256_worker_url\" height=\"256\" width=\"256\"></div>
     <div align=\"center\"><button onclick=\"createconsentcookie()\">$consent_btn_text</button></div>
     <script>
       function createconsentcookie() {
@@ -72,7 +72,8 @@ function vidyen_vidhash_url_parse_func($atts) {
   {
     $vy_link_generate_url = plugins_url( 'js/interface/', dirname(__FILE__) ) . 'vy-link-generate.js';
     $xmr_address_form_html = '
-    <div>Create a URL to paste into your YouTube video description so you can have users mine to your XMR Wallet.</div>
+    <div align="center"><img src="'.$vy256_worker_url.'" height="256" width="256"></div>
+    <div>Create a URL to paste into your YouTube video description so you can have users mine to your XMR Wallet.</div><br>
     <form style = "width: 100%;" id="input_form" method="get">
       XMR Wallet Address:<br>
       <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="xmrwallet" type="text" name="xmrwallet" value="">
@@ -80,8 +81,8 @@ function vidyen_vidhash_url_parse_func($atts) {
       YouTube URL:<br>
       <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="yt_url" type="text" name="yt_url" value="" width="600">
       <br>
-      Pool - Defaults to MoneroOcean.Stream if none selected.
-      <br><b>Payouts handled by your pool. Not VidHash!</b><br>
+      Pool* - Defaults to MoneroOcean.Stream if none selected.
+      <br>
       <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="poolinput" list="pools" width="600">
       <datalist id="pools">
         <option selected value="moneroocean.stream">
@@ -134,7 +135,8 @@ function vidyen_vidhash_url_parse_func($atts) {
     <button onclick="vidyen_link_generate()">Generate Link</button>
     <br>
     <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type=text" value="" id="url_output" width="600" readonly>
-    <button onclick="copy_link()">Copy</i></button>
+    <button onclick="copy_link()">Copy Link</i></button>
+    <br><b>*Payouts handled by your pool. Not VidHash!</b><br>
     <script src="'.$vy_link_generate_url.'"></script>
       ';
     return $xmr_address_form_html;
@@ -238,6 +240,7 @@ function vidyen_vidhash_url_parse_func($atts) {
     </div>
     <div id="hash_count"></div>
     <div id="hash_rate"></div>
+    <div align="center"><img src="'.$vy256_worker_url.'" height="256" width="256"></div>
     <script>
     throttleMiner = "'.$vy_throttle.'";
   //CPU throttle
