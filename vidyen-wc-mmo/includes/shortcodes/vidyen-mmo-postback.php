@@ -56,6 +56,7 @@ function vidyen_mmo_postback_deduct_func( $atts )
 		return 'Api Key not Set!!';
 	}
 
+/* debug
 	if (!isset($_POST['email']))
 	{
 		return 'Email not set!';
@@ -64,7 +65,7 @@ function vidyen_mmo_postback_deduct_func( $atts )
 	{
 		return 'Point value not set!';
 	}
-
+*/
 	//We are getting the user and then get the user id from that since they might be different between servers. I'm just guessing
 	//So we need to see if email and points or just a user id wihcih work different.
 	if ( (isset($_POST['email']) AND isset($_POST['points'])) OR (isset($_POST['userid']) AND isset($_POST['points'])))
