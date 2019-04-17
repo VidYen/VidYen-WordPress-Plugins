@@ -106,6 +106,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.3.7 =
+
+- Add: RPG Fantasy Miner Animations `graphic=fantasy`
+
 = 2.3.6 =
 
 - Fix: Console log information should only display in miner when `debug=TRUE` is on reducing memory footprint.
