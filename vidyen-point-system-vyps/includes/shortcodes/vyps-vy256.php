@@ -189,9 +189,15 @@ function vyps_vy256_solver_func($atts) {
       $rand_choice = mt_rand(5,5); //I know its randomly picking one number
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
     }
+    elseif ($graphic_choice == 'cyber')
+    {
+      $rand_choice = mt_rand(3,3); //I know its randomly picking one number
+      $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
+    }
     else
     {
-      $current_graphic = $graphic_list[$graphic_choice];
+      $rand_choice = intval($graphic_choice); //has to be a number at this point
+      $current_graphic = $graphic_list[$rand_choice];
     }
 
     if ($sm_site_key == '' AND $siteName == '')
