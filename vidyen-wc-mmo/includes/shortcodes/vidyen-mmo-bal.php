@@ -54,6 +54,10 @@ function vidyen_mmo_bal_func()
 	{
 		$ww_bal_html_output .= '<script>var woo_installed = 1;</script>';
 	}
+	else
+	{
+		$ww_bal_html_output .= '<script>var woo_installed = 0;</script>';
+	}
 
 	return $ww_bal_html_output;
 }

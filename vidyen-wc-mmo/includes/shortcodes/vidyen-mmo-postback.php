@@ -4,6 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //NOTE: This is designed for post backs of MMO systems with VidYen
 
+//Responses
+//-1 unknown error
+//0 = default, no transact
+//1 = success
+//2 = no user id found on
+
 function vidyen_mmo_postback_deduct_func( $atts )
 {
 	//NOTE: The admin needs to set the post back correctly. We will have no idea what the user id will be as it will be fed into the system by the post back
@@ -81,6 +87,10 @@ function vidyen_mmo_postback_deduct_func( $atts )
 			$loa_user_id = sanitize_text_field($_POST['userid']);
 			$user_id = vidyen_mmo_loa_user_query_func($loa_user_id);
 			//$user_id = 1; //Hard coded for now
+			if ($user_id < 1)
+			{
+				return 2; //Error code for user id not found. Game client should tell them to find in game id and put it in website.
+			}
 		}
 
 		//$user_id = 2;
@@ -118,7 +128,7 @@ function vidyen_mmo_postback_deduct_func( $atts )
 		//The rest of the post back isn't needed. I will delete but will make a different page for ads or balances.
 	}
 
-	return "Unknown error!";
+	return -1; //Uknown reason
 }
 
 /* Telling WP to use function for shortcode */
