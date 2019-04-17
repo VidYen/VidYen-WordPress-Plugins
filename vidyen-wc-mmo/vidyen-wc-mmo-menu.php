@@ -126,7 +126,7 @@ function vidyen_wc_mmo_sub_menu_page()
 	<h2>API Key Copy and Paste</h2>
 	<p>'.$api_key.'</p>
 	<h2>Shortcode</h2>
-	<p><b>[vyps-mmo-bal]</b> for live balance.</p>
+	<p><b>[vidyen-mmo-bal]</b> for live balance.</p>
 	<p><b>[vyps-mmo-pe]</b> for live point exchange.</p>
 	<p><b>[vidyen-mmo-deduct point_id=2 apikey=(set here on in MMO menu)]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
 	<p><b>[vidyen-mmo-api-bal mode=GET gui=TRUE point_id=7]</b> This is a postback page for external curls. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
