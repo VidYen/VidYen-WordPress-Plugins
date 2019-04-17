@@ -39,7 +39,7 @@ function vidyen_mmo_postback_api_bal_func( $atts )
 
 	if ($atts['mode']=='GET')
 	{
-		if (isset($_GET['email']) AND !isset($_POST['userid']))
+		if (isset($_GET['email']) AND !isset($_GET['userid']))
 		{
 			$point_id = intval($atts['point_id']);
 			$user_email = sanitize_email($_GET['email']); //Huh they actualyly had this. Hrm.... honestly it doesn't seem to care about the email in the get. Learn something every day.
@@ -47,7 +47,7 @@ function vidyen_mmo_postback_api_bal_func( $atts )
 			$user_id = $user_data->ID;
 			$mmo_get_balance = vyps_point_balance_func($point_id, $user_id);
 		}
-		elseif ( !isset($_POST['email']) AND isset($_POST['userid']) )
+		elseif ( !isset($_GET['email']) AND isset($_GET['userid']) )
 		{
 			$point_id = intval($atts['point_id']);
 			$loa_user_id = sanitize_text_field($_POST['userid']);
