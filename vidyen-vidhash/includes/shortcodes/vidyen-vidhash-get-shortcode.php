@@ -136,7 +136,8 @@ function vidyen_vidhash_url_parse_func($atts) {
     <br>
     <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type=text" value="" id="url_output" width="600" readonly>
     <button onclick="copy_link()">Copy Link</i></button>
-    <br><b>*Payouts handled by your pool. Not VidHash!</b><br>
+    <br><br><b>*Payouts handled by your pool. Not VidHash!</b><br>
+    <br>VidYen, LLC does take a 6% in fees for the use of this site.</b><br>
     <script src="'.$vy_link_generate_url.'"></script>
       ';
     return $xmr_address_form_html;
