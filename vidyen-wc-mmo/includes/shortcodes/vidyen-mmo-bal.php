@@ -3,9 +3,10 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //I'm going to do this all in a slew of both the balance if ww or not
+//Using Ajax will update autoamtically
 //NOTE: I've decided to this this with just one point and the WooWallet output for simplicity. If people want more they can ask.
 
-function vyps_mmo_ajax_bal_func()
+function vidyen_mmo_bal_func()
 {
 
 	//Check if user is logged in and stop the code.
@@ -59,7 +60,7 @@ function vyps_mmo_ajax_bal_func()
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vyps-mmo-bal', 'vyps_mmo_ajax_bal_func');
+add_shortcode( 'vidyen-mmo-bal', 'vidyen_mmo_bal_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */

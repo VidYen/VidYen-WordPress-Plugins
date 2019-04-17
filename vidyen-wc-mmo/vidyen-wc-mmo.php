@@ -3,7 +3,7 @@
 Plugin Name:  VidYen MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  MMO Support Plugin
-Version:      0.1.6
+Version:      0.1.7
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -79,11 +79,11 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_b
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_loa_user_query_func.php'); //Adds meta check
 
 /*** Shortcodes ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-ajax-bal.php'); //Ajax Balance
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-bal.php'); //Ajax Balance
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Ajax Point Exchange
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-postback.php'); //Post back for game transfers
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-api-bal.php'); //Post back for game transfers
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-player-id.php'); //Stores the LOA Player ID
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-loa-id.php'); //Stores the LOA Player ID
 
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-wc-mmo-menu.php'); //Order 600
