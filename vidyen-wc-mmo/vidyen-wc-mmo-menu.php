@@ -15,8 +15,8 @@ add_action('admin_menu', 'vidyen_wc_mmo_sub_menu', 600 );
 function vidyen_wc_mmo_sub_menu()
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "VidYen WooCommerce MMO";
-  $menu_title = 'WooCommerce MMO';
+	$page_title = "VidYen MMO";
+  $menu_title = 'MMO Menu';
 	$capability = 'manage_options';
   $menu_slug = 'vyps_wc_mmo_page';
   $function = 'vidyen_wc_mmo_sub_menu_page';

@@ -59,11 +59,11 @@ function vidyen_mmo_loa_id_func()
   //displaying loa_id if EXISTS
   if (strlen($loa_id) > 1)
   {
-    $display_loa_id = "Current XMR Address:<br>" . $loa_id; //I'm really guessing here as just assuming that if they put in more than one. Probaly should do validation somewhere down road
+    $display_loa_id = "Current LoA ID:<br>" . $loa_id; //I'm really guessing here as just assuming that if they put in more than one. Probaly should do validation somewhere down road
   }
   else
   {
-    $display_loa_id = "Add your XMR Payout Wallet:"; //Just some text
+    $display_loa_id = "Add your LoA ID:"; //Just some text
   }
 
   $form_result_ouput = "
@@ -74,7 +74,7 @@ function vidyen_mmo_loa_id_func()
             <tbody>
               <tr class=\"form-field form-required\">
                 <th scope=\"row\">
-                  <label for=\"loa_id\">Update XMR Wallet Address:</label>
+                  <label for=\"loa_id\">Update LoA ID:</label>
                 </th>
                 <td>
                   <input name=\"loa_id\" type=\"text\" id=\"loa_id\" value=\"$loa_id\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"256\">
@@ -96,3 +96,19 @@ function vidyen_mmo_loa_id_func()
 
 //Adding the shortcode.
 add_shortcode( 'vidyen-loa-id', 'vidyen_mmo_loa_id_func');
+
+//Some debuging going on here.
+function vidyen_load_id_shortcode_func($atts)
+{
+
+  $atts = shortcode_atts(
+		array(
+				'loa_id' => 'empty'
+		), $atts, 'vyps-loa-query' );
+
+    $loa_user_id = $atts['loa_id'];
+
+    return vidyen_mmo_loa_user_query_func($loa_user_id);
+}
+
+add_shortcode( 'vyps-loa-query', 'vidyen_load_id_shortcode_func');

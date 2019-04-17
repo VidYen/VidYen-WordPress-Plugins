@@ -8,7 +8,25 @@ function vidyen_mmo_loa_user_query_func($loa_user_id)
 {
 	$user_query = new WP_User_Query( array( 'meta_key' => 'vidyen_mmo_loa_id', 'meta_value' => $loa_user_id ) );
 
-	$user_id_output = $user_query[0]; //returns the first person with id. Not good at all but will fix laters
+	$users = $user_query->get_results();
 
-	return $user_id_output;
+	//Thi is a bit hackey. Basically it does a for loop and stop on the first one otherwise if none found returns a 0.
+	if ( ! empty( $users ) )
+	{
+	    foreach ( $users as $user )
+			{
+	        // get all the user's data
+	        $user_info = get_userdata( $user->ID );
+	        $output_result = $user_info->ID;
+					return intval($output_result);
+	    }
+		}
+		else
+		{
+	    return 0;
+		}
+		//print_r($users[0]);
+	return;
+
+	//return 'There should be something here: '. $users[0];
 }
