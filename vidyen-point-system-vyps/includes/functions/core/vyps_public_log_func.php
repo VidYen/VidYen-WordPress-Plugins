@@ -122,14 +122,19 @@ function vyps_public_log_func($atts)
 
 	if ( $admin_on == TRUE AND $user_id == 0 )
 	{
-		if ($page_number > 25 AND $page_number <= ($amount_of_pages -25 )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
+		if ( $amount_of_pages < 25)
+		{
+			 $page_number_start = 1;
+			 $page_number_end  = $amount_of_pages;
+		}
+		elseif ($page_number > 25 AND $page_number <= ($amount_of_pages -25 )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
 		{
 			$page_number_start = $page_number - 25;
 			$page_number_end = $page_number + 25;
 		}
-		elseif( $page_number >= ($amount_of_pages -25 ))
+		elseif( $page_number >= ($amount_of_pages - 25 ))
 		{
-			$page_number_start = $amount_of_pages -25;
+			$page_number_start = $amount_of_pages - 25;
 			$page_number_end = $amount_of_pages;
 		}
 		else
@@ -172,7 +177,12 @@ function vyps_public_log_func($atts)
 		$page_button_output = '<li><a href="?action=1">First</a></li>'; //First boot strap
 
 
-		if ($page_number > $max_pages_middle AND $page_number <= ($amount_of_pages - $max_pages_middle )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
+		if ( $amount_of_pages < $max_pages_middle)
+		{
+			 $page_number_start = 1;
+			 $page_number_end  = $amount_of_pages;
+		}
+		elseif ($page_number > $max_pages_middle AND $page_number <= ($amount_of_pages - $max_pages_middle )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
 		{
 			$page_number_start = $page_number - $max_pages_middle;
 			$page_number_end = $page_number + $max_pages_middle;
@@ -210,8 +220,12 @@ function vyps_public_log_func($atts)
 		//NOTE: Reset the HTML since bootstrap
 		$page_button_output = '<a href="?action=1">First</a>&nbsp;|&nbsp;'; //First non boot strap
 
-
-		if ($page_number > $max_pages_middle AND $page_number <= ($amount_of_pages - $max_pages_middle )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
+		if ( $amount_of_pages < $max_pages_middle)
+		{
+			 $page_number_start = 1;
+			 $page_number_end  = $amount_of_pages;
+		}
+		elseif ($page_number > $max_pages_middle AND $page_number <= ($amount_of_pages - $max_pages_middle )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
 		{
 			$page_number_start = $page_number - $max_pages_middle;
 			$page_number_end = $page_number + $max_pages_middle;
