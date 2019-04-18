@@ -50,7 +50,7 @@ function vidyen_mmo_postback_api_bal_func( $atts )
 		elseif ( !isset($_GET['email']) AND isset($_GET['userid']) )
 		{
 			$point_id = intval($atts['point_id']);
-			$loa_user_id = sanitize_text_field($_POST['userid']);
+			$loa_user_id = sanitize_text_field($_GET['userid']);
 			$user_id = vidyen_mmo_loa_user_query_func($loa_user_id);
 			//$user_id = 1; //Hard coded for now
 			$mmo_get_balance = vyps_point_balance_func($point_id, $user_id);
