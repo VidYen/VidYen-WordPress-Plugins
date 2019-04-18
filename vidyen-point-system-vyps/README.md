@@ -108,7 +108,8 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.3.7 =
 
-- Add: RPG Fantasy Miner Animations `graphic=fantasy`
+- Add: RPG Fantasy Miner Animations `graphic=fantasy` for peasant miner and `graphc=cyber` for cyber miner.
+- Fix: Log pagination fix for those with large amounts of user activity. `pages=25` can set to whatever number you wish for your page.
 
 = 2.3.6 =
 

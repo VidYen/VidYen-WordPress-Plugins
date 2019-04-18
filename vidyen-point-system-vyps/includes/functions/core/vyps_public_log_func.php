@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Main Public Log shortcode function */
 
-function vyps_public_log_func( $atts ) {
+function vyps_public_log_func($atts)
+{
 
 	/* Technically users don't have to be logged in
 	* Should litterally be the log the admin sees
@@ -29,6 +30,7 @@ function vyps_public_log_func( $atts ) {
 				'uid' => FALSE,
 				'admin' => FALSE,
 				'current' => FALSE,
+				'pages' => 10, //How many pages will have
 		), $atts, 'vyps-pl' );
 
 	$point_id = $atts['pid'];
@@ -39,6 +41,8 @@ function vyps_public_log_func( $atts ) {
 	$boostrap_on = $atts['bootstrap'];
 	$admin_on = $atts['admin'];
 	$current_user_state = $atts['current'];
+	$max_pages = $atts['pages'];
+	$max_pages_middle = intval($max_pages/2); //The middle in theory. I guess?
 
 	//So users can see their own transcations, I'm putting this shortcode hoook in.
 	if ($current_user_state == TRUE)
@@ -80,26 +84,24 @@ function vyps_public_log_func( $atts ) {
 	$reason_label = "Adjustment Reason";
 
 	//this code below checks the gets and determines the page nation
-	if (isset($_GET['action'])){
-
+	if (isset($_GET['action']))
+	{
 		$page_number = intval(htmlspecialchars($_GET['action']));
-
-	} else{
-
+	}
+	else
+	{
 		$page_number = 1; //Well... Always first.
-
 	}
 
 	//Adding the UID option to show in the admin panel of if the admin wants to turn on the public log for some reason.
 	//NOTE: have decided to use the function log as the log itself.
-	if ( $uid_on == TRUE ){
-
+	if ( $uid_on == TRUE )
+	{
 		$uid_label_row = "<th>$user_id_label</th>";
-
-	} else {
-
+	}
+	else
+	{
 		$uid_label_row = ""; //Defined and set to blank to if need to display.
-
 	}
 
 	//Header output is also footer output if you have not noticed.
@@ -116,72 +118,133 @@ function vyps_public_log_func( $atts ) {
 			</tr>
 	";
 
-	$page_button_output = ''; //Needs a define
+	$page_button_output = '<a href="?page=admin_log&action=1">First</a>&nbsp;|&nbsp;'; //Needs a first
 
-	if ( $admin_on == TRUE AND $user_id == 0 ) {
+	if ( $admin_on == TRUE AND $user_id == 0 )
+	{
+		if ($page_number > 25 AND $page_number <= ($amount_of_pages -25 )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
+		{
+			$page_number_start = $page_number - 25;
+			$page_number_end = $page_number + 25;
+		}
+		elseif( $page_number >= ($amount_of_pages -25 ))
+		{
+			$page_number_start = $amount_of_pages -25;
+			$page_number_end = $amount_of_pages;
+		}
+		else
+		{
+			$page_number_start = 1;
+			$page_number_end = 50;
+		}
 
 		//This is for the admin menus. Have to have special to add the link for page=vyps_admin_log and its just the whole log AKA user_id == 0
 		//NOTE: No need for nonce as not inputing data or POST-ing //NOTE NOTE I feel this is lazy coding and should be revisted later.
-		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
+		for ($p_for_count = $page_number_start; $p_for_count <= $page_number_end; $p_for_count = $p_for_count + 1 ) //Count starts at 2
+		{
 
 			$page_button = "<a href=\"?page=admin_log&action=$p_for_count\">$p_for_count</a>&nbsp;|&nbsp;";
 
-			$page_button_output = $page_button_output . $page_button;
+			$page_button_output .= $page_button;
 			//end for
 		}
+
+		$page_button_output .= '<a href="?page=admin_log&action='.$amount_of_pages.'">Last</a>'; //Needs a last
 
 		$page_button_row_output = "
 			<div class=\"pagination\">
 				$page_button_output
 			</div>";
 		//end of non bootstrap else
-
-	} elseif ( $admin_on == TRUE AND $user_id > 0 ) {
-
+	}
+	elseif ( $admin_on == TRUE AND $user_id > 0 )
+	{
 		//NOTE: Due to the issues with nonce, I'm just goin got show the last transactions.
 
 		$page_button_output = "User Point Log - $table_row_limit most recent";
 		$page_button_row_output = "<ul class=\"pagination\">$page_button_output</ul>";
 
 		//I'm going to need to figure out what to do about the page headers here.
+	}
+	elseif ($boostrap_on == 'yes' OR $boostrap_on == 'YES' OR $boostrap_on =='Yes')
+	{
+		//NOTE: Reset the HTML since bootstrap
+		$page_button_output = '<li><a href="?action=1">First</a></li>'; //First boot strap
 
-	} elseif ($boostrap_on == 'yes' OR $boostrap_on == 'YES' OR $boostrap_on =='Yes'){
+
+		if ($page_number > $max_pages_middle AND $page_number <= ($amount_of_pages - $max_pages_middle )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
+		{
+			$page_number_start = $page_number - $max_pages_middle;
+			$page_number_end = $page_number + $max_pages_middle;
+		}
+		elseif( $page_number >= ($amount_of_pages - $max_pages_middle ))
+		{
+			$page_number_start = $amount_of_pages - $max_pages_middle;
+			$page_number_end = $amount_of_pages;
+		}
+		else
+		{
+			$page_number_start = 1;
+			$page_number_end = $max_pages;
+		}
 
 		//Ok. Just going to loop for nubmer of pages.
-		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
-
+		for ($p_for_count = $page_number_start; $p_for_count <= $page_number_end; $p_for_count = $p_for_count + 1 )
+		{
 			$page_button = "<li><a href=\"?action=$p_for_count\">$p_for_count</a></li>";
 
-			$page_button_output = $page_button_output . $page_button;
+			$page_button_output .= $page_button;
 			//end for
 		}
+
+		$page_button_output .= '<li><a href="?action='.$amount_of_pages.'">Last</a></li>'; //Last boot strap
 
 		$page_button_row_output = "
 			<ul class=\"pagination\">
 				$page_button_output
 			</ul>";
 		//end of bootstrap if
+	}
+	else
+	{
+		//NOTE: Reset the HTML since bootstrap
+		$page_button_output = '<a href="?action=1">First</a>&nbsp;|&nbsp;'; //First non boot strap
 
-	} else {
+
+		if ($page_number > $max_pages_middle AND $page_number <= ($amount_of_pages - $max_pages_middle )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
+		{
+			$page_number_start = $page_number - $max_pages_middle;
+			$page_number_end = $page_number + $max_pages_middle;
+		}
+		elseif( $page_number >= ($amount_of_pages - $max_pages_middle ))
+		{
+			$page_number_start = $amount_of_pages - $max_pages_middle;
+			$page_number_end = $amount_of_pages;
+		}
+		else
+		{
+			$page_number_start = 1;
+			$page_number_end = $max_pages;
+		}
 
 		//this meeans we got no boostrap so it's just links.
 		//Ok. Just going to loop for nubmer of pages.
-		for ($p_for_count = 1; $p_for_count <= $amount_of_pages; $p_for_count = $p_for_count + 1 ) {
-
+		for ($p_for_count = $page_number_start; $p_for_count <= $page_number_end; $p_for_count = $p_for_count + 1 )
+		{
 			$page_button = "<a href=\"?action=$p_for_count\">$p_for_count</a>&nbsp;|&nbsp;";
 
 			$page_button_output = $page_button_output . $page_button;
 			//end for
 		}
 
+		$page_button_output .= '<a href="?action='.$amount_of_pages.'">Last</a>'; //Last boot strap
+
 		$page_button_row_output = "
 			<div class=\"pagination\">
 				$page_button_output
 			</div>";
 		//end of non bootstrap else
-
 	}
-
 
 	//Because the shortcode version won't have this
 	//	<h1 class=\"wp-heading-inline\">Public Point Log</h1> this was commented out. I don't think it was needed as admin can put any text in they want.
