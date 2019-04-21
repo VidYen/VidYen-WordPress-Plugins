@@ -79,9 +79,9 @@ function vidyen_mmo_postback_register_func( $atts )
 
 		//Ok now we know the user is on site.
 		$loa_user_id = sanitize_text_field($_POST['userid']);
-		$user_id = vidyen_mmo_loa_user_query_func($loa_user_id);
+		$loa_id_check = intval(vidyen_mmo_loa_user_query_func($loa_user_id));
 		//$user_id = 1; //Hard coded for now
-		if ($user_id > 1)
+		if ($loa_id_check > 1)
 		{
 			return 0; //Id was already found
 		}
@@ -90,7 +90,9 @@ function vidyen_mmo_postback_register_func( $atts )
 		$key = 'vidyen_mmo_loa_id';
 		//Ok now we just register it.
 
-		update_user_meta( $user_id, $key, $loa_id );
+		update_user_meta( $user_id, $key, $loa_user_id );
+
+		return 1; //sucess.
 
 	}
 

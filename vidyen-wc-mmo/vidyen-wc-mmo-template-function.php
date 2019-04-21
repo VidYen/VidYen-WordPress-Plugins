@@ -51,7 +51,7 @@ class vidyenMMOPageTemplater {
 		);
 		// Add your templates to this array.
 		$this->templates = array(
-			'vidyen-wc-mmo-template.php' => 'vidyen MMO Template',
+			'vidyen-wc-mmo-template.php' => 'VidYen MMO Template',
 		);
 	}
 	/**

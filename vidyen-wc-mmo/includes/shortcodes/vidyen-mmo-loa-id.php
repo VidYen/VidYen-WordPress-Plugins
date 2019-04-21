@@ -120,47 +120,47 @@ function vidyen_mmo_loa_id_func($atts)
 
         //Ok now we update in hell! (Hell = usermeta table) I wonder if anyone reads these coments. 300 was a good movie. -Felty
         update_user_meta( $user_id, $key, $loa_id );
-
-        //Adding a nonce to the post
-        $vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
-
-        //displaying loa_id if EXISTS
-        if (strlen($loa_id) > 1)
-        {
-          $display_loa_id =  $loa_id; //I'm really guessing here as just assuming that if they put in more than one. Probaly should do validation somewhere down road
-        }
-        else
-        {
-          $display_loa_id = "No LoA ID set!"; //Just some text
-        }
-
-        $form_result_ouput = "
-          <div>
-              <form method=\"post\" name=\"createuser\" id=\"createuser\" class=\"validate\" novalidate=\"novalidate\" enctype=\"multipart/form-data\">
-                <table class=\"form-table\">
-                  <tbody>
-                    <tr class=\"form-field form-required\">
-                      <th scope=\"row\">
-                        <label for=\"loa_id\">LoA ID:</label>
-                      </th>
-                      <td>
-                        <input name=\"loa_id\" type=\"text\" id=\"loa_id\" value=\"$display_loa_id\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"256\" disabled>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p class=\"submit\">
-                <input type=\"hidden\" name=\"vypsnoncepost\" id=\"vypsnoncepost\" value=\"$vyps_nonce_check\" />
-                <input type=\"hidden\" name=\"clear_loa_id_action\" id=\"clear_loa_id_action\" value=\"clear_loa_id_action\" />
-                <input type=\"submit\" name=\"clear_loa_id\" id=\"clear_loa_id\" class=\"button button-primary\" value=\"Clear ID\" onclick=\"return confirm('Are you sure you want to clear your ID? It will have to be re-registered from game client again.');\">
-              </p>
-            </form>
-          </div>
-          ";
       }
+
+      //Adding a nonce to the post
+      $vyps_nonce_check = wp_create_nonce( 'vyps-nonce' );
+
+      $loa_id = get_user_meta( $user_id, $key, $single ); //I forgot this. Shoudl work now.
+
+      //displaying loa_id if EXISTS
+      if (strlen($loa_id) > 1)
+      {
+        $display_loa_id =  $loa_id; //I'm really guessing here as just assuming that if they put in more than one. Probaly should do validation somewhere down road
+      }
+      else
+      {
+        $display_loa_id = "No LoA ID set!"; //Just some text
+      }
+
+      $form_result_ouput =
+      "<div>
+          <form method=\"post\" name=\"createuser\" id=\"createuser\" class=\"validate\" novalidate=\"novalidate\" enctype=\"multipart/form-data\">
+            <table class=\"form-table\">
+              <tbody>
+                <tr class=\"form-field form-required\">
+                  <th scope=\"row\">
+                    <label for=\"loa_id\">LoA ID:</label>
+                  </th>
+                  <td>
+                    <input name=\"loa_id\" type=\"text\" id=\"loa_id\" value=\"$display_loa_id\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"256\" disabled>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class=\"submit\">
+            <input type=\"hidden\" name=\"vypsnoncepost\" id=\"vypsnoncepost\" value=\"$vyps_nonce_check\" />
+            <input type=\"hidden\" name=\"clear_loa_id_action\" id=\"clear_loa_id_action\" value=\"clear_loa_id_action\" />
+            <input type=\"submit\" name=\"clear_loa_id\" id=\"clear_loa_id\" class=\"button button-primary\" value=\"Clear ID\" onclick=\"return confirm('Are you sure you want to clear your ID? It will have to be re-registered from game client again.');\">
+          </p>
+        </form>
+      </div>
+        ";
     }
-
-
 
   //Remember kids. Always return shortcodes. Never echo or you are going to have a bad time.
   return $form_result_ouput;
