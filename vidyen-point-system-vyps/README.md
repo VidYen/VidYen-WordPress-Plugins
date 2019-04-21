@@ -108,7 +108,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.3.8 =
 
-- Add: Reward timers with no inputs with a cleaner interface. (I actually needed this for a project) `[vidyen-reward-timer]`
+- Add: Reward timers with no inputs with a cleaner interface. (I actually needed this for a personal project) `[vidyen-reward-timer outputid=3 outputamount=100 minutes=5]`
 
 = 2.3.7 =
 
