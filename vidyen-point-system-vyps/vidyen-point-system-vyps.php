@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      2.3.7
+Version:      2.3.8
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -192,6 +192,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); /
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-refer.php'); //Referal shortcode display shortcode.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps_refer_balance.php'); //Referal balance shortcdoe. I really need to functionize this.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-quads.php'); //QUADS the game. Moving to a new tomorrow!
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-reward-timers.php'); //QUADS the game. Moving to a new tomorrow!
 
 /*** End of Shortcode Includes ***/
 
@@ -210,8 +211,10 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_icon_
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_icon_url_func.php'); //Need to get the url just by itself.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_balance_func.php'); //I neeced a raw balance function
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_earned_func.php'); //More for the MMO but it should go here since sites could use it.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_credit_func.php'); //Streamlined credit
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_deduct_func.php'); //Streamlined deduct
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_debug_func.php'); //Debug mode. Reduces memory footprint of miner.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_timer.php'); //Timer moved to its own function since more than one short code using it
 
 /*** MO API ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now

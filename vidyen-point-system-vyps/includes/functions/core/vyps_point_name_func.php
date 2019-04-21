@@ -8,8 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //Seem to be doing it a lot so might as well be professional about code now instead of copying and pasting every time
 
 /*** POINT NAME FUNCTION ***/
-function vyps_point_name_func($point_id) {
-
+function vyps_point_name_func($point_id)
+{
   //The usual suspects to get the sql calls up
   global $wpdb;
 	$table_name_points = $wpdb->prefix . 'vyps_points';

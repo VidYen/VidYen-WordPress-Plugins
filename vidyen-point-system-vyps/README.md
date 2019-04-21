@@ -106,6 +106,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.3.8 =
+
+- Add: Reward timers with no inputs with a cleaner interface. (I actually needed this for a project) `[vidyen-reward-timer]`
+
 = 2.3.7 =
 
 - Add: RPG Fantasy Miner Animations `graphic=fantasy` for peasant miner and `graphc=cyber` for cyber miner.

@@ -7,17 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Added prepare() to all SQL SELECT calls 7.1.2018 */
 
-//Oh. Maybe I should put this elsewhere but I have foudn this nifty code off https://stackoverflow.com/questions/8273804/convert-seconds-into-days-hours-minutes-and-seconds
-//So I'm putting it here as a function. Will use elsewhere mayhaps. If so will fix later.
-//NOTE: This is the time converstion
-function vyps_secondsToTime($seconds) {
-    $dtF = new \DateTime('@0');
-    $dtT = new \DateTime("@$seconds");
-    return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes, and %s seconds');
-}
-
-function vyps_point_exchange_func( $atts ) {
-
+function vyps_point_exchange_func( $atts )
+{
 	//The shortcode attributes need to come before the button as they determine the button value
 
 	$atts = shortcode_atts(

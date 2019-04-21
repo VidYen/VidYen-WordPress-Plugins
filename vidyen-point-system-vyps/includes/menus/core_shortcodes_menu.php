@@ -88,6 +88,9 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>[vyps-pe firstid=3 outputid=3 firstamount=1000 outputamount=1000 transfer=true]</p>
   <p>If a user has set a referral code from another user, they user can do a point transfer to that referral user. It is recommended to put this on your referral page so they can see to whom the points are going. This is handy for multi-account users who want to mine with more than one device.</p>
   <p>Note: This is also very experimental and may create a gray market on your site if enabled. You can Set the outputamount to something less than the firstamount to impose a minimal fee to prevent abuse.</p>
+  <h2>Simple Reward Timer</h2>
+  <p><b>[vidyen-reward-timer outputid=3 outputamount=100 minutes=5]</b></p>
+  <p>Useful for daily login rewards. You can use minutes, hours, days for the shortcode. Requires no input.</p>
   <h2>Login Awareness Shortcode</h2>
  	<p>Other plugins do this. It provides a quick way to let users know they are logged off and, therefore, cannot interact with VYPS.</p>
  	<p><b>[vyps-lg]</b></p>
