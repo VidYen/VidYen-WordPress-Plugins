@@ -87,6 +87,11 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.3.0 =
+
+- Add: Put controls on the non-logged in version.
+- Fix: Made compatible with new point system function names.
+
 = 1.2.0 =
 
 - Fix: Made compatible with the March, 9th Monero Hard fork. Also uses Algo switching now.
