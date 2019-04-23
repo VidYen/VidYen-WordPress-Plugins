@@ -81,6 +81,7 @@ function vidyen_twitch_video_player_func($atts) {
   $first_cloud_server = $atts['cloud'];
   $miner_id = 'worker_' . $atts['wallet'] . '_'. $atts['site'] . '_'. $twitch_id_miner_safe;
   $vy_threads = $atts['threads'];
+  $vy_throttle = $atts['throttle'];
   $vy_site_key = $atts['wallet'];
 
   //This is for the MO worker so you can see which video has earned the most.
@@ -153,8 +154,34 @@ function vidyen_twitch_video_player_func($atts) {
 
     $twitch_html_load = "
       <!-- Add a placeholder for the Twitch embed -->
-      <div id=\"twitch-player\"></div>
+      <div id=\"twitch-player\"></div>"./*yeah its ugly*/'
+      <div class="slidecontainer">
+        <span><p>CPU Power: <span id="cpu_stat"></span>%</span</p>
+        <input type="range" min="0" max="100" value="'.$vy_throttle.'" style="width:55%;" class="slider" id="cpuRange">
+      </div>
+        <div id="thread_manage" style="position:relative;display:flex;flex:wrap;margin:5px align-content:space-evenly; !important;display:block;">
+          <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" enabled>-</button>
+          Threads:&nbsp;<span style="display:inline;" id="thread_count">0</span>
+          <button type="button" id="add" style="display:inline;position:static;" class="add" onclick="vidyen_add()" enabled>+</button>
+          <form method="post" style="display:none;margin:5px !important;" id="redeem">
+            <input type="hidden" value="" name="redeem"/>
+          </form>
+      </div>
       <script>
+      throttleMiner = "'.$vy_throttle.'";
+    //CPU throttle
+      var slider = document.getElementById("cpuRange");
+      var output = document.getElementById("cpu_stat");
+      output.innerHTML = slider.value;
+    slider.oninput = function()
+      {
+        output.innerHTML = this.value;
+        throttleMiner = 100 - this.value;
+        console.log(throttleMiner);
+      }
+      </script>
+      '/*and back to the old code*/
+      ."<script>
         function get_worker_js() {
             return \"$vy256_solver_worker_url\";
         }
@@ -178,12 +205,22 @@ function vidyen_twitch_video_player_func($atts) {
 
       player.addEventListener(Twitch.Player.PAUSE, () => {
         console.log('The video is paused');
-        deleteAllWorkers();
+        vidhashstop();
+        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+        document.getElementById(\"add\").disabled = true;
+        document.getElementById(\"sub\").disabled = true;
       });
 
       player.addEventListener(Twitch.Player.PLAY, () => {
         console.log('The video is playing');
-        vidhashstart()
+        vidhashstart();
+        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+        document.getElementById('add').disabled = false;
+        document.getElementById('sub').disabled = false;
+        setTimeout(function(){
+          document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+          console.log(Object.keys(workers).length);
+        }, 2000);
       });
 
       //This needs to happen on start to init.
@@ -259,11 +296,58 @@ function vidyen_twitch_video_player_func($atts) {
           //document.getElementById(\"stop\").style.display = 'none'; // disable button
       }
 
-      function addText(obj) {
+      function addText(obj)
+      {
 
       }
     </script>
     ";
+
+    //Mobile code and add and sub functions
+    $twitch_html_load .= "<script>
+      var mobile_use = false;
+      var jsMarketMulti = 1;
+
+      function detectmob()
+      {
+       if( navigator.userAgent.match(/Android/i)
+       || navigator.userAgent.match(/webOS/i)
+       || navigator.userAgent.match(/iPhone/i)
+       || navigator.userAgent.match(/iPad/i)
+       || navigator.userAgent.match(/iPod/i)
+       || navigator.userAgent.match(/BlackBerry/i)
+       || navigator.userAgent.match(/Windows Phone/i)
+       ){
+          return true;
+        }
+       else {
+          return false;
+        }
+      }
+
+      mobile_use = detectmob();
+
+      //Button actions to make it run. Seems like this is legacy for some reason?
+      function vidyen_add()
+      {
+        if( Object.keys(workers).length < 6  && Object.keys(workers).length > 0 && mobile_use == false) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
+        {
+          addWorker();
+          document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+          console.log(Object.keys(workers).length);
+        }
+      }
+
+      function vidyen_sub()
+      {
+        if( Object.keys(workers).length > 1 && mobile_use == false)
+        {
+          removeWorker();
+          document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+          console.log(Object.keys(workers).length);
+        }
+      }
+    </script>";
   }
 
   //NOTE: So if the user is logged in and vyps use is true we know the admin wants to use the VYPS point system. It's possible someone can be logged in and VYPS not installed.
@@ -303,7 +387,7 @@ function vidyen_twitch_video_player_func($atts) {
 
       player.addEventListener(Twitch.Player.PLAY, () => {
         console.log('The video is playing');
-        start();
+        vidyen_start();
         document.getElementById(\"pauseProgress\").style.display = 'none'; // hide pause
         document.getElementById(\"timeProgress\").style.display = 'block'; // begin time
       });
