@@ -29,7 +29,7 @@ Current Version
 
 Extras
 --------
-There is a [VYPS combat game](https://github.com/VidYen/VYPS-combat-game) in another repo if you want to test.
+There is a [VYPS combat game](https://github.com/VidYen/VYPS-combat-game) in another repo if you want to test, but honestly we've moved to pre-existing games.
 
 
 About and Support
@@ -41,7 +41,7 @@ VidYen, LLC
 
 [VYPS WordPress Repo](https://wordpress.org/plugins/vidyen-point-system-vyps/)
 
-[VidYen Discord](https://discord.gg/6svN5sS) <- You can get live support here or at least Felt's attention. Do no abuse.
+[VidYen Discord](https://discord.gg/6svN5sS) <- You can get live support here or at least Felty's attention. Do no abuse.
 
 If you need an Adscend Media account and plan on using that feature please sign up through our referral code!
 
