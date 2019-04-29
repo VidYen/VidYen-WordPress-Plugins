@@ -45,5 +45,6 @@ function pull_mmo_stats()
 window.setInterval(function()
 {
 /// call your function here
+// I'm setting to 12 seconds to make less taxing on server
 pull_mmo_stats();
-}, 5000);
+}, 12000);
