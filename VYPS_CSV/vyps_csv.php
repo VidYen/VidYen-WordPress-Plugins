@@ -24,6 +24,8 @@
  */
 //Improved shortcode of public log.
 
+//Improved shortcode of public log.
+
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -260,9 +262,8 @@ class CSVExport {
    * Add extra menu items for admins
    */
   public function admin_menu() {
-    add_menu_page('Download Report', 'Download Report', 'manage_options', 'download_report', array($this, 'download_report'));
+    add_submenu_page('vyps_points', 'Download Report', 'Download Report', 'manage_options', 'download_report', array($this, 'download_report'));
   }
-
   /**
    * Allow for custom query variables
    */
@@ -289,7 +290,7 @@ class CSVExport {
     echo '<div id="icon-tools" class="icon32">
 </div>';
     echo '<h2>Download Report</h2>';
-    echo '<p><a href="?page=download_report&report=users">Export the Subscribers</a></p>';
+    echo '<p><a href="?page=download_report&report=users">Export to CSV</a></p>';
   }
 
   /**
