@@ -289,4 +289,4 @@ class CSVExport {
 }
 
 // Instantiate a singleton of this plugin
-$csvExport = new CSVExport($table_output);
+$csvExport = new CSVExport();
