@@ -8,14 +8,14 @@
  * that starts the plugin.
  *
  * @since             1.0.0
- * @package           vyps csv export
+ * @package           VidYen CSV Export
  *
  * @wordpress-plugin
  * Plugin Name:       VidYen CSV Export
  * Plugin URI:        https://github.com/VidYen/VidYen-WordPress-Plugins
  * Description:       Exports the VidYen Point Log to CSV
  * Version:           1.0.0
- * Author:            VidYen, LLC
+ * Author:            VidYen
  * Author URI:        http://vidyen.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -25,19 +25,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-/* Added prepare() to all SQL SELECT calls 7.1.2018 */
-
-/* Main Public Log shortcode function */
-
 function vyps_csv()
 {
-
-	/* Technically users don't have to be logged in
-	* Should litterally be the log the admin sees
-	* I don't care. Tell users to not put personal identificable
-	* information in their user name (referred to PID in the health care industry)
-	*/
-
 	//Shortcode stuff
 	//I'm going to eventually have site admins set logs for activities like reason etc and the meta fields, but for now.
 	$atts =
@@ -247,7 +236,7 @@ class CSVExport {
     }
 
 // Add extra menu items for admins
-    add_action('admin_menu', array($this, 'admin_menu'));
+    add_action('admin_menu', array($this, 'admin_menu'), 610);
 
 // Create end-points
     add_filter('query_vars', array($this, 'query_vars'));
