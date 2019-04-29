@@ -11,21 +11,17 @@
  * @package           vyps csv export
  *
  * @wordpress-plugin
- * Plugin Name:       vyps csv
- * Plugin URI:        http://example.com/plugin-name-uri/
- * Description:       exports csvs derrr
+ * Plugin Name:       VidYen CSV Export
+ * Plugin URI:        https://github.com/VidYen/VidYen-WordPress-Plugins
+ * Description:       Exports the VidYen Point Log to CSV
  * Version:           1.0.0
- * Author:            Your Name or Your Company
- * Author URI:        http://example.com/
+ * Author:            VidYen, LLC
+ * Author URI:        http://vidyen.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       csv-export
  * Domain Path:       /languages
  */
-//Improved shortcode of public log.
-
-//Improved shortcode of public log.
-
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
