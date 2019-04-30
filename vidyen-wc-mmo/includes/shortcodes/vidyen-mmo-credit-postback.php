@@ -2,15 +2,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-//NOTE: This is designed for post backs of MMO systems with VidYen
+//NOTE: This is designed for credit post backs of MMO systems with VidYen
 
-//Responses
-//-1 unknown error
-//0 = default, no transact
-//1 = success
-//2 = no user id found on
-
-function vidyen_mmo_postback_deduct_func( $atts )
+function vidyen_mmo_postback_credit_func( $atts )
 {
 	//NOTE: The admin needs to set the post back correctly. We will have no idea what the user id will be as it will be fed into the system by the post back
 	//We will need the secret
@@ -113,9 +107,9 @@ function vidyen_mmo_postback_deduct_func( $atts )
 
 		$current_balance = vyps_point_balance_func($point_id, $user_id); //need to check to see if they have an actual balance to report //NOTE: I opted with letting the other site tell how much it will withdraw at a time.
 
-		if( $current_balance >= $point_amount) // action = 1 CREDITED // action = 0 charge back
+		if( $points > 0) // We shouldn't be running SQL stuff if the amount is 0
 		{
-				return vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id ); //I knew I had a good reason to use this
+				return vyps_point_credit_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id ); //I knew I had a good reason to use this
 				//The above should resturn a 1 if successful. I'm not going to add an add here just yet. This is an output system.
 				//If the get gets a 1 then it adds the points on the other side. I would recommend not doing an all system just like 100 points.
 				//I am going to add a balance api, but may not be needed.
@@ -132,4 +126,4 @@ function vidyen_mmo_postback_deduct_func( $atts )
 }
 
 /* Telling WP to use function for shortcode */
-add_shortcode( 'vidyen-mmo-deduct', 'vidyen_mmo_postback_deduct_func');
+add_shortcode( 'vidyen-mmo-credit', 'vidyen_mmo_postback_credit_func');

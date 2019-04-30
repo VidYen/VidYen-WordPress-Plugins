@@ -129,6 +129,7 @@ function vidyen_wc_mmo_sub_menu_page()
 	<p><b>[vidyen-mmo-bal]</b> for live balance.</p>
 	<p><b>[vyps-mmo-pe]</b> for live point exchange.</p>
 	<p><b>[vidyen-mmo-deduct point_id=2 apikey=(set here on in MMO menu)]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
+	<p><b>[vidyen-mmo-credit point_id=2 apikey=(set here on in MMO menu)]</b> Same as above but does the credit when you want to talk currency off server and into site.</p>
 	<p><b>[vidyen-mmo-api-bal mode=GET gui=TRUE point_id=7]</b> This is a postback page for external curls. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
 	<p><b>[vidyen-mmo-register apikey=test]</b> This is for your registration curl. Only enter your apikey where test is written.</p>
 	<p><b>[vidyen-loa-id]</b> This is for your LoA userid box. It shows each user their currently stored LoA userid and lets them clear it if its incorrect. If edit=TRUE you are able to edit this directly from the website.</p>
