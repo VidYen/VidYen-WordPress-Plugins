@@ -3,7 +3,7 @@ Contributors: vidyen, felty, shanevidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: Rewards, Miner, Crypto, Monero, Adscend, Wannads, mining, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
 Requires at least: 4.9.8
-Tested up to: 5.1.1
+Tested up to: 5.2.0
 Requires PHP: 7.0
 Stable tag: 2.3.0
 License: GPLv2
@@ -105,6 +105,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - AdGate Media - Offer Walls [Privacy Policy](https://adgatemedia.com/pp.php)
 
 == Changelog ==
+
+= 2.3.9 =
+
+- Fix: Point Exchange with two inputs fix.
+- Fix: Readme changed to 5.2 compatible
 
 = 2.3.8 =
 

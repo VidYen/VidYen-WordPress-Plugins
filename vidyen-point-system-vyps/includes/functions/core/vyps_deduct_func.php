@@ -15,7 +15,7 @@ function vyps_deduct_func( $atts )
 				'firstid' => '0',
 				'secondid' => '0',
 				'firstamount' => '0',
-				'secondamount' => '0',
+				'secondamount' => 0,
 				'to_user_id' => 0,
         'comment' => '',
     		'reason' => '',
@@ -26,7 +26,7 @@ function vyps_deduct_func( $atts )
 	$first_point_id = intval($atts['firstid']);
 	$second_point_id = intval($atts['secondid']);
 	$first_amount = intval($atts['firstamount']);
-	$second_amount = intval($atts['firstamount']);
+	$second_amount = intval($atts['secondamount']);
 	$to_user_id = intval($atts['to_user_id']);
 
 	//This should be fed in by the hook doing the call now. ie Mining, Adscend, PE, etc

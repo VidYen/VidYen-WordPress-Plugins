@@ -333,20 +333,19 @@ function vyps_point_exchange_func( $atts )
 		$f_need_points = number_format($pt_fAmount - $f_balance_points);
 
 		//Check the second inputs
-		if ($secondPointID > 0){
-
+		if ($secondPointID > 0)
+		{
 			$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
 			$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $secondPointID );
 			$s_balance_points = $wpdb->get_var( $balance_points_query_prepared );
 
 			/* I do not ever see the need for a non-formatted need point */
 			$s_need_points = number_format($pt_sAmount - $s_balance_points);
-
-		} else {
-
+		}
+		else
+		{
 			$s_balance_points = 0; //Need to zero this out if there was no second point
 			$s_need_points = 0; //And this as well. Methinks mayhaps I should have thought this through better
-
 		}
 
 
