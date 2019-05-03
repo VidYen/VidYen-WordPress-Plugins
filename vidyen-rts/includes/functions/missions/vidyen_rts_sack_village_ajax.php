@@ -64,9 +64,9 @@ function vidyen_rts_sack_village_action()
   $iron_looted = mt_rand( 0 , 150 );
   $stone_looted = mt_rand( 0 , 100 ); //Why would you loot stone?
 
-  if ($soldiers_killed < 1)
+  if ($soldiers_killed < 5)
   {
-    $story = "You're soldiers suprise the villagers pillaging them all and taking no casualties. They even tore down the poor stone huts carrying back stone.";
+    $story = "You're soldiers suprise the villagers pillaging them all and taking little casualties with $soldiers_killed killed. They even tore down the poor stone huts carrying back stone.";
     $loot = "You received $money_looted copper coins, $wood_looted wood, $iron_looted iron ore, and $stone_looted units of stone.";
 
     //Technically no soldiders were killed.
