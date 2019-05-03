@@ -66,27 +66,27 @@ function vidyen_rts_sack_village_action()
 
   if ($soldiers_killed < 5)
   {
-    $story = "You're soldiers suprise the villagers pillaging them all and taking little casualties with $soldiers_killed killed. They even tore down the poor stone huts carrying back stone.";
+    $story = "Your soldiers suprise the villagers pillaging them all and taking little casualties with $soldiers_killed killed. They even tore down the poor stone huts carrying back stone.";
     $loot = "You received $money_looted copper coins, $wood_looted wood, $iron_looted iron ore, and $stone_looted units of stone.";
 
     //Technically no soldiders were killed.
   }
   elseif ($soldiers_killed < 10)
   {
-    $story = "You're soldiers attack and take some light casualties with $soldiers_killed soldiers lost. They remaining are too lazy to haul back the stone. It's heavy.";
+    $story = "Your soldiers attack and take some light casualties with $soldiers_killed soldiers lost. They remaining are too lazy to haul back the stone. It's heavy.";
     $loot = "You received $money_looted copper coins, $wood_looted wood, and $iron_looted iron ore." ;
     $stone_looted = 0; //Just had to reset that.
   }
   elseif ($soldiers_killed < 15)
   {
-    $story = "You're soldiers attack but the villages were angry and killed a good deal of your men with $soldiers_killed soldiers lost but eventually fled. They remaining soldiers are too lazy to haul back stone and iron.";
+    $story = "Your soldiers attack but the villages were angry and killed a good deal of your men with $soldiers_killed soldiers lost but eventually fled. They remaining soldiers are too lazy to haul back stone and iron.";
     $loot = "You received $money_looted copper coins and $wood_looted wood.";
     $stone_looted = 0; //Just had to reset that.
     $iron_looted = 0;
   }
   elseif ($soldiers_killed < 20)
   {
-    $story = "You're sack the village but most of them die with $soldiers_killed soldiers lost. They only carry back the copper coins they theived.";
+    $story = "Your soldiers sack the village but most of them die with $soldiers_killed soldiers lost. They only carry back the copper coins they theived.";
     $loot = "You received $money_looted in copper coins." ;
     $stone_looted = 0; //Just had to reset that.
     $iron_looted = 0;
@@ -94,7 +94,7 @@ function vidyen_rts_sack_village_action()
   }
   elseif ($soldiers_killed > 19)
   {
-    $story = "You're soldiers got drunk before attacking the peasants and attacked a nearby castle instead. All with $soldiers_killed soldiers died.";
+    $story = "Your soldiers got drunk before attacking the peasants and attacked a nearby castle instead. All with $soldiers_killed soldiers died.";
     $loot = "You received 0 resources.";
     $stone_looted = 0; //Just had to reset that.
     $iron_looted = 0;
