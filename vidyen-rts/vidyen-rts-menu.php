@@ -15,10 +15,10 @@ add_action('admin_menu', 'vidyen_rts_sub_menu', 640 );
 function vidyen_rts_sub_menu()
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "VidYen MMO";
-  $menu_title = 'MMO Menu';
+	$page_title = "VidYen RTS";
+  $menu_title = 'RTS Menu';
 	$capability = 'manage_options';
-  $menu_slug = 'vyps_wc_mmo_page';
+  $menu_slug = 'vyps_rts_page';
   $function = 'vidyen_rts_sub_menu_page';
 
   add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
@@ -33,7 +33,7 @@ function vidyen_rts_sub_menu_page()
 	{
 		//As the post is the only thing that edits data, I suppose this is the best place to the noce
 		$vyps_nonce_check = $_POST['vypsnoncepost'];
-		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-mmo-nonce' ) )
+		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-rts-nonce' ) )
     {
 				// This nonce is not valid.
 				die( 'Security check' );
@@ -57,7 +57,7 @@ function vidyen_rts_sub_menu_page()
 				$api_key = sanitize_text_field(($_POST['api_key']));
 		}
 
-    $table_name_wc_mmo = $wpdb->prefix . 'vidyen_rts';
+    $table_name_rts = $wpdb->prefix . 'vidyen_rts';
 
 	    $data = [
 	        'point_id' => $point_id,
@@ -66,8 +66,8 @@ function vidyen_rts_sub_menu_page()
 					'api_key' => $api_key,
 	    ];
 
-			$wpdb->update($table_name_wc_mmo, $data, ['id' => 1]);
-	    //$data_id = $wpdb->update($table_name_wc_mmo , $data);
+			$wpdb->update($table_name_rts, $data, ['id' => 1]);
+	    //$data_id = $wpdb->update($table_name_rts , $data);
 
 	    //I forget thow this works
 	    $message = "Added successfully.";
@@ -75,18 +75,18 @@ function vidyen_rts_sub_menu_page()
 
   //Repulls from SQL
 	//Input ID pull
-	$point_id = intval(vyps_mmo_sql_point_id_func());
+	$point_id = intval(vyps_rts_sql_point_id_func());
 
 	//Input Amount
-	$point_amount = intval(vyps_mmo_sql_point_amount_func());
+	$point_amount = intval(vyps_rts_sql_point_amount_func());
 
   //Ouput id
-  $output_id = intval(vyps_mmo_sql_output_id_func());
+  $output_id = intval(vyps_rts_sql_output_id_func());
 
 	//Ouput Amount
-	$output_amount = floatval(vyps_mmo_sql_output_amount_func());
+	$output_amount = floatval(vyps_rts_sql_output_amount_func());
 
-	$api_key = sanitize_text_field(vyps_mmo_sql_api_key_func());
+	$api_key = sanitize_text_field(vyps_rts_sql_api_key_func());
 
 
 	//It's possible we don't use the VYPS logo since no points.
@@ -94,13 +94,13 @@ function vidyen_rts_sub_menu_page()
 	$vidyen_rts_logo_url = plugins_url( 'includes/images/vyvp-logo.png', __FILE__ );
 
 	//Adding a nonce to the post
-	$vyps_nonce_check = wp_create_nonce( 'vyps-mmo-nonce' );
+	$vyps_nonce_check = wp_create_nonce( 'vyps-rts-nonce' );
 
   //Save for later //<img src="' . $vidyen_rts_logo_url . '">
 
 	//Static text for the base plugin
-	$vyps_wc_mmo_menu_html_ouput ='<br><br>
-	<h1>VidYen WC MMO Sub-Plugin</h1>
+	$vyps_rts_menu_html_ouput ='<br><br>
+	<h1>VidYen WC RTS Sub-Plugin</h1>
 	<p>Exchange Rates</p>
 	<table>
 		<form method="post">
@@ -127,9 +127,9 @@ function vidyen_rts_sub_menu_page()
 	<p>'.$api_key.'</p>
 	<h2>Shortcode</h2>
 	<p><b>[vidyen-rts-bal]</b> for live balance.</p>
-	<p><b>[vyps-mmo-pe]</b> for live point exchange.</p>
-	<p><b>[vidyen-rts-deduct point_id=2 apikey=(set here on in MMO menu)]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
-	<p><b>[vidyen-rts-credit point_id=2 apikey=(set here on in MMO menu)]</b> Same as above but does the credit when you want to talk currency off server and into site.</p>
+	<p><b>[vyps-rts-pe]</b> for live point exchange.</p>
+	<p><b>[vidyen-rts-deduct point_id=2 apikey=(set here on in RTS menu)]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
+	<p><b>[vidyen-rts-credit point_id=2 apikey=(set here on in RTS menu)]</b> Same as above but does the credit when you want to talk currency off server and into site.</p>
 	<p><b>[vidyen-rts-api-bal mode=GET gui=TRUE point_id=7]</b> This is a postback page for external curls. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
 	<p><b>[vidyen-rts-register apikey=test]</b> This is for your registration curl. Only enter your apikey where test is written.</p>
 	<p><b>[vidyen-loa-id]</b> This is for your LoA userid box. It shows each user their currently stored LoA userid and lets them clear it if its incorrect. If edit=TRUE you are able to edit this directly from the website.</p>
@@ -140,5 +140,5 @@ function vidyen_rts_sub_menu_page()
 	<br><br><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="' . $vyps_logo_url . '"></a>
 	';
 
-  echo $vyps_wc_mmo_menu_html_ouput;
+  echo $vyps_rts_menu_html_ouput;
 }

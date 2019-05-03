@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.0.1
+Version:      0.0.2
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -43,12 +43,15 @@ function vidyen_rts_sql_install()
   $sql = "CREATE TABLE {$table_name_rts} (
 	id mediumint(9) NOT NULL AUTO_INCREMENT,
   currency_id mediumint(9) NOT NULL,
+  wood_id mediumint(9) NOT NULL,
+  iron_id mediumint(9) NOT NULL,
 	light_soldier_id mediumint(9) NOT NULL,
 	light_soldier_cost mediumint(9) NOT NULL,
   light_soldier_time mediumint(9) NOT NULL,
 	light_ship_id mediumint(9) NOT NULL,
 	light_ship_cost mediumint(9) NOT NULL,
   light_ship_time mediumint(9) NOT NULL,
+  light_soldier_id mediumint(9) NOT NULL,
   api_key varchar(128) NOT NULL,
 	PRIMARY KEY  (id)
       ) {$charset_collate};";
@@ -80,12 +83,12 @@ function vidyen_rts_sql_install()
 /*** Functions ***/
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_woocommerce_check_func.php'); //Checks to see if WooCommerce installed, run first
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_woowallet_currency.php'); //Custom Currencies to WooCommerce
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_sql_call_func.php'); //SQL Call functions
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_rts_sql_call_func.php'); //SQL Call functions
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_bal_func.php'); //Custom WooWallet balance function for this purpose
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_loa_user_query_func.php'); //Adds meta check
 
 /*** Shortcodes ***/
-//include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-bal.php'); //Ajax Balance
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-missions.php'); //Ajax Balance
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-point-exchange.php'); //Ajax Point Exchange
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-credit-postback.php'); //Post back for game credit transfers
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-deduct-postback.php'); //Post back for game deduct transfers
