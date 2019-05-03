@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.0.2
+Version:      0.0.9
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -45,14 +45,13 @@ function vidyen_rts_sql_install()
   currency_id mediumint(9) NOT NULL,
   wood_id mediumint(9) NOT NULL,
   iron_id mediumint(9) NOT NULL,
+  stone_id mediumint(9) NOT NULL,
 	light_soldier_id mediumint(9) NOT NULL,
 	light_soldier_cost mediumint(9) NOT NULL,
   light_soldier_time mediumint(9) NOT NULL,
 	light_ship_id mediumint(9) NOT NULL,
 	light_ship_cost mediumint(9) NOT NULL,
   light_ship_time mediumint(9) NOT NULL,
-  light_soldier_id mediumint(9) NOT NULL,
-  api_key varchar(128) NOT NULL,
 	PRIMARY KEY  (id)
       ) {$charset_collate};";
 
@@ -60,20 +59,18 @@ function vidyen_rts_sql_install()
 
   dbDelta($sql);
 
-  //create random api_key. Shall be santizied.
-
-  $key = sanitize_text_field(str_replace('-', '', implode('-', str_split(substr(strtolower(md5(microtime().rand(1000, 9999))), 0, 30), 6))));
-
 	//Default data
 	$data_insert = [
       'currency_id' => 1,
+      'wood_id' => 4,
+      'iron_id' => 6,
+      'stone_id' => 5,
 			'light_soldier_id' => 7,
 			'light_soldier_cost' => 10,
       'light_soldier_time' => 1,
 			'light_ship_id' => 8,
 			'light_ship_cost' => 100,
       'light_ship_time' => 100,
-      'api_key' => $key,
 	];
 
 	$wpdb->insert($table_name_rts, $data_insert);
@@ -101,7 +98,7 @@ include( plugin_dir_path( __FILE__ ) . 'vidyen-rts-menu.php'); //Order 600
 
 /*** AJAX ***/
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mmo_bal_ajax.php');
-//include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mmo_exchange_ajax.php');
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_sack_village_ajax.php');
 
 /*** Templater ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-rts-template-function.php'); //Order 600

@@ -12,7 +12,7 @@ add_action('wp_ajax_vidyen_rts_sack_village_action', 'vidyen_rts_sack_village_ac
 //add_action( 'wp_ajax_nopriv_vidyen_rts_sack_village_action', 'vidyen_rts_sack_village_action' );
 
 // handle the ajax request
-function vidyen_rts_sack_village()
+function vidyen_rts_sack_village_action()
 {
   global $wpdb; // this is how you get access to the database
 
@@ -29,23 +29,29 @@ function vidyen_rts_sack_village()
   $user_id = get_current_user_id();
 
   //Assumption. We know the user send 20 soldiers... so we figure out how many survived.
-  $solider_point_id = vyps_rts_sql_currency_id_func();
+  $solider_point_id = vyps_rts_sql_light_soldier_id_func();
   $soldiers_sent = 20;
   $soldiers_reason = 'Soldiers killed';
   $vyps_meta_id = 'Mission_sack';
 
+  //Resource IDs
+  $currency_point_id = vyps_rts_sql_currency_id_func();
+  $wood_point_id = vyps_rts_sql_wood_id_func();
+  $iron_point_id = vyps_rts_sql_iron_id_func();
+  $stone_point_id = vyps_rts_sql_stone_id_func();
+
   //We need to see if they have 20 soldiers to send
 
-  $curreny_soldier_amoutn = vyps_point_balance_func($solider_point_id, $user_id);
-  if ($curreny_soldier_amoutn < $soldiers_sent)
+  $current_soldier_amount = vyps_point_balance_func($solider_point_id, $user_id);
+  if ($current_soldier_amount < $soldiers_sent)
   {
-    $story = "You don't have enough soldiers to send. They refuse to budge from the barracks."
-    $loot = "You received 0 resources."
+    $story = "You don't have enough soldiers to send. They refuse to budge from the barracks.";
+    $loot = "You received 0 resources.";
 
     $village_rts_sack_village_server_response = array(
         'system_message' => 'NOTENOUGH',
         'mission_story' => $story,
-        'loot' => $loot,
+        'mission_loot' => $loot,
     );
       echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
@@ -65,36 +71,35 @@ function vidyen_rts_sack_village()
 
     //Technically no soldiders were killed.
   }
-  elseif ($soldiers_killed < 5)
+  elseif ($soldiers_killed < 10)
   {
-    $story = "You're soldiers attack and take some light casualties. They remaining are too lazy to haul back the stone. It's heavy.";
+    $story = "You're soldiers attack and take some light casualties with $soldiers_killed soldiers lost. They remaining are too lazy to haul back the stone. It's heavy.";
     $loot = "You received $money_looted copper coins, $wood_looted wood, and $iron_looted iron ore." ;
     $stone_looted = 0; //Just had to reset that.
   }
-  elseif ($soldiers_killed < 10)
+  elseif ($soldiers_killed < 15)
   {
-    $story = "You're soldiers attack but the villages were angry and killed a good deal of your men but eventually fled. They remaining soldiers are too lazy to haul back stone and iron.";
+    $story = "You're soldiers attack but the villages were angry and killed a good deal of your men with $soldiers_killed soldiers lost but eventually fled. They remaining soldiers are too lazy to haul back stone and iron.";
     $loot = "You received $money_looted copper coins and $wood_looted wood.";
     $stone_looted = 0; //Just had to reset that.
     $iron_looted = 0;
   }
-  elseif ($soldiers_killed < 15)
+  elseif ($soldiers_killed < 20)
   {
-    $story = "You're sack the village but most of them die. They only carry back the copper coins they theived.";
+    $story = "You're sack the village but most of them die with $soldiers_killed soldiers lost. They only carry back the copper coins they theived.";
     $loot = "You received $money_looted in copper coins." ;
     $stone_looted = 0; //Just had to reset that.
     $iron_looted = 0;
     $wood_looted = 0;
   }
-  elseif ($soldiers_killed == 20)
+  elseif ($soldiers_killed > 19)
   {
-    $story = "You're soldiers got drunk before attacking the peasants and attacked a nearby castle instead. They all died.";
+    $story = "You're soldiers got drunk before attacking the peasants and attacked a nearby castle instead. All with $soldiers_killed soldiers died.";
     $loot = "You received 0 resources.";
     $stone_looted = 0; //Just had to reset that.
     $iron_looted = 0;
     $wood_looted = 0;
     $money_looted = 0;
-
   }
   else
   {
@@ -105,20 +110,19 @@ function vidyen_rts_sack_village()
   //Time to remove soldiers via functions.
   vyps_point_deduct_func( $solider_point_id, $soldiers_killed, $user_id, $soldiers_reason, $vyps_meta_id );
 
-  //Time to credit resources.
-  vyps_point_credit_func( $solider_point_id, $soldiers_killed, $user_id, $soldiers_reason, $vyps_meta_id );
-  vyps_point_credit_func( $solider_point_id, $soldiers_killed, $user_id, $soldiers_reason, $vyps_meta_id );
-  vyps_point_credit_func( $solider_point_id, $soldiers_killed, $user_id, $soldiers_reason, $vyps_meta_id );
-  vyps_point_credit_func( $solider_point_id, $soldiers_killed, $user_id, $soldiers_reason, $vyps_meta_id );
+  //Time to credit resources. I'm being lazy and getting the whole response sum so i can see in js (this whole thing was made in 2 hours)
+  $response_sum = vyps_point_credit_func( $currency_point_id, $money_looted, $user_id, $soldiers_reason, $vyps_meta_id );
+  $response_sum = $response_sum + vyps_point_credit_func( $wood_point_id, $wood_looted, $user_id, $soldiers_reason, $vyps_meta_id );
+  $response_sum = $response_sum + vyps_point_credit_func( $iron_point_id, $iron_looted, $user_id, $soldiers_reason, $vyps_meta_id );
+  $response_sum = $response_sum + vyps_point_credit_func( $stone_point_id, $stone_looted, $user_id, $soldiers_reason, $vyps_meta_id );
 
-  $mo_array_server_response = array(
-      'site_hashes' => $site_total_hashes,
-      'site_hash_per_second' => $site_hash_per_second,
-      'site_validShares' => $site_valid_shares,
-      'current_XMRprice' => $current_xmr_price,
+  $village_rts_sack_village_server_response = array(
+      'system_message' => $response_sum,
+      'mission_story' => $story,
+      'mission_loot' => $loot,
   );
 
-  echo json_encode($mo_array_server_response); //Proper method to return json
+  echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
 
   wp_die(); // this is required to terminate immediately and return a proper response
 }

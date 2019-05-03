@@ -27,7 +27,7 @@ function vidyen_rts_mission_func()
 	//$vyps_points_output = vyps_point_balance_func($point_id, $user_id);
 
 	//Get the url for the solver
-	$mmo_ajax_js_url = plugins_url( 'js/mmo_bal.js', dirname(__FILE__) );
+	$rts_ajax_js_url = plugins_url( 'js/rts_missions.js', dirname(__FILE__) );
 
 	//Concatenate the values into the output
 	$mission_html_output =
@@ -36,42 +36,41 @@ function vidyen_rts_mission_func()
 				<th>Send Soldiers to raid poor peasant village for loot.<th>
 			</tr>
 			<tr>
-				<td>Soldiers Required</td>
-			</tr>
-			<tr>
-				<td><td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($light_soldier_id).'</span> <span id="vyps_points" style="vertical-align: bottom;">'.$light_soldier_amount.'</span></div></td></td>
+				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Soldiers Required:</span><span style="vertical-align: top;">'.vyps_point_icon_func($light_soldier_id).'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>
 			</tr>
 			<tr>
 				<td>
-				<div align="center">
-					<button onclick="attack_peasants()">Tally hoe!!</button>
-				</div>
+					<div align="center">
+						<input  class="button" id="sack_button" type="button" value="Tally hoe!" onclick="rts_sack_village()" />
+					</div>
 				</td>
 			<tr>
 			<tr>
-
+				<td>
+					<div id="mission_output" align="center">
+					Your soliders wait for your command.
+					</div>
+				</td>
+			<tr>
+			<tr>
+				<td>
+					<div id="loot_output" align="center">
+						You have no loot yet.
+					</div>
+				</td>
+			<tr>
 		</table>';
 
-		return $ww_bal_html_output;
 
-	$mission_html_output .= '<script src="'.$mmo_ajax_js_url.'"></script><script>var point_id = '.$point_id.';</script>';
+	$mission_html_output .= '<script src="'.$rts_ajax_js_url.'"></script>';
 
-	//A simple hack to run the part that if woocommerce installed.
-	if (vidyen_mmo_woocommerce_check_func())
-	{
-		$ww_bal_html_output .= '<script>var woo_installed = 1;</script>';
-	}
-	else
-	{
-		$ww_bal_html_output .= '<script>var woo_installed = 0;</script>';
-	}
 
-	return $ww_bal_html_output;
+	return $mission_html_output;
 }
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vidyen-rts-missions', 'vidyen_mmo_bal_func');
+add_shortcode( 'vidyen-rts-missions', 'vidyen_rts_mission_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */

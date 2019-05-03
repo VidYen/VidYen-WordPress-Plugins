@@ -89,7 +89,69 @@ function vyps_rts_sql_light_soldier_time_func()
 	return $point_id;
 }
 
-/************END LIGHT SOLIDER FUNCTIONS********/
+/************NOTE: END LIGHT SOLIDER FUNCTIONS********/
 
 
-/************Begin Resource functions FUNCTIONS********/
+/************NOTE: BEGIN Resource functions FUNCTIONS********/
+
+/*** Wood ID SQL Call ***/
+function vyps_rts_sql_wood_id_func()
+{
+	global $wpdb;
+
+	//the $wpdb stuff to find what the current name and icons are
+	$table_name_rts = $wpdb->prefix . 'vidyen_rts';
+
+	$first_row = 1; //Note sure why I'm setting this.
+
+	//Input ID pull
+	$point_id_query = "SELECT wood_id FROM ". $table_name_rts . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$point_id_query_prepared = $wpdb->prepare( $point_id_query, $first_row );
+	$point_id = $wpdb->get_var( $point_id_query_prepared );
+
+	$point_id = intval($point_id); //Extra sanitzation
+
+	return $point_id;
+}
+
+/*** Iron ID SQL Call ***/
+function vyps_rts_sql_iron_id_func()
+{
+	global $wpdb;
+
+	//the $wpdb stuff to find what the current name and icons are
+	$table_name_rts = $wpdb->prefix . 'vidyen_rts';
+
+	$first_row = 1; //Note sure why I'm setting this.
+
+	//Input ID pull
+	$point_id_query = "SELECT iron_id FROM ". $table_name_rts . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$point_id_query_prepared = $wpdb->prepare( $point_id_query, $first_row );
+	$point_id = $wpdb->get_var( $point_id_query_prepared );
+
+	$point_id = intval($point_id); //Extra sanitzation
+
+	return $point_id;
+}
+
+/*** Iron ID SQL Call ***/
+function vyps_rts_sql_stone_id_func()
+{
+	global $wpdb;
+
+	//the $wpdb stuff to find what the current name and icons are
+	$table_name_rts = $wpdb->prefix . 'vidyen_rts';
+
+	$first_row = 1; //Note sure why I'm setting this.
+
+	//Input ID pull
+	$point_id_query = "SELECT stone_id FROM ". $table_name_rts . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$point_id_query_prepared = $wpdb->prepare( $point_id_query, $first_row );
+	$point_id = $wpdb->get_var( $point_id_query_prepared );
+
+	$point_id = intval($point_id); //Extra sanitzation
+
+	return $point_id;
+}
+
+/************NOTE: END Resource functions FUNCTIONS********/
