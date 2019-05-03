@@ -46,4 +46,6 @@ function rts_sack_village()
     document.getElementById('sack_button').value = 'Tally Hoe!';
   }
 
+  pull_rts_bal(); //If button is pushed might as well pull
+
 }
