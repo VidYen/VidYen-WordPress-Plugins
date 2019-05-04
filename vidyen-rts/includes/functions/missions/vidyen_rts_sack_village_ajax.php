@@ -59,10 +59,10 @@ function vidyen_rts_sack_village_action()
 
   $soldiers_killed = mt_rand( 0 , $soldiers_sent ); //It's possible no one died.
 
-  $money_looted = mt_rand( 0 , 1000 );
-  $wood_looted = mt_rand( 0 , 200 );
-  $iron_looted = mt_rand( 0 , 150 );
-  $stone_looted = mt_rand( 0 , 100 ); //Why would you loot stone?
+  $money_looted = mt_rand( 0 , 500 );
+  $wood_looted = mt_rand( 0 , 100 );
+  $iron_looted = mt_rand( 0 , 75 );
+  $stone_looted = mt_rand( 0 , 50 ); //Why would you loot stone?
 
   if ($soldiers_killed < 5)
   {
