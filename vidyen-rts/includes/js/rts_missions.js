@@ -28,7 +28,7 @@ function rts_sack_village()
      document.getElementById('mission_output').innerHTML = rts_sack_mission_story;
 
      //yeah I'm going to mess with formatting here because i don't want a really long string wide.
-     var sack_loot_table = 'Earned loot:' + currency_icon + ' ' + rts_sack_money_looted + ', ' + wood_icon + ' ' + rts_sack_wood_looted + ', ' + iron_icon + ' ' + rts_sack_iron_looted + ', ' + stone_icon + ' ' + rts_sack_stone_looted;
+     var sack_loot_table = 'Earned loot: ' + currency_icon + ' ' + rts_sack_money_looted + ', ' + wood_icon + ' ' + rts_sack_wood_looted + ', ' + iron_icon + ' ' + rts_sack_iron_looted + ', ' + stone_icon + ' ' + rts_sack_stone_looted;
 
      document.getElementById('loot_output').innerHTML = sack_loot_table;
 

@@ -48,10 +48,22 @@ function vidyen_rts_sack_village_action()
     $story = "You don't have enough soldiers to send. They refuse to budge from the barracks.";
     $loot = "You received 0 resources.";
 
+    $soldiers_killed = 0;
+
+    $money_looted = 0;
+    $wood_looted = 0;
+    $iron_looted = 0;
+    $stone_looted = 0;
+
     $village_rts_sack_village_server_response = array(
-        'system_message' => 'NOTENOUGH',
+        'system_message' => 'NOTENOUGHSOLDIERS',
         'mission_story' => $story,
         'mission_loot' => $loot,
+        'money_looted' => $money_looted,
+        'wood_looted' => $wood_looted,
+        'iron_looted' => $iron_looted,
+        'stone_looted' => $stone_looted,
+        'soldiers_killed' => $soldiers_killed,
     );
       echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
