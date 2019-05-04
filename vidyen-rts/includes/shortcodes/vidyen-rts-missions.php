@@ -17,14 +17,20 @@ function vidyen_rts_mission_func()
 	}
 
 	//NOTE: Guess what. We pull for SQL instead of short code. This helps with the AJAX
+	$div_id = $point_id.'vyrtsdiv';
+	$user_id = get_current_user_id();
 
 	//Currency will be listed as the poitn id
 	$currency_point_id = intval(vyps_rts_sql_currency_id_func());
-	$light_solider_point_id = intval(vyps_rts_sql_light_soldier_id_func());
-	$div_id = $point_id.'vyrtsdiv';
-	$user_id = get_current_user_id();
-	$light_soldier_amount = number_format(vyps_point_balance_func($light_solider_point_id, $user_id), 0);
-	//$vyps_points_output = vyps_point_balance_func($point_id, $user_id);
+
+	//Resource IDs
+	$currency_point_id = vyps_rts_sql_currency_id_func();
+	$wood_point_id = vyps_rts_sql_wood_id_func();
+	$iron_point_id = vyps_rts_sql_iron_id_func();
+	$stone_point_id = vyps_rts_sql_stone_id_func();
+
+	//Military
+	$light_solider_point_id = vyps_rts_sql_light_soldier_id_func();
 
 	//The icons for loot
 	$currency_icon = vyps_point_icon_func($currency_point_id);
@@ -71,6 +77,14 @@ function vidyen_rts_mission_func()
 
 	$mission_html_output .= '<script src="'.$rts_ajax_js_url.'"></script>';
 
+	//adding the icon urls to the js mix
+	$mission_html_output .= "<script>
+														var currency_icon = '$currency_icon';
+														var	wood_icon = '$wood_icon';
+														var iron_icon = '$iron_icon';
+														var	stone_icon = '$stone_icon';
+														var	light_soldier_icon = '$light_soldier_icon';
+													</script>";
 
 	return $mission_html_output;
 }

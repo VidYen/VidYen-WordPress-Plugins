@@ -16,10 +16,21 @@ function rts_sack_village()
      rts_sack_mission_story = output_response.mission_story;
      rts_sack_mission_loot = output_response.mission_loot;
 
+     rts_sack_money_looted = output_response.money_looted;
+     rts_sack_wood_looted = output_response.wood_looted;
+     rts_sack_iron_looted = output_response.iron_looted;
+     rts_sack_stone_looted = output_response.stone_looted;
+     rts_sack_soldiers_killed = output_response.soldiers_killed;
+
      console.log(rts_sack_system_message); //Yes I know I console log too much.
 
-     document.getElementById('mission_output').innerHTML = rts_sack_mission_story; //This needs to remain not on the MO pull
-     document.getElementById('loot_output').innerHTML = rts_sack_mission_loot;
+     //This gives the sad story of the soldiers
+     document.getElementById('mission_output').innerHTML = rts_sack_mission_story;
+
+     //yeah I'm going to mess with formatting here because i don't want a really long string wide.
+     var sack_loot_table = 'Earned loot:' + currency_icon + ' ' + rts_sack_money_looted + ', ' + wood_icon + ' ' + rts_sack_wood_looted + ', ' + iron_icon + ' ' + rts_sack_iron_looted + ', ' + stone_icon + ' ' + rts_sack_stone_looted;
+
+     document.getElementById('loot_output').innerHTML = sack_loot_table;
 
    });
   });
