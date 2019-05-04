@@ -120,6 +120,11 @@ function vidyen_rts_sack_village_action()
       'system_message' => $response_sum,
       'mission_story' => $story,
       'mission_loot' => $loot,
+      'money_looted' => $money_looted,
+      'wood_looted' => $wood_looted,
+      'iron_looted' => $iron_looted,
+      'stone_looted' => $stone_looted,
+      'soldiers_killed' => $soldiers_killed,
   );
 
   echo json_encode($village_rts_sack_village_server_response); //Proper method to return json

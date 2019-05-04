@@ -32,11 +32,11 @@ function vidyen_rts_bal_api_action()
   //Get user id
   $user_id = get_current_user_id();
 
-  $currency_balance = intval(vyps_point_balance_func($currency_point_id, $user_id)); //Yes we always be santising so whelp
-  $light_soldier_balance = intval(vyps_point_balance_func($light_solider_point_id, $user_id)); //Yes we always be santising so whelp
-  $wood_balance = intval(vyps_point_balance_func($wood_point_id, $user_id)); //Yes we always be santising so whelp
-  $iron_balance = intval(vyps_point_balance_func($iron_point_id, $user_id)); //Yes we always be santising so whelp
-  $stone_balance = intval(vyps_point_balance_func($stone_point_id, $user_id)); //Yes we always be santising so whelp
+  $light_soldier_balance = intval(vyps_point_balance_func($light_solider_point_id, $user_id));
+  $currency_balance = intval(vyps_point_balance_func($currency_point_id, $user_id));
+  $wood_balance = intval(vyps_point_balance_func($wood_point_id, $user_id));
+  $iron_balance = intval(vyps_point_balance_func($iron_point_id, $user_id));
+  $stone_balance = intval(vyps_point_balance_func($stone_point_id, $user_id));
 
   $rts_bal_array_server_response = array(
       'currency_balance' => $currency_balance,
@@ -47,6 +47,5 @@ function vidyen_rts_bal_api_action()
   );
 
   echo json_encode($rts_bal_array_server_response); //Proper method to return json
-
   wp_die(); // this is required to terminate immediately and return a proper response
 }
