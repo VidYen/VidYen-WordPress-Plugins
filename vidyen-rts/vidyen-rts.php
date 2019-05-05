@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.0.21
+Version:      0.0.30
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -55,6 +55,50 @@ function vidyen_rts_sql_install()
 	PRIMARY KEY  (id)
       ) {$charset_collate};";
 
+  //vidyen_rts_mission table creation
+  //This is mostly a place holder for now until later
+  /* NOTE: Don't use this yet
+  $table_name_rts_mission = $wpdb->prefix . 'vidyen_rts_mission';
+
+  $sql .= "CREATE TABLE {$table_name_rts_mission} (
+	id mediumint(9) NOT NULL AUTO_INCREMENT,
+  currency_id mediumint(9) NOT NULL,
+  wood_id mediumint(9) NOT NULL,
+  iron_id mediumint(9) NOT NULL,
+  stone_id mediumint(9) NOT NULL,
+	light_soldier_id mediumint(9) NOT NULL,
+	light_soldier_cost mediumint(9) NOT NULL,
+  light_soldier_time mediumint(9) NOT NULL,
+	light_ship_id mediumint(9) NOT NULL,
+	light_ship_cost mediumint(9) NOT NULL,
+  light_ship_time mediumint(9) NOT NULL,
+	PRIMARY KEY  (id)
+      ) {$charset_collate};";
+  */
+
+  //vidyen_rts_mission_log. keeps track of the mission timers
+  //Not really sucess but rather just to keep track of users
+  //A design philosophy note: I don't see users running more than one type of a mission at a time.
+  //A gate as you will
+	$table_name_rts_mission_log = $wpdb->prefix . 'vidyen_rts_mission_log';
+
+  $sql .= "CREATE TABLE {$table_name_rts_mission_log} (
+	id mediumint(9) NOT NULL AUTO_INCREMENT,
+  reason varchar(128) NOT NULL,
+  user_id mediumint(9) NOT NULL,
+	time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+  mission_id varchar(11) NOT NULL,
+  mission_time mediumint(9) NOT NULL,
+  adjustment varchar(100) NOT NULL,
+	mission_meta_id varchar(64) NOT NULL,
+	mission_meta_data varchar(128) NOT NULL,
+	mission_meta_amount double(64,0) NOT NULL,
+	mission_meta_subid1 mediumint(9) NOT NULL,
+	mission_meta_subid2 mediumint(9) NOT NULL,
+	mission_meta_subid3 mediumint(9) NOT NULL,
+	PRIMARY KEY  (id)
+      ) {$charset_collate};";
+
   require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I never did investigate why the original outsource dev used this.
 
   dbDelta($sql);
@@ -73,16 +117,24 @@ function vidyen_rts_sql_install()
       'light_ship_time' => 100,
 	];
 
+  //There will be no default data for the mission_log table
+
 	$wpdb->insert($table_name_rts, $data_insert);
 }
 
 /*** Includes ***/
-/*** Functions ***/
-//include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_woocommerce_check_func.php'); //Checks to see if WooCommerce installed, run first
-//include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_woowallet_currency.php'); //Custom Currencies to WooCommerce
+/*** CORE Functions ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_rts_sql_call_func.php'); //SQL Call functions
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_bal_func.php'); //Custom WooWallet balance function for this purpose
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_loa_user_query_func.php'); //Adds meta check
+
+/*** Balance AJAX ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vidyen_rts_bal_ajax.php');
+
+/*** MISSION FUNCTIONS ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_sack_village_ajax.php');
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_add_mission_func.php');
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_check_mission_time_func.php'); //Custom Currencies to WooCommerce
 
 /*** Shortcodes ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-missions.php'); //Ajax Balance
@@ -97,9 +149,6 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-bal.php')
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-rts-menu.php'); //Order 600
 
-/*** AJAX ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vidyen_rts_bal_ajax.php');
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_sack_village_ajax.php');
 
 /*** Templater ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-rts-template-function.php'); //Order 600

@@ -30,9 +30,14 @@ global $wpdb;
  * prefixed with $wpdb->prefix from the database
  */
 
-$table_name_mmo = $wpdb->prefix . 'vidyen_rts';
+$table_name_rts = $wpdb->prefix . 'vidyen_rts';
+$table_name_rts_mission = $wpdb->prefix . 'vidyen_rts_mission';
+$table_name_rts_mission_log = $wpdb->prefix . 'vidyen_rts_mission_log';
+$table_name_rts_log = $wpdb->prefix . 'vidyen_rts_mission_log';
 
 // drop the table from the database. NOTE: I called each without a loop as this should be very simple and specific. -Felty
 
 
-$wpdb->query( "DROP TABLE IF EXISTS $table_name_mmo" );
+$wpdb->query( "DROP TABLE IF EXISTS $table_name_rts" );
+$wpdb->query( "DROP TABLE IF EXISTS $table_name_rts_mission" );
+$wpdb->query( "DROP TABLE IF EXISTS $table_name_rts_mission_log" );

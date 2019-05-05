@@ -54,7 +54,7 @@ function vidyen_rts_mission_func()
 			<tr>
 				<td>
 					<div align="center">
-						<input  class="button" id="sack_button" type="button" value="Tally hoe!" onclick="rts_sack_village()" />
+						<input  class="button" id="sack_button" type="button" value="Attack!" onclick="rts_sack_village()" />
 					</div>
 				</td>
 			</tr>
