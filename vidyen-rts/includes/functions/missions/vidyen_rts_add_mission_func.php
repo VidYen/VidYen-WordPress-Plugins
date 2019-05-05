@@ -22,20 +22,16 @@ function vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $rea
 	$mission_time = intval($mission_time); //I'm not sure if mission log should have amount but we will see
 	$user_id = intval($user_id);
 	$reason = sanitize_text_field($reason);
-	$vyps_meta_id = 'start';
+	$vyps_meta_id = 'start'.$mission_id;
 
-	$start_time = strotime(date('Y-m-d H:i:s'));
-	$end_time = $start_time + $mission_time;
-
-	//SQL Insert for time
+	//Insert the SQL!
 	$data = [
 			'mission_id' => $mission_id,
 			'mission_time' => $mission_time, //I shall fix this one day to point_amount
 			'user_id' => $user_id,
-			'vyps_meta_id' => $vyps_meta_id,
+			'mission_meta_id' => $vyps_meta_id,
 			'reason' => $reason,
-			'startime' => $start_time,
-			'endtime' => $endtime,
+			'time' => date('Y-m-d H:i:s')
 	];
 	$wpdb->insert($table_name_log, $data);
 

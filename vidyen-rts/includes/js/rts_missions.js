@@ -22,6 +22,9 @@ function rts_sack_village()
      rts_sack_stone_looted = output_response.stone_looted;
      rts_sack_soldiers_killed = output_response.soldiers_killed;
 
+     rts_sack_time_left = parseFloat(output_response.time_left); //Needs to be number
+
+
      console.log(rts_sack_system_message); //Yes I know I console log too much.
 
      //This gives the sad story of the soldiers
@@ -58,5 +61,28 @@ function rts_sack_village()
   }
 
   pull_rts_bal(); //If button is pushed might as well pull
+  sack_village_time_left(); //This needs to be re run since won't wait for page run.
+}
 
+//This sould be set on page load or when mission runs.
+function sack_village_time_left()
+{
+  var elem = document.getElementById("raidVillageCoolDownTimer");
+  var time_progressed = 300 - rts_sack_time_left;
+  var width = Math.floor( time_progressed / 300 ) * 100;
+  var id = setInterval(frame, 1000);
+  function frame()
+  {
+   if (width >= 300)
+   {
+     clearInterval(id);
+   }
+   else
+   {
+     width++;
+     rts_sack_time_left = rts_sack_time_left - 1;
+     elem.style.width = width + '%';
+     document.getElementById('countdown_time_left').innerHTML = rts_sack_time_left;
+   }
+  }
 }

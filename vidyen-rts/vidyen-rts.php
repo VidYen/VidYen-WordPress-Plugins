@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.0.30
+Version:      0.0.38
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -87,7 +87,7 @@ function vidyen_rts_sql_install()
   reason varchar(128) NOT NULL,
   user_id mediumint(9) NOT NULL,
 	time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-  mission_id varchar(11) NOT NULL,
+  mission_id varchar(32) NOT NULL,
   mission_time mediumint(9) NOT NULL,
   adjustment varchar(100) NOT NULL,
 	mission_meta_id varchar(64) NOT NULL,

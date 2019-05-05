@@ -76,15 +76,15 @@ function vidyen_rts_sack_village_action()
   $vyps_meta_id = ''; //I can't think what to use here.
 
   //First lets check if a mission is currently running.
-  //$current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
+  $current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
 
-  $current_mission_time = 0; //Testing if its this function or the other one
+  //$current_mission_time = 0; //Testing if its this function or the other one
 
   //In case this is the first mission.
   if ($current_mission_time < 1 )
   {
       //Ok lets set out and conquer!
-      //vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $reason, $vyps_meta_id );
+      $mission_add_result = vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $reason, $vyps_meta_id );
       //see if this is broke
   }
   else
@@ -100,7 +100,7 @@ function vidyen_rts_sack_village_action()
     $stone_looted = 0;
 
     $village_rts_sack_village_server_response = array(
-        'system_message' => 'NOTENOUGHSOLDIERS',
+        'system_message' => 'YOUMUSTWAIT',
         'mission_story' => $story,
         'mission_loot' => $loot,
         'money_looted' => $money_looted,

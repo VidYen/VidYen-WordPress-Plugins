@@ -42,9 +42,17 @@ function vidyen_rts_mission_func()
 	//Get the url for the solver
 	$rts_ajax_js_url = plugins_url( 'js/rts_missions.js', dirname(__FILE__) );
 
+	//Should be a global, but have this set multiple plasces
+	$mission_id = 'sackvillage05'; //five minute village sack
+	$mission_time = 300; //5 minutes
+	$reason = 'Sack the village!';
+	$vyps_meta_id = ''; //I can't think what to use here.
+
+	$current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
+
 	//Concatenate the values into the output
 	$mission_html_output =
-		'<table>
+		'<table width="100%">
 			<tr>
 				<th>Send Soldiers to raid poor peasant village for loot.</th>
 			</tr>
@@ -72,6 +80,13 @@ function vidyen_rts_mission_func()
 					</div>
 				</td>
 			</tr>
+			<tr>
+				<td>
+				<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
+          <div id="raidVillageCoolDownTimer" style="width:0%; height: 30px; background-color: red;"><div id="countdown_time_left" style="position: absolute; right:12%; color:white;">0</div></div>
+        </div>
+				</td>
+			</tr>
 		</table>';
 
 
@@ -84,6 +99,8 @@ function vidyen_rts_mission_func()
 														var iron_icon = '$iron_icon';
 														var	stone_icon = '$stone_icon';
 														var	light_soldier_icon = '$light_soldier_icon';
+														var rts_sack_time_left = $current_mission_time;
+														sack_village_time_left();
 													</script>";
 
 	return $mission_html_output;
