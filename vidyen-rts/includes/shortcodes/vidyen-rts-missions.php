@@ -41,6 +41,7 @@ function vidyen_rts_mission_func()
 
 	//Get the url for the solver
 	$rts_ajax_js_url = plugins_url( 'js/rts_missions.js', dirname(__FILE__) );
+	$rts_ajax_timer_js_url = plugins_url( 'js/rts_mission_timer.js', dirname(__FILE__) );
 
 	//Should be a global, but have this set multiple plasces
 	$mission_id = 'sackvillage05'; //five minute village sack
@@ -83,7 +84,9 @@ function vidyen_rts_mission_func()
 			<tr>
 				<td>
 				<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
-          <div id="raidVillageCoolDownTimer" style="width:0%; height: 30px; background-color: red;"><div id="countdown_time_left" style="position: absolute; right:12%; color:white;">0</div></div>
+          <div id="raidVillageCoolDownTimer" style="width:0%; height: 30px; background-color: #b30b00;">
+						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;">0</div>
+					</div>
         </div>
 				</td>
 			</tr>
@@ -91,6 +94,7 @@ function vidyen_rts_mission_func()
 
 
 	$mission_html_output .= '<script src="'.$rts_ajax_js_url.'"></script>';
+	$mission_html_output .= '<script src="'.$rts_ajax_timer_js_url.'"></script>';
 
 	//adding the icon urls to the js mix
 	$mission_html_output .= "<script>
@@ -100,7 +104,11 @@ function vidyen_rts_mission_func()
 														var	stone_icon = '$stone_icon';
 														var	light_soldier_icon = '$light_soldier_icon';
 														var rts_sack_time_left = $current_mission_time;
-														sack_village_time_left();
+														var pillage_timer_check = 0;
+														if (rts_sack_time_left > 0)
+														{
+															sack_village_time_left();
+														}
 													</script>";
 
 	return $mission_html_output;
