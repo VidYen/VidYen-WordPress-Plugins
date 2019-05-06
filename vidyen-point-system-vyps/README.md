@@ -110,6 +110,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 - Fix: Point Exchange with two inputs fix.
 - Fix: Readme changed to 5.2 compatible
+- Fix: Table for reward timers and exchange set to 100% width by default due to the nature of the text.
 
 = 2.3.8 =
 

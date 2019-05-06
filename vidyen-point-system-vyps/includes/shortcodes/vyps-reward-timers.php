@@ -99,7 +99,7 @@ function vyps_reward_timer_func( $atts )
 
     //Some terrible logic behind this. Either there is the first transaction or the first initial reward.
     $reward_timer_html_ouput =
-    '<table id="'.$vyps_meta_id.'">
+    '<table id="'.$vyps_meta_id.'" width="100%">
         <tr><!-- Second row -->
           <td><div align="center">Receive</div></td>
           <td><div align="center">'.$output_icon.' '.$formatted_ouput_amount.'</div></td>
@@ -126,7 +126,7 @@ function vyps_reward_timer_func( $atts )
 
     //Some terrible logic behind this. Either there is the first transaction or the first initial reward.
     $reward_timer_html_ouput =
-    '<table id="'.$vyps_meta_id.'">
+    '<table id="'.$vyps_meta_id.'" width="100%">
         <tr><!-- Second row -->
           <td><div align="center">Receive</div></td>
           <td><div align="center">'.$output_icon.' '.$formatted_ouput_amount.'</div></td>

@@ -556,7 +556,7 @@ function vyps_point_exchange_func( $atts )
   	if ($secondPointID == 0){
 
   		//Well we know we have only point input as no PID 0
-  		$table_result_ouput = "<table id=\"$vyps_meta_id\">
+  		$table_result_ouput = "<table id=\"$vyps_meta_id\" width=\"100%\">
   					<tr><!-- First input -->
   						<td><div align=\"center\">Spend</div></td>
   						<td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
@@ -576,7 +576,7 @@ function vyps_point_exchange_func( $atts )
   	} else {
 
   	//Output for when there is two points.
-  	$table_result_ouput = "<table id=\"$vyps_meta_id\">
+  	$table_result_ouput = "<table id=\"$vyps_meta_id\" width=\"100%\">
   				<tr><!-- First input -->
   					<td rowspan=\"2\"><div align=\"center\">Spend</div></td>
   					<td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
@@ -603,7 +603,7 @@ function vyps_point_exchange_func( $atts )
     if ($secondPointID == 0){
 
       //Well we know we have only point input as no PID 0
-      $table_result_ouput = "<table id=\"$vyps_meta_id\">
+      $table_result_ouput = "<table id=\"$vyps_meta_id\" width=\"100%\">
             <tr><!-- First row -->
               <td><div align=\"center\">Spend</div></td>
               <td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
@@ -627,7 +627,7 @@ function vyps_point_exchange_func( $atts )
     } else {
 
     //Output for when there is two points. NOTE: No need for row/column spans
-    $table_result_ouput = "<table id=\"$vyps_meta_id\">
+    $table_result_ouput = "<table id=\"$vyps_meta_id\" width=\"100%\">
           <tr><!-- First input -->
             <td><div align=\"center\">Spend</div></td>
             <td><div align=\"center\">$f_sourceIcon $format_pt_fAmount</div></td>
