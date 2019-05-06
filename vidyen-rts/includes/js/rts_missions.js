@@ -34,35 +34,31 @@ function rts_sack_village()
 
      document.getElementById('loot_output').innerHTML = sack_loot_table;
 
-     setTimeout(function()
-       {
-         sack_village_time_left(); //Ajax needs 5 seconds (maybe?)
-       }, 1000);
-
+     sack_village_time_left(); //This should work now that we actually got time left after running command
    });
   });
 
-  var dice_roll = Math.floor(Math.random() * 5);
-  if (dice_roll == 0)
-  {
-    document.getElementById('sack_button').value = 'I hope you have something worth looting!';
-  }
-  else if (dice_roll == 1)
-  {
-    document.getElementById('sack_button').value = 'Whose being repressed now!';
-  }
-  else if (dice_roll == 2)
-  {
-    document.getElementById('sack_button').value = 'Rule by popular vote? What?!';
-  }
-  else if (dice_roll == 3)
-  {
-    document.getElementById('sack_button').value = 'Its raiding season!';
-  }
-  else if (dice_roll == 4)
-  {
-    document.getElementById('sack_button').value = 'Tally Hoe!';
-  }
+  //var dice_roll = Math.floor(Math.random() * 5);
+  //if (dice_roll == 0)
+  //{
+  //  document.getElementById('sack_button').value = 'I hope you have something worth looting!';
+  //}
+  //else if (dice_roll == 1)
+  //{
+  //  document.getElementById('sack_button').value = 'Whose being repressed now!';
+  //}
+  //else if (dice_roll == 2)
+  //{
+  //  document.getElementById('sack_button').value = 'Rule by popular vote? What?!';
+  //}
+  //else if (dice_roll == 3)
+  //{
+  //  document.getElementById('sack_button').value = 'Its raiding season!';
+  //}
+  //else if (dice_roll == 4)
+  //{
+  //  document.getElementById('sack_button').value = 'Tally Hoe!';
+  //}
 
   pull_rts_bal(); //If button is pushed might as well pull
 }

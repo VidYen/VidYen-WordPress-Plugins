@@ -85,7 +85,8 @@ function vidyen_rts_sack_village_action()
   {
       //Ok lets set out and conquer!
       $mission_add_result = vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $reason, $vyps_meta_id );
-      //see if this is broke
+      //In my mental stupdity, I forgot to update after adding.
+      $current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
   }
   else
   {

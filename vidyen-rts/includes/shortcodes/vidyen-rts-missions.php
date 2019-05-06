@@ -58,7 +58,7 @@ function vidyen_rts_mission_func()
 				<th>Send Soldiers to raid poor peasant village for loot.</th>
 			</tr>
 			<tr>
-				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Soldiers Required:</span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>
+				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>
 			</tr>
 			<tr>
 				<td>
@@ -84,8 +84,8 @@ function vidyen_rts_mission_func()
 			<tr>
 				<td>
 				<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
-          <div id="raidVillageCoolDownTimer" style="width:0%; height: 30px; background-color: #b30b00;">
-						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;">0</div>
+          <div id="raidVillageCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div>
 					</div>
         </div>
 				</td>
