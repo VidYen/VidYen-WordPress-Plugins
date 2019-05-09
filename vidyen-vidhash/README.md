@@ -87,6 +87,14 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.4.1 =
+
+- Fix: SVN Repo file fix
+
+= 1.4.0 =
+
+- Fix: Updated to 5.2.0 WP
+
 = 1.3.1 =
 
 -Fix: Made it possible to change threads after pausing video and restarting
