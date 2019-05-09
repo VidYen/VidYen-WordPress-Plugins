@@ -87,6 +87,10 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.4.2 =
+
+- Fix: SVN Repo file fix. WordPress.org seems to be having problems today.
+
 = 1.4.1 =
 
 - Fix: SVN Repo file fix
@@ -98,7 +102,7 @@ It is, but we kept the defaults low to aid with user experience.
 
 = 1.3.1 =
 
--Fix: Made it possible to change threads after pausing video and restarting
+- Fix: Made it possible to change threads after pausing video and restarting
 
 = 1.3.0 =
 
