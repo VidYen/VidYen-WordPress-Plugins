@@ -3,7 +3,7 @@ Contributors: vidyen, felty
 Donate link: https://www.vidyen.com/donate/
 Tags: mining, miner, Twitch, Monero, XMR, Browser Miner, Web Mining, demonetized, Crypto, crypto currency, monetization
 Requires at least: 4.9.8
-Tested up to: 5.1.1
+Tested up to: 5.2.0
 Requires PHP: 7.0
 Stable tag: 1.2.0
 License: GPLv2
@@ -86,6 +86,10 @@ It is, but we kept the defaults low to aid with user experience.
 4. Example on MO side.
 
 == Changelog ==
+
+= 1.3.1 =
+
+- Fix: Updated to 5.2.0 WP
 
 = 1.3.0 =
 

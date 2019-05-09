@@ -3,7 +3,7 @@ Contributors: vidyen, felty, shanevidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: mining, miner, YouTube, Monero, XMR, Browser Miner, Web Mining, demonetized, Crypto, crypto currency, monetization
 Requires at least: 4.9.8
-Tested up to: 5.1.1
+Tested up to: 5.2.0
 Requires PHP: 7.0
 Stable tag: 1.3.0
 License: GPLv2
