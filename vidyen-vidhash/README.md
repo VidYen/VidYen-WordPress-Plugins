@@ -90,6 +90,7 @@ It is, but we kept the defaults low to aid with user experience.
 = 1.4.1 =
 
 - Fix: SVN Repo file fix
+- Add: Code for the VidHash.com site if needed.
 
 = 1.4.0 =
 
