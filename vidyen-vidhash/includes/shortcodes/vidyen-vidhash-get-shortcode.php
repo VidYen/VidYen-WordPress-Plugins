@@ -182,11 +182,11 @@ function vidyen_vidhash_url_parse_func($atts) {
   if(empty($custom_server))
   {
     $server_name = array(
-          array('savona.vy256.com', '8183'), //2,0 2,1
-          array('vesalius.vy256.com', '8443'), //0,0 0,1
-          array('daidem.vidhash.com', '8443'), //1,0 1,1
-          array('clarion.vidhash.com', '8286'), //her own
-          array('clarion.vidhash.com', '8186'), //her own
+      array('clarion.vidhash.com', '8286'), //clarion is the first for VidHash.
+      array('savona.vy256.com', '8183'), //2,0 2,1
+      array('vesalius.vy256.com', '8443'), //0,0 0,1
+      array('daidem.vidhash.com', '8443'), //1,0 1,1
+      array('clarion.vidhash.com', '8186'), //her own
     );
 
     //shuffle($server_name); turn shuffle off. The js will shuffle if server down.
