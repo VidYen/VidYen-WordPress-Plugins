@@ -188,7 +188,7 @@ function vyps_rts_sql_castle_id_func()
 	$first_row = 1; //Note sure why I'm setting this.
 
 	//Input ID pull
-	$point_id_query = "SELECT village_id FROM ". $table_name_rts . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$point_id_query = "SELECT castle_id FROM ". $table_name_rts . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
 	$point_id_query_prepared = $wpdb->prepare( $point_id_query, $first_row );
 	$point_id = $wpdb->get_var( $point_id_query_prepared );
 
