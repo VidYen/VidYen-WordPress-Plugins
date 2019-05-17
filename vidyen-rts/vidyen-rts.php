@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.0.73
+Version:      0.0.76
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -125,7 +125,7 @@ function vidyen_rts_sql_install()
 /*** Includes ***/
 /*** CORE Functions ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_rts_sql_call_func.php'); //SQL Call functions
-//include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_bal_func.php'); //Custom WooWallet balance function for this purpose
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_rts_icon_func.php'); //SQL Call functions
 //include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_loa_user_query_func.php'); //Adds meta check
 
 /*** Balance AJAX ***/

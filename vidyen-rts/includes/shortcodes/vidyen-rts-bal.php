@@ -44,11 +44,11 @@ function vidyen_rts_bal_func()
 	$rts_bal_html_output =
 		'<table>
 			<tr>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($currency_point_id).'</span> <span id="currency_balance" style="vertical-align: bottom;">'.$currency_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($wood_point_id).'</span> <span id="wood_balance" style="vertical-align: bottom;">'.$wood_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($iron_point_id).'</span> <span id="iron_balance" style="vertical-align: bottom;">'.$iron_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($stone_point_id).'</span> <span id="stone_balance" style="vertical-align: bottom;">'.$stone_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vyps_point_icon_func($light_solider_point_id).'</span> <span id="light_soldier_balance" style="vertical-align: bottom;">'.$light_soldier_balance.'</span></div></td>
+			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($currency_point_id).'</span> <span id="currency_balance" style="vertical-align: bottom;">'.$currency_balance.'</span></div></td>
+			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($wood_point_id).'</span> <span id="wood_balance" style="vertical-align: bottom;">'.$wood_balance.'</span></div></td>
+			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($iron_point_id).'</span> <span id="iron_balance" style="vertical-align: bottom;">'.$iron_balance.'</span></div></td>
+			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($stone_point_id).'</span> <span id="stone_balance" style="vertical-align: bottom;">'.$stone_balance.'</span></div></td>
+			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($light_solider_point_id).'</span> <span id="light_soldier_balance" style="vertical-align: bottom;">'.$light_soldier_balance.'</span></div></td>
 			</tr>
 		</table>';
 
