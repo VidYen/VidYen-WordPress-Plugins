@@ -20,8 +20,12 @@ function vidyen_mmo_loa_id_func($atts)
     return; //Not logged in. You see nothing.
   }
 
-  //Get current user Id obviously
+  //Get current user Id obviously and email
   $user_id = get_current_user_id();
+  $user_info = get_userdata($user_id);
+  $user_email =  $user_info->user_email;
+  $user_registration_link = '/registerid '. $user_email;
+  $loa_link_generate_url = plugins_url( 'js/', dirname(__FILE__) ) . 'loa-id-generate.js';
 
   //This is hardcoded, but the label we are going to cram into the usermeta table
   $key = 'vidyen_mmo_loa_id';
@@ -161,6 +165,21 @@ function vidyen_mmo_loa_id_func($atts)
       </div>
         ";
     }
+
+  $form_result_ouput .= '<table>
+                  <tr>
+                    <td>
+                      <div>To link your LOA account copy and paste the command below into the chat in Legends of Aria on the City States of Dandolo Game server.</div>
+                    </td>
+                  </tr>
+                  <tr>
+                     <td>
+                      <input id="url_output" style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type="text" value="'.$user_registration_link.'" width="100%" readonly>
+                      <button onclick="copy_link()">Copy</button>
+                    </td>
+                   </tr>
+                  </table>
+                  <script src="'.$loa_link_generate_url.'"></script>';
 
   //Remember kids. Always return shortcodes. Never echo or you are going to have a bad time.
   return $form_result_ouput;
