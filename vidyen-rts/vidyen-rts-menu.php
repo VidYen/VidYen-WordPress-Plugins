@@ -45,6 +45,8 @@ function vidyen_rts_sub_menu_page()
 		$iron_id = abs(intval($_POST['iron_id']));
 		$stone_id = abs(intval($_POST['stone_id']));
 		$light_soldier_id = abs(intval($_POST['light_soldier_id']));
+		$village_id = abs(intval($_POST['village_id']));
+		$castle_id = abs(intval($_POST['castle_id']));
 
     $table_name_rts = $wpdb->prefix . 'vidyen_rts';
 
@@ -54,6 +56,7 @@ function vidyen_rts_sub_menu_page()
 					'iron_id' => $iron_id,
 					'stone_id' => $stone_id,
 					'light_soldier_id' => $light_soldier_id,
+					'castle_id' => $castle_id,
 	    ];
 
 			$wpdb->update($table_name_rts, $data, ['id' => 1]);
@@ -120,7 +123,17 @@ function vidyen_rts_sub_menu_page()
 				<td>Light Soldier ID</td>
 				<td><input type="number" name="light_soldier_id" type="number" id="light_soldier_id" min="1" step="1" value="'.$light_soldier_id.'" required="true"></td>
 				<td>'.vyps_point_icon_func($light_soldier_id).'</td>
-			</tr
+			</tr>
+			<tr>
+				<td>Stone Point ID</td>
+				<td><input type="number" name="stone_id" type="number" id="village_id" min="1" step="1" value="'.$village_id.'" required="true"></td>
+				<td>'.vyps_point_icon_func($village_id).'</td>
+			</tr>
+			<tr>
+				<td>Light Soldier ID</td>
+				<td><input type="number" name="castle_id" type="number" id="castle_id" min="1" step="1" value="'.$castle_id.'" required="true"></td>
+				<td>'.vyps_point_icon_func($castle_id).'</td>
+			</tr>
 			<tr>
 				<td colspan="3"><input type="submit" value="Submit"></td>
 			</tr>
