@@ -49,7 +49,7 @@ function vidyen_rts_mission_func()
 		$site_path = '/login' . '/';
 		$site_url = get_site_url() . $site_path;
 
-		//Concatenate the values into the output
+		//Village sack
 		$mission_html_output =
 			'<table width="100%">
 				<tr>
@@ -83,8 +83,10 @@ function vidyen_rts_mission_func()
 
 	$current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
 
-	//Concatenate the values into the output
-	$mission_html_output =
+	$mission_html_output = ''; //Starter
+
+	//Village Sack code
+	$mission_html_output .=
 		'<table width="100%">
 			<tr>
 				<th>'.$light_soldier_large_icon.' Send Soldiers to raid poor peasant village for loot. '.$village_icon.'</th>
@@ -123,6 +125,50 @@ function vidyen_rts_mission_func()
 				</td>
 			</tr>
 		</table>';
+
+		//Spacing
+		$mission_html_output .= '<br><br>';
+		
+		//Castle Sack code
+		$mission_html_output .=
+			'<table width="100%">
+				<tr>
+					<th>'.$light_soldier_large_icon.' Send Soldiers to raid nearby Castle. '.$castle_icon.'</th>
+				</tr>
+				<tr>
+					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">200</span></div></td>
+				</tr>
+				<tr>
+					<td>
+						<div align="center">
+							<input  class="button" id="sack_button" type="button" value="Attack!" onclick="rts_siege_castle()" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="mission_output" align="center">
+						Your soliders wait for your command.
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div id="loot_output" align="center">
+							You have no loot yet.
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
+						<div id="raidVillageCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+							<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$light_soldier_icon.'</div>
+						</div>
+					</div>
+					</td>
+				</tr>
+			</table>';
 
 
 	$mission_html_output .= '<script src="'.$rts_ajax_js_url.'"></script>';
