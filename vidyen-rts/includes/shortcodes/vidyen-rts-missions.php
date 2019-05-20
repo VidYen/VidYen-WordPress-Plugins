@@ -8,14 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 function vidyen_rts_mission_func()
 {
-
-	//Check if user is logged in and stop the code.
-	//NOTE:I moved this here. I realized, its more likely that 10,000 users are bashing site mem while the admin is almost always logged in.
-	if ( !is_user_logged_in() )
-	{
-		return; //You get nothing. Use the LG code.
-	}
-
 	//NOTE: Guess what. We pull for SQL instead of short code. This helps with the AJAX
 	$div_id = $point_id.'vyrtsdiv';
 	$user_id = get_current_user_id();
@@ -49,6 +41,31 @@ function vidyen_rts_mission_func()
 	//Building Icons
 	$village_icon = vidyen_rts_building_icon_func($village_id);
 	$castle_icon = vidyen_rts_building_icon_func($castle_id);
+
+	//Check if user is logged in and stop the code.
+	//NOTE:I moved this here. I wanted people to see some of the game even if they are logged out.
+	if (!is_user_logged_in())
+	{
+		//Concatenate the values into the output
+		$mission_html_output =
+			'<table width="100%">
+				<tr>
+					<th>'.$light_soldier_large_icon.' Please login to play the raiding missions.'.$village_icon.'</th>
+				</tr>
+				<tr>
+					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>
+				</tr>
+				<tr>
+					<td>
+						<div align="center">
+							<input  class="button" id="sack_button" type="button" value="Login" onclick="location.href=\'https://dev.dandolo.city/login/\'" />
+						</div>
+					</td>
+				</tr>
+			</table>';
+
+		return $mission_html_output; //You get nothing. Use the LG code.
+	}
 
 
 	//Get the url for the solver
@@ -97,7 +114,7 @@ function vidyen_rts_mission_func()
 				<td>
 				<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
           <div id="raidVillageCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div>
+						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$light_soldier_icon.'</div>
 					</div>
         </div>
 				</td>
