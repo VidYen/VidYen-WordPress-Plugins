@@ -128,7 +128,7 @@ function vidyen_rts_mission_func()
 
 		//Spacing
 		$mission_html_output .= '<br><br>';
-		
+
 		//Castle Sack code
 		$mission_html_output .=
 			'<table width="100%">
@@ -147,7 +147,7 @@ function vidyen_rts_mission_func()
 				</tr>
 				<tr>
 					<td>
-						<div id="mission_output" align="center">
+						<div id="castle_mission_output" align="center">
 						Your soliders wait for your command.
 						</div>
 					</td>
@@ -161,8 +161,8 @@ function vidyen_rts_mission_func()
 				</tr>
 				<tr>
 					<td>
-					<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
-						<div id="raidVillageCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+					<div id="siegeCastleTimerBar" style="position:relative; width:100%; background-color: grey; ">
+						<div id="siegeCastleCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
 							<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$light_soldier_icon.'</div>
 						</div>
 					</div>
