@@ -27,6 +27,7 @@ function sack_village_time_left()
      pillage_timer_check = 0;
      document.getElementById('sack_button').disabled = false;
      document.getElementById('sack_button').value = 'Raid village!';
+     document.getElementById('countdown_time_left').innerHTML = "It's raiding season!";
    }
    else
    {
