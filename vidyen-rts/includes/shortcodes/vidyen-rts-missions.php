@@ -32,12 +32,24 @@ function vidyen_rts_mission_func()
 	//Military
 	$light_solider_point_id = vyps_rts_sql_light_soldier_id_func();
 
+	//Buildings
+	$village_id = vyps_rts_sql_village_id_func();
+	$castle_id = vyps_rts_sql_castle_id_func();
+
 	//The icons for loot
 	$currency_icon = vyps_point_icon_func($currency_point_id);
 	$wood_icon = vyps_point_icon_func($wood_point_id);
 	$iron_icon = vyps_point_icon_func($iron_point_id);
 	$stone_icon = vyps_point_icon_func($stone_point_id);
 	$light_soldier_icon = vyps_point_icon_func($light_solider_point_id);
+
+	//Icons for units
+	$light_soldier_large_icon = vidyen_rts_unit_icon_func($light_solider_point_id);
+
+	//Building Icons
+	$village_icon = vidyen_rts_building_icon_func($village_id);
+	$castle_icon = vidyen_rts_building_icon_func($castle_id);
+
 
 	//Get the url for the solver
 	$rts_ajax_js_url = plugins_url( 'js/rts_missions.js', dirname(__FILE__) );
@@ -55,7 +67,7 @@ function vidyen_rts_mission_func()
 	$mission_html_output =
 		'<table width="100%">
 			<tr>
-				<th>Send Soldiers to raid poor peasant village for loot.</th>
+				<th>'.$light_soldier_large_icon.' Send Soldiers to raid poor peasant village for loot. '.$village_icon.'</th>
 			</tr>
 			<tr>
 				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>

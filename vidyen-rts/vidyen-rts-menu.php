@@ -82,6 +82,12 @@ function vidyen_rts_sub_menu_page()
 	//Light Soldier Id (yes I don't have knights yet but plannged so I keep variables ready)
 	$light_soldier_id = intval(vyps_rts_sql_light_soldier_id_func());
 
+	//Village ID
+	$village_id = intval(vyps_rts_sql_village_id_func());
+
+	//Castle ID
+	$castle_id = intval(vyps_rts_sql_castle_id_func());
+
 
 	//It's possible we don't use the VYPS logo since no points.
   $vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
@@ -125,12 +131,12 @@ function vidyen_rts_sub_menu_page()
 				<td>'.vyps_point_icon_func($light_soldier_id).'</td>
 			</tr>
 			<tr>
-				<td>Stone Point ID</td>
-				<td><input type="number" name="stone_id" type="number" id="village_id" min="1" step="1" value="'.$village_id.'" required="true"></td>
+				<td>Village Point ID</td>
+				<td><input type="number" name="village_id" type="number" id="village_id" min="1" step="1" value="'.$village_id.'" required="true"></td>
 				<td>'.vyps_point_icon_func($village_id).'</td>
 			</tr>
 			<tr>
-				<td>Light Soldier ID</td>
+				<td>Castle ID</td>
 				<td><input type="number" name="castle_id" type="number" id="castle_id" min="1" step="1" value="'.$castle_id.'" required="true"></td>
 				<td>'.vyps_point_icon_func($castle_id).'</td>
 			</tr>
