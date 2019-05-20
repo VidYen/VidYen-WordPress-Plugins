@@ -46,6 +46,9 @@ function vidyen_rts_mission_func()
 	//NOTE:I moved this here. I wanted people to see some of the game even if they are logged out.
 	if (!is_user_logged_in())
 	{
+		$site_path = '/login' . '/';
+		$site_url = get_site_url() . $site_path;
+
 		//Concatenate the values into the output
 		$mission_html_output =
 			'<table width="100%">
@@ -58,7 +61,7 @@ function vidyen_rts_mission_func()
 				<tr>
 					<td>
 						<div align="center">
-							<input  class="button" id="sack_button" type="button" value="Login" onclick="location.href=\'https://dev.dandolo.city/login/\'" />
+							<input  class="button" id="sack_button" type="button" value="Login" onclick="location.href=\''.$site_url.'\'" />
 						</div>
 					</td>
 				</tr>
