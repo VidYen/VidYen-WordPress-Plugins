@@ -5,24 +5,24 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /*** AJAX TO GRAB HASH PER SECOND FROM MO ***/
 
 // register the ajax action for authenticated users
-add_action('wp_ajax_vidyen_rts_sack_village_action', 'vidyen_rts_sack_castle_action');
+add_action('wp_ajax_vidyen_rts_siege_village_action', 'vidyen_rts_siege_castle_action');
 
 //register the ajax for non authenticated users
 //NOTE: for missions they need to be authenticated
-//add_action( 'wp_ajax_nopriv_vidyen_rts_sack_village_action', 'vidyen_rts_sack_village_action' );
+//add_action( 'wp_ajax_nopriv_vidyen_rts_siege_village_action', 'vidyen_rts_siege_village_action' );
 
 // handle the ajax request
-function vidyen_rts_sack_castle_action()
+function vidyen_rts_siege_castle_action()
 {
   global $wpdb; // this is how you get access to the database
 
   //Is user logged in check!
   if ( ! is_user_logged_in() )
   {
-    $castle_rts_sack_castle_server_response = array(
+    $castle_rts_siege_castle_server_response = array(
         'system_message' => "NOTLOGGEDIN",
     );
-      echo json_encode($castle_rts_sack_castle_server_response); //Proper method to return json
+      echo json_encode($castle_rts_siege_castle_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
@@ -32,7 +32,7 @@ function vidyen_rts_sack_castle_action()
   $solider_point_id = vyps_rts_sql_light_soldier_id_func();
   $soldiers_sent = 200;
   $soldiers_reason = 'Soldiers killed';
-  $vyps_meta_id = 'Mission_sack';
+  $vyps_meta_id = 'Mission_siege';
 
   //Resource IDs
   $currency_point_id = vyps_rts_sql_currency_id_func();
@@ -55,7 +55,7 @@ function vidyen_rts_sack_castle_action()
     $iron_looted = 0;
     $stone_looted = 0;
 
-    $castle_rts_sack_castle_server_response = array(
+    $castle_rts_siege_castle_server_response = array(
         'system_message' => 'NOTENOUGHSOLDIERS',
         'mission_story' => $story,
         'mission_loot' => $loot,
@@ -66,13 +66,13 @@ function vidyen_rts_sack_castle_action()
         'soldiers_killed' => $soldiers_killed,
         'time_left' => 0,
     );
-      echo json_encode($castle_rts_sack_castle_server_response); //Proper method to return json
+      echo json_encode($castle_rts_siege_castle_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
-  $mission_id = 'sackcastle05'; //five minute village sack
+  $mission_id = 'siegecastle05'; //five minute village siege
   $mission_time = 30; //5 minutes
-  $reason = 'Sack the castle!';
+  $reason = 'Siege the castle!';
   $vyps_meta_id = ''; //I can't think what to use here.
 
   //First lets check if a mission is currently running.
@@ -100,7 +100,7 @@ function vidyen_rts_sack_castle_action()
     $iron_looted = 0;
     $stone_looted = 0;
 
-    $castle_rts_sack_castle_server_response = array(
+    $castle_rts_siege_castle_server_response = array(
         'system_message' => 'YOUMUSTWAIT',
         'mission_story' => $story,
         'mission_loot' => $loot,
@@ -111,7 +111,7 @@ function vidyen_rts_sack_castle_action()
         'soldiers_killed' => $soldiers_killed,
         'time_left' => $current_mission_time,
     );
-      echo json_encode($castle_rts_sack_castle_server_response); //Proper method to return json
+      echo json_encode($castle_rts_siege_castle_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
@@ -256,7 +256,7 @@ function vidyen_rts_sack_castle_action()
   $response_sum = $response_sum + vyps_point_credit_func( $iron_point_id, $iron_looted, $user_id, $soldiers_reason, $vyps_meta_id );
   $response_sum = $response_sum + vyps_point_credit_func( $stone_point_id, $stone_looted, $user_id, $soldiers_reason, $vyps_meta_id );
 
-  $castle_rts_sack_castle_server_response = array(
+  $castle_rts_siege_castle_server_response = array(
       'system_message' => $response_sum,
       'mission_story' => $story,
       'mission_loot' => $loot,
@@ -268,7 +268,7 @@ function vidyen_rts_sack_castle_action()
       'time_left' => $current_mission_time,
   );
 
-  echo json_encode($castle_rts_sack_castle_server_response); //Proper method to return json
+  echo json_encode($castle_rts_siege_castle_server_response); //Proper method to return json
 
   wp_die(); // this is required to terminate immediately and return a proper response
 }
