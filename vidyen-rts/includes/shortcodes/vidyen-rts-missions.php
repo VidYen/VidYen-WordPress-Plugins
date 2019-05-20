@@ -129,7 +129,7 @@ function vidyen_rts_mission_func()
 		//Spacing
 		$mission_html_output .= '<br><br>';
 
-		//Castle Sack code
+		//Castle Siege code
 		$mission_html_output .=
 			'<table width="100%">
 				<tr>
