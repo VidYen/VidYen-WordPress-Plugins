@@ -45,6 +45,7 @@ function vidyen_rts_sub_menu_page()
 		$iron_id = abs(intval($_POST['iron_id']));
 		$stone_id = abs(intval($_POST['stone_id']));
 		$light_soldier_id = abs(intval($_POST['light_soldier_id']));
+		$laborer_id = abs(intval($_POST['laborer_id']));
 		$village_id = abs(intval($_POST['village_id']));
 		$castle_id = abs(intval($_POST['castle_id']));
 
@@ -56,6 +57,7 @@ function vidyen_rts_sub_menu_page()
 					'iron_id' => $iron_id,
 					'stone_id' => $stone_id,
 					'light_soldier_id' => $light_soldier_id,
+					'laborer_id' => $laborer_id,
 					'castle_id' => $castle_id,
 	    ];
 
@@ -81,6 +83,9 @@ function vidyen_rts_sub_menu_page()
 
 	//Light Soldier Id (yes I don't have knights yet but plannged so I keep variables ready)
 	$light_soldier_id = intval(vyps_rts_sql_light_soldier_id_func());
+
+	//Light Soldier Id (yes I don't have knights yet but plannged so I keep variables ready)
+	$laborer_id = intval(vyps_rts_sql_laborer_id_func());
 
 	//Village ID
 	$village_id = intval(vyps_rts_sql_village_id_func());
@@ -129,6 +134,11 @@ function vidyen_rts_sub_menu_page()
 				<td>Light Soldier ID</td>
 				<td><input type="number" name="light_soldier_id" type="number" id="light_soldier_id" min="1" step="1" value="'.$light_soldier_id.'" required="true"></td>
 				<td>'.vyps_point_icon_func($light_soldier_id).'</td>
+			</tr>
+			<tr>
+				<td>Laborer ID</td>
+				<td><input type="number" name="laborer_id" type="number" id="laborer_id" min="1" step="1" value="'.$laborer_id.'" required="true"></td>
+				<td>'.vyps_point_icon_func($laborer_id).'</td>
 			</tr>
 			<tr>
 				<td>Village Point ID</td>

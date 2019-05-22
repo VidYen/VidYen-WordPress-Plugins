@@ -19,13 +19,14 @@ function pull_rts_bal()
      rts_iron_balance = parseFloat(output_response.iron_balance);
      rts_stone_balance = parseFloat(output_response.stone_balance);
      rts_light_soldier_balance = parseFloat(output_response.light_soldier_balance);
+     rts_laborer_balance = parseFloat(output_response.laborer_balance);
 
      document.getElementById('currency_balance').innerHTML = rts_currency_balance;
      document.getElementById('wood_balance').innerHTML = rts_wood_balance;
      document.getElementById('iron_balance').innerHTML = rts_iron_balance;
      document.getElementById('stone_balance').innerHTML = rts_stone_balance;
      document.getElementById('light_soldier_balance').innerHTML = rts_light_soldier_balance;
-
+     document.getElementById('laborer_balance').innerHTML = rts_laborer_balance;
    });
   });
 }

@@ -19,6 +19,9 @@ function vidyen_rts_bal_func()
 	//Military
   $light_solider_point_id = vyps_rts_sql_light_soldier_id_func();
 
+	//Civilian
+	$laborer_point_id = vyps_rts_sql_laborer_id_func();
+
   //Resource IDs
   $currency_point_id = vyps_rts_sql_currency_id_func();
   $wood_point_id = vyps_rts_sql_wood_id_func();
@@ -36,6 +39,9 @@ function vidyen_rts_bal_func()
 	//Soldier balance
 	$light_soldier_balance = intval(vyps_point_balance_func($light_solider_point_id, $user_id)); //Yes we always be santising so whelp
 
+	//Laborer Balance
+	$laborer_balance = intval(vyps_point_balance_func($laborer_point_id, $user_id)); //Yes we always be santising so whelp
+
 	//Get the url for the solver
 	$rts_ajax_js_url = plugins_url( 'js/rts_bal.js', dirname(__FILE__) );
 
@@ -49,6 +55,7 @@ function vidyen_rts_bal_func()
 			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($iron_point_id).'</span> <span id="iron_balance" style="vertical-align: bottom;">'.$iron_balance.'</span></div></td>
 			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($stone_point_id).'</span> <span id="stone_balance" style="vertical-align: bottom;">'.$stone_balance.'</span></div></td>
 			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($light_solider_point_id).'</span> <span id="light_soldier_balance" style="vertical-align: bottom;">'.$light_soldier_balance.'</span></div></td>
+			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($laborer_point_id).'</span> <span id="laborer_balance" style="vertical-align: bottom;">'.$laborer_balance.'</span></div></td>
 			</tr>
 		</table>';
 

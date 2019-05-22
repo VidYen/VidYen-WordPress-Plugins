@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.1.1
+Version:      0.2.0
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -52,6 +52,9 @@ function vidyen_rts_sql_install()
 	light_ship_id mediumint(9) NOT NULL,
 	light_ship_cost mediumint(9) NOT NULL,
   light_ship_time mediumint(9) NOT NULL,
+  laborer_id mediumint(9) NOT NULL,
+  laborer_cost mediumint(9) NOT NULL,
+  laborer_time mediumint(9) NOT NULL,
   village_id mediumint(9) NOT NULL,
   castle_id mediumint(9) NOT NULL,
   mine_id mediumint(9) NOT NULL,
@@ -118,6 +121,9 @@ function vidyen_rts_sql_install()
 			'light_ship_id' => 8,
 			'light_ship_cost' => 100,
       'light_ship_time' => 100,
+      'laborer_id' => 11,
+      'laborer_cost' => 1,
+      'laborer_time' => 1,
       'village_id' => 9,
       'castle_id' => 10,
 	];
@@ -143,8 +149,13 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_a
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_check_mission_time_func.php');
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_sack_village_timer_ajax.php');
 
+/*** RECRUIT FUNCTIONS ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/recruit/vidyen_rts_recruit_laborers_ajax.php');
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/recruit/vidyen_rts_recruit_laborers_timer_ajax.php');
+
 /*** Shortcodes ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-missions.php'); //Ajax Balance
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-missions.php'); //Missions
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-recruit.php'); //Recruit
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-bal.php'); //Post back for game transfers
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-point-exchange.php'); //Ajax Point Exchange
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-credit-postback.php'); //Post back for game credit transfers

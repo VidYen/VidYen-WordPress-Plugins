@@ -23,6 +23,9 @@ function vidyen_rts_bal_api_action()
   //Military
   $light_solider_point_id = vyps_rts_sql_light_soldier_id_func();
 
+  //Civilian
+  $laborer_point_id = vyps_rts_sql_laborer_id_func();
+
   //Resource IDs
   $currency_point_id = vyps_rts_sql_currency_id_func();
   $wood_point_id = vyps_rts_sql_wood_id_func();
@@ -32,7 +35,13 @@ function vidyen_rts_bal_api_action()
   //Get user id
   $user_id = get_current_user_id();
 
+  //Soldier Balance
   $light_soldier_balance = intval(vyps_point_balance_func($light_solider_point_id, $user_id));
+
+  //Laborer Balance
+	$laborer_balance = intval(vyps_point_balance_func($laborer_point_id, $user_id));
+
+  //Resource Balance
   $currency_balance = intval(vyps_point_balance_func($currency_point_id, $user_id));
   $wood_balance = intval(vyps_point_balance_func($wood_point_id, $user_id));
   $iron_balance = intval(vyps_point_balance_func($iron_point_id, $user_id));
@@ -41,6 +50,7 @@ function vidyen_rts_bal_api_action()
   $rts_bal_array_server_response = array(
       'currency_balance' => $currency_balance,
       'light_soldier_balance' => $light_soldier_balance,
+      'laborer_balance' => $laborer_balance,
       'wood_balance' => $wood_balance,
       'iron_balance' => $iron_balance,
       'stone_balance' => $stone_balance,
