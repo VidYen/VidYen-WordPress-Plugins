@@ -5,14 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /*** AJAX TO GRAB HASH PER SECOND FROM MO ***/
 
 // register the ajax action for authenticated users
-add_action('wp_ajax_vidyen_rts_sack_village_action', 'vidyen_rts_sack_village_action');
+add_action('wp_ajax_vidyen_rts_recruit_laborers_action', 'vidyen_rts_recruit_laborers_action');
 
 //register the ajax for non authenticated users
 //NOTE: for missions they need to be authenticated
-//add_action( 'wp_ajax_nopriv_vidyen_rts_sack_village_action', 'vidyen_rts_sack_village_action' );
+//add_action( 'wp_ajax_nopriv_vidyen_rts_recruit_laborers_action', 'vidyen_rts_recruit_laborers_action' );
 
 // handle the ajax request
-function vidyen_rts_sack_village_action()
+function vidyen_rts_recruit_laborers_action()
 {
   global $wpdb; // this is how you get access to the database
 
@@ -31,49 +31,43 @@ function vidyen_rts_sack_village_action()
   //Assumption. We know the user send 20 soldiers... so we figure out how many survived.
   $solider_point_id = vyps_rts_sql_light_soldier_id_func();
   $solider_icon = vyps_point_icon_func($solider_point_id);
-  $soldiers_sent = 20;
-  $soldiers_reason = 'Soldiers killed';
-  $vyps_meta_id = 'Mission_sack';
+  $laborer_point_id = vyps_rts_sql_laborer_id_func();
+  $laborer_icon = vyps_point_icon_func($laborer_point_id);
+  $money_sent = 1000;
+  $recruit_reason = 'Money Spent';
+  $vyps_meta_id = 'recruit_laborers';
 
   //Resource IDs
   $currency_point_id = vyps_rts_sql_currency_id_func();
-  $wood_point_id = vyps_rts_sql_wood_id_func();
-  $iron_point_id = vyps_rts_sql_iron_id_func();
-  $stone_point_id = vyps_rts_sql_stone_id_func();
+  $currency_icon = vyps_point_icon_func($currency_point_id);
 
   //We need to see if they have 20 soldiers to send
 
-  $current_soldier_amount = vyps_point_balance_func($solider_point_id, $user_id);
-  if ($current_soldier_amount < $soldiers_sent)
+  $current_currency_amount = vyps_point_balance_func($currency_point_id, $user_id);
+  if ($current_currency_amount < $money_sent)
   {
-    $story = "You don't have enough soldiers to send. They refuse to budge from the barracks.";
-    $loot = "You received 0 resources.";
+    $story = "You don't have enough currency to begin negotiations.";
+    $loot = "No laborers hired.";
 
-    $soldiers_killed = 0;
+    $money_spent = 0;
 
-    $money_looted = 0;
-    $wood_looted = 0;
-    $iron_looted = 0;
-    $stone_looted = 0;
+    $laborers_hired = 0;
 
     $village_rts_sack_village_server_response = array(
-        'system_message' => 'NOTENOUGHSOLDIERS',
+        'system_message' => 'NOTENOUGHMONEY',
         'mission_story' => $story,
         'mission_loot' => $loot,
-        'money_looted' => $money_looted,
-        'wood_looted' => $wood_looted,
-        'iron_looted' => $iron_looted,
-        'stone_looted' => $stone_looted,
-        'soldiers_killed' => $soldiers_killed,
+        'laborers_hired' => $laborers_hired,
+        'money_spent' => $money_spent,
         'time_left' => 0,
     );
       echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
-  $mission_id = 'sackvillage05'; //five minute village sack
+  $mission_id = 'hirelaborers05'; //five minute village sack
   $mission_time = 300; //5 minutes
-  $reason = 'Sack the village!';
+  $reason = 'Hire laborers.';
   $vyps_meta_id = ''; //I can't think what to use here.
 
   //First lets check if a mission is currently running.
@@ -91,75 +85,58 @@ function vidyen_rts_sack_village_action()
   }
   else
   {
-    $story = "You must wait until local villages recover before taking advantage of them.";
-    $loot = "You need to wait $current_mission_time seconds before pillaging again.";
+    $story = "You must wait until local villagers recover before taking advantage of them.";
+    $loot = "You need to wait $current_mission_time seconds before recruiting again.";
 
-    $soldiers_killed = 0;
+    $money_spent = 0;
 
-    $money_looted = 0;
-    $wood_looted = 0;
-    $iron_looted = 0;
-    $stone_looted = 0;
+    $laborers_hired = 0;
 
     $village_rts_sack_village_server_response = array(
         'system_message' => 'YOUMUSTWAIT',
         'mission_story' => $story,
         'mission_loot' => $loot,
-        'money_looted' => $money_looted,
-        'wood_looted' => $wood_looted,
-        'iron_looted' => $iron_looted,
-        'stone_looted' => $stone_looted,
-        'soldiers_killed' => $soldiers_killed,
+        'laborers_hired' => $laborers_hired,
+        'money_spent' => $money_spent,
         'time_left' => $current_mission_time,
     );
       echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
+  $money_spent = mt_rand( 0 , $money_sent ); //It's possible the laborders were really bored
+  $laborers_hired = mt_rand( 0 , 250 );
 
-  $soldiers_killed = mt_rand( 0 , $soldiers_sent ); //It's possible no one died.
-
-  $money_looted = mt_rand( 0 , 500 );
-  $wood_looted = mt_rand( 0 , 100 );
-  $iron_looted = mt_rand( 0 , 75 );
-  $stone_looted = mt_rand( 0 , 50 ); //Why would you loot stone?
-
-  if ($soldiers_killed < 5)
+  if ($money_spent < 250)
   {
-    $story = "Your soldiers suprise the villagers pillaging them all and taking little casualties with $soldiers_killed $solider_icon killed. They even tore down the poor stone huts carrying back stone.";
-    $loot = "You received $money_looted copper coins, $wood_looted wood, $iron_looted iron ore, and $stone_looted units of stone.";
+    $story = "You approach the village elder and notice the large group of haggard beggars hanging out with him. He immediately offers $laborer_icon $laborers_hired for only $currency_icon $money_spent.";
+    $loot = "You received $laborers_hired copper coins, $wood_looted wood, $iron_looted iron ore, and $stone_looted units of stone.";
 
     //Technically no soldiders were killed.
   }
-  elseif ($soldiers_killed < 10)
+  elseif ($money_spent < 500)
   {
-    $story = "Your soldiers attack and take some light casualties with $soldiers_killed $solider_icon lost. They remaining are too lazy to haul back the stone. It's heavy.";
-    $loot = "You received $money_looted copper coins, $wood_looted wood, and $iron_looted iron ore." ;
-    $stone_looted = 0; //Just had to reset that.
+    $laborers_hired = $laborers_hired + 10; //I figure you get a bonus
+    $story = "You approach the village elder and notice the large and it seems a bit better than most villages so you have to offer more money than normal. He offers a bonus of $laborer_icon 10 for a total of $laborer_icon $laborers_hired costing $currency_icon $money_spent.";
+    $loot = "You received $laborers_hired laborers." ;
   }
-  elseif ($soldiers_killed < 15)
+  elseif ($money_spent < 750)
   {
-    $story = "Your soldiers attack but the villagers were angry at being disturbed at second lunch and killed a good deal of your men with $soldiers_killed $solider_icon lost but they were able to flee with some loot. They remaining soldiers are too lazy to haul back stone and iron.";
-    $loot = "You received $money_looted copper coins and $wood_looted wood.";
-    $stone_looted = 0; //Just had to reset that.
-    $iron_looted = 0;
+    $laborers_hired = $laborers_hired + 15; //I figure you get a bonus
+    $story = "You approach the village elder and he haggles you to death. He offers a bonus of $laborer_icon 15 for a total of $laborer_icon $laborers_hired costing $currency_icon $money_spent.";
+    $loot = "You received $laborers_hired laborers." ;
   }
-  elseif ($soldiers_killed < 20)
+  elseif ($money_spent < 2000)
   {
-    $story = "Your soldiers sack the village but most of them die with $soldiers_killed $solider_icon lost. They only carry back the copper coins they theived.";
-    $loot = "You received $money_looted in copper coins." ;
-    $stone_looted = 0; //Just had to reset that.
-    $iron_looted = 0;
-    $wood_looted = 0;
+    $laborers_hired = $laborers_hired + 20; //I figure you get a bonus
+    $story = "You spend most of your money with $currency_icon  $money_spent spent. The amount of money did get extra 20 $laborer_icon with a total of $laborer_icon $laborers_hired";
+    $loot = "You received $laborers_hired laborers." ;
   }
-  elseif ($soldiers_killed > 19)
+  elseif ($money_spent > 1999)
   {
-    $story = "Your soldiers got drunk before attacking the peasants and attacked a nearby castle instead. All with $soldiers_killed $solider_icon died.";
+    $story = "As you approach the village you discover that the villagers are soldiers $solider_icon in poorly made villager disguises. They take all your $currency_icon $money_spent at sword point. You wish you raided the village instead.";
     $loot = "You received 0 resources.";
-    $stone_looted = 0; //Just had to reset that.
-    $iron_looted = 0;
-    $wood_looted = 0;
-    $money_looted = 0;
+    $laborers_hired = 0;
   }
   else
   {
@@ -168,23 +145,17 @@ function vidyen_rts_sack_village_action()
   }
 
   //Time to remove soldiers via functions.
-  vyps_point_deduct_func( $solider_point_id, $soldiers_killed, $user_id, $soldiers_reason, $vyps_meta_id );
+  vyps_point_deduct_func( $currency_point_id, $money_spent, $user_id, $recruit_reason, $vyps_meta_id );
 
   //Time to credit resources. I'm being lazy and getting the whole response sum so i can see in js (this whole thing was made in 2 hours)
-  $response_sum = vyps_point_credit_func( $currency_point_id, $money_looted, $user_id, $soldiers_reason, $vyps_meta_id );
-  $response_sum = $response_sum + vyps_point_credit_func( $wood_point_id, $wood_looted, $user_id, $soldiers_reason, $vyps_meta_id );
-  $response_sum = $response_sum + vyps_point_credit_func( $iron_point_id, $iron_looted, $user_id, $soldiers_reason, $vyps_meta_id );
-  $response_sum = $response_sum + vyps_point_credit_func( $stone_point_id, $stone_looted, $user_id, $soldiers_reason, $vyps_meta_id );
+  $response_sum = vyps_point_credit_func( $laborer_point_id, $laborers_hired, $user_id, $recruit_reason, $vyps_meta_id );
 
   $village_rts_sack_village_server_response = array(
       'system_message' => $response_sum,
       'mission_story' => $story,
       'mission_loot' => $loot,
-      'money_looted' => $money_looted,
-      'wood_looted' => $wood_looted,
-      'iron_looted' => $iron_looted,
-      'stone_looted' => $stone_looted,
-      'soldiers_killed' => $soldiers_killed,
+      'laborers_hired' => $laborers_hired,
+      'money_spent' => $money_spent,
       'time_left' => $current_mission_time,
   );
 

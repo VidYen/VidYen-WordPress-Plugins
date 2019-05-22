@@ -89,7 +89,7 @@ function vidyen_rts_recruit_func()
 	$mission_html_output .=
 		'<table width="100%">
 			<tr>
-				<th>'.$laborer_large_icon.' Recruit laborers from local vilalge. '.$village_icon.'</th>
+				<th>'.$laborer_large_icon.' Recruit laborers from local village. '.$village_icon.'</th>
 			</tr>
 			<tr>
 				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$currency_icon.'</span> <span id="money_required" style="vertical-align: bottom;">1000</span></div></td>
@@ -97,7 +97,7 @@ function vidyen_rts_recruit_func()
 			<tr>
 				<td>
 					<div align="center">
-						<input  class="button" id="sack_button" type="button" value="Speak to village elder!" onclick="rts_hire_laborers()" />
+						<input  class="button" id="recruit_laborers_button" type="button" value="Speak to village elder!" onclick="rts_recruit_laborers()" />
 					</div>
 				</td>
 			</tr>
@@ -110,7 +110,7 @@ function vidyen_rts_recruit_func()
 			</tr>
 			<tr>
 				<td>
-					<div id="results_output" align="center">
+					<div id="recruit_output" align="center">
 						You have not made your offer yet.
 					</div>
 				</td>
@@ -119,7 +119,7 @@ function vidyen_rts_recruit_func()
 				<td>
 				<div id="hireLaborersTimerBar" style="position:relative; width:100%; background-color: grey; ">
           <div id="hireLaborersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
+						<div id="recruit_laborers_countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
 					</div>
         </div>
 				</td>
@@ -182,11 +182,11 @@ function vidyen_rts_recruit_func()
 														var iron_icon = '$iron_icon';
 														var	stone_icon = '$stone_icon';
 														var	laborer_icon = '$laborer_icon';
-														var rts_sack_time_left = $current_mission_time;
-														var pillage_timer_check = 0;
-														if (rts_sack_time_left > 0)
+														var rts_recruit_time_left = $current_mission_time;
+														var recruit_laborers_timer_check = 0;
+														if (rts_recruit_time_left > 0)
 														{
-															sack_village_time_left();
+															recruit_laborers_time_left();
 														}
 													</script>";
 

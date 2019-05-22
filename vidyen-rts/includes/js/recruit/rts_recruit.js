@@ -12,53 +12,29 @@ function rts_recruit_laborers()
    {
      output_response = JSON.parse(response);
      //MMO Pull
-     rts_sack_system_message = output_response.system_message;
+     rts_recruit_system_message = output_response.system_message;
      rts_recruit_laborers_story = output_response.mission_story;
      rts_recruit_laborers_loot = output_response.mission_loot;
 
-     rts_sack_money_looted = output_response.money_looted;
-     rts_sack_wood_looted = output_response.wood_looted;
-     rts_sack_iron_looted = output_response.iron_looted;
-     rts_sack_stone_looted = output_response.stone_looted;
-     rts_sack_soldiers_killed = output_response.soldiers_killed;
+     rts_recruit_money_spent = output_response.money_spent;
+     rts_recruit_laborers_hired = output_response.laborers_hired;
 
-     rts_sack_time_left = parseFloat(output_response.time_left); //I'm going to assume that if we run this a mission
+     rts_recruit_time_left = parseFloat(output_response.time_left); //I'm going to assume that if we run this a mission
 
-     console.log(rts_sack_system_message); //Yes I know I console log too much.
+     console.log(rts_recruit_system_message); //Yes I know I console log too much.
 
      //This gives the sad story of the soldiers
      document.getElementById('mission_output').innerHTML = rts_recruit_laborers_story;
 
      //yeah I'm going to mess with formatting here because i don't want a really long string wide.
-     var sack_loot_table = 'Earned loot: ' + currency_icon + ' ' + rts_sack_money_looted + ', ' + wood_icon + ' ' + rts_sack_wood_looted + ', ' + iron_icon + ' ' + rts_sack_iron_looted + ', ' + stone_icon + ' ' + rts_sack_stone_looted;
+     var recruit_loot_table = 'Laborers Recruited: ' + laborer_icon + ' ' + rts_recruit_laborers_hired;
 
-     document.getElementById('loot_output').innerHTML = sack_loot_table;
+     document.getElementById('recruit_output').innerHTML = recruit_loot_table;
 
-     sack_village_time_left(); //This should work now that we actually got time left after running command
+     recruit_laborers_time_left(); //This should work now that we actually got time left after running command
    });
   });
 
-  //var dice_roll = Math.floor(Math.random() * 5);
-  //if (dice_roll == 0)
-  //{
-  //  document.getElementById('sack_button').value = 'I hope you have something worth looting!';
-  //}
-  //else if (dice_roll == 1)
-  //{
-  //  document.getElementById('sack_button').value = 'Whose being repressed now!';
-  //}
-  //else if (dice_roll == 2)
-  //{
-  //  document.getElementById('sack_button').value = 'Rule by popular vote? What?!';
-  //}
-  //else if (dice_roll == 3)
-  //{
-  //  document.getElementById('sack_button').value = 'Its raiding season!';
-  //}
-  //else if (dice_roll == 4)
-  //{
-  //  document.getElementById('sack_button').value = 'Tally Hoe!';
-  //}
 
   pull_rts_bal(); //If button is pushed might as well pull
 }

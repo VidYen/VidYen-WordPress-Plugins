@@ -5,14 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /*** AJAX TO GRAB HASH PER SECOND FROM MO ***/
 
 // register the ajax action for authenticated users
-add_action('wp_ajax_vidyen_rts_sack_village_timer_action', 'vidyen_rts_sack_village_timer_action');
+add_action('wp_ajax_vidyen_rts_recruit_laborers_timer_action', 'vidyen_rts_recruit_laborers_timer_action');
 
 //register the ajax for non authenticated users
 //NOTE: for missions they need to be authenticated
 //add_action( 'wp_ajax_nopriv_vidyen_rts_sack_village_action', 'vidyen_rts_sack_village_action' );
 
 // handle the ajax request
-function vidyen_rts_sack_village_timer_action()
+function vidyen_rts_recruit_laborers_timer_action()
 {
   global $wpdb; // this is how you get access to the database
 
