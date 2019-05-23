@@ -60,7 +60,7 @@ function vidyen_rts_train_func()
 		$mission_html_output =
 			'<table width="100%">
 				<tr>
-					<th>'.$soldier_large_icon.' Please login to play the train soldiers.'.$barracks_icon.'</th>
+					<th>'.$soldier_large_icon.' Please login to train soldiers.'.$barracks_icon.'</th>
 				</tr>
 				<tr>
 					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$currency_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">1000</span></div></td>

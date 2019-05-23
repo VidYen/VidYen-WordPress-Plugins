@@ -36,7 +36,7 @@ function train_soldiers_time_left()
      time_progress++;
      width = Math.floor( (time_progress / 300 ) * 100);
      elem.style.width = width + '%';
-     document.getElementById('train_soldiers_countdown_time_left').innerHTML = 'You have ' + rts_train_time_left + ' before the laborers recover from trying to train!';
+     document.getElementById('train_soldiers_countdown_time_left').innerHTML = 'You have ' + rts_train_time_left + ' seconds before the laborers recover from training!';
      //This gives the sad story of the soldiers
      //document.getElementById('mission_output').innerHTML = "You must wait until local villages recover before taking advantage of them.";
      //document.getElementById('loot_output').innerHTML =  "You need to wait " + rts_train_time_left +" seconds before pillaging again.";
