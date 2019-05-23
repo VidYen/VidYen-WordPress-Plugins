@@ -12,14 +12,14 @@ function sack_village_time_left()
   console.log('Pillage timer 0!');
 
   var elem = document.getElementById("raidVillageCoolDownTimer");
-  var time_progress = 300 - rts_sack_time_left;
+  var time_progress = 180 - rts_sack_time_left;
 
-  var width = Math.floor( time_progress / 300 ) * 100;
+  var width = Math.floor( time_progress / 180 ) * 100;
   var sackid = setInterval(sackframe, 1000);
   //var id = setInterval(frame, 1000);
   function sackframe()
   {
-   if (time_progress >= 300)
+   if (time_progress >= 180)
    {
      clearInterval(sackid);
      //document.getElementById('mission_output').innerHTML = "The villages are ready for pillaging! It's raiding season!";
@@ -34,7 +34,7 @@ function sack_village_time_left()
      width++;
      rts_sack_time_left = rts_sack_time_left - 1;
      time_progress++;
-     width = Math.floor( (time_progress / 300 ) * 100);
+     width = Math.floor( (time_progress / 180 ) * 100);
      elem.style.width = width + '%';
      document.getElementById('countdown_time_left').innerHTML = 'You have ' + rts_sack_time_left + ' seconds left before you can loot again!';
      //This gives the sad story of the soldiers

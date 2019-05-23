@@ -71,8 +71,8 @@ function vidyen_rts_sack_village_action()
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
-  $mission_id = 'sackvillage05'; //five minute village sack
-  $mission_time = 300; //5 minutes
+  $mission_id = 'sackvillage03'; //five minute village sack
+  $mission_time = 180; //5 minutes
   $reason = 'Sack the village!';
   $vyps_meta_id = ''; //I can't think what to use here.
 

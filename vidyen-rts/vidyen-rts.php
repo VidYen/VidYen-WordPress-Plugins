@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.2.9
+Version:      0.4.3
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -56,8 +56,10 @@ function vidyen_rts_sql_install()
   laborer_cost mediumint(9) NOT NULL,
   laborer_time mediumint(9) NOT NULL,
   village_id mediumint(9) NOT NULL,
+  village_burning_id mediumint(9) NOT NULL,
   castle_id mediumint(9) NOT NULL,
   mine_id mediumint(9) NOT NULL,
+  barracks_id mediumint(9) NOT NULL,
 	PRIMARY KEY  (id)
       ) {$charset_collate};";
 
@@ -126,6 +128,7 @@ function vidyen_rts_sql_install()
       'laborer_time' => 1,
       'village_id' => 9,
       'castle_id' => 10,
+      'barracks_id' => 12,
 	];
 
   //There will be no default data for the mission_log table
@@ -153,11 +156,15 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/missions/vidyen_rts_s
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/recruit/vidyen_rts_recruit_laborers_ajax.php');
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/recruit/vidyen_rts_recruit_laborers_timer_ajax.php');
 
+/*** TRAIN FUNCTIONS ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/train/vidyen_rts_train_soldiers_ajax.php');
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/recruit/vidyen_rts_train_soldiers_timer_ajax.php');
+
 /*** Shortcodes ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-missions.php'); //Missions
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-recruit.php'); //Recruit
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-train.php'); //Train
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-bal.php'); //Post back for game transfers
-//include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-point-exchange.php'); //Ajax Point Exchange
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-credit-postback.php'); //Post back for game credit transfers
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-deduct-postback.php'); //Post back for game deduct transfers
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-api-bal.php'); //Post back for game transfers

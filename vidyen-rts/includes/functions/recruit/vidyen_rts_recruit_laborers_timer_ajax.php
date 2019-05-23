@@ -19,29 +19,29 @@ function vidyen_rts_recruit_laborers_timer_action()
   //Is user logged in check!
   if ( ! is_user_logged_in() )
   {
-    $village_rts_sack_village_server_response = array(
+    $village_rts_recruit_laborers_server_response = array(
         'system_message' => "NOTLOGGEDIN",
     );
-      echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
+      echo json_encode($village_rts_recruit_laborers_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
   $user_id = get_current_user_id();
 
-  $mission_id = 'sackvillage05'; //five minute village sack
+  $mission_id = 'recruitlaborers05'; //five minute village sack
   $mission_time = 300; //5 minutes
-  $reason = 'Sack the village!';
+  $reason = 'Recruit Laborers.';
   $vyps_meta_id = ''; //I can't think what to use here.
 
   //First lets check if a mission is currently running.
   $current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
 
-  $village_rts_sack_village_server_response = array(
+  $village_rts_recruit_laborers_server_response = array(
 
       'time_left' => $current_mission_time,
   );
 
-  echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
+  echo json_encode($village_rts_recruit_laborers_server_response); //Proper method to return json
 
   wp_die(); // this is required to terminate immediately and return a proper response
 }

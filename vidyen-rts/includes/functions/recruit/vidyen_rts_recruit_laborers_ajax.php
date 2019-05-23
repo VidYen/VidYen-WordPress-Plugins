@@ -19,10 +19,10 @@ function vidyen_rts_recruit_laborers_action()
   //Is user logged in check!
   if ( ! is_user_logged_in() )
   {
-    $village_rts_sack_village_server_response = array(
+    $village_rts_recruit_laborers_server_response = array(
         'system_message' => "NOTLOGGEDIN",
     );
-      echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
+      echo json_encode($village_rts_recruit_laborers_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
@@ -53,7 +53,7 @@ function vidyen_rts_recruit_laborers_action()
 
     $laborers_hired = 0;
 
-    $village_rts_sack_village_server_response = array(
+    $village_rts_recruit_laborers_server_response = array(
         'system_message' => 'NOTENOUGHMONEY',
         'mission_story' => $story,
         'mission_loot' => $loot,
@@ -61,7 +61,7 @@ function vidyen_rts_recruit_laborers_action()
         'money_spent' => $money_spent,
         'time_left' => 0,
     );
-      echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
+      echo json_encode($village_rts_recruit_laborers_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
@@ -92,7 +92,7 @@ function vidyen_rts_recruit_laborers_action()
 
     $laborers_hired = 0;
 
-    $village_rts_sack_village_server_response = array(
+    $village_rts_recruit_laborers_server_response = array(
         'system_message' => 'YOUMUSTWAIT',
         'mission_story' => $story,
         'mission_loot' => $loot,
@@ -100,7 +100,7 @@ function vidyen_rts_recruit_laborers_action()
         'money_spent' => $money_spent,
         'time_left' => $current_mission_time,
     );
-      echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
+      echo json_encode($village_rts_recruit_laborers_server_response); //Proper method to return json
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
@@ -150,7 +150,7 @@ function vidyen_rts_recruit_laborers_action()
   //Time to credit resources. I'm being lazy and getting the whole response sum so i can see in js (this whole thing was made in 2 hours)
   $response_sum = vyps_point_credit_func( $laborer_point_id, $laborers_hired, $user_id, $recruit_reason, $vyps_meta_id );
 
-  $village_rts_sack_village_server_response = array(
+  $village_rts_recruit_laborers_server_response = array(
       'system_message' => $response_sum,
       'mission_story' => $story,
       'mission_loot' => $loot,
@@ -159,7 +159,7 @@ function vidyen_rts_recruit_laborers_action()
       'time_left' => $current_mission_time,
   );
 
-  echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
+  echo json_encode($village_rts_recruit_laborers_server_response); //Proper method to return json
 
   wp_die(); // this is required to terminate immediately and return a proper response
 }

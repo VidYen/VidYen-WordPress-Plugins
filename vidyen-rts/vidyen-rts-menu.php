@@ -48,6 +48,7 @@ function vidyen_rts_sub_menu_page()
 		$laborer_id = abs(intval($_POST['laborer_id']));
 		$village_id = abs(intval($_POST['village_id']));
 		$castle_id = abs(intval($_POST['castle_id']));
+		$baracks_id = abs(intval($_POST['baracks_id']));
 
     $table_name_rts = $wpdb->prefix . 'vidyen_rts';
 
@@ -92,6 +93,9 @@ function vidyen_rts_sub_menu_page()
 
 	//Castle ID
 	$castle_id = intval(vyps_rts_sql_castle_id_func());
+
+	//Barracks ID
+	$barracks_id = intval(vyps_rts_sql_barracks_id_func());
 
 
 	//It's possible we don't use the VYPS logo since no points.
@@ -151,25 +155,20 @@ function vidyen_rts_sub_menu_page()
 				<td>'.vyps_point_icon_func($castle_id).'</td>
 			</tr>
 			<tr>
+				<td>Barracks ID</td>
+				<td><input type="number" name="barracks_id" type="number" id="barracks_id" min="1" step="1" value="'.$barracks_id.'" required="true"></td>
+				<td>'.vyps_point_icon_func($barracks_id).'</td>
+			</tr>
+			<tr>
 				<td colspan="3"><input type="submit" value="Submit"></td>
 			</tr>
 		</form>
-	</table>';
-	/*
-	<h2>Shortcode</h2>
-	<p><b>[vidyen-rts-bal]</b> for live balance.</p>
-	<p><b>[vyps-rts-pe]</b> for live point exchange.</p>
-	<p><b>[vidyen-rts-deduct currency_id=2 apikey=(set here on in RTS menu)]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
-	<p><b>[vidyen-rts-credit currency_id=2 apikey=(set here on in RTS menu)]</b> Same as above but does the credit when you want to talk currency off server and into site.</p>
-	<p><b>[vidyen-rts-api-bal mode=GET gui=TRUE currency_id=7]</b> This is a postback page for external curls. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
-	<p><b>[vidyen-rts-register apikey=test]</b> This is for your registration curl. Only enter your apikey where test is written.</p>
-	<p><b>[vidyen-loa-id]</b> This is for your LoA userid box. It shows each user their currently stored LoA userid and lets them clear it if its incorrect. If edit=TRUE you are able to edit this directly from the website.</p>
-	<p>Simply put the shortcodes on a page and let it run with the point id from the VidYen point system.</p>
-	<p>Point ID is the point ID from the VidYen System. Found in Manage Points section of VYPS</p>
-	<p>NOTE: If you change this settings while a game is in play, they must close browser or tab and reload page as is server session based.</p>
-	<p>Requires the <a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank">VidYen Point System</a></p>
-	<br><br><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="' . $vyps_logo_url . '"></a>
-	';*/
+	</table>
+	<h1>Shortcoces</h1>
+	<p>[vidyen-rts-train]</p>
+	<p>[vidyen-rts-missions]</p>
+	<p>[vidyen-rts-bal]</p>
+	<p>[vidyen-rts-recruit]</p>';
 
   echo $vyps_rts_menu_html_ouput;
 }

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //Using Ajax will update autoamtically
 //NOTE: I've decided to this this with just one point and the WooWallet output for simplicity. If people want more they can ask.
 
-function vidyen_rts_mission_func()
+function vidyen_rts_train_func()
 {
 	//NOTE: Guess what. We pull for SQL instead of short code. This helps with the AJAX
 	$div_id = $point_id.'vyrtsdiv';
@@ -21,26 +21,33 @@ function vidyen_rts_mission_func()
 	$iron_point_id = vyps_rts_sql_iron_id_func();
 	$stone_point_id = vyps_rts_sql_stone_id_func();
 
+	//Civilian
+	$laborer_point_id = vyps_rts_sql_laborer_id_func();
+
 	//Military
 	$light_solider_point_id = vyps_rts_sql_light_soldier_id_func();
 
 	//Buildings
 	$village_id = vyps_rts_sql_village_id_func();
 	$castle_id = vyps_rts_sql_castle_id_func();
+	$barracks_id = vyps_rts_sql_barracks_id_func();
 
 	//The icons for loot
 	$currency_icon = vyps_point_icon_func($currency_point_id);
 	$wood_icon = vyps_point_icon_func($wood_point_id);
 	$iron_icon = vyps_point_icon_func($iron_point_id);
 	$stone_icon = vyps_point_icon_func($stone_point_id);
-	$light_soldier_icon = vyps_point_icon_func($light_solider_point_id);
+	$laborer_icon = vyps_point_icon_func($laborer_point_id);
+	$soldier_icon = vyps_point_icon_func($light_solider_point_id);
 
 	//Icons for units
-	$light_soldier_large_icon = vidyen_rts_unit_icon_func($light_solider_point_id);
+	$laborer_large_icon = vidyen_rts_unit_icon_func($laborer_point_id);
+	$soldier_large_icon = vidyen_rts_unit_icon_func($light_solider_point_id);
 
 	//Building Icons
 	$village_icon = vidyen_rts_building_icon_func($village_id);
 	$castle_icon = vidyen_rts_building_icon_func($castle_id);
+	$barracks_icon = vidyen_rts_building_icon_func($barracks_id);
 
 	//Check if user is logged in and stop the code.
 	//NOTE:I moved this here. I wanted people to see some of the game even if they are logged out.
@@ -53,10 +60,10 @@ function vidyen_rts_mission_func()
 		$mission_html_output =
 			'<table width="100%">
 				<tr>
-					<th>'.$light_soldier_large_icon.' Please login to play the raiding missions.'.$village_icon.'</th>
+					<th>'.$laborer_large_icon.' Please login to play the train soliders.'.$barracks_icon.'</th>
 				</tr>
 				<tr>
-					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>
+					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$currency_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">1000</span></div></td>
 				</tr>
 				<tr>
 					<td>
@@ -72,13 +79,13 @@ function vidyen_rts_mission_func()
 
 
 	//Get the url for the solver
-	$rts_ajax_js_url = plugins_url( 'js/rts_missions.js', dirname(__FILE__) );
-	$rts_ajax_timer_js_url = plugins_url( 'js/rts_mission_timer.js', dirname(__FILE__) );
+	$rts_ajax_js_url = plugins_url( 'js/train/rts_train.js', dirname(__FILE__) );
+	$rts_ajax_timer_js_url = plugins_url( 'js/train/rts_train_timer.js', dirname(__FILE__) );
 
 	//Should be a global, but have this set multiple plasces
-	$mission_id = 'sackvillage03'; //five minute village sack
-	$mission_time = 180; //5 minutes
-	$reason = 'Sack the village!';
+	$mission_id = 'trainsoliders05'; //five minute village sack
+	$mission_time = 300; //5 minutes
+	$reason = 'Train soliders.';
 	$vyps_meta_id = ''; //I can't think what to use here.
 
 	$current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
@@ -89,37 +96,37 @@ function vidyen_rts_mission_func()
 	$mission_html_output .=
 		'<table width="100%">
 			<tr>
-				<th>'.$light_soldier_large_icon.' Send Soldiers to raid poor peasant village for loot. '.$village_icon.'</th>
+				<th>'.$laborer_large_icon.' Train soliders at barracks. '.$barracks_icon.'</th>
 			</tr>
 			<tr>
-				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>
+				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$currency_icon.'</span> <span id="money_required" style="vertical-align: bottom;">1000</span> <span style="vertical-align: top;">'.$laborer_icon.'</span> <span id="money_required" style="vertical-align: bottom;">100</span></div></td>
 			</tr>
 			<tr>
 				<td>
 					<div align="center">
-						<input  class="button" id="sack_button" type="button" value="Attack!" onclick="rts_sack_village()" />
+						<input  class="button" id="train_soliders_button" type="button" value="Train Soldiers" onclick="rts_train_soldiers()" />
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<div id="mission_output" align="center">
-					Your soliders wait for your command.
+						You gather a group of laborers together.
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<div id="loot_output" align="center">
-						You have no loot yet.
+					<div id="train_output" align="center">
+						You have not started training yet.
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-				<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
-          <div id="raidVillageCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$light_soldier_icon.'</div>
+				<div id="trainsolidersTimerBar" style="position:relative; width:100%; background-color: grey; ">
+          <div id="trainSolidersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+						<div id="train_soliders_countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$soldier_icon.'</div>
 					</div>
         </div>
 				</td>
@@ -133,10 +140,10 @@ function vidyen_rts_mission_func()
 		$mission_html_output .=
 			'<table width="100%">
 				<tr>
-					<th>'.$light_soldier_large_icon.' Send Soldiers to raid nearby Castle. '.$castle_icon.'</th>
+					<th>'.$laborer_large_icon.' Send Soldiers to raid nearby Castle. '.$castle_icon.'</th>
 				</tr>
 				<tr>
-					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">200</span></div></td>
+					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$laborer_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">200</span></div></td>
 				</tr>
 				<tr>
 					<td>
@@ -163,7 +170,7 @@ function vidyen_rts_mission_func()
 					<td>
 					<div id="siegeCastleTimerBar" style="position:relative; width:100%; background-color: grey; ">
 						<div id="siegeCastleCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-							<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$light_soldier_icon.'</div>
+							<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
 						</div>
 					</div>
 					</td>
@@ -181,12 +188,12 @@ function vidyen_rts_mission_func()
 														var	wood_icon = '$wood_icon';
 														var iron_icon = '$iron_icon';
 														var	stone_icon = '$stone_icon';
-														var	light_soldier_icon = '$light_soldier_icon';
-														var rts_sack_time_left = $current_mission_time;
-														var pillage_timer_check = 0;
-														if (rts_sack_time_left > 0)
+														var	laborer_icon = '$laborer_icon';
+														var rts_train_time_left = $current_mission_time;
+														var train_soliders_timer_check = 0;
+														if (rts_train_time_left > 0)
 														{
-															sack_village_time_left();
+															train_soliders_time_left();
 														}
 													</script>";
 
@@ -195,7 +202,7 @@ function vidyen_rts_mission_func()
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vidyen-rts-missions', 'vidyen_rts_mission_func');
+add_shortcode( 'vidyen-rts-train', 'vidyen_rts_train_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */
