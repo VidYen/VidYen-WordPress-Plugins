@@ -241,6 +241,26 @@ function vyps_rts_sql_village_id_func()
 	return $point_id;
 }
 
+/*** village_burning ID SQL Call ***/
+function vyps_rts_sql_village_burning_id_func()
+{
+	global $wpdb;
+
+	//the $wpdb stuff to find what the current name and icons are
+	$table_name_rts = $wpdb->prefix . 'vidyen_rts';
+
+	$first_row = 1; //Note sure why I'm setting this.
+
+	//Input ID pull
+	$point_id_query = "SELECT village_burning_id FROM ". $table_name_rts . " WHERE id= %d"; //I'm not sure if this is resource optimal but it works. -Felty
+	$point_id_query_prepared = $wpdb->prepare( $point_id_query, $first_row );
+	$point_id = $wpdb->get_var( $point_id_query_prepared );
+
+	$point_id = intval($point_id); //Extra sanitzation
+
+	return $point_id;
+}
+
 /*** Castle ID SQL Call ***/
 function vyps_rts_sql_castle_id_func()
 {

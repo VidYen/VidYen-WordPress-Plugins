@@ -27,6 +27,7 @@ function vidyen_rts_mission_func()
 	//Buildings
 	$village_id = vyps_rts_sql_village_id_func();
 	$castle_id = vyps_rts_sql_castle_id_func();
+	$village_burning_id = vyps_rts_sql_village_burning_id_func();
 
 	//The icons for loot
 	$currency_icon = vyps_point_icon_func($currency_point_id);
@@ -40,6 +41,7 @@ function vidyen_rts_mission_func()
 
 	//Building Icons
 	$village_icon = vidyen_rts_building_icon_func($village_id);
+	$village_burning_icon = vidyen_rts_building_icon_func($village_burning_id);
 	$castle_icon = vidyen_rts_building_icon_func($castle_id);
 
 	//Check if user is logged in and stop the code.
@@ -72,8 +74,8 @@ function vidyen_rts_mission_func()
 
 
 	//Get the url for the solver
-	$rts_ajax_js_url = plugins_url( 'js/rts_missions.js', dirname(__FILE__) );
-	$rts_ajax_timer_js_url = plugins_url( 'js/rts_mission_timer.js', dirname(__FILE__) );
+	$rts_ajax_js_url = plugins_url( 'js/raid/rts_missions.js', dirname(__FILE__) );
+	$rts_ajax_timer_js_url = plugins_url( 'js/raid/rts_mission_timer.js', dirname(__FILE__) );
 
 	//Should be a global, but have this set multiple plasces
 	$mission_id = 'sackvillage03'; //five minute village sack
@@ -89,7 +91,7 @@ function vidyen_rts_mission_func()
 	$mission_html_output .=
 		'<table width="100%">
 			<tr>
-				<th>'.$light_soldier_large_icon.' Send Soldiers to raid poor peasant village for loot. '.$village_icon.'</th>
+				<th>'.$light_soldier_large_icon.' Send Soldiers to raid poor peasant village for loot. <span id="village_fine" style="display:block;">'.$village_icon.'</span><span id="village_burning" style="display:none;">'.$village_burning_icon.'</span></th>
 			</tr>
 			<tr>
 				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$light_soldier_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">20</span></div></td>

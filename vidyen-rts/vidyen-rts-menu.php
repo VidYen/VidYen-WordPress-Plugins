@@ -150,6 +150,11 @@ function vidyen_rts_sub_menu_page()
 				<td>'.vyps_point_icon_func($village_id).'</td>
 			</tr>
 			<tr>
+				<td>Village Burning Point ID</td>
+				<td><input type="number" name="village_burning_id" type="number" id="village_burning_id" min="1" step="1" value="'.$village_burning_id.'" required="true"></td>
+				<td>'.vyps_point_icon_func($village_burning_id).'</td>
+			</tr>
+			<tr>
 				<td>Castle ID</td>
 				<td><input type="number" name="castle_id" type="number" id="castle_id" min="1" step="1" value="'.$castle_id.'" required="true"></td>
 				<td>'.vyps_point_icon_func($castle_id).'</td>

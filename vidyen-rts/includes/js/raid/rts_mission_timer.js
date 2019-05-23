@@ -28,6 +28,10 @@ function sack_village_time_left()
      document.getElementById('sack_button').disabled = false;
      document.getElementById('sack_button').value = 'Raid village!';
      document.getElementById('countdown_time_left').innerHTML = "It's raiding season!";
+
+     //Show it back to normal
+     document.getElementById("village_burning").style.display = 'none'; // hide burning
+     document.getElementById("village_fine").style.display = 'block'; // show normal village
    }
    else
    {
@@ -44,6 +48,10 @@ function sack_village_time_left()
      //console.log('Pillage timer is 1 and sack time is ' + rts_sack_time_left);
      document.getElementById('sack_button').disabled = true;
      document.getElementById('sack_button').value = 'Resting';
+
+     //Set village on fire
+     document.getElementById("village_burning").style.display = 'block'; // hide burning
+     document.getElementById("village_fine").style.display = 'none'; // show normal village
    }
   }
 }
