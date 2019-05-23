@@ -140,7 +140,7 @@ function vidyen_rts_sack_castle_action()
     {
       //$lootss = 5000;
       //$money_looted2 = $lootss - $soldiers_killed(25);
-      $story = "Your soliders raid a mine the assassins kill the guards for the mine. shortly after all your soliders come over and steal away every bit of iron they can carry losing $soldiers_killed.";
+      $story = "Your soldiers raid a mine the assassins kill the guards for the mine. shortly after all your soldiers come over and steal away every bit of iron they can carry losing $soldiers_killed.";
       $loot = "You received $iron_looted iron ore, and $stone_looted units of stone.";
 
       //Technically no soldiders were killed.

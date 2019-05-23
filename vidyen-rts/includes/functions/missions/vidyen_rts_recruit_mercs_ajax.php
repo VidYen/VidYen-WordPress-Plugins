@@ -140,8 +140,8 @@ function vidyen_rts_sack_castle_action()
     {
       //$lootss = 5000;
       //$money_looted2 = $lootss - $soldiers_killed(25);
-      $story = "Your scouts go out to recruit soliders from the local mercenary hall. They arrive and quickly start chatting with the mercenaries coaxing over a lot of good soliders for your barracks";
-      $loot = "You received $solider_point_id soliders.";
+      $story = "Your scouts go out to recruit soldiers from the local mercenary hall. They arrive and quickly start chatting with the mercenaries coaxing over a lot of good soldiers for your barracks";
+      $loot = "You received $solider_point_id soldiers.";
 
       //Technically no soldiders were killed.
     }
@@ -149,14 +149,14 @@ function vidyen_rts_sack_castle_action()
     {
       //intval($soldiers_killed)
       $story = "Your scouts leave to recruit mercenaries and come back with a few good ones but it doesnt seem like too many people were interested.";
-      $loot = "You received $solider_point_id soliders.";
+      $loot = "You received $solider_point_id soldiers.";
       $stone_looted = 0; //Just had to reset that.
     }
     elseif ($soldiers_killed < 250)
     {
       //$money_looted2 = $lootss - $soldiers_killed(25);
       $story = "Your soldiers attack using bows however one of them in the back gets trigger happy, upon shotting the guards of the mine he doesnt stop there and kills many people before being taken down with $soldiers_killed soldiers. In the end they walk away with far fewer men along with one in ropes tied up. They remaining soldiers have to haul back the stone and iron without help from the previously large force.";
-      $loot = "You received $solider_point_id soliders.";
+      $loot = "You received $solider_point_id soldiers.";
       $stone_looted = 0; //Just had to reset that.
       $iron_looted = 0;
     }
@@ -164,7 +164,7 @@ function vidyen_rts_sack_castle_action()
     {
       //$money_looted2 = $lootss - $soldiers_killed(25);
       $story = "Your soldiers raid the mine but the majority of them die under heavy siege from a group of castle mages who were passing by very bad luck indeed with $soldiers_killed soldiers lost. They only carry a paltry amount of iron forgoing stone for the more urgent needs.";
-      $loot = "You received $solider_point_id soliders.";
+      $loot = "You received $solider_point_id soldiers.";
       $stone_looted = 0; //Just had to reset that.
       $iron_looted = 0;
       $wood_looted = 0;
@@ -173,7 +173,7 @@ function vidyen_rts_sack_castle_action()
     {
       //$money_looted2 = $lootss - $soldiers_killed(25);
       $story = "Your soldiers take the main road over a stone bridge towards the mine however their march causes the bridge to collpase just as they all are on it leaving all of them to fall to their doom in the endless pit. All with $soldiers_killed soldiers died.";
-      $loot = "You received $solider_point_id soliders.";
+      $loot = "You received $solider_point_id soldiers.";
       $stone_looted = 0; //Just had to reset that.
       $iron_looted = 0;
       $wood_looted = 0;

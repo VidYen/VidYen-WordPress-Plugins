@@ -104,7 +104,7 @@ function vidyen_rts_mission_func()
 			<tr>
 				<td>
 					<div id="mission_output" align="center">
-					Your soliders wait for your command.
+					Your soldiers wait for your command.
 					</div>
 				</td>
 			</tr>
@@ -148,7 +148,7 @@ function vidyen_rts_mission_func()
 				<tr>
 					<td>
 						<div id="castle_mission_output" align="center">
-						Your soliders wait for your command.
+						Your soldiers wait for your command.
 						</div>
 					</td>
 				</tr>
