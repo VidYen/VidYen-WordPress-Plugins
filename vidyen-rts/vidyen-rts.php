@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.4.7
+Version:      0.4.11
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -158,7 +158,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/recruit/vidyen_rts_re
 
 /*** TRAIN FUNCTIONS ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/train/vidyen_rts_train_soldiers_ajax.php');
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/recruit/vidyen_rts_train_soldiers_timer_ajax.php');
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/train/vidyen_rts_train_soldiers_timer_ajax.php');
 
 /*** Shortcodes ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-missions.php'); //Missions

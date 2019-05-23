@@ -89,9 +89,9 @@ function vidyen_rts_train_soldiers_action()
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
-  $mission_id = 'hirelaborers05'; //five minute village sack
+  $mission_id = 'trainSoldiers05'; //five minute village sack
   $mission_time = 300; //5 minutes
-  $reason = 'Hire laborers.';
+  $reason = 'Train Soldiers';
   $vyps_meta_id = ''; //I can't think what to use here.
 
   //First lets check if a mission is currently running.

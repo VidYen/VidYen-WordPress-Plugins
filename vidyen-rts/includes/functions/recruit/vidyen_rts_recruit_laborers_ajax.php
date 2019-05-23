@@ -65,7 +65,7 @@ function vidyen_rts_recruit_laborers_action()
       wp_die(); // this is required to terminate immediately and return a proper response
   }
 
-  $mission_id = 'hirelaborers05'; //five minute village sack
+  $mission_id = 'recruitLaborers05'; //five minute village sack
   $mission_time = 300; //5 minutes
   $reason = 'Hire laborers.';
   $vyps_meta_id = ''; //I can't think what to use here.

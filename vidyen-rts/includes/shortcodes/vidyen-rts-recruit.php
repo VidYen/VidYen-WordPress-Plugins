@@ -76,7 +76,7 @@ function vidyen_rts_recruit_func()
 	$rts_ajax_timer_js_url = plugins_url( 'js/recruit/rts_recruit_timer.js', dirname(__FILE__) );
 
 	//Should be a global, but have this set multiple plasces
-	$mission_id = 'hirelaborers05'; //five minute village sack
+	$mission_id = 'recruitLaborers05'; //five minute village sack
 	$mission_time = 300; //5 minutes
 	$reason = 'Hire laborers.';
 	$vyps_meta_id = ''; //I can't think what to use here.
@@ -117,8 +117,8 @@ function vidyen_rts_recruit_func()
 			</tr>
 			<tr>
 				<td>
-				<div id="hireLaborersTimerBar" style="position:relative; width:100%; background-color: grey; ">
-          <div id="hireLaborersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+				<div id="recruitLaborersTimerBar" style="position:relative; width:100%; background-color: grey; ">
+          <div id="recruitLaborersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
 						<div id="recruit_laborers_countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
 					</div>
         </div>
