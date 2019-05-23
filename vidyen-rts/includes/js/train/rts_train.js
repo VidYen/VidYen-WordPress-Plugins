@@ -17,7 +17,7 @@ function rts_train_soldiers()
      rts_train_soldiers_loot = output_response.mission_loot;
 
      rts_train_money_spent = output_response.money_spent;
-     rts_train_soldiers_trained = output_response.Soldiers_trained;
+     rts_train_soldiers_trained = output_response.soldiers_trained;
 
      rts_train_time_left = parseFloat(output_response.time_left); //I'm going to assume that if we run this a mission
 
@@ -27,7 +27,7 @@ function rts_train_soldiers()
      document.getElementById('mission_output').innerHTML = rts_train_soldiers_story;
 
      //yeah I'm going to mess with formatting here because i don't want a really long string wide.
-     var train_loot_table = 'Soldiers trained: ' + laborer_icon + ' ' + rts_train_soldiers_trained;
+     var train_loot_table = 'Soldiers trained: ' + soldier_icon + ' ' + rts_train_soldiers_trained;
 
      document.getElementById('train_output').innerHTML = train_loot_table;
 

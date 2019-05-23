@@ -141,13 +141,13 @@ function vidyen_rts_train_soldiers_action()
   elseif ($money_spent < 500)
   {
     $soldiers_trained = $soldiers_trained + 10; //I figure you get a bonus
-    $story = "The laborers seem restless but lazy so you throw a bit more money at them.. The extra money you spent earned a bonsu of $solider_icon 10 for a total of $solider_icon $soldiers_trained costing $currency_icon $money_spent.";
+    $story = "The laborers seem restless but lazy so you throw a bit more money at them.. The extra money you spent earned a bonus of $solider_icon 10 for a total of $solider_icon $soldiers_trained costing $currency_icon $money_spent.";
     $loot = "You received $soldiers_trained laborers." ;
   }
   elseif ($money_spent < 750)
   {
     $soldiers_trained = $soldiers_trained + 15; //I figure you get a bonus
-    $story = "Not only are these laborers lazy, you need to hire a man to whip them into shape but you get a bonsu of $solider_icon 15 for a total of $solider_icon $soldiers_trained costing $currency_icon $money_spent.";
+    $story = "Not only are these laborers lazy, you need to hire a man to whip them into shape but you get a bonus of $solider_icon 15 for a total of $solider_icon $soldiers_trained costing $currency_icon $money_spent.";
     $loot = "You received $soldiers_trained laborers." ;
   }
   elseif ($money_spent < 2000)
@@ -168,11 +168,14 @@ function vidyen_rts_train_soldiers_action()
     $loot = "RNGJesus save us!";
   }
 
-  //Time to remove soldiers via functions.
+  //Time to remove currency via functions.
   vyps_point_deduct_func( $currency_point_id, $money_spent, $user_id, $recruit_reason, $vyps_meta_id );
 
+  //Time to remove laborers via functions.
+  vyps_point_deduct_func( $laborer_point_id, $soldiers_trained, $user_id, $recruit_reason, $vyps_meta_id );
+
   //Time to credit resources. I'm being lazy and getting the whole response sum so i can see in js (this whole thing was made in 2 hours)
-  $response_sum = vyps_point_credit_func( $laborer_point_id, $soldiers_trained, $user_id, $recruit_reason, $vyps_meta_id );
+  $response_sum = vyps_point_credit_func( $solider_point_id, $soldiers_trained, $user_id, $recruit_reason, $vyps_meta_id );
 
   $village_rts_train_soldiers_server_response = array(
       'system_message' => $response_sum,

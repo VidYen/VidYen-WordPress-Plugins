@@ -60,7 +60,7 @@ function vidyen_rts_train_func()
 		$mission_html_output =
 			'<table width="100%">
 				<tr>
-					<th>'.$laborer_large_icon.' Please login to play the train soliders.'.$barracks_icon.'</th>
+					<th>'.$soldier_large_icon.' Please login to play the train soldiers.'.$barracks_icon.'</th>
 				</tr>
 				<tr>
 					<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$currency_icon.'</span> <span id="soldiers_required" style="vertical-align: bottom;">1000</span></div></td>
@@ -83,9 +83,9 @@ function vidyen_rts_train_func()
 	$rts_ajax_timer_js_url = plugins_url( 'js/train/rts_train_timer.js', dirname(__FILE__) );
 
 	//Should be a global, but have this set multiple plasces
-	$mission_id = 'trainsoliders05'; //five minute village sack
+	$mission_id = 'trainsoldiers05'; //five minute village sack
 	$mission_time = 300; //5 minutes
-	$reason = 'Train soliders.';
+	$reason = 'Train soldiers.';
 	$vyps_meta_id = ''; //I can't think what to use here.
 
 	$current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
@@ -96,7 +96,7 @@ function vidyen_rts_train_func()
 	$mission_html_output .=
 		'<table width="100%">
 			<tr>
-				<th>'.$laborer_large_icon.' Train soliders at barracks. '.$barracks_icon.'</th>
+				<th>'.$soldier_large_icon.' Train soldiers at barracks. '.$barracks_icon.'</th>
 			</tr>
 			<tr>
 				<td><div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$currency_icon.'</span> <span id="money_required" style="vertical-align: bottom;">1000</span> <span style="vertical-align: top;">'.$laborer_icon.'</span> <span id="money_required" style="vertical-align: bottom;">100</span></div></td>
@@ -104,7 +104,7 @@ function vidyen_rts_train_func()
 			<tr>
 				<td>
 					<div align="center">
-						<input  class="button" id="train_soliders_button" type="button" value="Train Soldiers" onclick="rts_train_soldiers()" />
+						<input  class="button" id="train_soldiers_button" type="button" value="Train Soldiers" onclick="rts_train_soldiers()" />
 					</div>
 				</td>
 			</tr>
@@ -124,9 +124,9 @@ function vidyen_rts_train_func()
 			</tr>
 			<tr>
 				<td>
-				<div id="trainsolidersTimerBar" style="position:relative; width:100%; background-color: grey; ">
-          <div id="trainSolidersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="train_soliders_countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$soldier_icon.'</div>
+				<div id="trainsoldiersTimerBar" style="position:relative; width:100%; background-color: grey; ">
+          <div id="trainsoldiersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+						<div id="train_soldiers_countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$soldier_icon.'</div>
 					</div>
         </div>
 				</td>
@@ -155,7 +155,7 @@ function vidyen_rts_train_func()
 				<tr>
 					<td>
 						<div id="castle_mission_output" align="center">
-						Your soliders wait for your command.
+						Your soldiers wait for your command.
 						</div>
 					</td>
 				</tr>
@@ -189,11 +189,12 @@ function vidyen_rts_train_func()
 														var iron_icon = '$iron_icon';
 														var	stone_icon = '$stone_icon';
 														var	laborer_icon = '$laborer_icon';
+														var	soldier_icon = '$light_soldier_icon';
 														var rts_train_time_left = $current_mission_time;
-														var train_soliders_timer_check = 0;
+														var train_soldiers_timer_check = 0;
 														if (rts_train_time_left > 0)
 														{
-															train_soliders_time_left();
+															train_soldiers_time_left();
 														}
 													</script>";
 
