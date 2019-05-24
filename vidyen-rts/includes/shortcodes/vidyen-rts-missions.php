@@ -121,7 +121,7 @@ function vidyen_rts_mission_func()
 				<td>
 				<div id="raidVillageTimerBar" style="position:relative; width:100%; background-color: grey; ">
           <div id="raidVillageCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$light_soldier_icon.'</div>
+						<div id="countdown_time_left" style="position: absolute; right:12%; color:white; font-size:2vw;"></div><div style="text-align: right;">'.$light_soldier_icon.'</div>
 					</div>
         </div>
 				</td>

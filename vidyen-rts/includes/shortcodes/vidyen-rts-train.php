@@ -126,7 +126,7 @@ function vidyen_rts_train_func()
 				<td>
 				<div id="trainsoldiersTimerBar" style="position:relative; width:100%; background-color: grey; ">
           <div id="trainsoldiersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="train_soldiers_countdown_time_left" style="position: absolute; right:12%; color:white;"></div><div style="text-align: right;">'.$soldier_icon.'</div>
+						<div id="train_soldiers_countdown_time_left" style="position: absolute; right:12%; color:white; font-size:2vw;"></div><div style="text-align: right;">'.$soldier_icon.'</div>
 					</div>
         </div>
 				</td>
