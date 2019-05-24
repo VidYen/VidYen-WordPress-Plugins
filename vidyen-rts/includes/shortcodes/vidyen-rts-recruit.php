@@ -119,7 +119,7 @@ function vidyen_rts_recruit_func()
 				<td>
 				<div id="recruitLaborersTimerBar" style="position:relative; width:100%; background-color: grey; ">
           <div id="recruitLaborersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="recruit_laborers_countdown_time_left" style="position: absolute; right:12%; color:white; font-size:2vw;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
+						<div id="recruit_laborers_countdown_time_left" style="position: absolute; right:12%; color:white; font-size:1.25vw;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
 					</div>
         </div>
 				</td>
