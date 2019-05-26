@@ -1,6 +1,6 @@
-# vidyen-wc-mmo
+# vidyen-user-market
 
-Plugin designed for MMO like rewards for WooCommerce. But more becoming just stand alone MMO interface.
+Plugin designed for user to user market transfers
 
 Donate to our XMR Wallet:
 
@@ -14,14 +14,6 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
-= 0.1.1 =
+= 0.0.1 =
 
-- Fixed font because of my OCD
-
-= 0.1.0 =
-
-- Release for Coin-Target
-
-= 0.0.43 =
-
-- Almost released.
+- Meh
