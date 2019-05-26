@@ -109,6 +109,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 2.3.10 =
 
 - Fix: Miner text in progress bars more adaptive to small screens (iPhone 5)
+- Add: Adscend redemption says point name rather than just 'points'
 
 = 2.3.9 =
 

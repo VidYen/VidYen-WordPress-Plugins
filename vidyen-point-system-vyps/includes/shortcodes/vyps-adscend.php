@@ -298,7 +298,12 @@ function vyps_adscend_redeem_func( $atts ) {
 	/* Developers note. I try to put working into site admins mouth but this only way to show button and the redeemed points in a way that I liked.
 	*  In theory if admin doesn't like it, they edit the below wording or just use the old shortcodes which I left in. -Felty
 	*/
-	return "<b>" . $amount . " points redeemed.</b><br><br><form method=\"post\">
+
+	//I'm adding this to show the name. I should overhaul adscend in general because it is getting used.
+	$point_id = $atts['pid'];
+	$point_name = vyps_point_name_func($point_id);
+
+	return "<b>" . $amount . ' '. $point_name " redeemed.</b><br><br><form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"redeem\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Adscend\" onclick=\"return confirm('You are about to synce your Adscend point with this site. Are you sure?');\" />
                 </form>
