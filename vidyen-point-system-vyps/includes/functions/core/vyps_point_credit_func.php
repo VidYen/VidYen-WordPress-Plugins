@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*
 ** More modern version of the credit function
-**
+** NOTE: I had to add the meta_subids in to make compatible with new tr and exchange
 **
 */
 
-function vyps_point_credit_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id )
+function vyps_point_credit_func($point_id, $point_amount, $user_id, $reason, $vyps_meta_id, $vyps_meta_data, $vyps_meta_subid1, $vyps_meta_subid2, $vyps_meta_subid3)
 {
 	//$WPDB calls
 	global $wpdb;
@@ -21,14 +21,23 @@ function vyps_point_credit_func( $point_id, $point_amount, $user_id, $reason, $v
 	$user_id = intval($user_id);
 	$reason = sanitize_text_field($reason);
 	$vyps_meta_id = sanitize_text_field($vyps_meta_id);
+	$vyps_meta_data = sanitize_text_field($vyps_meta_data);
+	$vyps_meta_data = sanitize_text_field($vyps_meta_data);
+	$vyps_meta_subid1 = sanitize_text_field($vyps_meta_subid1);
+	$vyps_meta_subid2 = sanitize_text_field($vyps_meta_subid2);
+	$vyps_meta_subid3 = sanitize_text_field($vyps_meta_subid3);
 
 	//Deduction for first point id
 	$data = [
 			'point_id' => $point_id,
 			'points_amount' => $point_amount, //I shall fix this one day to point_amount
 			'user_id' => $user_id,
-			'vyps_meta_id' => $vyps_meta_id,
 			'reason' => $reason,
+			'vyps_meta_id' => $vyps_meta_id,
+			'vyps_meta_data' => $vyps_meta_data,
+			'vyps_meta_subid1' => $vyps_meta_subid1,
+			'vyps_meta_subid2' => $vyps_meta_subid2,
+			'vyps_meta_subid3' => $vyps_meta_subid3,
 			'time' => date('Y-m-d H:i:s')
 	];
 	$wpdb->insert($table_name_log, $data);
