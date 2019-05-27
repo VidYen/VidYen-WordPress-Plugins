@@ -31,13 +31,13 @@ function vidyen_user_market_func($atts)
 				'sell_amount' => 0,
 				'buy_id' => 0,
 				'buy_amount' => 0,
-				'uid' => 0,
+				'uid' => '',
 		), $atts, 'vidyen-user-market' );
 
 	$sell_id = $atts['sell_id'];
-	$sell_amount = $atts['samount'];
-	$buy_id = $atts['dpid'];
-	$buy_amount = $atts['damount'];
+	$sell_amount = $atts['sell_amount'];
+	$buy_id = $atts['buy_id'];
+	$buy_amount = $atts['buy_amount'];
 
 	$unique_id = $atts['uid'];
 
@@ -81,7 +81,7 @@ function vidyen_user_market_func($atts)
 		return "Admin Error: You did not set buy point id!";
 	}
 
-	if ( $unique_id == 0 )
+	if ( $unique_id == '' )
 	{
 		return "Admin Error: You did not set unique identifier!";
 	}
@@ -419,7 +419,7 @@ function vidyen_user_market_func($atts)
 
 /* Telling WP to use function for shortcode */
 
-add_shortcode( 'vidyen-user-market', 'vyps_point_threshold_user_exchange_func');
+add_shortcode( 'vidyen-user-market', 'vidyen_user_market_func');
 
 /* Ok after much deliberation, I decided I want the WW plugin to go into the pt since it has become the exchange */
 /* If you don't have WW, it won't kill anything if you don't call it */

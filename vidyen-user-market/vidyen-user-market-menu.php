@@ -8,99 +8,31 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 */
 
 //Adding menus.
-add_action('admin_menu', 'vidyen_wc_mmo_sub_menu', 660 );
+add_action('admin_menu', 'vidyen_wc_user_exchange_sub_menu', 666 );
 
 //Sub menu. Adding it to the VYPS system.
 
-function vidyen_wc_mmo_sub_menu()
+function vidyen_wc_user_exchange_sub_menu()
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = "VidYen MMO";
-  $menu_title = 'MMO Menu';
+	$page_title = "VidYen User Exchange";
+  $menu_title = 'User Exchange Menu';
 	$capability = 'manage_options';
-  $menu_slug = 'vyps_wc_mmo_page';
-  $function = 'vidyen_wc_mmo_sub_menu_page';
+  $menu_slug = 'vyps_wc_user_exchange_page';
+  $function = 'vidyen_wc_user_exchange_sub_menu_page';
 
   add_submenu_page($parent_menu_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
 }
 
 //The actual menu
-function vidyen_wc_mmo_sub_menu_page()
+function vidyen_wc_user_exchange_sub_menu_page()
 {
-	global $wpdb;
 
-	if (isset($_POST['point_id']))
-	{
-		//As the post is the only thing that edits data, I suppose this is the best place to the noce
-		$vyps_nonce_check = $_POST['vypsnoncepost'];
-		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vyps-mmo-nonce' ) )
-    {
-				// This nonce is not valid.
-				die( 'Security check' );
-		}
-
-		//ID Text value
-		$point_id = abs(intval($_POST['point_id'])); //Even though I am in the believe if an admin sql injects himself, we got bigger issues, but this has been sanitized.
-
-		//The icon. I'm suprised this works so well
-		$point_amount = abs(intval($_POST['point_amount']));
-
-		//The icon. I'm suprised this works so well
-		$output_amount = abs(floatval($_POST['output_amount']));
-
-		if($_POST['api_key'] == '' OR !isset($_POST['api_key']))
-		{
-			$api_key = sanitize_text_field(str_replace('-', '', implode('-', str_split(substr(strtolower(md5(microtime().rand(1000, 9999))), 0, 30), 6))));
-		}
-		else
-		{
-				$api_key = sanitize_text_field(($_POST['api_key']));
-		}
-
-    $table_name_wc_mmo = $wpdb->prefix . 'vidyen_wc_mmo';
-
-	    $data = [
-	        'point_id' => $point_id,
-	        'point_amount' => $point_amount,
-					'output_amount' => $output_amount,
-					'api_key' => $api_key,
-	    ];
-
-			$wpdb->update($table_name_wc_mmo, $data, ['id' => 1]);
-	    //$data_id = $wpdb->update($table_name_wc_mmo , $data);
-
-	    //I forget thow this works
-	    $message = "Added successfully.";
-	}
-
-  //Repulls from SQL
-	//Input ID pull
-	$point_id = intval(vyps_mmo_sql_point_id_func());
-
-	//Input Amount
-	$point_amount = intval(vyps_mmo_sql_point_amount_func());
-
-  //Ouput id
-  $output_id = intval(vyps_mmo_sql_output_id_func());
-
-	//Ouput Amount
-	$output_amount = floatval(vyps_mmo_sql_output_amount_func());
-
-	$api_key = sanitize_text_field(vyps_mmo_sql_api_key_func());
-
-
-	//It's possible we don't use the VYPS logo since no points.
-  $vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
-	$vidyen_wc_mmo_logo_url = plugins_url( 'includes/images/vyvp-logo.png', __FILE__ );
-
-	//Adding a nonce to the post
-	$vyps_nonce_check = wp_create_nonce( 'vyps-mmo-nonce' );
-
-  //Save for later //<img src="' . $vidyen_wc_mmo_logo_url . '">
+  //Save for later //<img src="' . $vidyen_wc_user_exchange_logo_url . '">
 
 	//Static text for the base plugin
-	$vyps_wc_mmo_menu_html_ouput ='<br><br>
-	<h1>VidYen WC MMO Sub-Plugin</h1>
+	$vyps_wc_user_exchange_menu_html_ouput ='<br><br>
+	<h1>VidYen WC User Exchange Sub-Plugin</h1>
 	<p>Exchange Rates</p>
 	<table>
 		<form method="post">
@@ -126,12 +58,12 @@ function vidyen_wc_mmo_sub_menu_page()
 	<h2>API Key Copy and Paste</h2>
 	<p>'.$api_key.'</p>
 	<h2>Shortcode</h2>
-	<p><b>[vidyen-mmo-bal]</b> for live balance.</p>
-	<p><b>[vyps-mmo-pe]</b> for live point exchange.</p>
-	<p><b>[vidyen-mmo-deduct point_id=2 apikey=(set here on in MMO menu)]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
-	<p><b>[vidyen-mmo-credit point_id=2 apikey=(set here on in MMO menu)]</b> Same as above but does the credit when you want to talk currency off server and into site.</p>
-	<p><b>[vidyen-mmo-api-bal mode=GET gui=TRUE point_id=7]</b> This is a postback page for external curls. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
-	<p><b>[vidyen-mmo-register apikey=test]</b> This is for your registration curl. Only enter your apikey where test is written.</p>
+	<p><b>[vidyen-user_exchange-bal]</b> for live balance.</p>
+	<p><b>[vyps-user_exchange-pe]</b> for live point exchange.</p>
+	<p><b>[vidyen-user_exchange-deduct point_id=2 apikey=(set here on in User Exchange menu)]</b> This is a postback page. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
+	<p><b>[vidyen-user_exchange-credit point_id=2 apikey=(set here on in User Exchange menu)]</b> Same as above but does the credit when you want to talk currency off server and into site.</p>
+	<p><b>[vidyen-user_exchange-api-bal mode=GET gui=TRUE point_id=7]</b> This is a postback page for external curls. If you do not remember how to do the post back page watch the Wannads tutorial video in full.</p>
+	<p><b>[vidyen-user_exchange-register apikey=test]</b> This is for your registration curl. Only enter your apikey where test is written.</p>
 	<p><b>[vidyen-loa-id]</b> This is for your LoA userid box. It shows each user their currently stored LoA userid and lets them clear it if its incorrect. If edit=TRUE you are able to edit this directly from the website.</p>
 	<p>Simply put the shortcodes on a page and let it run with the point id from the VidYen point system.</p>
 	<p>Point ID is the point ID from the VidYen System. Found in Manage Points section of VYPS</p>
@@ -140,5 +72,5 @@ function vidyen_wc_mmo_sub_menu_page()
 	<br><br><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="' . $vyps_logo_url . '"></a>
 	';
 
-  echo $vyps_wc_mmo_menu_html_ouput;
+  echo $vyps_wc_user_exchange_menu_html_ouput;
 }

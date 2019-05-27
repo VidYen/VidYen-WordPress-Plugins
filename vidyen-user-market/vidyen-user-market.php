@@ -1,9 +1,9 @@
 <?php
- /*
+/*
 Plugin Name:  VidYen User Market
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Allows users to transfer points betwen each other.
-Version:      0.0.1
+Version:      0.0.4
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -29,24 +29,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /*** Includes ***/
 /*** Functions ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_woocommerce_check_func.php'); //Checks to see if WooCommerce installed, run first
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_woowallet_currency.php'); //Custom Currencies to WooCommerce
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_sql_call_func.php'); //SQL Call functions
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_bal_func.php'); //Custom WooWallet balance function for this purpose
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_loa_user_query_func.php'); //Adds meta check
 
 /*** Shortcodes ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-bal.php'); //Ajax Balance
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wc-mmo-point-exchange.php'); //Ajax Point Exchange
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-credit-postback.php'); //Post back for game credit transfers
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-deduct-postback.php'); //Post back for game deduct transfers
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-api-bal.php'); //Post back for game transfers
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-loa-id.php'); //Stores the LOA Player ID
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-register.php'); //Registers the User ID
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-user-market-exchange.php');
+
 
 /*** Menu Includes ***/
-include( plugin_dir_path( __FILE__ ) . 'vidyen-user-market-menu'); //Order 660
+include( plugin_dir_path( __FILE__ ) . 'vidyen-user-market-menu.php'); //Order 660
 
 /*** AJAX ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mmo_bal_ajax.php');
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_mmo_exchange_ajax.php');
