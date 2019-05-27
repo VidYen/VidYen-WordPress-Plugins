@@ -81,19 +81,14 @@ add_shortcode( 'vyps-as-watch', 'vyps_adscend_func');
 
 
 //The redeem will need some cleansing but not much. -Felty
-function vyps_adscend_redeem_func( $atts ) {
-
+function vyps_adscend_redeem_func( $atts )
+{
 	/* Do the logged on check first as I guess it wastes less resources */
 
-	if ( is_user_logged_in() ) {
-
-		//I probaly don't have to have this part of the if
-
-	} else {
-
+	if (!is_user_logged_in())
+	{
     return; //Use the login function please.
 		//return "You need to be logged in to watch ads for points.";
-
 	}
 
 	global $wpdb;
@@ -112,18 +107,16 @@ function vyps_adscend_redeem_func( $atts ) {
 
 	/* do the normal checks to see if the $atts were set */
 
-	if ( $atts['pub'] == 0 ) {
-
-	return "Publisher was not set!";
-
+	if ( $atts['pub'] == 0 )
+	{
+		return "Publisher was not set!";
 	}
 
 	/* Oh yeah. Check Profile */
 
-	if ( $atts['profile'] == 0 ) {
-
+	if ( $atts['profile'] == 0 )
+	{
 		return "You did not set a profile!";
-
 	}
 
 	/* Oh yeah. Checking to see if no API was set
@@ -303,7 +296,7 @@ function vyps_adscend_redeem_func( $atts ) {
 	$point_id = $atts['pid'];
 	$point_name = vyps_point_name_func($point_id);
 
-	return "<b>" . $amount . ' '. $point_name " redeemed.</b><br><br><form method=\"post\">
+	return "<b>".$amount .' '.$point_name." redeemed.</b><br><br><form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"redeem\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Adscend\" onclick=\"return confirm('You are about to synce your Adscend point with this site. Are you sure?');\" />
                 </form>
