@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 **
 */
 
-function vyps_point_credit_func($point_id, $point_amount, $user_id, $reason, $vyps_meta_id, $vyps_meta_data, $vyps_meta_subid1, $vyps_meta_subid2, $vyps_meta_subid3)
+function vyps_point_credit_func($point_id, $point_amount, $user_id, $reason, $vyps_meta_id = '', $vyps_meta_data = '', $vyps_meta_subid1 = '', $vyps_meta_subid2 ='', $vyps_meta_subid3= '')
 {
 	//$WPDB calls
 	global $wpdb;
@@ -21,7 +21,6 @@ function vyps_point_credit_func($point_id, $point_amount, $user_id, $reason, $vy
 	$user_id = intval($user_id);
 	$reason = sanitize_text_field($reason);
 	$vyps_meta_id = sanitize_text_field($vyps_meta_id);
-	$vyps_meta_data = sanitize_text_field($vyps_meta_data);
 	$vyps_meta_data = sanitize_text_field($vyps_meta_data);
 	$vyps_meta_subid1 = sanitize_text_field($vyps_meta_subid1);
 	$vyps_meta_subid2 = sanitize_text_field($vyps_meta_subid2);
