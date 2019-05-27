@@ -3,7 +3,7 @@
 Plugin Name:  VidYen User Market
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Allows users to transfer points betwen each other.
-Version:      0.0.4
+Version:      0.0.13
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
