@@ -215,13 +215,11 @@ function vidyen_user_market_func($atts)
 	{
 		//<br><br>$post_vyps_meta_id";	//Debug: I'm curious what it looks like.
 
-		/* These operations are below the post check as no need to waste server CPU if user didn't press button */
-
+		//These operations are below the post check as no need to waste server CPU if user didn't press button
 		$table_name_log = $wpdb->prefix . 'vyps_points_log';
 		$current_user_id = get_current_user_id();
 
 		//Ok. Now we get balance. If it is not enough for the spend variable, we tell them that and return out. NO EXCEPTIONS
-
 		//SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $ask_id
 		$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
 		$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $current_id );
@@ -243,8 +241,6 @@ function vidyen_user_market_func($atts)
 			*  I'm just going to reuse the CH code for ads and ducts
 			*/
 
-			/* The CH add code to insert in the vyps log */
-
 			$table_log = $wpdb->prefix . 'vyps_points_log';
 			$reason = "user_exchange";
 			$amount = $current_transaction_amount * -1; //Seems like this is a bad idea to just multiply it by a negative 1 but hey
@@ -253,7 +249,6 @@ function vidyen_user_market_func($atts)
 			$user_id = $current_user_id;
 
 			/* In my heads points out should happen first and then points destination. */
-
 			//NOTE: Adding the $game_id to the issue. BTW meta_id etc was reserved so prefixed vyps
 			//Btw I'm 75% sure putting in VYPS meta count this way will make it constant until the win.
 			//Could be terribly wrong though
