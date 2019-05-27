@@ -280,7 +280,9 @@ function vyps_adscend_redeem_func( $atts )
 					'time' => date('Y-m-d H:i:s')
 				];
 			$wpdb->insert($table_name_log, $data);
-		} else {
+		}
+		else
+		{
 			$amount = 0; //I think this works right. Ere we go!
 		}
 
@@ -296,12 +298,11 @@ function vyps_adscend_redeem_func( $atts )
 	$point_id = $atts['pid'];
 	$point_name = vyps_point_name_func($point_id);
 
-	return "<b>".$amount .' '.$point_name." redeemed.</b><br><br><form method=\"post\">
+	return '<b>'.$amount.' '.$point_name." redeemed.</b><br><br><form method=\"post\">
                 <input type=\"hidden\" value=\"\" name=\"redeem\"/>
                 <input type=\"submit\" class=\"button-secondary\" value=\"Redeem Adscend\" onclick=\"return confirm('You are about to synce your Adscend point with this site. Are you sure?');\" />
                 </form>
 								$VYPS_power_row";
-
 }
 
 add_shortcode( 'vyps-as-redeem', 'vyps_adscend_redeem_func');
