@@ -230,49 +230,50 @@ function vidyen_user_market_func($atts)
 		/* I do not ever see the need for a non-formatted need point */
 		$need_points = number_format($current_transaction_amount - $balance_points);
 
-		if ( $current_transaction_amount > $balance_points )
+		if ($current_transaction_amount > $balance_points)
 		{
 			$results_message = "Not enough " . $current_name . " to bid a ticket! You need " . $need_points . " more.";
-
 		}
+		else
+		{
+			//NOTE: This is only runs if they have enough money
+			/* All right. If user is still in the function, that means they are logged in and have enough points.
+			*  It dawned on me an admin might put in a negative number but that's on them.
+			*  Now the danergous part. Deduct points and then add the VYPS log to the WooWallet
+			*  I'm just going to reuse the CH code for ads and ducts
+			*/
 
-		/* All right. If user is still in the function, that means they are logged in and have enough points.
-		*  It dawned on me an admin might put in a negative number but that's on them.
-		*  Now the danergous part. Deduct points and then add the VYPS log to the WooWallet
-		*  I'm just going to reuse the CH code for ads and ducts
-		*/
+			/* The CH add code to insert in the vyps log */
 
-		/* The CH add code to insert in the vyps log */
+			$table_log = $wpdb->prefix . 'vyps_points_log';
+			$reason = "user_exchange";
+			$amount = $current_transaction_amount * -1; //Seems like this is a bad idea to just multiply it by a negative 1 but hey
 
-		$table_log = $wpdb->prefix . 'vyps_points_log';
-		$reason = "Rafle Ticket Purchase";
-		$amount = $current_transaction_amount * -1; //Seems like this is a bad idea to just multiply it by a negative 1 but hey
+			$PointType = $current_id; //Originally this was a table call, but seems easier this way
+			$user_id = $current_user_id;
 
-		$PointType = $current_id; //Originally this was a table call, but seems easier this way
-		$user_id = $current_user_id;
+			/* In my heads points out should happen first and then points destination. */
 
-		/* In my heads points out should happen first and then points destination. */
+			//NOTE: Adding the $game_id to the issue. BTW meta_id etc was reserved so prefixed vyps
+			//Btw I'm 75% sure putting in VYPS meta count this way will make it constant until the win.
+			//Could be terribly wrong though
 
-		//NOTE: Adding the $game_id to the issue. BTW meta_id etc was reserved so prefixed vyps
-		//Btw I'm 75% sure putting in VYPS meta count this way will make it constant until the win.
-		//Could be terribly wrong though
+			$current_ticket_count = $current_ticket_count + 1; //Ah now I know why to start at zero. Actually some of that I don't think we need. Just a few bytes wasted I guess.
 
-		$current_ticket_count = $current_ticket_count + 1; //Ah now I know why to start at zero. Actually some of that I don't think we need. Just a few bytes wasted I guess.
+			$tickets_left = $exchange_threshold - $current_ticket_count; //Well. Good as place as any to check the tickets left.
 
-		$tickets_left = $exchange_threshold - $current_ticket_count; //Well. Good as place as any to check the tickets left.
-
-		$data = [
-					'reason' => $reason,
-					'point_id' => $PointType,
-					'points_amount' => $amount,
-					'user_id' => $user_id,
-					'vyps_meta_id' => $game_id,
-					'vyps_meta_data' => 'user_exchange',
-					'vyps_meta_subid1' => $current_game_count,
-					'vyps_meta_subid2' => $current_ticket_count,
-					'time' => date('Y-m-d H:i:s')
-					];
-			$wpdb->insert($table_log, $data);
+			$data = [
+						'reason' => $reason,
+						'point_id' => $PointType,
+						'points_amount' => $amount,
+						'user_id' => $user_id,
+						'vyps_meta_id' => $game_id,
+						'vyps_meta_data' => 'user_exchange',
+						'vyps_meta_subid1' => $current_game_count,
+						'vyps_meta_subid2' => $current_ticket_count,
+						'time' => date('Y-m-d H:i:s')
+						];
+				$wpdb->insert($table_log, $data);
 
 			//NOTE: This was a custom request. It got so annoying trying to get it to work with all themes
 			//that I told them, if they want ot mess with it, they can add the refresh=true on theirs.
@@ -282,80 +283,86 @@ function vidyen_user_market_func($atts)
 				$new_url = add_query_arg( 'success', 1, get_permalink() );
 				wp_redirect( $new_url, 303 );
 			}
+			else
+			{
+				$new_url = add_query_arg( 'success', 1, get_permalink() );
+				wp_redirect( $new_url, 303 );
+			}
 
 			//The below should only be run if there is a winner. which means we should only fire if the game games left = 1
 			//Yeah counting at zero, but this fires it means there was one ticket left so there should be no more as this is exectuting
 
-			$results_message = "Success. Ticket bought at: ". date('Y-m-d H:i:s');
+			$results_message = 'You bid '.$current_icon.' '.$current_format_amount.' on '. date('Y-m-d H:i:s');
 
-		//Ok I wrapped my head around where I am having the off by one error.
-		//So if the post happens when tickets are left is 1. That means that is the last ticket and there needs to be a row made with a 0 entry for subid2?
+			//Ok I wrapped my head around where I am having the off by one error.
+			//So if the post happens when tickets are left is 1. That means that is the last ticket and there needs to be a row made with a 0 entry for subid2?
 
-		//NOTE to self. This is when it wins.
-		if ($current_ticket_count == $exchange_threshold)
-		{
-			//Ok with exchange there are always points given to both parties.
-			//So the winners are just ticket 1 and 2
+			//NOTE to self. This is when it wins.
+			if ($current_ticket_count == $exchange_threshold)
+			{
+				//Ok with exchange there are always points given to both parties.
+				//So the winners are just ticket 1 and 2
 
-			//Did i start coutning at 0?
-			$asker_ticket = 1;
-			$bider_ticket = 2;
+				//Did i start coutning at 0?
+				$asker_ticket = 1;
+				$bider_ticket = 2;
 
-			//$winning_ticket = mt_rand(1,$exchange_threshold); //In theory the ticket threshold should always be an integer sooo... One of those tickets should hav wonder+
+				//$winning_ticket = mt_rand(1,$exchange_threshold); //In theory the ticket threshold should always be an integer sooo... One of those tickets should hav wonder+
 
-			$vyps_meta_data = "user_exchange";
+				$vyps_meta_data = "user_exchange";
 
-			//Asker
-			//I'm going to be really surprised if the query works on the first try. Basically we find the user id of the ticket owner that one (it should be already inserted into the table)
-			$vidyen_exchange_bider_user_id_query = "SELECT user_id FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s AND vyps_meta_subid2 = %d" ;
-			$vidyen_exchange_bider_user_id_prepared = $wpdb->prepare( $vidyen_exchange_bider_user_id_query, $game_id, $vyps_meta_subid1_max, $vyps_meta_data, $bider_ticket );
-			$vidyen_exchange_bider_user_id = $wpdb->get_var( $vidyen_exchange_bider_user_id_prepared );
+				//Asker
+				//I'm going to be really surprised if the query works on the first try. Basically we find the user id of the ticket owner that one (it should be already inserted into the table)
+				$vidyen_exchange_bider_user_id_query = "SELECT user_id FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s AND vyps_meta_subid2 = %d" ;
+				$vidyen_exchange_bider_user_id_prepared = $wpdb->prepare( $vidyen_exchange_bider_user_id_query, $game_id, $vyps_meta_subid1_max, $vyps_meta_data, $asker_ticket );
+				$vidyen_exchange_bider_user_id = $wpdb->get_var( $vidyen_exchange_bider_user_id_prepared );
 
-			//I want the display_name to make it look nice because of OCD. Will only be used on message
-			$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
-			$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $vidyen_exchange_bider_user_id );
-			$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
+				//I want the display_name to make it look nice because of OCD. Will only be used on message
+				$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
+				$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $vidyen_exchange_bider_user_id );
+				$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
 
-			//Bider
-			//I'm going to be really surprised if the query works on the first try. Basically we find the user id of the ticket owner that one (it should be already inserted into the table)
-			$vidyen_exchange_asker_user_id_query = "SELECT user_id FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s AND vyps_meta_subid2 = %d" ;
-			$vidyen_exchange_asker_user_id_prepared = $wpdb->prepare( $vidyen_exchange_asker_user_id_query, $game_id, $vyps_meta_subid1_max, $vyps_meta_data, $bider_ticket );
-			$vidyen_exchange_asker_user_id = $wpdb->get_var( $vidyen_exchange_asker_user_id_prepared );
+				//Bider
+				//I'm going to be really surprised if the query works on the first try. Basically we find the user id of the ticket owner that one (it should be already inserted into the table)
+				$vidyen_exchange_asker_user_id_query = "SELECT user_id FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_subid1 = %d AND vyps_meta_data = %s AND vyps_meta_subid2 = %d" ;
+				$vidyen_exchange_asker_user_id_prepared = $wpdb->prepare( $vidyen_exchange_asker_user_id_query, $game_id, $vyps_meta_subid1_max, $vyps_meta_data, $bider_ticket );
+				$vidyen_exchange_asker_user_id = $wpdb->get_var( $vidyen_exchange_asker_user_id_prepared );
 
-			//I want the display_name to make it look nice because of OCD. Will only be used on message
-			$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
-			$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $vidyen_exchange_asker_user_id );
-			$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
+				//I want the display_name to make it look nice because of OCD. Will only be used on message
+				$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
+				$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $vidyen_exchange_asker_user_id );
+				$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
 
-			/* Ok. Now we put the destination points in. Reason should stay the same */
+				/* Ok. Now we put the destination points in. Reason should stay the same */
 
-			$amount = $bid_amount; //Destination amount should be positive
+				$amount = $bid_amount; //Destination amount should be positive
 
-			$PointType = $bid_id; //Originally this was a table call, but seems easier this way
+				$PointType = $bid_id; //Originally this was a table call, but seems easier this way
 
-			//NOTE: I"m curious if given them both the meta will cause issues? shouldn't. WCCW
-			$reason = "user_exchange";
-			$vyps_meta_data = "user_exchange";
+				//NOTE: I"m curious if given them both the meta will cause issues? shouldn't. WCCW
+				$reason = "user_exchange";
+				$vyps_meta_data = "user_exchange";
 
-			//This way will be easier for me to keep track of:
-			$vyps_meta_id = $game_id;
-			$vyps_meta_data = $vyps_meta_data;
-			$vyps_meta_subid1 = $current_game_count;
-			$vyps_meta_subid2 = $current_ticket_count;
-			//$vyps_meta_subid3 = $winning_ticket;
+				//This way will be easier for me to keep track of:
+				$vyps_meta_id = $game_id;
+				$vyps_meta_data = $vyps_meta_data;
+				$vyps_meta_subid1 = $current_game_count;
+				$vyps_meta_subid2 = $current_ticket_count;
+				//$vyps_meta_subid3 = $winning_ticket;
 
-			//NOTE: These are ontogically reversed as the asker gets the bider and the bider gets the asker.
-			//Credit Asker
-			$credit_asker_result = vyps_point_credit_func($bid_id, $bid_amount, $vidyen_exchange_asker_user_id, $reason, $vyps_meta_id, $vyps_meta_data, $vyps_meta_subid1, $vyps_meta_subid2, $asker_ticket);
+				//NOTE: These are ontogically reversed as the asker gets the bider and the bider gets the asker.
+				//Credit Asker
+				$credit_asker_result = vyps_point_credit_func($bid_id, $bid_amount, $vidyen_exchange_asker_user_id, $reason, $vyps_meta_id, $vyps_meta_data, $vyps_meta_subid1, $vyps_meta_subid2, $asker_ticket);
 
-			//Credit Bider
-			$credit_bider_result = vyps_point_credit_func($ask_id, $ask_amount, $vidyen_exchange_bider_user_id, $reason, $vyps_meta_id, $vyps_meta_data, $vyps_meta_subid1, $vyps_meta_subid2, $bider_ticket);
+				//Credit Bider
+				$credit_bider_result = vyps_point_credit_func($ask_id, $ask_amount, $vidyen_exchange_bider_user_id, $reason, $vyps_meta_id, $vyps_meta_data, $vyps_meta_subid1, $vyps_meta_subid2, $bider_ticket);
 
-			$results_message = 'The user exchange has successfully happened: '. date('Y-m-d H:i:s');
-			//for now i'm just going to see if this works before adding RNG
+				$results_message = 'The user exchange has successfully happened at '. date('Y-m-d H:i:s');
+				//for now i'm just going to see if this works before adding RNG
 
-			//Meh I need a butom button!, but I sort of need to change the table a bit rather than reuse it.
-			//Having issues. One day will come back and fix. Damn I need more helpers.
+				//Meh I need a butom button!, but I sort of need to change the table a bit rather than reuse it.
+				//Having issues. One day will come back and fix. Damn I need more helpers.
+			}
 		}
 	}
 
