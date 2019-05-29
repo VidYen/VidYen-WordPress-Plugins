@@ -5,7 +5,86 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+//It dawned on me that Dandolo (userid = 1) could be the bank.
 function vidyen_user_market_func($atts)
+{
+	//Buildings
+	$village_id = vyps_rts_sql_village_id_func();
+	
+	//Building Icons
+	$village_icon = vidyen_rts_building_icon_func($village_id);
+
+	//I'm recylign the mission output because its better
+	$html_market_output =
+	'<table width="100%">
+		<tr>
+			<th> Resource Market '.$village_icon.'</th>
+		</tr>
+		</tr>
+		<tr>
+			<td>
+				<div align="center">
+					<input  class="button" id="buy_wood" type="button" value="Buy" onclick="market_buy_wood()" />
+				</div>
+			</td>
+			<td>
+				<div align="center">
+					Wood Amount
+				</div>
+			</td>
+			<td>
+				<div align="center">
+					Wood Price
+				</div>
+			</td>
+			<td>
+				<div align="center">
+					<input  class="button" id="sell_wood" type="button" value="Sell" onclick="market_sell_wood()" />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div style="font-size: 21px;"><span style="vertical-align: bottom;">Mission Requirements: </span><span style="vertical-align: top;">'.$currency_icon.'</span> <span id="money_required" style="vertical-align: bottom;">1000</span></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div align="center">
+					<input  class="button" id="recruit_laborers_button" type="button" value="Speak to village elder!" onclick="rts_recruit_laborers()" />
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id="mission_output" align="center">
+				You seek out the village elder searching for those who wish to work.
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id="recruit_output" align="center">
+					You have not made your offer yet.
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<div id="recruitLaborersTimerBar" style="position:relative; width:100%; background-color: grey; ">
+				<div id="recruitLaborersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+					<div id="recruit_laborers_countdown_time_left" style="position: absolute; right:12%; color:white; font-size:1.25vw;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
+				</div>
+			</div>
+			</td>
+		</tr>
+	</table>';
+
+ return $html_market_output;
+
+}
+
+function vidyen_user_market_func_old($atts)
 {
 	//Check to see if user is logged in and boot them out of function if they aren't.
 	if(!is_user_logged_in())
@@ -194,6 +273,29 @@ function vidyen_user_market_func($atts)
 
 	//return $game_id_count; //debug
 
+	//<br><br>$post_vyps_meta_id";	//Debug: I'm curious what it looks like.
+
+	//These operations are below the post check as no need to waste server CPU if user didn't press button
+	$table_name_log = $wpdb->prefix . 'vyps_points_log';
+	$current_user_id = get_current_user_id();
+
+	$balance_points = vyps_point_balance_func($current_id, $current_user_id);
+
+	/* I do not ever see the need for a non-formatted need point */
+	$need_points = number_format($current_transaction_amount - $balance_points);
+
+	//I need to check to see if user already bought something so they aren't trading with themselves.
+	//NOTE: I should functionize this
+	$vyps_meta_data = "user_exchange";
+	//Going to check for the subid (as we know that if there is a game count it put one in)
+	$current_game_id_check_query = "SELECT max(id) FROM ". $table_name_log . " WHERE vyps_meta_id = %s AND vyps_meta_data = %s";
+	$current_game_id_check_prepared = $wpdb->prepare( $current_game_id_check_query, $game_id, $vyps_meta_data ); //I realized that I can only need to look at rows that are user_exchanges. If rows = threshold, then we done with that game.
+	$current_game_id_check = intval($wpdb->get_var( $current_game_id_check_prepared ));
+
+	$current_user_id_check_query = "SELECT user_id FROM ". $table_name_log . " WHERE id = %d";
+	$current_user_id_check_prepared = $wpdb->prepare( $current_user_id_check_query, $current_game_id_check ); //I realized that I can only need to look at rows that are user_exchanges. If rows = threshold, then we done with that game.
+	$current_user_id_check = $wpdb->get_var( $current_user_id_check_prepared );
+
 	if (!isset($_POST[ $post_vyps_meta_id ]))
 	{
 		/* Ok. I'm creating a semi-unique name by just concatinating all the shortcode attributes.
@@ -208,33 +310,43 @@ function vidyen_user_market_func($atts)
 		/* I added ability to have point names but for now. Just have the button say transfer and the warning give how much */
 		/* BTW it's only 1 column, 2 rows for each button. One for the output at top and one at bottom for button. */
 		/* Reason I put button at bottom is that don't want mouse on the text bothering user */
-
-		$results_message = 'Press button to '.$current_trade_mode_lower.' '.$current_icon.' '.$current_format_amount.'.';
-	}
-	else
-	{
-		//<br><br>$post_vyps_meta_id";	//Debug: I'm curious what it looks like.
-
-		//These operations are below the post check as no need to waste server CPU if user didn't press button
-		$table_name_log = $wpdb->prefix . 'vyps_points_log';
-		$current_user_id = get_current_user_id();
-
-		//Ok. Now we get balance. If it is not enough for the spend variable, we tell them that and return out. NO EXCEPTIONS
-		//SELECT sum(points_amount) FROM $table_name_log WHERE user_id = $current_user_id AND points = $ask_id
-		$balance_points_query = "SELECT sum(points_amount) FROM ". $table_name_log . " WHERE user_id = %d AND point_id = %d";
-		$balance_points_query_prepared = $wpdb->prepare( $balance_points_query, $current_user_id, $current_id );
-		$balance_points = $wpdb->get_var( $balance_points_query_prepared );
-
-		/* I do not ever see the need for a non-formatted need point */
-		$need_points = number_format($current_transaction_amount - $balance_points);
-
+		//NOTE: I've added some ifs and moved the checks to above. A bit mor eserver intensive, but saving people time from clicking.
+		//I should add a button disable to prevent it from going on, but they can try I suppose but won't actually post.
 		if ($current_transaction_amount > $balance_points)
 		{
-			$results_message = "Not enough " . $current_name . " to bid a ticket! You need " . $need_points . " more.";
+			$results_message = "Not enough " . $current_name . " to trade! You need " . $need_points . " more.";
+		}
+		elseif($current_ticket_count == 0)
+		{
+			$results_message = 'This order is ready to be created.';
+		}
+		elseif ($current_user_id_check == $current_user_id)
+		{
+			$results_message = 'You cannot trade with yourself!';
+		}
+		elseif($current_ticket_count == 1)
+		{
+			$results_message = 'This order is looking for another user to fufill.';
 		}
 		else
 		{
-			//NOTE: This is only runs if they have enough money
+			$results_message = 'Press button to '.$current_trade_mode_lower.' '.$current_icon.' '.$current_format_amount.'.';
+		}
+	}
+	else
+	{
+		//This is duplicate of the above. I should figure out a better solution.
+		if ($current_transaction_amount > $balance_points)
+		{
+			$results_message = "Not enough " . $current_name . " to trade! You need " . $need_points . " more.";
+		}
+		elseif ($current_user_id_check == $current_user_id AND $current_ticket_count != 0)
+		{
+			$results_message = 'You cannot trade with yourself!';
+		}
+		else
+		{
+			//NOTE: This is only runs if they have enough money and are not trying to trade with themselves.
 			/* All right. If user is still in the function, that means they are logged in and have enough points.
 			*  It dawned on me an admin might put in a negative number but that's on them.
 			*  Now the danergous part. Deduct points and then add the VYPS log to the WooWallet
