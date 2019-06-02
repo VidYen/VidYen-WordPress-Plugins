@@ -65,6 +65,7 @@ function vyps_vy256_solver_func($atts) {
             'shares' => 1,
             'hash' => 10000,
             'roundup' => FALSE,
+            'effort' = 1;
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -94,6 +95,7 @@ function vyps_vy256_solver_func($atts) {
     $hash_per_point = intval($atts['hash']); //intvaling this since would be odd as decimal
     $shares_per_point = floatval($atts['shares']);
     $reason = sanitize_text_field($atts['reason']); //Gods only know what people will do with their text fields.
+    $effort_multi = floatval($atts['effort']); //Does not need to be so int-ey
 
     //Custom Graphics variables for the miner. Static means start image, custom worker just means the one that goes on when you hit start
     $custom_worker_stat = $atts['cstatic'];
@@ -986,7 +988,7 @@ function vyps_vy256_solver_func($atts) {
                   current_algo = job.algo;
                 }
                 document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + current_algo + ']';
-                progresswidth = (( reported_hashes / $hash_per_point  ) - Math.floor( reported_hashes / $hash_per_point )) * 100;
+                progresswidth = (( reported_hashes / ($hash_per_point * $effort_multi )) - Math.floor( reported_hashes / ( $hash_per_point * $effort_multi) )) * 100;
                 elemworkerbar.style.width = progresswidth + '%'
 
                 //Check server is up
