@@ -66,6 +66,7 @@ function vyps_vy256_solver_func($atts) {
             'hash' => 10000,
             'roundup' => FALSE,
             'effort' = 1;
+            'pico' = FALSE;
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -121,7 +122,7 @@ function vyps_vy256_solver_func($atts) {
     $debug_mode = $atts['debug']; //Making this easier for people to see on their own the results if have to troubleshoot with them
     $market_multi = floatval($atts['marketmulti']); //Making this easier for people to see on their own the results if have to troubleshoot with them
     $hash_multi = floatval($atts['multi']);
-
+    $pico_mode = sanitize_text_field($atts['pico']); //Gods only know what people will do with their text fields.
     //Roundup mode
     $roundup_mode = $atts['roundup'];
 
@@ -323,6 +324,15 @@ function vyps_vy256_solver_func($atts) {
               array('clarion.vidhash.com', '8286'), //her own
               array('clarion.vidhash.com', '8186'), //her own
         );
+
+        //NOTE: I am experimenting with hash only server.
+        if ($pico_mode == TRUE)
+        {
+          $server_name = array(
+                array('igori.vy256.com', '8256'),
+                array('igori.vy256.com', '8256'),
+          );
+        }
 
         //shuffle($server_name); //NOTE: I'm going to turn shuffle off for now. It will always use Savona. If it breaks it will pick a server at random.
         //I feel perhaps this was a big mistake not to have a central server.
