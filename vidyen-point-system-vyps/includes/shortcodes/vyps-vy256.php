@@ -65,8 +65,8 @@ function vyps_vy256_solver_func($atts) {
             'shares' => 1,
             'hash' => 10000,
             'roundup' => FALSE,
-            'effort' = 1;
-            'pico' = FALSE;
+            'effort' => 1,
+            'pico' => FALSE,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -944,7 +944,7 @@ function vyps_vy256_solver_func($atts) {
                  document.getElementById('pool_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                  //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']'; //This needs to remain not on the MO pull
                  //document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
-                 poolProgresswidth = (( mo_totalhashes / $hash_per_point  ) - Math.floor( mo_totalhashes / $hash_per_point )) * 100;
+                 poolProgresswidth = (( mo_totalhashes / ( $hash_per_point * $effort_multi )  ) - Math.floor( mo_totalhashes / ( $hash_per_point * $effort_multi) )) * 100;
                  elempoolbar.style.width = poolProgresswidth + '%';
                });
               });
