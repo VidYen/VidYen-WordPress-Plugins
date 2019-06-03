@@ -104,6 +104,12 @@ function vyps_vy256_sub_menu_page()
     <p>If users wish to mine but donate points to another user then you can use the [vyps-refer] referral system with the shortcode addtion in the miner shortcode:</p>
     <p><b>donate=TRUE</b></p>
     <p>Then have users set their accounts to the referral to the main account to donate the rewards to that. A bit complicated, but because we do not run the pool, it is required to prevent over rewarding or loss of rewards.</p>
+    <h2>PICO mode</h2>
+    <p>We setup a CN-PICO only server which seems to do better for mobile devices. Based on the TRTL algo (Turtle Coin) it seems to do better for slower or older devices.</p>
+    <p>Add the shortcode attribue <b>pico = TRUE</b></p>
+    <h2>Effort Multi</h2>
+    <p>Sometimes, you want a longer effort xp bar so adding <b>effort = 10</b> will make it last 10x longer if you are using a low hash to point rate.</p>
+    <p>This is cosmetic only.</p>
     <h2>Referral Mining</h2>
     <p>You can set shortcode option to <b>refer=10</b> to give 10% mining bonus to their referral code invite. This shortcode accepts whole numbers only and rounds down. In theory, a site admin could set refer=200 to give a 200% mining bonus, but I am not sure why you would as that could be abused.</p>
     <p>Users can set their referral code with the shortcode <b>[vyps-refer]</b>, which should give them a page to give and get their referral code. This is not an automatic system, and your users will have to manually add the code. There are plenty of login customization and user account plugins an admin can use to integrate this system with.</p>

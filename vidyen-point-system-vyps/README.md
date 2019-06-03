@@ -111,7 +111,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Fix: Miner text in progress bars more adaptive to small screens (iPhone 5)
 - Add: Adscend redemption says point name rather than just 'points'
 - Add: Shortcode to the vy256 miner of `effort=10` which makes the effort move more slowly like an XP bar.
-- Add: Pico only server.
+- Add: Pico only server. Set shortcode `pico=TRUE`
 
 = 2.3.9 =
 
