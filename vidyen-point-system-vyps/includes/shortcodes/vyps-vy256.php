@@ -60,7 +60,7 @@ function vyps_vy256_solver_func($atts) {
             'twitch' => FALSE,
             'youtube' => FALSE,
             'donate' => FALSE,
-            'reason' => 'VY256 Mining', //Not sure sure I never added it hear other than to prevent people from messing with the reason too much and blow up db
+            'reason' => 'VidYen Webmining', //Not sure sure I never added it hear other than to prevent people from messing with the reason too much and blow up db
             'marketmulti' => 0, //market mode. Checks XMR price.
             'shares' => 1,
             'hash' => 10000,

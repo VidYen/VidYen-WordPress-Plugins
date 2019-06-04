@@ -380,33 +380,41 @@ function vyps_public_log_func($atts)
 	} //End of if its not current user
 	elseif( $current_user_state == TRUE ) //NOTE: The below is only if it is set for current users
 	{
+		//Need to boot out if not logged in.
+		if ( ! is_user_logged_in() )
+		{
+				return;
+		}
+		
 		//We need to find out how many times a user is in the table.
 		$number_of_user_rows_query = "SELECT count( user_id ) FROM $table_name_log WHERE id = %d";
 		$number_of_user_rows_query_prepared = $wpdb->prepare( $number_of_user_rows_query, $user_id );
 		$number_of_user_rows = $wpdb->get_var( $number_of_user_rows_query_prepared ); //Ok. I realized that not only prepare() doesn't work it, there is no varialbes needed to sanitize as the table name is actually hard coded.
 
+		$current_row_check = $table_range_start; //this goes in!
 		//In this instance there will be all rows. This will fix fixed eventually... Maybe. (How many entries can one user possibly have?)
-		for ($x_for_count = $number_of_log_rows; $x_for_count >= 1; $x_for_count = $x_for_count - 1 ) //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
+		//for ($x_for_count = $number_of_log_rows; $x_for_count >= 1; $x_for_count = $x_for_count - 1 ) //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
+		for ($x_for_count = $table_range_start; $x_for_count >= $table_range_stop; $x_for_count = $x_for_count - 1 ) //I'm counting backwards. Also look what I did. Also also, there should never be a 0 id or less than 1
 		{
 			//$date_data = $wpdb->get_var( "SELECT time FROM $table_name_log WHERE id= '$x_for_count'" ); //Straight up going to brute force this un-programatically not via entire row
 			$date_data_query = "SELECT time FROM ". $table_name_log . " WHERE id = %d";
-			$date_data_query_prepared = $wpdb->prepare( $date_data_query, $x_for_count );
+			$date_data_query_prepared = $wpdb->prepare( $date_data_query, $current_row_check );
 			$date_data = $wpdb->get_var( $date_data_query_prepared );
 
 			//$user_id_data = $wpdb->get_var( "SELECT user_id FROM $table_name_log WHERE id= '$x_for_count'" );
 			$user_id_data_query = "SELECT user_id FROM ". $table_name_log . " WHERE id = %d";
-			$user_id_data_query_prepared = $wpdb->prepare( $user_id_data_query, $x_for_count );
+			$user_id_data_query_prepared = $wpdb->prepare( $user_id_data_query, $current_row_check );
 			$user_id_data = $wpdb->get_var( $user_id_data_query_prepared );
 			$user_id_validated = intval($user_id_data); //I added this extra line to make the return an int as it wasn't being compared correctly as was coming out as a string not a number.
 
 			//$display_name_data = $wpdb->get_var( "SELECT display_name FROM $table_name_users WHERE id= '$user_id_data'" ); //And this is why I didn't call it the entire row by arrow. We are in 4d with multiple tables
 			$display_name_data_query = "SELECT display_name FROM ". $table_name_users . " WHERE id = %d"; //Note: Pulling from WP users table
-			$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $user_id_data );
+			$display_name_data_query_prepared = $wpdb->prepare( $display_name_data_query, $current_row_check );
 			$display_name_data = $wpdb->get_var( $display_name_data_query_prepared );
 
 			//$point_id_data = $wpdb->get_var( "SELECT point_id FROM $table_name_log WHERE id= '$x_for_count'" );
 			$point_id_data_query = "SELECT point_id FROM ". $table_name_log . " WHERE id = %d";
-			$point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $x_for_count );
+			$point_id_data_query_prepared = $wpdb->prepare( $point_id_data_query, $current_row_check );
 			$point_id_data = $wpdb->get_var( $point_id_data_query_prepared );
 
 			//$point_type_data = $wpdb->get_var( "SELECT name FROM $table_name_points WHERE id= '$point_id_data'" );
@@ -416,12 +424,12 @@ function vyps_public_log_func($atts)
 
 			//$amount_data = $wpdb->get_var( "SELECT points_amount FROM $table_name_log WHERE id= '$x_for_count'" );
 	    $amount_data_query = "SELECT points_amount FROM ". $table_name_log . " WHERE id = %d";
-	    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $x_for_count );
+	    $amount_data_query_prepared = $wpdb->prepare( $amount_data_query, $current_row_check );
 	    $amount_data = $wpdb->get_var( $amount_data_query_prepared );
 
 			//$reason_data = $wpdb->get_var( "SELECT reason FROM $table_name_log WHERE id= '$x_for_count'" );
 	    $reason_data_query = "SELECT reason FROM ". $table_name_log . " WHERE id = %d";
-	    $reason_data_query_prepared = $wpdb->prepare( $reason_data_query, $x_for_count );
+	    $reason_data_query_prepared = $wpdb->prepare( $reason_data_query, $current_row_check );
 	    $reason_data = $wpdb->get_var( $reason_data_query_prepared );
 
 			//If statement to pop in the UID if There
@@ -460,6 +468,16 @@ function vyps_public_log_func($atts)
 				//I believe there should be either it is 0 or above zero and equals but never anything else so we should be good.
 				$table_output = $table_output . $current_row_output; //I like my way that is more reasonable instead of .=
 			}
+			else
+			{
+				//Going to make a big assumption here. If user id != 0 and user ID is valid.
+				//We are going to increament the row but reset the xcount to attempt again.
+				//Sounds counter unintuitive, but *shrugs*
+				//Back up ye go!
+				$x_for_count = $x_for_count + 1;
+			}
+			//This should always happen.
+			$current_row_check = $current_row_check - 1;
 		}
 
 		//The page output for user. There are no pages currently.
