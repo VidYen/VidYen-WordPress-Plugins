@@ -14,4 +14,4 @@ add_shortcode( 'vyps-pl', 'vyps_public_log_func');
 
 add_shortcode( 'vidyen-point-log', 'vyps_public_log_func'); //note I'm slowly chaning naming convention. Havin these two side by side should keep from breaking people's sites.
 
-//add_shortcode( 'vidyen-personal-log', 'vyps_personal_log_func'); //note I'm slowly chaning naming convention. Havin these two side by side should keep from breaking people's sites.
+add_shortcode( 'vidyen-user-log', 'vyps_user_log_func'); //note I'm slowly chaning naming convention. Havin these two side by side should keep from breaking people's sites.

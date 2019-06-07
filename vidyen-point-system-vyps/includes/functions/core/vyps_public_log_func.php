@@ -380,12 +380,13 @@ function vyps_public_log_func($atts)
 	} //End of if its not current user
 	elseif( $current_user_state == TRUE ) //NOTE: The below is only if it is set for current users
 	{
+		return; //Lets just debug our way out for now.
 		//Need to boot out if not logged in.
 		if ( ! is_user_logged_in() )
 		{
 				return;
 		}
-		
+
 		//We need to find out how many times a user is in the table.
 		$number_of_user_rows_query = "SELECT count( user_id ) FROM $table_name_log WHERE id = %d";
 		$number_of_user_rows_query_prepared = $wpdb->prepare( $number_of_user_rows_query, $user_id );

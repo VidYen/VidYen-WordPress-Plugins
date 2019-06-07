@@ -13,6 +13,11 @@ add_action('wp_ajax_vyps_mmo_exchange_api_action', 'vyps_mmo_exchange_api_action
 // handle the ajax request
 function vyps_mmo_exchange_api_action()
 {
+  if ( ! is_user_logged_in() )
+  {
+    wp_die(); // this is required to terminate immediately and return a proper response
+  }
+
   global $wpdb; // this is how you get access to the database
 
   //NOTE: I do not think there is a need for nonce as no user input to wordpress

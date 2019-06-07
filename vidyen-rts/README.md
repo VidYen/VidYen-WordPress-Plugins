@@ -14,6 +14,10 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
+= 0.5.0 =
+
+- Fix: AJAX always checks to see if user is logged in or it dies immediately.
+
 = 0.1.1 =
 
 - Fixed font because of my OCD

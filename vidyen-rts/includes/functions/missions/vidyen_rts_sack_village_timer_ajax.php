@@ -14,17 +14,12 @@ add_action('wp_ajax_vidyen_rts_sack_village_timer_action', 'vidyen_rts_sack_vill
 // handle the ajax request
 function vidyen_rts_sack_village_timer_action()
 {
-  global $wpdb; // this is how you get access to the database
-
-  //Is user logged in check!
   if ( ! is_user_logged_in() )
   {
-    $village_rts_sack_village_server_response = array(
-        'system_message' => "NOTLOGGEDIN",
-    );
-      echo json_encode($village_rts_sack_village_server_response); //Proper method to return json
-      wp_die(); // this is required to terminate immediately and return a proper response
+    wp_die(); // this is required to terminate immediately and return a proper response
   }
+
+  global $wpdb; // this is how you get access to the database
 
   $user_id = get_current_user_id();
 

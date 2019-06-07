@@ -14,18 +14,13 @@ add_action('wp_ajax_vidyen_rts_siege_village_action', 'vidyen_rts_siege_castle_a
 // handle the ajax request
 function vidyen_rts_siege_castle_action()
 {
-  global $wpdb; // this is how you get access to the database
-
-  //Is user logged in check!
   if ( ! is_user_logged_in() )
   {
-    $castle_rts_siege_castle_server_response = array(
-        'system_message' => "NOTLOGGEDIN",
-    );
-      echo json_encode($castle_rts_siege_castle_server_response); //Proper method to return json
-      wp_die(); // this is required to terminate immediately and return a proper response
+    wp_die(); // this is required to terminate immediately and return a proper response
   }
 
+  global $wpdb; // this is how you get access to the database
+  
   $user_id = get_current_user_id();
 
   //Assumption. We know the user send 20 soldiers... so we figure out how many survived.

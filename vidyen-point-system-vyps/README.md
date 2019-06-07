@@ -108,7 +108,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.4.1 =
 
-- Fix: Personal log does not do all rows.
+- Fix: Personal log does not do all rows. Has been depreciated.
 - Change: `VY256 Mining` reason changed to `VidYen Webmining`
 
 = 2.4.0 =

@@ -11,12 +11,12 @@ add_action('wp_ajax_vidyen_rts_bal_api_action', 'vidyen_rts_bal_api_action');
 // handle the ajax request
 function vidyen_rts_bal_api_action()
 {
-  global $wpdb; // this is how you get access to the database
+  if ( ! is_user_logged_in() )
+  {
+    wp_die(); // this is required to terminate immediately and return a proper response
+  }
 
-    if ( ! is_user_logged_in() )
-    {
-      wp_die(); // this is required to terminate immediately and return a proper response
-    }
+  global $wpdb; // this is how you get access to the database
 
   //NOTE: I do not think there is a need for nonce as no user input to wordpress
 
