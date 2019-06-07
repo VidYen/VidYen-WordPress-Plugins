@@ -36,4 +36,4 @@ window.setInterval(function()
 /// call your function here
 // I'm setting to 12 seconds to make less taxing on server
 pull_rts_bal()
-}, 12000);
+}, 28000);
