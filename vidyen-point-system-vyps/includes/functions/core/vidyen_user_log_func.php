@@ -42,11 +42,15 @@ function vidyen_user_log_func($atts)
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 	$table_name_users = $wpdb->prefix . 'users'; //Needed for their name.
 
-	//SQL query of current user
+	//SQL query of current user on log
 	$user_data_query = "SELECT * FROM ". $table_name_log . " WHERE user_id = %d";
 	$user_data_query_prepared = $wpdb->prepare( $user_data_query, $user_id );
 	$user_data = $wpdb->get_results( $user_data_query_prepared );
 
+	//SQL query of user display name
+	$user_data_query = "SELECT * FROM ". $table_name_log . " WHERE user_id = %d";
+	$user_data_query_prepared = $wpdb->prepare( $user_data_query, $user_id );
+	$user_data = $wpdb->get_results( $user_data_query_prepared );
 	/*
 	$result = $wpdb->get_results ( "
     SELECT *
@@ -70,19 +74,6 @@ function vidyen_user_log_func($atts)
 	$amount_label = "Amount";
 	$reason_label = "Adjustment Reason";
 
-	//$html_output = 'Begin<br><br>';
-	$html_output = '<table width="100%">';
-	$html_output .= "
-			<tr>
-				<th>$transaction_id_label</th>
-				<th>$date_label</th>
-				<th>$display_name_label</th>
-				<th>$point_type_label</th>
-				<th>$amount_label</th>
-				<th>$reason_label</th>
-			</tr>
-	";
-
 	$index = 0;
 
 	//The variable $result is just arbitrarty and could have been anything but was a resutl dump of user data.
@@ -97,26 +88,78 @@ function vidyen_user_log_func($atts)
 
 		//Array parsing to cram it into multi dimensional row
 		//TODO: Add index names and not numbers for second part!
-		$parsed_array[$index][0] = $index;
-		$parsed_array[$index][1] = $transaction_id;
-		$parsed_array[$index][2] = $user_id;
-		$parsed_array[$index][3] = $reason;
-		$parsed_array[$index][4] = $transaction_time;
-		$parsed_array[$index][5] = $point_id;
-		$parsed_array[$index][6] = $point_amount;
+		$parsed_array[$index]['index'] = $index;
+		$parsed_array[$index]['transaction_id'] = $transaction_id;
+		$parsed_array[$index]['user_id'] = $user_id;
+		$parsed_array[$index]['reason'] = $reason;
+		$parsed_array[$index]['transaction_time'] = $transaction_time;
+		$parsed_array[$index]['point_id'] = $point_id;
+		$parsed_array[$index]['point_amount'] = $point_amount;
 		$index = $index + 1;
 	}
+
+	//This had to go below the foreach and use the $index for number of rows
+	$amount_of_pages = ceil( $index / $table_row_limit);
+	$display_name = vidyen_user_display_name($user_id);
+
+	//Below is the HTML output for the pagenation
+	$html_output = '<ul class="pagination">
+		<li><a href="?action=1">Newest</a></li>'; //First boot strap
+
+	if ( $amount_of_pages < $max_pages_middle)
+	{
+		 $page_number_start = 1;
+		 $page_number_end  = $amount_of_pages;
+	}
+	elseif ($page_number > $max_pages_middle AND $page_number <= ($amount_of_pages - $max_pages_middle )) //logic time here. If page number selected is greater than 5, it means we start removing the 1 to only show 9. I'll fix the math later
+	{
+		$page_number_start = $page_number - $max_pages_middle;
+		$page_number_end = $page_number + $max_pages_middle;
+	}
+	elseif( $page_number >= ($amount_of_pages - $max_pages_middle ))
+	{
+		$page_number_start = $amount_of_pages - $max_pages_middle;
+		$page_number_end = $amount_of_pages;
+	}
+	else
+	{
+		$page_number_start = 1;
+		$page_number_end = $max_pages;
+	}
+
+	//Ok. Just going to loop for nubmer of pages.
+	for ($p_for_count = $page_number_start; $p_for_count <= $page_number_end; $p_for_count = $p_for_count + 1 )
+	{
+		$page_button = "<li><a href=\"?action=$p_for_count\">$p_for_count</a></li>";
+
+		$html_output .= $page_button;
+		//end for
+	}
+
+	$html_output .= '<h1>'.$display_name.'\'s Transaction Log</h1>
+	<li><a href="?action='.$amount_of_pages.'">Oldest</a></li></ul>';
+
+	//$html_output = 'Begin<br><br>';
+	$html_output .= '<table width="100%">';
+	$html_output .= "
+			<tr>
+				<th>$transaction_id_label</th>
+				<th>$date_label</th>
+				<th>$point_type_label</th>
+				<th>$amount_label</th>
+				<th>$reason_label</th>
+			</tr>
+	";
 
 	for ($x = $start_row; $x <= $end_row; $x++)
 	{
 		$html_output .= '
 			<tr>
-				<td>'.$parsed_array[$x][1].'</td>
-				<td>'.$parsed_array[$x][3].'</td>
-				<td>'.$parsed_array[$x][2].'</td>
-				<td>'.$parsed_array[$x][5].'</td>
-				<td>'.$parsed_array[$x][6].'</td>
-				<td>'.$parsed_array[$x][3].'</td>
+				<td>'.$parsed_array[$x]['index'].'</td>
+				<td>'.$parsed_array[$x]['transaction_time'].'</td>
+				<td>'.$parsed_array[$x]['point_id'].'</td>
+				<td>'.$parsed_array[$x]['point_amount'].'</td>
+				<td>'.$parsed_array[$x]['reason'].'</td>
 			</tr>
 				';
 	}
