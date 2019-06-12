@@ -18,7 +18,7 @@ function vyps_point_credit_func($point_id, $point_amount, $user_id, $reason, $vy
 	//Its possible that this could be called without user being logged in but we should still sanitize
 	$point_id = intval($point_id);
 	$point_amount = abs(intval($point_amount)); //there is an abs() in there but should be using deduct to remove
-	$user_id = sanitize_text_field($user_id);
+	$user_id = intval($user_id);
 	$reason = sanitize_text_field($reason);
 	$vyps_meta_id = sanitize_text_field($vyps_meta_id);
 	$vyps_meta_data = sanitize_text_field($vyps_meta_data);
