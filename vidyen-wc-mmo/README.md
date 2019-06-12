@@ -14,6 +14,10 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
+= 0.5.0 =
+
+- Update: Added latest backend funcitonality to make the in game monentization without having to register an account.
+
 = 0.1.1 =
 
 - Fixed font because of my OCD

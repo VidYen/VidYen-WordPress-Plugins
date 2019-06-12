@@ -376,7 +376,7 @@ function vyps_vy256_solver_func($atts) {
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';
       $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
-      $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+      $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, $reason, $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
       $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
       $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
@@ -500,7 +500,7 @@ function vyps_vy256_solver_func($atts) {
         //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
         $table_name_log = $wpdb->prefix . 'vyps_points_log';
         $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
-        $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+        $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, $reason, $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
         $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
         //NOTE: I new something was messing up

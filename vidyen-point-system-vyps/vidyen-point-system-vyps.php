@@ -73,18 +73,19 @@ function vyps_points_install()
 
     $sql .= "CREATE TABLE {$table_name_points_log} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
-                reason varchar(128) NOT NULL,
-                user_id mediumint(9) NOT NULL,
+		reason varchar(128) NOT NULL,
+		user_id mediumint(9) NOT NULL,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		point_id varchar(11) NOT NULL,
-                points_amount double(64, 0) NOT NULL,
-                adjustment varchar(100) NOT NULL,
-								vyps_meta_id varchar(64) NOT NULL,
-								vyps_meta_data varchar(128) NOT NULL,
-								vyps_meta_amount double(64,0) NOT NULL,
-								vyps_meta_subid1 mediumint(9) NOT NULL,
-								vyps_meta_subid2 mediumint(9) NOT NULL,
-								vyps_meta_subid3 mediumint(9) NOT NULL,
+    points_amount double(64, 0) NOT NULL,
+    adjustment varchar(100) NOT NULL,
+		vyps_meta_id varchar(64) NOT NULL,
+		vyps_meta_data varchar(128) NOT NULL,
+		vyps_meta_amount double(64,0) NOT NULL,
+		vyps_meta_subid1 mediumint(9) NOT NULL,
+		vyps_meta_subid2 mediumint(9) NOT NULL,
+		vyps_meta_subid3 mediumint(9) NOT NULL,
+		game_id tinytext NOT NULL,
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
 

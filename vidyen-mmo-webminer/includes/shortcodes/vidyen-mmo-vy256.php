@@ -78,22 +78,56 @@ function vidyen_mmo_vy256_solver_func($atts) {
         return "ADMIN ERROR: Point ID not set!";
     }
 
+    //NOTE: needs to replace  get_current_user_id()
+    //Also NOTE game_id is not user id. Dumb $WPDB
+    if(isset($_GET['user_id']))
+    {
+      $game_id = sanitize_text_field($_GET['user_id']);
+      $user_id = 0; //Represents no user
+    }
+    else
+    {
+      return; //You get nothing. Otherwise, your mining for no reward.
+    }
+
+
     //NOTE: Where we are going we don't need $wpdb
     $graphic_choice = $atts['graphic'];
     $sm_site_key = $atts['wallet'];
     $sm_site_key_origin = $atts['wallet'];
     $siteName = $atts['site'];
     $mining_pool = $atts['pool']; //Overwrite rather than default
+
+    //NOTE: THis need to be replaced with gets
     //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
-    $sm_threads = $atts['threads'];
+
+    //$sm_threads = $atts['threads'];
+    if(isset($_GET['threads']))
+    {
+      $sm_threads = intval($_GET['threads']);
+    }
+    else
+    {
+      return; //You get nothing. Otherwise, your mining for no reward.
+    }
+
+    //$sm_throttle = $atts['throttle'];
+    if(isset($_GET['throttle']))
+    {
+      $sm_throttle = floatval($_GET['throttle']);
+    }
+    else
+    {
+      return; //You get nothing. Otherwise, your mining for no reward.
+    }
+
     $max_threads = $atts['maxthreads'];
-    $sm_throttle = $atts['throttle'];
     $point_id = $atts['pid'];
+
     $password = $atts['password']; //This gives option to set password on the miner on MO when setting up
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
-    $current_user_id = get_current_user_id();
-    //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
+    //$miner_id = 'worker_' . $game_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
     $hash_per_point = intval($atts['hash']); //intvaling this since would be odd as decimal
     $shares_per_point = floatval($atts['shares']);
     $reason = sanitize_text_field($atts['reason']); //Gods only know what people will do with their text fields.
@@ -256,38 +290,15 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
       global $wpdb;
 
-      //It is a bit of some SQL reads. Not writes so its not terrible, but unless its needed let's not run the function. If the shareholder is set to 1 or more it should fire
-      if ( $share_holder_status > 0 )
-      {
-        $share_holder_pick = vyps_worker_shareholder_pick( $atts ); //I'm 75% sure this works since the shortcode is the same. Calling it after WPDB tho.
-
-        //If pick is 0 it means that house one so wallet remains the same as what it started out with
-        if ($share_holder_pick != 0)
-        {
-            $key = 'vyps_xmr_wallet'; //This is static. May have MSR wallet someday.
-            $single = TRUE; //Need to to force to not be an array.
-            $user_meta_wallet = get_user_meta( $share_holder_pick, $key, $single );
-
-            //I have the notion that a user may have got points but failed to put in an address. An XMR address is way more than 2 characters
-            if ( strlen($user_meta_wallet)  > 2 )
-            {
-              $sm_site_key = $user_meta_wallet; //ok the site key becomes this, but... see below about the issues i had to work around with the note.
-            } //strlen check.
-        } //Pick check if
-      } //Shareholder close
-
       //loading the graphic url
       $VYPS_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . $current_graphic; //Now with dynamic images!
       $VYPS_stat_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . 'stat_'. $current_graphic; //Stationary version!
       $VYPS_power_url = plugins_url( 'images/', dirname(__FILE__) ) . 'powered_by_vyps.png'; //Well it should work out.
 
-      $VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
+      //$VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
 
+      $VYPS_power_row ='';
       //Procheck here. Do not forget the ==
-      if (vyps_procheck_func($atts) == 1)
-      {
-        $VYPS_power_row = ''; //No branding if procheck is correct.
-      }
 
       //Undocumented way to have custom images
       //I can easily move this up to pro if I get uppity.
@@ -313,7 +324,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
       //But you can just look at the pools and see the winner. I'm not sure if people want their XMR visible to other user.
       //I will do an unscientific poll. By poll...  I'm going to ask my only known user admin.
 
-      //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+      //$miner_id = 'worker_' . $game_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
       //OK going to do a shuffle of servers to pick one at random from top.
       if(empty($custom_server))
@@ -376,16 +387,16 @@ function vidyen_mmo_vy256_solver_func($atts) {
       /*** Unique mining ***/
       //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
       $table_name_log = $wpdb->prefix . 'vyps_points_log';
-      $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
-      $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+      $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE game_id = %s AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
+      $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $game_id, $reason, $siteName ); //NOTE: Originally this said $game_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
       $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
-      $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
+      $siteName_worker = '.' . $game_id . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
 
       //I feel like maybe should eventually functionize this.
       //MO remote get info for site
       $mo_site_wallet = $sm_site_key;
-      $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
+      $mo_site_worker = $game_id . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
       /*** MoneroOcean Gets***/
       //Site get
@@ -449,80 +460,47 @@ function vidyen_mmo_vy256_solver_func($atts) {
         //Also I'm going to functionize this. I don't think we will need $wpdb, but I could be wrong
         global $wpdb;
 
-        $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
+        $point_amount = $balance; //Well in theory the json_decode could blow up I suppose better safe than sorry.
         $pointType = intval($point_id); //Point type should be int.
-        $user_id = get_current_user_id(); //Redudant, but ah well.
-        $refer_rate = intval($refer_rate);
+        $vyps_meta_data = $siteName;
 
-        //Update the $atts array to feed into the add funciton
-        $atts['outputid'] = $pointType;
-        $atts['outputamount'] = $amount;
-        $atts['to_user_id'] = $user_id;
-        $atts['vyps_meta_data'] = $siteName;
-        $atts['refer'] = $refer_rate; //It dawned on that I built the referral system into the function and could reduce the shortcode.
-        $atts['reason'] = $reason; //Redudant, but went through some santiization before it got here indirectly
-
-        if ($donate_mode != TRUE OR vyps_current_refer_func($current_user_id) == 0) //Donate mod is off. Or at least not true. Or... Its is true, but refer is 0 meaning there is no refer
-        {
-          $add_result = vyps_add_func($atts);
-
-          if($add_result == 1)
-          {
-            $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
-          }
-          else
-          {
-            $redeem_output = '<tr><td>Redemption Error!</td></tr>'; //Something went wrong.
-          }
-
-        }
-        elseif ($donate_mode == TRUE AND vyps_current_refer_func($current_user_id) != 0 ) //Same as before but we changing the donate mode to give it all to other user if refer set
-        {
-          $atts['to_user_id'] = vyps_current_refer_func($current_user_id); //Simply change the user id to the referral. Saves a lot of messing.
-          $add_result = vyps_add_func($atts);
-
-          $atts['to_user_id'] = get_current_user_id(); //Ok running a second operation
-          $atts['outputamount'] = 0; //Goign to add a transaction to the existing user with 0. See what I did there.
-          $donate_result = vyps_add_func($atts);
-
-          if($add_result == 1 AND $donate_result == 1)
-          {
-            $current_refer_name = vyps_current_refer_name_func($user_id);
-            $redeem_output = "<tr><td>$reward_icon $balance donated to $current_refer_name!</td></tr>"; //I figured people should be aware that this is what it is doing.
-          }
-          else
-          {
-            $redeem_output = '<tr><td>Redemption Error! Codes: '.$add_result.' + '.$donate_result.'</td></tr>'; //Something went wrong.
-          }
-        }
+        //$credit_result = vyps_point_credit_func($point_id, $point_amount, $game_id, $reason, $vyps_meta_data  = $siteName);
 
         //NOTE to self... I might want to functionalize the bllow.
         /*** Unique mining ***/ //Derr i frogt part of this in the redeem. No wonder I was having bugs. Still need to functionalize. -Felty
         //Ok. We are makign the mining unique. I might need to drop the _ but we will see if monroe made it required. If so, then I'll just drop the _ and combine it with user name.
         $table_name_log = $wpdb->prefix . 'vyps_points_log';
-        $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
-        $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
+
+        //Addition of the point_id
+        $data = [
+            'point_id' => $point_id,
+            'points_amount' => $point_amount, //I shall fix this one day to point_amount
+            'user_id' => $user_id,
+            'game_id' => $game_id,
+            'reason' => $reason,
+            'vyps_meta_data' => $vyps_meta_data,
+            'time' => date('Y-m-d H:i:s')
+        ];
+        $wpdb->insert($table_name_log, $data);
+
+        $last_transaction_query = "SELECT max(id) FROM ". $table_name_log . " WHERE game_id = %s AND reason = %s AND vyps_meta_data = %s"; //Ok we find the id of the last VY256 mining
+        $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $game_id, $reason, $siteName ); //NOTE: Originally this said $game_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
         $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
         //NOTE: I new something was messing up
         //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
-        //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
-        $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
-        $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
+        //$miner_id = 'worker_' . $game_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+        $siteName_worker = '.' . $game_id . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
+        $mo_site_worker = $game_id . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
+        $redeem_output = '<tr><td>Seems to have given a reward: ' . $reward_icon . ' ' . $balance. ' Credit result: '. $credit_result . ' game_id: '.$game_id.'</td></tr>';
         $balance = 0; //This should be set to zero at this point.
-      }
-      elseif($player_mode != TRUE)
-      {
-          $balance = 0; //I remembered if it gets returned a blank should be made a zero.
-          //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-          $redeem_output = "<tr><td>Click  \"$start_btn_text\" to begin and  \"$redeem_btn_text\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
       }
       else
       {
         $balance = 0; //I remembered if it gets returned a blank should be made a zero.
         //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-        $redeem_output = "<tr><td>Click play to begin and  \"$redeem_btn_text\" to get work credit in: " . $reward_icon . "</td></tr>";
+        $redeem_output = "<tr><td>No balance found: " . $reward_icon . ' '.$balance."</td></tr>";
       }
 
       $start_button_html ="
@@ -531,19 +509,6 @@ function vidyen_mmo_vy256_solver_func($atts) {
       ";
 
       $start_message_verbage = 'Press Start to begin.';
-
-      $switch_pause_div_on = "document.getElementById(\"pauseProgress\").style.display = 'none'; // hide pause
-      document.getElementById(\"timeProgress\").style.display = 'block'; // begin time";
-
-      if ($player_mode==TRUE)
-      {
-        $start_button_html = "
-        <button id=\"startb\" style=\"display:none;width:100%;\" onclick=\"vidyen_start()\">$start_btn_text</button>
-        <form id=\"stop\" style=\"width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>";
-
-        $start_message_verbage = 'Press Play to begin.';
-        $switch_pause_div_on = '';
-      }
 
       //Get the url for the solver
       $vy256_solver_folder_url = plugins_url( 'js/solver319/', __FILE__ );
@@ -591,11 +556,6 @@ function vidyen_mmo_vy256_solver_func($atts) {
             </script>
           <script src="'.$vy256_solver_js_url.'"></script>
           <script>
-
-            //function get_user_id()
-            //{
-            //    return "miner_id"; //There was a $ in front of it
-            //}
             var sendstackId = 0;
             function clearSendStack(){
               clearInterval(sendstackId);
@@ -677,12 +637,8 @@ function vidyen_mmo_vy256_solver_func($atts) {
       $simple_miner_output .="
               //Switch on animations and bars.
               $switch_pause_div_on
-              document.getElementById(\"startb\").style.display = 'none'; // disable button
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
               document.getElementById(\"atwork\").style.display = 'block'; // disable button
-              document.getElementById(\"redeem\").style.display = 'block'; // disable button
-              document.getElementById(\"thread_manage\").style.display = 'block'; // disable button
-              document.getElementById(\"stop\").style.display = 'block'; // disable button
               document.getElementById(\"mining\").style.display = 'block'; // disable button
 
               document.getElementById('status-text').innerText = 'Working.'; //set to working
@@ -700,15 +656,11 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
               }, 2000);
-
-              //Order of operations issue. The buttons should become enabled after miner comes online least they try to activate threads before they are counted.
-              document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
             }
 
             function stop()
             {
                 deleteAllWorkers();
-                document.getElementById(\"stop\").style.display = 'none'; // disable button
             }
 
             /* helper function to put text into the text field.  */
@@ -788,87 +740,22 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
     //NOTE: I should move this in sequential but this needs to be moved to top as HTML runs first and then the <script> at bottom
     //I should eventually move the js to an actual js file and use php to change the variables, but I like this method better for now.
-    $simple_miner_html_output = $graphics_html_ouput."
+    $simple_miner_html_output = $graphics_html_ouput.'
     <tr>
        <td>
-         <div>"
-         .$start_button_html. //I have added a small bit of code here to move over to the '.$variable.' system rather than the "" which is horrid for HTML 4/3/19 -Felty
-        '</div><br>
-        <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
-          <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text\">'.$start_message_verbage.'</span></div></div>
-        </div>
         <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
-          <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span></div></div>
+          <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"></div></div>
         </div>
         <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
-          <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="progress_text"> Effort[0]</span></div></div>
+          <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span> <span id="progress_text"> Effort[0]</span></div></div>
         </div>
         <div id="poolProgress" style="position:relative; display: '.$poolBar_display.';width:100%; background-color: grey; ">
           <div id="poolBar" style="display: '.$poolBar_display.';width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%; font-size:1.25vw; color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
         </div>
-        <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
-          <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
-          <span style="font-size:1.25vw;">Threads:&nbsp;</span><span style="display:inline; font-size:1.25vw;" id="thread_count">0</span>
-          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" disabled>+</button>
-          <form method="post" style="display:none;margin:5px !important;" id="redeem">
-            <input type="hidden" value="" name="redeem"/>
-            <input type="hidden" value="$device_name" name="device"/>
-          </form>
-        </div>
       </td>
-    </tr>
-      <tr>
-        <td>
-          <div class="slidecontainer">
-            <p>Device '.$device_name.' - CPU Power: <span id="cpu_stat"></span>%</p>
-            <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$sm_throttle.'" class="slider" id="cpuRange">
-          </div>
-        </td>
-      </tr>';
-      /*Working on making this all '' rather than "" to parse the php to html better*/
-      $simple_miner_output .= "
-      <script>
-        //CPU throttle
-        var slider = document.getElementById(\"cpuRange\");
-        var output = document.getElementById(\"cpu_stat\");
-        output.innerHTML = slider.value;
+    </tr>';
 
-        slider.oninput = function()
-        {
-          output.innerHTML = this.value;
-          throttleMiner = 100 - this.value;
-        ";
-    $simple_miner_output .=
-              vyps_point_debug_func($debug_mode, "console.log(throttleMiner);").'
-            }
-      </script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      ';
-
-    $simple_miner_output .= "
-          <script>
-              //Button actions to make it run. Seems like this is legacy for some reason?
-              function vidyen_add()
-              {
-                if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
-                {
-                  addWorker();
-                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
-                  .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
-                }
-              }
-
-              function vidyen_sub()
-              {
-                if( Object.keys(workers).length > 1)
-                {
-                  removeWorker();
-                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
-                  .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
-                }
-              }
-            </script>
-        ";
+    $simple_miner_output .= '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>';
 
         //MO ajax js to put add.
         $mo_ajax_html_output = "
@@ -943,8 +830,6 @@ function vidyen_mmo_vy256_solver_func($atts) {
                  progresspoints = mo_totalhashes - ( Math.floor( mo_totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( mo_totalhashes / $hash_per_point );
                  document.getElementById('pool_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
-                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']'; //This needs to remain not on the MO pull
-                 //document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
                  poolProgresswidth = (( mo_totalhashes / ( $hash_per_point * $effort_multi )  ) - Math.floor( mo_totalhashes / ( $hash_per_point * $effort_multi) )) * 100;
                  elempoolbar.style.width = poolProgresswidth + '%';
                });
@@ -972,12 +857,6 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 else
                 {
                   ajaxTime++;
-                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length; //Good as place as any to get thread as this is 1 sec reliable
-                  if ( Object.keys(workers).length > 1 && mobile_use == false )
-                  {
-                    document.getElementById(\"add\").disabled = false; //enable the + button
-                    document.getElementById(\"sub\").disabled = false; //enable the - button
-                  }
                   elemworkerbar.style.width = progresswidth + '%';
                   document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']';
                 }
@@ -988,7 +867,6 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 prior_totalhashes = totalhashes;
                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                 totalpoints = Math.floor( totalhashes / $hash_per_point );
-                //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                 document.getElementById('progress_text').innerHTML = 'Effort[' + reported_hashes + ']';
                 if (job == null)
                 {
@@ -1015,22 +893,9 @@ function vidyen_mmo_vy256_solver_func($atts) {
             }
             </script>";
 
-        //Donation mode. Should be made aware who you are donating too
-        if ($donate_mode == TRUE AND vyps_current_refer_func($current_user_id) != 0 )
-        {
-          $user_id = $current_user_id;
 
-          $current_refer_name = vyps_current_refer_name_func($user_id);
+      $donate_html_output = '';
 
-          $donate_html_output = '<tr>
-                                  <td>Donate Mode On - Rewards go to: '.$current_refer_name.'</td>
-                                </tr>
-                                ';
-        }
-        else
-        {
-          $donate_html_output = '';
-        }
 
       //Hidden DEBUG
       if($debug_mode==TRUE)
@@ -1067,18 +932,21 @@ function vidyen_mmo_vy256_solver_func($atts) {
         $start_html_output = '<script>vidyen_start();</script>';
       }
 
+      $ajax_url_html_oputput = '<script type="text/javascript">
+              var ajaxurl = "' . admin_url('admin-ajax.php') . '";
+            </script>';
+
       //JS files will load after the table display now.
-      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output . $VYPS_power_row . '</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $start_html_output; //The output!
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output .'</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output; //The output!
 
 
-    } else {
-
+    }
+    else
+    {
         $final_return = ""; //Well. Niether consent button or redeem were clicked sooo.... You get nothing.
-
     }
 
     return $final_return;
-
 }
 
 /* Telling WP to use function for shortcode for sm-consent*/
