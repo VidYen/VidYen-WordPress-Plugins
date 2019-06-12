@@ -562,6 +562,19 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
       $start_message_verbage = 'Press Start to begin.';
 
+      $switch_pause_div_on = "document.getElementById(\"pauseProgress\").style.display = 'none'; // hide pause
+      document.getElementById(\"timeProgress\").style.display = 'block'; // begin time";
+
+      if ($player_mode==TRUE)
+      {
+        $start_button_html = "
+        <button id=\"startb\" style=\"display:none;width:100%;\" onclick=\"vidyen_start()\">$start_btn_text</button>
+        <form id=\"stop\" style=\"width:100%;\" method=\"post\"><input type=\"hidden\" value=\"\" name=\"consent\"/><input type=\"submit\" style=\"width:100%;\" class=\"button - secondary\" value=\"$redeem_btn_text\"/></form>";
+
+        $start_message_verbage = 'Press Play to begin.';
+        $switch_pause_div_on = '';
+      }
+
       //Get the url for the solver
       $vy256_solver_folder_url = plugins_url( 'js/solver319/', __FILE__ );
       //$vy256_solver_url = plugins_url( 'js/solver/miner.js', __FILE__ ); //Ah it was the worker.
@@ -694,6 +707,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
       $simple_miner_output .="
               //Switch on animations and bars.
               $switch_pause_div_on
+              document.getElementById(\"startb\").style.display = 'none'; // disable button
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
               document.getElementById(\"atwork\").style.display = 'block'; // disable button
               document.getElementById(\"mining\").style.display = 'block'; // disable button
@@ -718,6 +732,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
             function stop()
             {
                 deleteAllWorkers();
+                document.getElementById(\"stop\").style.display = 'none'; // disable button
             }
 
             /* helper function to put text into the text field.  */
@@ -800,6 +815,10 @@ function vidyen_mmo_vy256_solver_func($atts) {
     $simple_miner_html_output = $graphics_html_ouput.'
     <tr>
        <td>
+        <br>
+        <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
+          <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text\">'.$start_message_verbage.'</span></div></div>
+        </div>
         <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
           <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span></div></div>
         </div>
@@ -914,6 +933,11 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 else
                 {
                   ajaxTime++;
+                  if ( Object.keys(workers).length > 1 && mobile_use == false )
+                  {
+                    document.getElementById(\"add\").disabled = false; //enable the + button
+                    document.getElementById(\"sub\").disabled = false; //enable the - button
+                  }
                   elemworkerbar.style.width = progresswidth + '%';
                   document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']';
                 }
@@ -1002,21 +1026,18 @@ function vidyen_mmo_vy256_solver_func($atts) {
         $start_html_output = '<script>vidyen_start();</script>';
       }
 
-      $ajax_url_html_oputput = '<script type="text/javascript">
-              var ajaxurl = "' . admin_url('admin-ajax.php') . '";
-            </script>';
-
       //JS files will load after the table display now.
-      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . '</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output; //The output!
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . '</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $start_html_output; //The output!
 
 
-    }
-    else
-    {
+    } else {
+
         $final_return = ""; //Well. Niether consent button or redeem were clicked sooo.... You get nothing.
+
     }
 
     return $final_return;
+
 }
 
 /* Telling WP to use function for shortcode for sm-consent*/
