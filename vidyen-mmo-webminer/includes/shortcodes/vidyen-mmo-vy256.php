@@ -744,13 +744,13 @@ function vidyen_mmo_vy256_solver_func($atts) {
     <tr>
        <td>
         <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
-          <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"></div></div>
+          <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%;  color:'.$workerBar_text_color.';"></div></div>
         </div>
         <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
-          <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span> <span id="progress_text"> Effort[0]</span></div></div>
+          <div id="workerBar" style="display: '.$workerBar_display.'; width:0%; height: 30px; background-color: '.$workerBar_color.';"><div style="position: absolute; right:12%;  color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span> <span id="progress_text"> Effort[0]</span></div></div>
         </div>
         <div id="poolProgress" style="position:relative; display: '.$poolBar_display.';width:100%; background-color: grey; ">
-          <div id="poolBar" style="display: '.$poolBar_display.';width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%; font-size:1.25vw; color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
+          <div id="poolBar" style="display: '.$poolBar_display.'; width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%;  color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
         </div>
       </td>
     </tr>';
@@ -936,8 +936,15 @@ function vidyen_mmo_vy256_solver_func($atts) {
               var ajaxurl = "' . admin_url('admin-ajax.php') . '";
             </script>';
 
+      //Resets every 30,000 miliseconds
+      $reload_page_js_output = '<script type="text/javascript">
+        setTimeout(function() {
+          location.reload();
+        }, 60000);
+      </script>';
+
       //JS files will load after the table display now.
-      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output .'</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output; //The output!
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output .'</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output . $reload_page_js_output; //The output!
 
 
     }
