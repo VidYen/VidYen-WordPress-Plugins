@@ -32,7 +32,7 @@ if(current_user_can('install_plugins')){
 
 		//Grab the GET
 		$user_id = $_GET['edituserpoints'];
-		$user_id = intval($user_id); //Santize the get
+		$user_id = sanitize_text_field($user_id); //Santize the get
 
 		//I'm going to reverse the the order
 		//Two buttons with a add and subtract buttons with two different post values
