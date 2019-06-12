@@ -103,7 +103,8 @@ function vidyen_user_log_func($atts)
 	$display_name = vidyen_user_display_name($user_id);
 
 	//Below is the HTML output for the pagenation
-	$html_output = '<ul class="pagination">
+	$html_output = '<h1>'.$display_name.'\'s Transaction Log</h1>
+		<ul class="pagination">
 		<li><a href="?action=1">Newest</a></li>'; //First boot strap
 
 	if ( $amount_of_pages < $max_pages_middle)
@@ -136,8 +137,7 @@ function vidyen_user_log_func($atts)
 		//end for
 	}
 
-	$html_output .= '<h1>'.$display_name.'\'s Transaction Log</h1>
-	<li><a href="?action='.$amount_of_pages.'">Oldest</a></li></ul>';
+	$html_output .= '<li><a href="?action='.$amount_of_pages.'">Oldest</a></li></ul>';
 
 	//$html_output = 'Begin<br><br>';
 	$html_output .= '<table width="100%">';
