@@ -20,7 +20,7 @@ function vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $rea
 	//Its possible that this could be called without user being logged in but we should still sanitize
 	$mission_id = sanitize_text_field($mission_id); // Mission ids will be text ids... like 'sackvillage05'
 	$mission_time = intval($mission_time); //I'm not sure if mission log should have amount but we will see
-	$user_id = sanitize_text_field($user_id);
+	$user_id = intval($user_id);
 	$reason = sanitize_text_field($reason);
 	$vyps_meta_id = 'start'.$mission_id;
 

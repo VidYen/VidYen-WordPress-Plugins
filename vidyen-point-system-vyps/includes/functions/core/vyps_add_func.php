@@ -26,7 +26,7 @@ function vyps_add_func( $atts )
 	//ALL THESE SHOULD BE INTS as VYPS is INT only!
 	$add_point_id = intval($atts['outputid']);
 	$add_amount = intval($atts['outputamount']);
-	$to_user_id = sanitize_text_field($atts['to_user_id']);
+	$to_user_id = intval($atts['to_user_id']);
 	$refer_rate = intval($atts['refer']); 	//Refer rate
 
 	//The Reason and meta Meta which should be somewhat text

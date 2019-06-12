@@ -479,10 +479,52 @@ function vidyen_mmo_vy256_solver_func($atts) {
         //Also I'm going to functionize this. I don't think we will need $wpdb, but I could be wrong
         global $wpdb;
 
-        $point_amount = $balance; //Well in theory the json_decode could blow up I suppose better safe than sorry.
+        $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
         $pointType = intval($point_id); //Point type should be int.
+        $user_id = $user_id; //Redudant, but ah well.
+        $refer_rate = intval($refer_rate);
 
-        $credit_result = vyps_point_credit_func($point_id, $point_amount, $user_id, $reason, $vyps_meta_data  = $siteName);
+        //Update the $atts array to feed into the add funciton
+        $atts['outputid'] = $pointType;
+        $atts['outputamount'] = $amount;
+        $atts['to_user_id'] = $user_id;
+        $atts['vyps_meta_data'] = $siteName;
+        $atts['refer'] = $refer_rate; //It dawned on that I built the referral system into the function and could reduce the shortcode.
+        $atts['reason'] = $reason; //Redudant, but went through some santiization before it got here indirectly
+
+        if ($donate_mode != TRUE OR vyps_current_refer_func($current_user_id) == 0) //Donate mod is off. Or at least not true. Or... Its is true, but refer is 0 meaning there is no refer
+        {
+          $add_result = vyps_add_func($atts);
+
+          if($add_result == 1)
+          {
+            $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
+          }
+          else
+          {
+            $redeem_output = '<tr><td>Redemption Error!</td></tr>'; //Something went wrong.
+          }
+
+        }
+        elseif ($donate_mode == TRUE AND vyps_current_refer_func($current_user_id) != 0 ) //Same as before but we changing the donate mode to give it all to other user if refer set
+        {
+          $atts['to_user_id'] = vyps_current_refer_func($current_user_id); //Simply change the user id to the referral. Saves a lot of messing.
+          $add_result = vyps_add_func($atts);
+
+          $atts['to_user_id'] = $user_id; //Ok running a second operation
+          $atts['outputamount'] = 0; //Goign to add a transaction to the existing user with 0. See what I did there.
+          $donate_result = vyps_add_func($atts);
+
+          if($add_result == 1 AND $donate_result == 1)
+          {
+            $current_refer_name = vyps_current_refer_name_func($user_id);
+            $redeem_output = "<tr><td>$reward_icon $balance donated to $current_refer_name!</td></tr>"; //I figured people should be aware that this is what it is doing.
+          }
+          else
+          {
+            $redeem_output = '<tr><td>Redemption Error! Codes: '.$add_result.' + '.$donate_result.'</td></tr>'; //Something went wrong.
+          }
+        }
 
         //NOTE to self... I might want to functionalize the bllow.
         /*** Unique mining ***/ //Derr i frogt part of this in the redeem. No wonder I was having bugs. Still need to functionalize. -Felty
@@ -498,14 +540,19 @@ function vidyen_mmo_vy256_solver_func($atts) {
         $siteName_worker = '.' . $user_id . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
         $mo_site_worker = $user_id . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
-        $redeem_output = '<tr><td>Seems to have given a reward: ' . $reward_icon . ' ' . $balance. ' Credit result: '. $credit_result . ' User_id: '.$user_id.'</td></tr>';
         $balance = 0; //This should be set to zero at this point.
+      }
+      elseif($player_mode != TRUE)
+      {
+          $balance = 0; //I remembered if it gets returned a blank should be made a zero.
+          //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
+          $redeem_output = "<tr><td>Click  \"$start_btn_text\" to begin and  \"$redeem_btn_text\" to stop and get work credit in: " . $reward_icon . "</td></tr>";
       }
       else
       {
         $balance = 0; //I remembered if it gets returned a blank should be made a zero.
         //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-        $redeem_output = "<tr><td>No balance found: " . $reward_icon . ' '.$balance."</td></tr>";
+        $redeem_output = "<tr><td>Click play to begin and  \"$redeem_btn_text\" to get work credit in: " . $reward_icon . "</td></tr>";
       }
 
       $start_button_html ="
@@ -960,7 +1007,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
             </script>';
 
       //JS files will load after the table display now.
-      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output .'</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output; //The output!
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . '</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output; //The output!
 
 
     }
