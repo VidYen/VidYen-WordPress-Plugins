@@ -110,6 +110,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 - Fix: Personal log does not do all rows. Has been depreciated.
 - Change: `VY256 Mining` reason changed to `VidYen Webmining`
+- Change: Log Table user_id changed from int to varchar to allow new integration
 
 = 2.4.0 =
 
