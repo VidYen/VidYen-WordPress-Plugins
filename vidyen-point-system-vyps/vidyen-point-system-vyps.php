@@ -74,7 +74,7 @@ function vyps_points_install()
     $sql .= "CREATE TABLE {$table_name_points_log} (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
                 reason varchar(128) NOT NULL,
-                user_id varchar(28) NOT NULL,
+                user_id mediumint(9) NOT NULL,
 		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		point_id varchar(11) NOT NULL,
                 points_amount double(64, 0) NOT NULL,

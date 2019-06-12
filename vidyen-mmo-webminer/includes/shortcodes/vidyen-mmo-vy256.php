@@ -78,54 +78,21 @@ function vidyen_mmo_vy256_solver_func($atts) {
         return "ADMIN ERROR: Point ID not set!";
     }
 
-    //NOTE: needs to be replaced get_current_user_id()
-    if(isset($_GET['user_id']))
-    {
-      $user_id = sanitize_text_field($_GET['user_id']);
-    }
-    else
-    {
-      return; //You get nothing. Otherwise, your mining for no reward.
-    }
-
-
     //NOTE: Where we are going we don't need $wpdb
     $graphic_choice = $atts['graphic'];
     $sm_site_key = $atts['wallet'];
     $sm_site_key_origin = $atts['wallet'];
     $siteName = $atts['site'];
     $mining_pool = $atts['pool']; //Overwrite rather than default
-
-    //NOTE: THis need to be replaced with gets
     //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
-
-    //$sm_threads = $atts['threads'];
-    if(isset($_GET['threads']))
-    {
-      $sm_threads = intval($_GET['threads']);
-    }
-    else
-    {
-      return; //You get nothing. Otherwise, your mining for no reward.
-    }
-
-    //$sm_throttle = $atts['throttle'];
-    if(isset($_GET['throttle']))
-    {
-      $sm_throttle = floatval($_GET['throttle']);
-    }
-    else
-    {
-      return; //You get nothing. Otherwise, your mining for no reward.
-    }
-
+    $sm_threads = $atts['threads'];
     $max_threads = $atts['maxthreads'];
+    $sm_throttle = $atts['throttle'];
     $point_id = $atts['pid'];
-
     $password = $atts['password']; //This gives option to set password on the miner on MO when setting up
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
-    $current_user_id = $user_id;
+    $current_user_id = get_current_user_id();
     //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
     $hash_per_point = intval($atts['hash']); //intvaling this since would be odd as decimal
     $shares_per_point = floatval($atts['shares']);
@@ -314,10 +281,13 @@ function vidyen_mmo_vy256_solver_func($atts) {
       $VYPS_stat_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . 'stat_'. $current_graphic; //Stationary version!
       $VYPS_power_url = plugins_url( 'images/', dirname(__FILE__) ) . 'powered_by_vyps.png'; //Well it should work out.
 
-      //$VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
+      $VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
 
-      $VYPS_power_row ='';
       //Procheck here. Do not forget the ==
+      if (vyps_procheck_func($atts) == 1)
+      {
+        $VYPS_power_row = ''; //No branding if procheck is correct.
+      }
 
       //Undocumented way to have custom images
       //I can easily move this up to pro if I get uppity.
@@ -410,12 +380,12 @@ function vidyen_mmo_vy256_solver_func($atts) {
       $last_transaction_query_prepared = $wpdb->prepare( $last_transaction_query, $current_user_id, "VY256 Mining", $siteName ); //NOTE: Originally this said $current_user_id but although I could pass it through to something else it would not be true if admin specified a UID. Ergo it should just say it $userID
       $last_transaction_id = $wpdb->get_var( $last_transaction_query_prepared );
 
-      $siteName_worker = '.' . $user_id . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
+      $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
 
       //I feel like maybe should eventually functionize this.
       //MO remote get info for site
       $mo_site_wallet = $sm_site_key;
-      $mo_site_worker = $user_id . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
+      $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
       /*** MoneroOcean Gets***/
       //Site get
@@ -481,7 +451,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
         $amount = doubleval($balance); //Well in theory the json_decode could blow up I suppose better safe than sorry.
         $pointType = intval($point_id); //Point type should be int.
-        $user_id = $user_id; //Redudant, but ah well.
+        $user_id = get_current_user_id(); //Redudant, but ah well.
         $refer_rate = intval($refer_rate);
 
         //Update the $atts array to feed into the add funciton
@@ -511,7 +481,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
           $atts['to_user_id'] = vyps_current_refer_func($current_user_id); //Simply change the user id to the referral. Saves a lot of messing.
           $add_result = vyps_add_func($atts);
 
-          $atts['to_user_id'] = $user_id; //Ok running a second operation
+          $atts['to_user_id'] = get_current_user_id(); //Ok running a second operation
           $atts['outputamount'] = 0; //Goign to add a transaction to the existing user with 0. See what I did there.
           $donate_result = vyps_add_func($atts);
 
@@ -537,8 +507,8 @@ function vidyen_mmo_vy256_solver_func($atts) {
         //NOTE: I new something was messing up
         //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
         //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
-        $siteName_worker = '.' . $user_id . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
-        $mo_site_worker = $user_id . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
+        $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
+        $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
         $balance = 0; //This should be set to zero at this point.
       }
@@ -710,6 +680,9 @@ function vidyen_mmo_vy256_solver_func($atts) {
               document.getElementById(\"startb\").style.display = 'none'; // disable button
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
               document.getElementById(\"atwork\").style.display = 'block'; // disable button
+              document.getElementById(\"redeem\").style.display = 'block'; // disable button
+              document.getElementById(\"thread_manage\").style.display = 'block'; // disable button
+              document.getElementById(\"stop\").style.display = 'block'; // disable button
               document.getElementById(\"mining\").style.display = 'block'; // disable button
 
               document.getElementById('status-text').innerText = 'Working.'; //set to working
@@ -727,6 +700,9 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 while (sendStack.length > 0) addText((sendStack.pop()));
                 while (receiveStack.length > 0) addText((receiveStack.pop()));
               }, 2000);
+
+              //Order of operations issue. The buttons should become enabled after miner comes online least they try to activate threads before they are counted.
+              document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
             }
 
             function stop()
@@ -812,10 +788,12 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
     //NOTE: I should move this in sequential but this needs to be moved to top as HTML runs first and then the <script> at bottom
     //I should eventually move the js to an actual js file and use php to change the variables, but I like this method better for now.
-    $simple_miner_html_output = $graphics_html_ouput.'
+    $simple_miner_html_output = $graphics_html_ouput."
     <tr>
        <td>
-        <br>
+         <div>"
+         .$start_button_html. //I have added a small bit of code here to move over to the '.$variable.' system rather than the "" which is horrid for HTML 4/3/19 -Felty
+        '</div><br>
         <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
           <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text\">'.$start_message_verbage.'</span></div></div>
         </div>
@@ -828,10 +806,69 @@ function vidyen_mmo_vy256_solver_func($atts) {
         <div id="poolProgress" style="position:relative; display: '.$poolBar_display.';width:100%; background-color: grey; ">
           <div id="poolBar" style="display: '.$poolBar_display.';width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%; font-size:1.25vw; color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
         </div>
+        <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
+          <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
+          <span style="font-size:1.25vw;">Threads:&nbsp;</span><span style="display:inline; font-size:1.25vw;" id="thread_count">0</span>
+          <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" disabled>+</button>
+          <form method="post" style="display:none;margin:5px !important;" id="redeem">
+            <input type="hidden" value="" name="redeem"/>
+            <input type="hidden" value="$device_name" name="device"/>
+          </form>
+        </div>
       </td>
-    </tr>';
+    </tr>
+      <tr>
+        <td>
+          <div class="slidecontainer">
+            <p>Device '.$device_name.' - CPU Power: <span id="cpu_stat"></span>%</p>
+            <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$sm_throttle.'" class="slider" id="cpuRange">
+          </div>
+        </td>
+      </tr>';
+      /*Working on making this all '' rather than "" to parse the php to html better*/
+      $simple_miner_output .= "
+      <script>
+        //CPU throttle
+        var slider = document.getElementById(\"cpuRange\");
+        var output = document.getElementById(\"cpu_stat\");
+        output.innerHTML = slider.value;
 
-    $simple_miner_output .= '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>';
+        slider.oninput = function()
+        {
+          output.innerHTML = this.value;
+          throttleMiner = 100 - this.value;
+        ";
+    $simple_miner_output .=
+              vyps_point_debug_func($debug_mode, "console.log(throttleMiner);").'
+            }
+      </script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      ';
+
+    $simple_miner_output .= "
+          <script>
+              //Button actions to make it run. Seems like this is legacy for some reason?
+              function vidyen_add()
+              {
+                if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
+                {
+                  addWorker();
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
+                  .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
+                }
+              }
+
+              function vidyen_sub()
+              {
+                if( Object.keys(workers).length > 1)
+                {
+                  removeWorker();
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
+                  .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
+                }
+              }
+            </script>
+        ";
 
         //MO ajax js to put add.
         $mo_ajax_html_output = "
@@ -906,6 +943,8 @@ function vidyen_mmo_vy256_solver_func($atts) {
                  progresspoints = mo_totalhashes - ( Math.floor( mo_totalhashes / $hash_per_point ) * $hash_per_point );
                  totalpoints = Math.floor( mo_totalhashes / $hash_per_point );
                  document.getElementById('pool_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
+                 //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']'; //This needs to remain not on the MO pull
+                 //document.getElementById('hash_rate').innerHTML = output_response.site_hash_per_second;
                  poolProgresswidth = (( mo_totalhashes / ( $hash_per_point * $effort_multi )  ) - Math.floor( mo_totalhashes / ( $hash_per_point * $effort_multi) )) * 100;
                  elempoolbar.style.width = poolProgresswidth + '%';
                });
@@ -933,6 +972,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 else
                 {
                   ajaxTime++;
+                  document.getElementById('thread_count').innerHTML = Object.keys(workers).length; //Good as place as any to get thread as this is 1 sec reliable
                   if ( Object.keys(workers).length > 1 && mobile_use == false )
                   {
                     document.getElementById(\"add\").disabled = false; //enable the + button
@@ -948,6 +988,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 prior_totalhashes = totalhashes;
                 //progresspoints = totalhashes - ( Math.floor( totalhashes / $hash_per_point ) * $hash_per_point );
                 totalpoints = Math.floor( totalhashes / $hash_per_point );
+                //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + totalpoints + '] - Progress[' + progresspoints + '/' + $hash_per_point + ']';
                 document.getElementById('progress_text').innerHTML = 'Effort[' + reported_hashes + ']';
                 if (job == null)
                 {
@@ -1027,7 +1068,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
       }
 
       //JS files will load after the table display now.
-      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . '</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $start_html_output; //The output!
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output . $VYPS_power_row . '</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $start_html_output; //The output!
 
 
     } else {
