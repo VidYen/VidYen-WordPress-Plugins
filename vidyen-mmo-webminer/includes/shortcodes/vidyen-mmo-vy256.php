@@ -82,7 +82,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
     //Also NOTE game_id is not user id. Dumb $WPDB
     if(isset($_GET['user_id']))
     {
-      $game_id = sanitize_text_field($_GET['user_id']);
+      $game_id = sanitize_text_field(htmlspecialchars($_GET['user_id']));
       $user_id = 0; //Represents no user
     }
     else
