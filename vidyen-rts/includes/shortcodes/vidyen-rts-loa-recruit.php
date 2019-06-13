@@ -16,6 +16,7 @@ function vidyen_rts_loa_recruit_func()
 	{
 		$game_id = sanitize_text_field(htmlspecialchars($_GET['user_id']));
 		$user_id = 0; //Represents no user
+
 		//$get_key = sanitize_text_field(htmlspecialchars($_GET['get_key']));
 
 		//NOTE: I've changed my mind about the get key security.
@@ -71,7 +72,7 @@ function vidyen_rts_loa_recruit_func()
 	$reason = 'Hire laborers.';
 	$vyps_meta_id = ''; //I can't think what to use here.
 
-	$current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
+	$current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time, $game_id);
 
 	$mission_html_output = ''; //Starter
 
@@ -174,6 +175,7 @@ function vidyen_rts_loa_recruit_func()
 														var	laborer_icon = '$laborer_icon';
 														var rts_recruit_time_left = $current_mission_time;
 														var recruit_laborers_timer_check = 0;
+														var user_id = '$game_id';
 														if (rts_recruit_time_left > 0)
 														{
 															recruit_laborers_time_left();

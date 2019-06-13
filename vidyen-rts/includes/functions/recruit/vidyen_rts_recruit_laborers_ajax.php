@@ -16,12 +16,25 @@ function vidyen_rts_recruit_laborers_action()
 {
   if ( ! is_user_logged_in() )
   {
-    wp_die(); // this is required to terminate immediately and return a proper response
+    if (!isset($_POST['user_id'])
+    {
+      wp_die(); //If the game_id didn't come through then it means the get from the above didnt' work
+                //and by all accounts it should die at that point.
+    }
+    else
+    {
+      $game_id = sanitize_text_field( $_POST['user_id'] ); //If its good enough for the Romans, it's good enough for me.
+      $user_id = 0; //Signal that user has a user_id but not logged in
+      $user_logged_in = FALSE;
+    }
   }
-  
-  global $wpdb; // this is how you get access to the database
+  else
+  {
+    //Either user is logged in or they isn't.
+    $user_id = get_current_user_id();
+  }
 
-  $user_id = get_current_user_id();
+  global $wpdb; // this is how you get access to the database
 
   //Assumption. We know the user send 20 soldiers... so we figure out how many survived.
   $solider_point_id = vyps_rts_sql_light_soldier_id_func();
@@ -37,8 +50,20 @@ function vidyen_rts_recruit_laborers_action()
   $currency_icon = vyps_point_icon_func($currency_point_id);
 
   //We need to see if they have 20 soldiers to send
+  //And see if they are logged in. I'm using variables as I believe checking to log in uses more checking power
 
-  $current_currency_amount = vyps_point_balance_func($currency_point_id, $user_id);
+  /***** NOTE NOTE NOTE ****/
+  /* I stopped here on 6/13 */
+  
+  if ($user_logged_in == FALSE)
+  {
+    $current_currency_amount = vidyen_mmo_wm_point_balance_func($currency_point_id, $game_id)
+  }
+  else
+  {
+    $current_currency_amount = vyps_point_balance_func($currency_point_id, $user_id);
+  }
+
   if ($current_currency_amount < $money_sent)
   {
     $story = "You don't have enough currency to begin negotiations.";
@@ -66,7 +91,7 @@ function vidyen_rts_recruit_laborers_action()
   $vyps_meta_id = ''; //I can't think what to use here.
 
   //First lets check if a mission is currently running.
-  $current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
+  $current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time, $game_id);
 
   //$current_mission_time = 0; //Testing if its this function or the other one
 

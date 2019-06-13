@@ -184,6 +184,7 @@ function vidyen_rts_recruit_func()
 														var	laborer_icon = '$laborer_icon';
 														var rts_recruit_time_left = $current_mission_time;
 														var recruit_laborers_timer_check = 0;
+														var user_id = '$user_id';
 														if (rts_recruit_time_left > 0)
 														{
 															recruit_laborers_time_left();
