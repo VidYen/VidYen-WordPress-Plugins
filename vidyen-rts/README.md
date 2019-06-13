@@ -14,6 +14,10 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
+= 0.7.0 =
+
+- Update: Added LoA missions that use gets and require no login beyond API
+
 = 0.5.0 =
 
 - Fix: AJAX always checks to see if user is logged in or it dies immediately.

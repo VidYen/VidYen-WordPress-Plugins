@@ -21,17 +21,33 @@ function vidyen_rts_seconds_to_days($seconds)
 //Mission time should be called from somewhere. For now its being pulled form the funciton call
 //I may include this into the mission table
 
-function vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time)
+function vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time, $game_id = '')
 {
   //$WPDB calls
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vidyen_rts_mission_log';
 
-  $last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND mission_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
-  $last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $user_id, $mission_id);
-  $last_transfer_id = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
+  if ($user_id == 0 OR $user_id = '')
+  {
+    //NOTE: I realized I'd have to have two but slightly similar situations if user_id was 0
+    //As the game_id is not an integer
+    $user_id = $game_id;
 
-  //return $last_transfer; //DEBUG I think there is something going on here that I'm not aware of.
+    $last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE game_id = %s AND mission_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
+    $last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $user_id, $mission_id);
+    $last_transfer_id = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
+
+    //return $last_transfer; //DEBUG I think there is something going on here that I'm not aware of.
+  }
+  else
+  {
+    //THIS IS WHEN $user_id is not 0
+    $last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE user_id = %d AND mission_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
+    $last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $user_id, $mission_id);
+    $last_transfer_id = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
+
+    //return $last_transfer; //DEBUG I think there is something going on here that I'm not aware of.
+  }
 
   if ($last_transfer_id != '') //If its not blank
   {
