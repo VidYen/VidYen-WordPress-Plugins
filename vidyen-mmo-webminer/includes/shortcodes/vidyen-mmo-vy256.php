@@ -493,14 +493,14 @@ function vidyen_mmo_vy256_solver_func($atts) {
         $siteName_worker = '.' . $game_id . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
         $mo_site_worker = $game_id . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
-        $redeem_output = '<tr><td>Seems to have given a reward: ' . $reward_icon . ' ' . $balance. ' Credit result: '. $credit_result . ' game_id: '.$game_id.'</td></tr>';
+        $redeem_output = '<tr><td><div style="color:white;">Just updated reward: ' . $reward_icon . ' ' . $balance. ' Credit result: '. $credit_result . ' game_id: '.$game_id.'</div></td></tr>';
         $balance = 0; //This should be set to zero at this point.
       }
       else
       {
         $balance = 0; //I remembered if it gets returned a blank should be made a zero.
         //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-        $redeem_output = "<tr><td>No balance found: " . $reward_icon . ' '.$balance."</td></tr>";
+        $redeem_output = '<tr><td><div style="color:white;">No prior balance found: ' . $reward_icon . ' '.$balance.'</div></td></tr>';
       }
 
       $start_button_html ="
@@ -639,7 +639,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
               $switch_pause_div_on
               document.getElementById(\"waitwork\").style.display = 'none'; // disable button
               document.getElementById(\"atwork\").style.display = 'block'; // disable button
-              document.getElementById(\"mining\").style.display = 'block'; // disable button
+              //document.getElementById(\"mining\").style.display = 'block'; // disable button
 
               document.getElementById('status-text').innerText = 'Working.'; //set to working
 
@@ -740,14 +740,23 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
     //NOTE: I should move this in sequential but this needs to be moved to top as HTML runs first and then the <script> at bottom
     //I should eventually move the js to an actual js file and use php to change the variables, but I like this method better for now.
-    $simple_miner_html_output = $graphics_html_ouput.'
+    //$simple_miner_html_output = $graphics_html_ouput.'
+    $simple_miner_html_output = '
     <tr>
        <td>
         <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
           <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%;  color:'.$workerBar_text_color.';"></div></div>
         </div>
         <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
-          <div id="workerBar" style="display: '.$workerBar_display.'; width:0%; height: 30px; background-color: '.$workerBar_color.';"><div style="position: absolute; right:12%;  color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span> <span id="progress_text"> Effort[0]</span></div></div>
+          <div id="workerBar" style="display: '.$workerBar_display.'; width:0%; height: 30px; background-color: '.$workerBar_color.';">
+            <div style="position: absolute; right:12%;  color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span> <span id="progress_text"> Effort[0]</span></div>
+              <div id="waitwork">
+                <img src="'.$VYPS_stat_worker_url.'" width="32" height="32" title="Dandolonian Laborer">
+              </div>
+              <div style="display:none; text-align: right;" id="atwork">
+                <img src="'.$VYPS_worker_url.'" style="height:30px;" title="Dandolonian Laborer">
+              </div>
+          </div>
         </div>
         <div id="poolProgress" style="position:relative; display: '.$poolBar_display.';width:100%; background-color: grey; ">
           <div id="poolBar" style="display: '.$poolBar_display.'; width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%;  color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
