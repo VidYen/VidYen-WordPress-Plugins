@@ -108,9 +108,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.4.1 =
 
-- Fix: Last Transaction bug.
-- Fix: Personal log does not do all rows. Has been depreciated.
+- Fix: Last Transaction bug for Webminer.
+- Change: Log for the user has been moved to `[vidyen-user-log start=1 end=20]`. Is more SQL efficient.
 - Change: `VY256 Mining` reason changed to `VidYen Webmining`
+- Change: Fixed branding references to Tera Wallet from WooWallet after they decided (or were forced) to change names. Everything still worked before this though.
 
 = 2.4.0 =
 

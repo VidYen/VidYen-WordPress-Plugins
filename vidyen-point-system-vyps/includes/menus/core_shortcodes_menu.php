@@ -42,12 +42,12 @@ function vyps_core_shortcodes_sub_menu_page()
   <p><b>[vidyen-point-log rows=25 pages=25 bootstrap=yes]</b></p>
  	<p>Set the rows options to set the number of rows per page of the transaction log. If you use a bootstrap theme, you can turn option on to bootstrap=yes to get bootstrap pagination. pagination is set to default of 10 but setting pages=(number) can set to desired amount.</p>
   <p>NOTE: You can set log rows to something big, like 1000000, but it may slow the site if you have that many transactions on your VYPS table.</p>
-  <p><b>[vidyen-point-log current=TRUE]</b></p>
-  <p>This shows the log just for a specific user and is useful for the new post back implementation with Wannads as their response takes time to be reported.</p>
+  <p><b>[vidyen-user-log start=1 end=20]</b></p>
+  <p>This shows the log just for the user to see their own log and is useful for the new post back implementation with Wannads as their response takes time to be reported.</p>
  	<p><b>[vyps-balance pid=# uid=optional icon=optional ]</b></p>
  	<p>This shortcode shows the balance of a particular point. Replace # with the corresponding pointid (optional). You can set a specific user ID by setting the uid attribute. If you want to turn off icons, set to icon=0.</p>
  	<p><b>[vyps-balance-ww]</b></p>
- 	<p>This shows the current <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> if it is installed.</p>
+ 	<p>This shows the current <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">Tera Wallet for WooCommerce</a> if it is installed.</p>
  	<p><b>[vyps-balance-ww-menu]</b></p>
  	<p>Use this if you wish to display the My Icon on the menu. This, of course, requires you to use shortcodes in the menu plugin and may have unexpected results.</p>
   <p>NOTE: As of 1.6.2, you can use the WooWallet menu itself, but because of loading order issues, if the button of the transfer goes first, the wallet on header will be behind it. Side bar and footer options should load fine.</p>
@@ -74,7 +74,7 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>All you need to do is add values to secondid= and secondamount= to enable a combination of points into the output.</p>
   <h2>Transfer Points into WooCommerce Credit</h2>
   <p><b>[vyps-pe firstid=3  firstamount=1000 outputamount=0.01 woowallet=true]</b></p>
- 	<p>This creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode requires both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">WooCommerce Wallet</a> to function. It is assumed that you are going straight to WooWallet, so there is no need to set outputid if woowallet=true, but you still need to set outputamount.</p>
+ 	<p>This creates a table transfer menu to transfer points to the WooWallet if you have it installed. This shortcode requires both VYPS and <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">Tera Wallet for WooCommerce</a> to function. It is assumed that you are going straight to WooWallet, so there is no need to set outputid if woowallet=true, but you still need to set outputamount.</p>
   <h2>Transfer Points into myCred</h2>
   <p><b>[vyps-pe firstid=3  firstamount=1000 outputamount=100 mycred=true]</b></p>
   <p>This takes VYPS points and transfers it into <a href=\"https://wordpress.org/plugins/mycred/\" target=\"_blank\">myCred</a> if you have it installed. You need at least the first id and firstamount and outputamount and mycred=true in the shortcode.</p>
