@@ -949,7 +949,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
       $reload_page_js_output = '<script type="text/javascript">
         setTimeout(function() {
           location.reload();
-        }, 60000);
+        }, 120000);
       </script>';
 
       //JS files will load after the table display now.

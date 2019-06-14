@@ -97,7 +97,7 @@ function vidyen_mmo_wm_deduct_postback_func($atts)
 		$current_balance = vidyen_mmo_wm_point_balance_func($point_id, $game_id); //need to check to see if they have an actual balance to report //NOTE: I opted with letting the other site tell how much it will withdraw at a time.
 
 		if( $current_balance >= $point_amount) // action = 1 CREDITED // action = 0 charge back
-		{
+		{			
 				return vidyen_mmo_wm_point_deduct_func( $point_id, $point_amount, $game_id, $reason, $vyps_meta_id ); //I knew I had a good reason to use this
 				//The above should resturn a 1 if successful. I'm not going to add an add here just yet. This is an output system.
 				//If the get gets a 1 then it adds the points on the other side. I would recommend not doing an all system just like 100 points.

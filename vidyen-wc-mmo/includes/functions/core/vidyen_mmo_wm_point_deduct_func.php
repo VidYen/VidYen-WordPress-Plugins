@@ -18,7 +18,7 @@ function vidyen_mmo_wm_point_deduct_func( $point_id, $point_amount, $game_id, $r
 	//Its possible that this could be called without user being logged in but we should still sanitize
 	$point_id = intval($point_id);
 	$point_amount = abs(intval($point_amount)) * -1; //Realized that to deduct I need to subtract
-	$game_id = intval($game_id);
+	$game_id = sanitize_text_field($game_id);
 	$reason = sanitize_text_field($reason);
 	$vyps_meta_id = sanitize_text_field($vyps_meta_id);
 	$user_id = 0;
