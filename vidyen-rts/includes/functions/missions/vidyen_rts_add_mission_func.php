@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 **
 */
 
-function vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $reason, $vyps_meta_id )
+function vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $reason, $vyps_meta_id, $game_id='' )
 {
 	//$WPDB calls
 	global $wpdb;
@@ -23,6 +23,7 @@ function vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $rea
 	$user_id = intval($user_id);
 	$reason = sanitize_text_field($reason);
 	$vyps_meta_id = 'start'.$mission_id;
+	$game_id = sanitize_text_field($game_id);
 
 	//Insert the SQL!
 	$data = [
@@ -31,6 +32,7 @@ function vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $rea
 			'user_id' => $user_id,
 			'mission_meta_id' => $vyps_meta_id,
 			'reason' => $reason,
+			'game_id' => $game_id,
 			'time' => date('Y-m-d H:i:s')
 	];
 	$wpdb->insert($table_name_log, $data);

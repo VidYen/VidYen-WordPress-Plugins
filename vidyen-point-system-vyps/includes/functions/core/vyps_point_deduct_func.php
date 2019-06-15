@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 **
 */
 
-function vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id )
+function vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $vyps_meta_id, $game_id ='' )
 {
 	//$WPDB calls
 	global $wpdb;
@@ -21,6 +21,7 @@ function vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $v
 	$user_id = intval($user_id);
 	$reason = sanitize_text_field($reason);
 	$vyps_meta_id = sanitize_text_field($vyps_meta_id);
+	$game_id = sanitize_text_field($game_id);
 
 	//Deduction for first point id
 	$data = [
@@ -29,6 +30,7 @@ function vyps_point_deduct_func( $point_id, $point_amount, $user_id, $reason, $v
 			'user_id' => $user_id,
 			'vyps_meta_id' => $vyps_meta_id,
 			'reason' => $reason,
+			'game_id' => $game_id,
 			'time' => date('Y-m-d H:i:s')
 	];
 	$wpdb->insert($table_name_log, $data);

@@ -52,9 +52,6 @@ function vidyen_rts_recruit_laborers_action()
   //We need to see if they have 20 soldiers to send
   //And see if they are logged in. I'm using variables as I believe checking to log in uses more checking power
 
-  /***** NOTE NOTE NOTE ****/
-  /* I stopped here on 6/13 */
-  
   if ($user_logged_in == FALSE)
   {
     $current_currency_amount = vidyen_mmo_wm_point_balance_func($currency_point_id, $game_id)
@@ -99,9 +96,9 @@ function vidyen_rts_recruit_laborers_action()
   if ($current_mission_time < 1 )
   {
       //Ok lets set out and conquer!
-      $mission_add_result = vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $reason, $vyps_meta_id );
+      $mission_add_result = vidyen_rts_add_mission_func( $mission_id, $mission_time, $user_id, $reason, $vyps_meta_id, $game_id );
       //In my mental stupdity, I forgot to update after adding.
-      $current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time);
+      $current_mission_time = vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time, $game_id);
   }
   else
   {
@@ -168,7 +165,7 @@ function vidyen_rts_recruit_laborers_action()
   vyps_point_deduct_func( $currency_point_id, $money_spent, $user_id, $recruit_reason, $vyps_meta_id );
 
   //Time to credit resources. I'm being lazy and getting the whole response sum so i can see in js (this whole thing was made in 2 hours)
-  $response_sum = vyps_point_credit_func( $laborer_point_id, $laborers_hired, $user_id, $recruit_reason, $vyps_meta_id );
+  $response_sum = vyps_point_credit_func( $laborer_point_id, $laborers_hired, $user_id, $recruit_reason, $vyps_meta_id, $vyps_meta_data = '', $vyps_meta_subid1 = '', $vyps_meta_subid2 ='', $vyps_meta_subid3= '', $game_id);
 
   $village_rts_recruit_laborers_server_response = array(
       'system_message' => $response_sum,
