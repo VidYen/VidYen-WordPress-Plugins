@@ -182,6 +182,10 @@ function vidyen_rts_loa_recruit_func()
 														}
 													</script>";
 
+		$mission_html_output .= '<script type="text/javascript">
+																var ajaxurl = "' . admin_url('admin-ajax.php') . '";
+														</script>';
+
 	return $mission_html_output;
 }
 

@@ -3,7 +3,7 @@
 Plugin Name:  VidYen RTS Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds RTS Game to VidYen Point System
-Version:      0.7.0
+Version:      0.7.4
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -171,6 +171,9 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-bal.php')
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-api-bal.php'); //Post back for game transfers
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-loa-id.php'); //Stores the LOA Player ID
 //include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-register.php'); //Registers the User ID
+
+/*** LoA Shortcodes ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-rts-loa-recruit.php'); //Recruit
 
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-rts-menu.php'); //Order 600

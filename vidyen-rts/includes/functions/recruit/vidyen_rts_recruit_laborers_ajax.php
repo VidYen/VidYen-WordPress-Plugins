@@ -16,7 +16,7 @@ function vidyen_rts_recruit_laborers_action()
 {
   if ( ! is_user_logged_in() )
   {
-    if (!isset($_POST['user_id'])
+    if (!isset($_POST['user_id']))
     {
       wp_die(); //If the game_id didn't come through then it means the get from the above didnt' work
                 //and by all accounts it should die at that point.
@@ -54,7 +54,7 @@ function vidyen_rts_recruit_laborers_action()
 
   if ($user_logged_in == FALSE)
   {
-    $current_currency_amount = vidyen_mmo_wm_point_balance_func($currency_point_id, $game_id)
+    $current_currency_amount = vidyen_mmo_wm_point_balance_func($currency_point_id, $game_id);
   }
   else
   {

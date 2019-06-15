@@ -106,6 +106,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.4.2 =
+
+- Update: Made functions more compatible with WordPress RTS interface from Github (Yes a VidYen RTS exists)
+
 = 2.4.1 =
 
 - Fix: Last Transaction bug for Webminer.
