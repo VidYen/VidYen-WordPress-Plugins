@@ -76,7 +76,7 @@ function vidyen_rts_loa_recruit_func()
 
 	$mission_html_output = ''; //Starter
 
-	//Village Sack code
+	//Village Sack code. Since we aren't using the WP jquery we have to import it first
 	$mission_html_output .=
 		'<table width="100%">
 			<tr>

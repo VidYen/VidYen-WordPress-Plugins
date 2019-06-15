@@ -2,6 +2,11 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+//register the ajax for non authenticated users
+//NOTE: Non-authed users (those in LoA)
+add_action( 'wp_ajax_nopriv_vidyen_rts_bal_api_action', 'vidyen_rts_bal_api_action' );
+
+
 // register the ajax action for authenticated users
 add_action('wp_ajax_vidyen_rts_bal_api_action', 'vidyen_rts_bal_api_action');
 
@@ -13,7 +18,26 @@ function vidyen_rts_bal_api_action()
 {
   if ( ! is_user_logged_in() )
   {
-    wp_die(); // this is required to terminate immediately and return a proper response
+    if (!isset($_POST['user_id']))
+    {
+      wp_die(); //If the game_id didn't come through then it means the get from the above didnt' work
+                //and by all accounts it should die at that point.
+    }
+    else
+    {
+      $game_id = sanitize_text_field( $_POST['user_id'] ); //If its good enough for the Romans, it's good enough for me.
+      $user_id = 0; //Signal that user has a user_id but not logged in
+      $user_logged_in = FALSE;
+    }
+  }
+  elseif ( is_user_logged_in() )
+  {
+    //Either user is logged in or they isn't.
+    $user_id = get_current_user_id();
+  }
+  else
+  {
+    wp_die(); //Redudant, tu you know.
   }
 
   global $wpdb; // this is how you get access to the database
@@ -32,20 +56,17 @@ function vidyen_rts_bal_api_action()
   $iron_point_id = vyps_rts_sql_iron_id_func();
   $stone_point_id = vyps_rts_sql_stone_id_func();
 
-  //Get user id
-  $user_id = get_current_user_id();
-
   //Soldier Balance
-  $light_soldier_balance = intval(vyps_point_balance_func($light_solider_point_id, $user_id));
+  $light_soldier_balance = intval(vyps_point_balance_func($light_solider_point_id, $user_id, $game_id));
 
   //Laborer Balance
-	$laborer_balance = intval(vyps_point_balance_func($laborer_point_id, $user_id));
+	$laborer_balance = intval(vyps_point_balance_func($laborer_point_id, $user_id, $game_id));
 
   //Resource Balance
-  $currency_balance = intval(vyps_point_balance_func($currency_point_id, $user_id));
-  $wood_balance = intval(vyps_point_balance_func($wood_point_id, $user_id));
-  $iron_balance = intval(vyps_point_balance_func($iron_point_id, $user_id));
-  $stone_balance = intval(vyps_point_balance_func($stone_point_id, $user_id));
+  $currency_balance = intval(vyps_point_balance_func($currency_point_id, $user_id, $game_id));
+  $wood_balance = intval(vyps_point_balance_func($wood_point_id, $user_id, $game_id));
+  $iron_balance = intval(vyps_point_balance_func($iron_point_id, $user_id, $game_id));
+  $stone_balance = intval(vyps_point_balance_func($stone_point_id, $user_id, $game_id));
 
   $rts_bal_array_server_response = array(
       'currency_balance' => $currency_balance,
