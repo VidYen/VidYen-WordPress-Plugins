@@ -6,7 +6,7 @@ function rts_recruit_laborers()
    var data =
    {
      'action': 'vidyen_rts_recruit_laborers_action',
-     'game_id': user_id,
+     'user_id': user_id,
    };
    // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
    jQuery.post(ajaxurl, data, function(response)

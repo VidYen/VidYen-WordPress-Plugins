@@ -61,6 +61,10 @@ function vidyen_rts_bal_func()
 
 	$rts_bal_html_output .= '<script src="'.$rts_ajax_js_url.'"></script>';
 
+		$rts_bal_html_output .= "<script>
+															var user_id = $user_id;
+														</script>";
+
 	return $rts_bal_html_output;
 }
 

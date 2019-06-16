@@ -16,18 +16,17 @@ add_action('wp_ajax_vidyen_rts_bal_api_action', 'vidyen_rts_bal_api_action');
 // handle the ajax request
 function vidyen_rts_bal_api_action()
 {
-  if ( ! is_user_logged_in() )
+  if (!is_user_logged_in())
   {
     if (!isset($_POST['user_id']))
     {
       wp_die(); //If the game_id didn't come through then it means the get from the above didnt' work
                 //and by all accounts it should die at that point.
     }
-    else
+    elseif(isset($_POST['user_id']))
     {
-      $game_id = sanitize_text_field( $_POST['user_id'] ); //If its good enough for the Romans, it's good enough for me.
-      $user_id = 0; //Signal that user has a user_id but not logged in
-      $user_logged_in = FALSE;
+      $game_id = sanitize_text_field($_POST['user_id']);
+  		$user_id = 0; //Represents no user
     }
   }
   elseif ( is_user_logged_in() )
@@ -51,10 +50,10 @@ function vidyen_rts_bal_api_action()
   $laborer_point_id = vyps_rts_sql_laborer_id_func();
 
   //Resource IDs
-  $currency_point_id = vyps_rts_sql_currency_id_func();
-  $wood_point_id = vyps_rts_sql_wood_id_func();
-  $iron_point_id = vyps_rts_sql_iron_id_func();
-  $stone_point_id = vyps_rts_sql_stone_id_func();
+  $currency_point_id = intval(vyps_rts_sql_currency_id_func());
+  $wood_point_id = intval(vyps_rts_sql_wood_id_func());
+  $iron_point_id = intval(vyps_rts_sql_iron_id_func());
+  $stone_point_id = intval(vyps_rts_sql_stone_id_func());
 
   //Soldier Balance
   $light_soldier_balance = intval(vyps_point_balance_func($light_solider_point_id, $user_id, $game_id));

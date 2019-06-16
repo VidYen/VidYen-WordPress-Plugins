@@ -44,7 +44,7 @@ function vidyen_rts_loa_bal_func()
   $stone_point_id = vyps_rts_sql_stone_id_func();
 
   //Get user id
-  $user_id = 0; //As I'm keeping both shortcodes the hell away from each other this will be zero.
+  //$user_id = 0; //As I'm keeping both shortcodes the hell away from each other this will be zero.
 
   $currency_balance = intval(vyps_point_balance_func($currency_point_id, $user_id, $game_id)); //Yes we always be santising so whelp
   $wood_balance = intval(vyps_point_balance_func($wood_point_id, $user_id, $game_id)); //Yes we always be santising so whelp
@@ -76,6 +76,11 @@ function vidyen_rts_loa_bal_func()
 
 	$rts_bal_html_output .= '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="'.$rts_ajax_js_url.'"></script>';
+
+	//DAMN " vs ' vs \'
+	$rts_bal_html_output .= "<script>
+														var user_id = '$game_id';
+													</script>";
 
 	return $rts_bal_html_output;
 }
