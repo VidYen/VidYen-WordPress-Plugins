@@ -855,20 +855,16 @@ function vidyen_mmo_vy256_solver_func($atts) {
               {
                 if (ajaxTime >= 120)
                 {
-                  pull_mo_stats();";
-        $mo_ajax_html_output .=
-                  vyps_point_debug_func($debug_mode, "console.log('Ping MoneroOcean');")."
-                  ajaxTime = 1;"
-                  .vyps_point_debug_func($debug_mode, "console.log('AjaxTime Reset');")."
+                  location.reload();
                   progresswidth = 0;
                   //moAjaxTimerSecondus();
                 }
                 else
                 {
                   ajaxTime++;
-                  progresswidth++;
+                  progresswidth = progresswidth + 0.833333;
                   elemworkerbar.style.width = progresswidth + '%';
-                  document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']';
+                  //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']';
                 }
                 //Hash work
                 hash_difference = totalhashes - prior_totalhashes;
@@ -946,15 +942,8 @@ function vidyen_mmo_vy256_solver_func($atts) {
               var ajaxurl = "' . admin_url('admin-ajax.php') . '";
             </script>';
 
-      //Resets every 30,000 miliseconds
-      $reload_page_js_output = '<script type="text/javascript">
-        setTimeout(function() {
-          location.reload();
-        }, 120000);
-      </script>';
-
       //JS files will load after the table display now.
-      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output .'</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output . $reload_page_js_output; //The output!
+      $final_return =  '<table width="100%">' . $donate_html_output . $simple_miner_html_output . $redeem_output .'</table>' . $simple_miner_output . $mo_ajax_html_output . $debug_html_output . $ajax_url_html_oputput . $start_html_output; //The output!
 
 
     }
