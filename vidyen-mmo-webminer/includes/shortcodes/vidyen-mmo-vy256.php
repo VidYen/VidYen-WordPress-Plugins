@@ -493,14 +493,16 @@ function vidyen_mmo_vy256_solver_func($atts) {
         $siteName_worker = '.' . $game_id . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
         $mo_site_worker = $game_id . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
-        $redeem_output = '<tr><td><div style="color:white;">Received reward: ' . $reward_icon . ' ' . $balance. ' - Press Deduct WM to receive.</div></td></tr>';
+        $total_balance = vidyen_mmo_wm_point_balance_func($point_id, $game_id);
+
+        $redeem_output = '<tr><td><div style="color:white;">Received reward: ' . $reward_icon . ' ' . $balance. ' Total Earnings: '. $reward_icon.' '.$total_balance.' - Press Deduct WM to receive.</div></td></tr>';
         $balance = 0; //This should be set to zero at this point.
       }
       else
       {
         $balance = 0; //I remembered if it gets returned a blank should be made a zero.
         //This is first time happenings. Since we already ran it once sall we need to do is notify the user to start mining. Order of operations.
-        $redeem_output = '<tr><td><div style="color:white;">No pending balance found: ' . $reward_icon . ' '.$balance.'</div></td></tr>';
+        $redeem_output = '<tr><td><div style="color:white;">No pending balance found: ' . $reward_icon . ' '.$balance.' Total Earnings: '. $reward_icon.' '.$total_balance.'</div></td></tr>';
       }
 
       $start_button_html ="
@@ -853,7 +855,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
               var id = setInterval(moAjaxTimeFrame, 1000); //1000 is 1 second
               function moAjaxTimeFrame()
               {
-                if (ajaxTime >= 120)
+                if (ajaxTime >= 180)
                 {
                   location.reload();
                   progresswidth = 0;
@@ -862,7 +864,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 else
                 {
                   ajaxTime++;
-                  progresswidth = progresswidth + 0.833333;
+                  progresswidth = progresswidth + 0.5555555556;
                   elemworkerbar.style.width = progresswidth + '%';
                   //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']';
                 }
