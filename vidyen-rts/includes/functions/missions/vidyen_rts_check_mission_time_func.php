@@ -27,14 +27,12 @@ function vidyen_rts_check_mission_time_func($user_id, $mission_id, $mission_time
 	global $wpdb;
 	$table_name_log = $wpdb->prefix . 'vidyen_rts_mission_log';
 
-  if ($user_id == 0 OR $user_id = '')
+  if ($user_id == 0 OR $user_id == '')
   {
     //NOTE: I realized I'd have to have two but slightly similar situations if user_id was 0
     //As the game_id is not an integer
-    $user_id = $game_id;
-
     $last_transfer_query = "SELECT max(id) FROM ". $table_name_log . " WHERE game_id = %s AND mission_id = %s"; //In theory we should check for the pid as well, but it the btn should make it unique
-    $last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $user_id, $mission_id);
+    $last_transfer_query_prepared = $wpdb->prepare( $last_transfer_query, $game_id, $mission_id);
     $last_transfer_id = $wpdb->get_var( $last_transfer_query_prepared ); //Now we know the last id. NOTE: It is possible that there was not a previous transaction.
 
     //return $last_transfer; //DEBUG I think there is something going on here that I'm not aware of.

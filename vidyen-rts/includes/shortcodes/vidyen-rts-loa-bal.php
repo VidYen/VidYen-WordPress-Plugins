@@ -63,14 +63,20 @@ function vidyen_rts_loa_bal_func()
 
 	//Concatenate the values into the output
 	$rts_bal_html_output =
-		'<table>
+		'<table style="color: yellow;">
+			<col width="160">
+			<col width="160">
+			<col width="160">
+			<col width="160">
+			<col width="160">
+			<col width="160">
 			<tr>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($currency_point_id).'</span> <span id="currency_balance" style="vertical-align: bottom;">'.$currency_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($wood_point_id).'</span> <span id="wood_balance" style="vertical-align: bottom;">'.$wood_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($iron_point_id).'</span> <span id="iron_balance" style="vertical-align: bottom;">'.$iron_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($stone_point_id).'</span> <span id="stone_balance" style="vertical-align: bottom;">'.$stone_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($light_solider_point_id).'</span> <span id="light_soldier_balance" style="vertical-align: bottom;">'.$light_soldier_balance.'</span></div></td>
-			<td><div style="font-size: 21px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($laborer_point_id).'</span> <span id="laborer_balance" style="vertical-align: bottom;">'.$laborer_balance.'</span></div></td>
+			<td><div style="font-size: 28px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($currency_point_id).'</span> <span id="currency_balance" style="vertical-align: bottom;">'.$currency_balance.'</span></div></td>
+			<td><div style="font-size: 28px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($wood_point_id).'</span> <span id="wood_balance" style="vertical-align: bottom;">'.$wood_balance.'</span></div></td>
+			<td><div style="font-size: 28px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($iron_point_id).'</span> <span id="iron_balance" style="vertical-align: bottom;">'.$iron_balance.'</span></div></td>
+			<td><div style="font-size: 28px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($stone_point_id).'</span> <span id="stone_balance" style="vertical-align: bottom;">'.$stone_balance.'</span></div></td>
+			<td><div style="font-size: 28px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($light_solider_point_id).'</span> <span id="light_soldier_balance" style="vertical-align: bottom;">'.$light_soldier_balance.'</span></div></td>
+			<td><div style="font-size: 28px;"><span style="vertical-align: top;">'.vidyen_rts_icon_func($laborer_point_id).'</span> <span id="laborer_balance" style="vertical-align: bottom;">'.$laborer_balance.'</span></div></td>
 			</tr>
 		</table>';
 
@@ -81,6 +87,10 @@ function vidyen_rts_loa_bal_func()
 	$rts_bal_html_output .= "<script>
 														var user_id = '$game_id';
 													</script>";
+
+	$rts_bal_html_output .= '<script type="text/javascript">
+															var ajaxurl = "' . admin_url('admin-ajax.php') . '";
+													</script>';
 
 	return $rts_bal_html_output;
 }

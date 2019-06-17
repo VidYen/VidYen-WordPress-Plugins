@@ -14,6 +14,10 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
+= 0.8.7 =
+
+- Fix: Fixed the damned rts mission timer = vs ==
+
 = 0.7.0 =
 
 - Update: Added LoA missions that use gets and require no login beyond API

@@ -17,7 +17,7 @@ add_action('wp_ajax_vidyen_rts_recruit_laborers_action', 'vidyen_rts_recruit_lab
 // handle the ajax request
 function vidyen_rts_recruit_laborers_action()
 {
-  if ( ! is_user_logged_in() )
+  if (!is_user_logged_in())
   {
     if (!isset($_POST['user_id']))
     {
@@ -35,6 +35,7 @@ function vidyen_rts_recruit_laborers_action()
   {
     //Either user is logged in or they isn't.
     $user_id = get_current_user_id();
+    $game_id = '';
   }
   else
   {
@@ -169,7 +170,7 @@ function vidyen_rts_recruit_laborers_action()
   }
 
   //Time to remove soldiers via functions.
-  vyps_point_deduct_func( $currency_point_id, $money_spent, $user_id, $recruit_reason, $vyps_meta_id );
+  vyps_point_deduct_func( $currency_point_id, $money_spent, $user_id, $recruit_reason, $vyps_meta_id, $game_id );
 
   //Time to credit resources. I'm being lazy and getting the whole response sum so i can see in js (this whole thing was made in 2 hours)
   $response_sum = vyps_point_credit_func( $laborer_point_id, $laborers_hired, $user_id, $recruit_reason, $vyps_meta_id, $vyps_meta_data = '', $vyps_meta_subid1 = '', $vyps_meta_subid2 ='', $vyps_meta_subid3= '', $game_id);

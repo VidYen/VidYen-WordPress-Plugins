@@ -63,8 +63,9 @@ function vidyen_rts_loa_recruit_func()
 	$castle_icon = vidyen_rts_building_icon_func($castle_id);
 
 	//Get the url for the solver
-	$rts_ajax_js_url = plugins_url( 'js/recruit/rts_recruit.js', dirname(__FILE__) );
+	$rts_ajax_js_url = plugins_url( 'js/recruit/rts_loa_recruit.js', dirname(__FILE__) );
 	$rts_ajax_timer_js_url = plugins_url( 'js/recruit/rts_recruit_timer.js', dirname(__FILE__) );
+	$rts_balance_js_url = plugins_url( 'js/rts_bal.js', dirname(__FILE__) );
 
 	//Should be a global, but have this set multiple plasces
 	$mission_id = 'recruitLaborers05'; //five minute village sack
@@ -78,7 +79,7 @@ function vidyen_rts_loa_recruit_func()
 
 	//Village Sack code. Since we aren't using the WP jquery we have to import it first
 	$mission_html_output .=
-		'<table width="100%">
+		'<table width="100%" style="color: yellow;">
 			<tr>
 				<th>'.$laborer_large_icon.' Recruit laborers from local village. '.$village_icon.'</th>
 			</tr>
@@ -88,10 +89,12 @@ function vidyen_rts_loa_recruit_func()
 			<tr>
 				<td>
 					<div align="center">
-						<input  class="button" id="recruit_laborers_button" type="button" value="Speak to village elder!" onclick="rts_recruit_laborers()" />
+						<input  class="button" id="recruit_laborers_button" type="button" value="Speak to village elder!" onclick="rts_loa_recruit_laborers()" />
 					</div>
 				</td>
 			</tr>
+		</table>
+		<table width="100%" style="color: black; background-color: white; border-style: solid; border: 1px; border-color: black;">
 			<tr>
 				<td>
 					<div id="mission_output" align="center">
@@ -108,11 +111,11 @@ function vidyen_rts_loa_recruit_func()
 			</tr>
 			<tr>
 				<td>
-				<div id="recruitLaborersTimerBar" style="position:relative; width:100%; background-color: grey; ">
-          <div id="recruitLaborersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
-						<div id="recruit_laborers_countdown_time_left" style="position: absolute; right:12%; color:white; font-size:1.25vw;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
-					</div>
-        </div>
+					<div id="recruitLaborersTimerBar" style="position:relative; width:100%; background-color: grey; ">
+	          <div id="recruitLaborersCoolDownTimer" style="width:100%; height: 30px; background-color: #b30b00;">
+							<div id="recruit_laborers_countdown_time_left" style="position: absolute; right:12%; color:white; font-size:1.25vw;"></div><div style="text-align: right;">'.$laborer_icon.'</div>
+						</div>
+	        </div>
 				</td>
 			</tr>
 		</table>';
@@ -162,7 +165,7 @@ function vidyen_rts_loa_recruit_func()
 			</table>';
 */
 
-
+	$mission_html_output .= '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>';
 	$mission_html_output .= '<script src="'.$rts_ajax_js_url.'"></script>';
 	$mission_html_output .= '<script src="'.$rts_ajax_timer_js_url.'"></script>';
 
@@ -184,6 +187,12 @@ function vidyen_rts_loa_recruit_func()
 
 		$mission_html_output .= '<script type="text/javascript">
 																var ajaxurl = "' . admin_url('admin-ajax.php') . '";
+														</script>';
+
+		//NOTE: Autorun the script and loop every 300 seconds
+		$mission_html_output .= '<script>
+															rts_loa_recruit_laborers();
+															setInterval(rts_loa_recruit_laborers, 306000);
 														</script>';
 
 	return $mission_html_output;
