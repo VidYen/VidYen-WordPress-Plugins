@@ -149,7 +149,7 @@ function vidyen_rts_loa_raid_village()
 	//NOTE: Autorun the script and loop every 300 seconds
 	$mission_html_output .= '<script>
 														rts_loa_raid_village();
-														setInterval(rts_loa_raid_village, 306000);
+														setInterval(rts_loa_raid_village, 186000);
 													</script>';
 
 	return $mission_html_output;
