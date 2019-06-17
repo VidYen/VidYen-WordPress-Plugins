@@ -1,5 +1,5 @@
 //Sets the method to update to the refresh I'm debatin gto make this universial or by point.
-function rts_train_soldiers()
+function rts_loa_train_soldiers()
 {
   jQuery(document).ready(function($)
   {
@@ -35,7 +35,4 @@ function rts_train_soldiers()
      train_soldiers_time_left(); //This should work now that we actually got time left after running command
    });
   });
-
-
-  pull_rts_bal(); //If button is pushed might as well pull
 }

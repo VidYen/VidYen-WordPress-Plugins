@@ -6,7 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //NOTE: Non-authed users (those in LoA)
 add_action( 'wp_ajax_nopriv_vidyen_rts_recruit_laborers_action', 'vidyen_rts_recruit_laborers_action' );
 
-
 // register the ajax action for authenticated users
 add_action('wp_ajax_vidyen_rts_recruit_laborers_action', 'vidyen_rts_recruit_laborers_action');
 

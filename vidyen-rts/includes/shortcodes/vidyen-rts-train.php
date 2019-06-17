@@ -192,6 +192,7 @@ function vidyen_rts_train_func()
 														var	soldier_icon = '$solder_icon';
 														var rts_train_time_left = $current_mission_time;
 														var train_soldiers_timer_check = 0;
+														var user_id = $user_id;
 														if (rts_train_time_left > 0)
 														{
 															train_soldiers_time_left();
