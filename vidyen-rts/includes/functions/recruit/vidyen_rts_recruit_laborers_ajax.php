@@ -35,6 +35,7 @@ function vidyen_rts_recruit_laborers_action()
     //Either user is logged in or they isn't.
     $user_id = get_current_user_id();
     $game_id = '';
+    $user_logged_in = TRUE;
   }
   else
   {

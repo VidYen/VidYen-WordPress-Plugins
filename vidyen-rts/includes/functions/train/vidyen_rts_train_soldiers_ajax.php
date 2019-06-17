@@ -37,6 +37,7 @@ function vidyen_rts_train_soldiers_action()
     //Either user is logged in or they isn't.
     $user_id = get_current_user_id();
     $game_id = '';
+    $user_logged_in = TRUE;
   }
   else
   {
@@ -62,11 +63,10 @@ function vidyen_rts_train_soldiers_action()
   //We need to see if they have 1000 copper and 100 laborers soldiers to send
 
   //And see if they are logged in. I'm using variables as I believe checking to log in uses more checking power
-
   if ($user_logged_in == FALSE)
   {
     $current_currency_amount = vidyen_mmo_wm_point_balance_func($currency_point_id, $game_id);
-    $laborer_amount = vyps_point_balance_func($laborer_point_id, $game_id);
+    $laborer_amount = vidyen_mmo_wm_point_balance_func($laborer_point_id, $game_id);
   }
   else
   {

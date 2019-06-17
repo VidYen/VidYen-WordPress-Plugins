@@ -186,6 +186,7 @@ function vidyen_rts_mission_func()
 														var	light_soldier_icon = '$light_soldier_icon';
 														var rts_sack_time_left = $current_mission_time;
 														var pillage_timer_check = 0;
+														var user_id = $user_id;
 														if (rts_sack_time_left > 0)
 														{
 															sack_village_time_left();
