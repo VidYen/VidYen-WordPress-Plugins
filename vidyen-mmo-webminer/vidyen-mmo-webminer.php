@@ -3,7 +3,7 @@
 Plugin Name:  VidYen MMO WebMiner
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  MMO Webminer meant for in game usage
-Version:      0.0.29
+Version:      0.0.35
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2

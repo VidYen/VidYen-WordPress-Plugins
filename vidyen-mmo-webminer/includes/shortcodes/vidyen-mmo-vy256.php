@@ -68,6 +68,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
             'roundup' => FALSE,
             'effort' => 1,
             'pico' => FALSE,
+            'discord' => FALSE,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -84,6 +85,16 @@ function vidyen_mmo_vy256_solver_func($atts) {
     {
       $game_id = sanitize_text_field(htmlspecialchars($_GET['user_id']));
       $user_id = 0; //Represents no user
+
+      //I'm setting user name for the discord bot and perhaps the user_id? Would be complicated.
+      if(isset($_GET['player_name']))
+      {
+        $player_name = sanitize_text_field(htmlspecialchars($_GET['player_name']));
+      }
+      else
+      {
+        $player_name = 'Unknown Player';
+      }
     }
     else
     {
@@ -215,6 +226,9 @@ function vidyen_mmo_vy256_solver_func($atts) {
           '4' => 'vyworker_004.gif',
           '5' => 'vyworker_005.gif'
     );
+
+    //discord mode.
+    $discord_mode = $atts['discord'];
 
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
     if ($graphic_choice == 'rand')
@@ -495,8 +509,20 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
         $total_balance = vidyen_mmo_wm_point_balance_func($point_id, $game_id);
 
+        if ($discord_mode == TRUE)
+        {
+          $username = 'Enrico Dandolo'; //Not to be confused with $player_name
+          $message = ':pick: '. $player_name.' :pick: received :small_orange_diamond:'.$balance.':small_orange_diamond: copper coins for crypto mining!';
+          //$message = "hoo ha!";
+          $url = "https://discordapp.com/api/webhooks/590615185568301056/oKNRaUiqeDE-d2LhLTwoKEK0i_OYUkh9O3tmibroNjzjUBG0rvOsiSVuydjmWv0hPD1S";
+          $remote_response = vidyen_discord_webhook_func($message, $username, $url);
+        }
+
+
         $redeem_output = '<tr><td><div style="color:white;">Received reward: ' . $reward_icon . ' ' . $balance. '</div></td></tr>';
         $balance = 0; //This should be set to zero at this point.
+
+
       }
       else
       {
