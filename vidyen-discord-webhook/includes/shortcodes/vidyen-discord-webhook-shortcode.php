@@ -6,9 +6,13 @@ function vidyen_discord_webhook_test_func()
 {
   $message = 'Here arrives the great and terrible webhook!';
 
-  vidyen_discord_webhook_func($message);
+  $username = 'Webhook';
 
-  return 'Hello! It has run!'
+  $url = '';
+
+  vidyen_discord_webhook_func($message, $username, $url);
+
+  return 'Hello! It has run!';
 }
 
 
