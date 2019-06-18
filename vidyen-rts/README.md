@@ -14,6 +14,10 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
+= 0.9.20 =
+
+- Add development of fonts.
+
 = 0.8.7 =
 
 - Fix: Fixed the damned rts mission timer = vs ==

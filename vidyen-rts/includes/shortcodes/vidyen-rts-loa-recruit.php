@@ -77,6 +77,20 @@ function vidyen_rts_loa_recruit_func()
 
 	$mission_html_output = ''; //Starter
 
+	$mission_html_output .= '
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<link href="https://fonts.googleapis.com/css?family=Spectral+SC&display=swap" rel="stylesheet">
+	<title>CSoD LoA Balance</title>
+	<style>
+	html, body {
+		font-family: "Spectral SC", serif;
+	}
+	</style>
+	</head>
+	';
+
 	//Village Sack code. Since we aren't using the WP jquery we have to import it first
 	$mission_html_output .=
 		'<table width="100%" style="color: yellow;">
@@ -149,6 +163,10 @@ function vidyen_rts_loa_recruit_func()
 															rts_loa_recruit_laborers();
 															setInterval(rts_loa_recruit_laborers, 306000);
 														</script>';
+
+		//closing.
+		$mission_html_output .= '</body>
+														</html>';
 
 	return $mission_html_output;
 }
