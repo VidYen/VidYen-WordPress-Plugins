@@ -3,7 +3,7 @@
 Plugin Name:  VidYen MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  MMO Support Plugin
-Version:      0.5.4
+Version:      0.5.5
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -79,6 +79,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_mmo_wc_ww_b
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_loa_user_query_func.php'); //Adds meta check
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_wm_point_balance_func.php'); //In game webminer balance
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_wm_point_deduct_func.php'); //In game deduct
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_wm_point_credit_func.php'); //In game deduct
 
 
 /*** Shortcodes ***/
@@ -90,7 +91,8 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-api-bal.p
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-loa-id.php'); //Stores the LOA Player ID
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-register.php'); //Registers the User ID
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-wm-api-bal.php'); //Stores the LOA Player ID
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-wm-deduct-postback.php'); //Registers the User ID
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-wm-deduct-postback.php'); //Webminer deduct
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-mmo-wm-credit-postback.php'); //webminer credit
 
 /*** Menu Includes ***/
 include( plugin_dir_path( __FILE__ ) . 'vidyen-wc-mmo-menu.php'); //Order 600
