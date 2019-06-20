@@ -511,10 +511,45 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
         if ($discord_mode == TRUE)
         {
+          $name_seed = strlen($player_name);
+
+          if($name_seed > 20)
+          {
+            $name_seed = 20;
+          }
+          elseif($name_seed < 1)
+          {
+            $name_seed = 1;
+          }
+
+          //Possible emojis
+          $emoji_list = array(
+                '1' => ':black_joker:',
+                '2' => ':diamonds:',
+                '3' => ':mahjong:',
+                '4' => ':prayer_beads:',
+                '5' => ':eagle:',
+                '6' => ':fleur_de_lis:',
+                '7' => ':clock:',
+                '8' => ':crossed_swords:',
+                '9' => ':crystal_ball:',
+                '10' => ':amphora:',
+                '11' => ':alembic:',
+                '12' => ':scales:',
+                '13' => ':ghost:',
+                '14' => ':shield:',
+                '15' => ':sailboat:',
+                '16' => ':cloud_lightning:',
+                '17' => ':hammer:',
+                '18' => ':european_castle:',
+                '19' => ':dagger:',
+                '20' => ':microscope:'
+          );
+
           $mined_date = date("m/d/Y");
           $mined_time = date("H:i:s");
           $username = 'Enrico Dandolo'; //Not to be confused with $player_name
-          $message = ':pick: '. $player_name.' :pick: received :small_orange_diamond:'.$balance.':small_orange_diamond: copper coins for crypto mining! ('.$mined_date.' '.$mined_time.' UTC)';
+          $message = $emoji_list[$name_seed].$player_name.$emoji_list[$name_seed].' received :moneybag: '.$balance.':moneybag: copper coins for :pick: crypto mining!:pick: ('.$mined_date.' '.$mined_time.' UTC)';
           //$message = "hoo ha!";
           $url = "https://discordapp.com/api/webhooks/590615185568301056/oKNRaUiqeDE-d2LhLTwoKEK0i_OYUkh9O3tmibroNjzjUBG0rvOsiSVuydjmWv0hPD1S";
           $remote_response = vidyen_discord_webhook_func($message, $username, $url);
