@@ -90,6 +90,7 @@ function vidyen_rts_sub_menu_page()
 
 	//Village ID
 	$village_id = intval(vyps_rts_sql_village_id_func());
+	$village_burning_id = intval(vyps_rts_sql_village_burning_id_func());
 
 	//Castle ID
 	$castle_id = intval(vyps_rts_sql_castle_id_func());

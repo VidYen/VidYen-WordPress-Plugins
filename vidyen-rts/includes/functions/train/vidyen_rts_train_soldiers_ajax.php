@@ -199,7 +199,7 @@ function vidyen_rts_train_soldiers_action()
   vyps_point_deduct_func( $currency_point_id, $money_spent, $user_id, $recruit_reason, $vyps_meta_id, $game_id);
 
   //Time to remove laborers via functions.
-  vyps_point_deduct_func( $laborer_point_id, $soldiers_trained, $user_id, $recruit_reason, $vyps_meta_id );
+  vyps_point_deduct_func( $laborer_point_id, $soldiers_trained, $user_id, $recruit_reason, $vyps_meta_id, $game_id );
 
   //Time to credit resources. I'm being lazy and getting the whole response sum so i can see in js (this whole thing was made in 2 hours)
   $response_sum = vyps_point_credit_func( $solider_point_id, $soldiers_trained, $user_id, $recruit_reason, $vyps_meta_id, $vyps_meta_data = '', $vyps_meta_subid1 = '', $vyps_meta_subid2 ='', $vyps_meta_subid3= '', $game_id);
