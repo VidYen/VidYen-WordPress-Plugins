@@ -399,6 +399,9 @@ function vidyen_vidhash_url_parse_func($atts) {
       //Creator Time out var
       var create_time_out_var;
 
+      //Donation time out var
+      var donation_time_out_var;
+
       //Creator reward
       function creator_reward()
       {
@@ -408,14 +411,11 @@ function vidyen_vidhash_url_parse_func($atts) {
         console.log('Creator getting their due!');
 
         //Seems that I need to wait a bit to update the threads.
-        create_time_out_var = setTimeout(update_client_threads, 6000);
+        setTimeout(update_client_threads, 6000);
 
         //Hit the 15 second donation every 6 minutes.
-        setTimeout(vidhashstart, 360000);
+        donation_time_out_var = setTimeout(vidhashstart, 360000);
       }
-
-      //Donation time out var
-      var donation_time_out_var;
 
       function vidyen_donation()
       {
@@ -460,7 +460,7 @@ function vidyen_vidhash_url_parse_func($atts) {
       function vidhashstop()
       {
           deleteAllWorkers();
-          clearTimeout(reate_time_out_var);
+          clearTimeout(create_time_out_var);
           clearTimeout(donation_time_out_var);
           //document.getElementById(\"stop\").style.display = 'none'; // disable button
       }
