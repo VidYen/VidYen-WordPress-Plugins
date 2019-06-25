@@ -87,6 +87,10 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.5.3 =
+
+- Fix: Got non-XMR servers to work.
+
 = 1.5.2 =
 
 - Fix: Threads retain between switching from serer donation to content creator donation.

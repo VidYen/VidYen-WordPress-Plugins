@@ -396,7 +396,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
 
         //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
-        startMining(\"$mining_pool\", \"$vy_site_key$siteName\", \"$password\", switch_current_thread_count);
+        startMining(\"$mining_pool\", \"$vy_site_key\", \"\", switch_current_thread_count);
       }
 
       //Creator Time out var
@@ -410,7 +410,7 @@ function vidyen_vidhash_url_parse_func($atts) {
       {
         /* start playing, use a local server */
         server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", switch_current_thread_count);
+        startMining(\"$mining_pool\", \"$vy_site_key\", \"\", switch_current_thread_count);
         console.log('Creator getting their due!');
 
         //Seems that I need to wait a bit to update the threads.
