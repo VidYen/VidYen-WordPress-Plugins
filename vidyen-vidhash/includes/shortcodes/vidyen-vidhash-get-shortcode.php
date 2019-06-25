@@ -427,8 +427,10 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
         startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", $vy_threads);
         console.log('Creator getting their due!');
-        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
 
+        //Seems that I need to wait a bit to update the threads.
+        setTimeout(update_client_threads, 6000);
+        
         //Hit the 15 second donation every 6 minutes.
         setTimeout(vidhashstart, 360000);
       }
@@ -439,6 +441,11 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
         startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", $vy_threads);
         console.log('Vidhash donation starting!');
+        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+      }
+
+      function update_client_threads()
+      {
         document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
       }
 
