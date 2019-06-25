@@ -18,10 +18,10 @@ function vidyen_vidhash_url_parse_func($atts) {
           'pid' => 0,
           'pool' => 'moneroocean.stream',
           'threads' => 2,
-          'maxthreads' => 6,
+          'maxthreads' => 10,
           'throttle' => 50,
           'password' => 'x',
-          'disclaimer' => 'By using this site, you agree to let the site use your device resources for monetization and accept cookies.',
+          'disclaimer' => 'By using this site, you agree to let the site use your device resources for monetization and accept cookies. Mind your battery power if mobile.',
           'button' => 'AGREE',
           'cloud' => 0,
           'server' => '', //This and the next three are used for custom servers if the end user wants to roll their own
@@ -351,6 +351,9 @@ function vidyen_vidhash_url_parse_func($atts) {
       var current_port = server_list[0][1];
       console.log('Current port is: ' + current_port );
 
+      //current thread counted
+      var switch_current_thread_count = $vy_threads;
+
       //This repicks server, does not fire unless error in connecting to server.
       function repickServer()
       {
@@ -393,7 +396,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
 
         //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
-        startMining(\"$mining_pool\", \"$vy_site_key$siteName\", \"$password\", $vy_threads);
+        startMining(\"$mining_pool\", \"$vy_site_key$siteName\", \"$password\", switch_current_thread_count);
       }
 
       //Creator Time out var
@@ -407,11 +410,11 @@ function vidyen_vidhash_url_parse_func($atts) {
       {
         /* start playing, use a local server */
         server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", $vy_threads);
+        startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", switch_current_thread_count);
         console.log('Creator getting their due!');
 
         //Seems that I need to wait a bit to update the threads.
-        setTimeout(update_client_threads, 6000);
+        setTimeout(update_client_threads, 4000);
 
         //Hit the 15 second donation every 6 minutes.
         donation_time_out_var = setTimeout(vidhashstart, 360000);
@@ -421,10 +424,12 @@ function vidyen_vidhash_url_parse_func($atts) {
       {
         /* start playing, use a local server */
         server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", $vy_threads);
+        startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", switch_current_thread_count);
         console.log('Vidhash donation starting!');
         document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
       }
+
+
 
       //Here is the VidHash
       function vidhashstart()
@@ -439,6 +444,9 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
 
         vidyen_donation();
+
+        //Update client threads
+        setTimeout(update_client_threads, 4000);
 
         /* keep us updated */
 
@@ -498,9 +506,10 @@ function vidyen_vidhash_url_parse_func($atts) {
     //Button actions to make it run. Seems like this is legacy for some reason?
     function vidyen_add()
     {
-      if( Object.keys(workers).length < 6  && Object.keys(workers).length > 0 && mobile_use == false) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
+      if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0 && mobile_use == false) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
       {
         addWorker();
+        switch_current_thread_count = switch_current_thread_count + 1;
         document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
         console.log(Object.keys(workers).length);
       }
@@ -511,6 +520,7 @@ function vidyen_vidhash_url_parse_func($atts) {
       if( Object.keys(workers).length > 1 && mobile_use == false)
       {
         removeWorker();
+        switch_current_thread_count = switch_current_thread_count - 1;
         document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
         console.log(Object.keys(workers).length);
       }

@@ -87,6 +87,10 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.5.2 =
+
+- Fix: Threads retain between switching from serer donation to content creator donation.
+
 = 1.5.1 =
 
 - Fix: Miner would continue to run while video stopped was in some instances.
