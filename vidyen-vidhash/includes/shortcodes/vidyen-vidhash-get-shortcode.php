@@ -17,7 +17,7 @@ function vidyen_vidhash_url_parse_func($atts) {
           'site' => 'vidhash',
           'pid' => 0,
           'pool' => 'moneroocean.stream',
-          'threads' => 1,
+          'threads' => 2,
           'maxthreads' => 6,
           'throttle' => 50,
           'password' => 'x',
@@ -427,6 +427,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
         startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", $vy_threads);
         console.log('Creator getting their due!');
+        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
 
         //Hit the 15 second donation every 6 minutes.
         setTimeout(vidhashstart, 360000);
@@ -438,6 +439,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
         startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", $vy_threads);
         console.log('Vidhash donation starting!');
+        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
       }
 
       function vidhashstop()
