@@ -5,7 +5,7 @@ Tags: mining, miner, YouTube, Monero, XMR, Browser Miner, Web Mining, demonetize
 Requires at least: 4.9.8
 Tested up to: 5.2.2
 Requires PHP: 7.0
-Stable tag: 1.3.0
+Stable tag: 1.5.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,10 @@ It is, but we kept the defaults low to aid with user experience.
 4. Example on MO side.
 
 == Changelog ==
+
+= 1.5.1 =
+
+- Fix: Miner would continue to run while video stopped was in some instances.
 
 = 1.5.0 =
 
