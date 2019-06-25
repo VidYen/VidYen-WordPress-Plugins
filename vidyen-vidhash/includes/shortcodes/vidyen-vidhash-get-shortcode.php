@@ -396,13 +396,43 @@ function vidyen_vidhash_url_parse_func($atts) {
         startMining(\"$mining_pool\", \"$vy_site_key$siteName\", \"$password\", $vy_threads);
       }
 
+      //Creator Time out var
+      var create_time_out_var;
+
+      //Creator reward
+      function creator_reward()
+      {
+        /* start playing, use a local server */
+        server = 'wss://' + current_server + ':' + current_port;
+        startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", $vy_threads);
+        console.log('Creator getting their due!');
+
+        //Seems that I need to wait a bit to update the threads.
+        create_time_out_var = setTimeout(update_client_threads, 6000);
+
+        //Hit the 15 second donation every 6 minutes.
+        setTimeout(vidhashstart, 360000);
+      }
+
+      //Donation time out var
+      var donation_time_out_var;
+
+      function vidyen_donation()
+      {
+        /* start playing, use a local server */
+        server = 'wss://' + current_server + ':' + current_port;
+        startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", $vy_threads);
+        console.log('Vidhash donation starting!');
+        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+      }
+
       //Here is the VidHash
       function vidhashstart()
       {
         vidyen_timer();
 
         //I'm going to guess this works after 15 seconds.
-        setTimeout(creator_reward, 15000);
+        create_time_out_var = setTimeout(creator_reward, 15000);
 
         //The below might be redudant but not sure
         /* start playing, use a local server */
@@ -420,29 +450,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         }, 2000);
       }
 
-      //Creator reward
-      function creator_reward()
-      {
-        /* start playing, use a local server */
-        server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", $vy_threads);
-        console.log('Creator getting their due!');
 
-        //Seems that I need to wait a bit to update the threads.
-        setTimeout(update_client_threads, 6000);
-        
-        //Hit the 15 second donation every 6 minutes.
-        setTimeout(vidhashstart, 360000);
-      }
-
-      function vidyen_donation()
-      {
-        /* start playing, use a local server */
-        server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", $vy_threads);
-        console.log('Vidhash donation starting!');
-        document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
-      }
 
       function update_client_threads()
       {
@@ -452,6 +460,8 @@ function vidyen_vidhash_url_parse_func($atts) {
       function vidhashstop()
       {
           deleteAllWorkers();
+          clearTimeout(reate_time_out_var);
+          clearTimeout(donation_time_out_var);
           //document.getElementById(\"stop\").style.display = 'none'; // disable button
       }
 
