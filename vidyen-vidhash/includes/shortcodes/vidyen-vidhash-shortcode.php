@@ -71,7 +71,8 @@ function vidyen_vidhash_video_player_func($atts) {
   $youtube_id = str_replace("https://youtu.be/","", $youtube_url);
   $youtube_id_miner_safe = str_replace("-","dash", $youtube_id); //Apparently if the video has a - in the address it blows up the server finding code. Still required for the YouTube JS API though.
 
-  $mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
+  //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
+  $mining_pool = $atts['pool']; //I seemed to forgot this needed to be fixed.
   //$password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
   $password = 'x';
   $first_cloud_server = $atts['cloud'];

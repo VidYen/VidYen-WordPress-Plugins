@@ -3,7 +3,7 @@ Contributors: vidyen, felty, shanevidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: mining, miner, YouTube, Monero, XMR, Browser Miner, Web Mining, demonetized, Crypto, crypto currency, monetization
 Requires at least: 4.9.8
-Tested up to: 5.2.0
+Tested up to: 5.2.2
 Requires PHP: 7.0
 Stable tag: 1.3.0
 License: GPLv2
@@ -86,6 +86,12 @@ It is, but we kept the defaults low to aid with user experience.
 4. Example on MO side.
 
 == Changelog ==
+
+= 1.5.0 =
+
+- Add: Created video sharing option for all `[vy-vidhash-get]`
+- Add: Some functionality to check video length.
+- Fix: I seemed to over looked the pool short code for non-MonerOcean pools. You can use other pools now with `pool=` but rewards will only work with MO.
 
 = 1.4.2 =
 

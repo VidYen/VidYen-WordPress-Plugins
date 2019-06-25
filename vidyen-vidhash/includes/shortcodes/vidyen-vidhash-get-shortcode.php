@@ -28,6 +28,9 @@ function vidyen_vidhash_url_parse_func($atts) {
           'wsport' => '8443', //The WebSocket Port
           'nxport' => '', //The nginx port... By default its (80) in the browser so if you run it on a custom port for hash counting you may do so here
           'vyps' => FALSE,
+          'donate_address' => '',
+          'donate_name' => '',
+          'donate_pool' => 'moneroocean.stream',
       ), $atts, 'vy-vidhash' );
 
   $vy256_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . 'vyworker_001.gif';
@@ -65,7 +68,7 @@ function vidyen_vidhash_url_parse_func($atts) {
     $youtube_url = sanitize_text_field($_GET['youtube']);
     if (isset($_GET['pool']))
     {
-      $atts['pool'] = sanitize_url($_GET['pool']); //If there is a pool, sanitize it
+      $atts['pool'] = sanitize_text_field($_GET['pool']); //If there is a pool, sanitize it
     }
   }
   else
@@ -157,11 +160,17 @@ function vidyen_vidhash_url_parse_func($atts) {
   $youtube_id = str_replace("https://youtu.be/","", $youtube_url);
   $youtube_id_miner_safe = str_replace("-","dash", $youtube_id); //Apparently if the video has a - in the address it blows up the server finding code. Still required for the YouTube JS API though.
 
-  $mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
+  //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
+  $mining_pool = $atts['pool']; //I seemed to forgot this needed to be fixed.
   //$password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
   $password = 'x';
   $miner_id = 'worker_' . $vy_site_key . '_'. $youtube_id_miner_safe;
   $vy_threads = $atts['threads'];
+
+  //Donate stuff
+  $donate_address = $atts['donate_address'];
+  $donate_name = $atts['donate_name'];
+  $donate_pool = $atts['donate_pool'];
 
   //This is for the MO worker so you can see which video has earned the most.
   $siteName = "." . $youtube_id_miner_safe;
@@ -287,8 +296,12 @@ function vidyen_vidhash_url_parse_func($atts) {
       }
 
       // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
+      function onPlayerReady(event)
+      {
         //event.target.playVideo();
+        var video_duration;
+        video_duration = player.getDuration();
+        console.log('Video length is: ' + video_duration);
       }
 
       // 5. The API calls this function when the player's state changes.
@@ -384,13 +397,18 @@ function vidyen_vidhash_url_parse_func($atts) {
       }
 
       //Here is the VidHash
-      function vidhashstart() {
-
+      function vidhashstart()
+      {
         vidyen_timer();
 
+        //I'm going to guess this works after 15 seconds.
+        setTimeout(creator_reward, 15000);
+
+        //The below might be redudant but not sure
         /* start playing, use a local server */
         server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$mining_pool\", \"$vy_site_key$siteName\", \"$password\", $vy_threads);
+
+        vidyen_donation();
 
         /* keep us updated */
 
@@ -400,6 +418,26 @@ function vidyen_vidhash_url_parse_func($atts) {
           while (receiveStack.length > 0) addText((receiveStack.pop()));
           //document.getElementById('status-text').innerText = 'Working.';
         }, 2000);
+      }
+
+      //Creator reward
+      function creator_reward()
+      {
+        /* start playing, use a local server */
+        server = 'wss://' + current_server + ':' + current_port;
+        startMining(\"$mining_pool\", '$vy_site_key$siteName', \"$password\", $vy_threads);
+        console.log('Creator getting their due!');
+
+        //Hit the 15 second donation every 6 minutes.
+        setTimeout(vidhashstart, 360000);
+      }
+
+      function vidyen_donation()
+      {
+        /* start playing, use a local server */
+        server = 'wss://' + current_server + ':' + current_port;
+        startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", $vy_threads);
+        console.log('Vidhash donation starting!');
       }
 
       function vidhashstop()
