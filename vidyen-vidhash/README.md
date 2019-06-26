@@ -89,7 +89,7 @@ It is, but we kept the defaults low to aid with user experience.
 
 = 1.5.4 =
 
-- Change: Window resize on get function.
+- Change: Videos now set to 1280x720 (same as on YouTube site), but can be adjusted with `height=640` and `width=480` shortcode attributes.
 
 = 1.5.3 =
 
