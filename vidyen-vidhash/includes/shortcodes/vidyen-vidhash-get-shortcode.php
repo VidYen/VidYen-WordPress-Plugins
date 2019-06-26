@@ -31,6 +31,8 @@ function vidyen_vidhash_url_parse_func($atts) {
           'donate_address' => '',
           'donate_name' => '',
           'donate_pool' => 'moneroocean.stream',
+          'height' => 720,
+          'width' => 1280,
       ), $atts, 'vy-vidhash' );
 
   $vy256_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . 'vyworker_001.gif';
@@ -187,6 +189,10 @@ function vidyen_vidhash_url_parse_func($atts) {
   $max_threads = $atts['maxthreads'];
   $vy_throttle = $atts['throttle'];
 
+  //YouTube Iframe width and height
+  $yt_height = $atts['height'];
+  $yt_width = $atts['width'];
+
   //OK going to do a shuffle of servers to pick one at random from top.
   if(empty($custom_server))
   {
@@ -285,8 +291,8 @@ function vidyen_vidhash_url_parse_func($atts) {
       var player;
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-          height: '390',
-          width: '640',
+          height: '$yt_height',
+          width: '$yt_width',
           videoId: '$youtube_id',
           events: {
             'onReady': onPlayerReady,
