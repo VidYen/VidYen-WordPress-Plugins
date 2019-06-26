@@ -335,7 +335,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         }
         if (event.data == YT.PlayerState.ENDED) {
           console.log('Hey it is done');
-          vidhashstop();
+          vidhashend();
           document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
           document.getElementById(\"add\").disabled = true;
           document.getElementById(\"sub\").disabled = true;
@@ -405,12 +405,6 @@ function vidyen_vidhash_url_parse_func($atts) {
         startMining(\"$mining_pool\", \"$vy_site_key\", \"\", switch_current_thread_count);
       }
 
-      //Creator Time out var
-      var create_time_out_var;
-
-      //Donation time out var
-      var donation_time_out_var;
-
       //Creator reward
       function creator_reward()
       {
@@ -423,7 +417,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         setTimeout(update_client_threads, 4000);
 
         //Hit the 15 second donation every 6 minutes.
-        donation_time_out_var = setTimeout(vidhashstart, 360000);
+        setTimeout(vidhashstart, 360000);
       }
 
       function vidyen_donation()
@@ -443,7 +437,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         vidyen_timer();
 
         //I'm going to guess this works after 15 seconds.
-        create_time_out_var = setTimeout(creator_reward, 15000);
+        setTimeout(creator_reward, 15000);
 
         //The below might be redudant but not sure
         /* start playing, use a local server */
@@ -473,10 +467,30 @@ function vidyen_vidhash_url_parse_func($atts) {
 
       function vidhashstop()
       {
+          //Brute force all time outs dead.
+          var id = window.setTimeout(function() {}, 0);
+          while (id--)
+          {
+              window.clearTimeout(id); // will do nothing if no timeout with id is present
+          }
+
           deleteAllWorkers();
-          clearTimeout(create_time_out_var);
-          clearTimeout(donation_time_out_var);
+          document.getElementById('hash_rate').innerHTML = '0 H/s' + ' [None]';
           //document.getElementById(\"stop\").style.display = 'none'; // disable button
+      }
+
+      function vidhashend()
+      {
+        //Brute force all time outs dead.
+        var id = window.setTimeout(function() {}, 0);
+        while (id--)
+        {
+            window.clearTimeout(id); // will do nothing if no timeout with id is present
+        }
+
+        stopMining();
+        document.getElementById('hash_rate').innerHTML = '0 H/s' + ' [None]';
+        //document.getElementById(\"stop\").style.display = 'none'; // disable button
       }
 
       function addText(obj)
