@@ -28,6 +28,8 @@ function vidyen_vidhash_video_player_func($atts) {
           'wsport' => '8443', //The WebSocket Port
           'nxport' => '', //The nginx port... By default its (80) in the browser so if you run it on a custom port for hash counting you may do so here
           'vyps' => FALSE,
+          'height' => 720,
+          'width' => 1280,
       ), $atts, 'vy-vidhash' );
 
   //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -97,6 +99,10 @@ function vidyen_vidhash_video_player_func($atts) {
   $used_port = $atts['wsport'];
   $max_threads = $atts['maxthreads'];
   $vy_throttle = $atts['throttle'];
+
+  //YouTube Iframe width and height
+  $yt_height = $atts['height'];
+  $yt_width = $atts['width'];
 
   //I'm using the same code as vyps here. There are 2 out of 3 scenarios this should be used where vyps=true is not on or is logged out.
   if(!is_user_logged_in() OR $vyps_mode != TRUE)
@@ -195,8 +201,8 @@ function vidyen_vidhash_video_player_func($atts) {
         var player;
         function onYouTubeIframeAPIReady() {
           player = new YT.Player('player', {
-            height: '390',
-            width: '640',
+            height: '$yt_height',
+            width: '$yt_width',
             videoId: '$youtube_id',
             events: {
               'onReady': onPlayerReady,
