@@ -39,6 +39,12 @@ function vidyen_link_generate()
 
   //Fit the pool pass as people might get cute
   //var pool_pass_prespace = removeSpaces(pool_pass);
+  var pool_pass = pool_pass.replace("=", "equalsign");
+  var pool_pass = pool_pass.replace(":", "colonsymbol");
+  var pool_pass = pool_pass.replace("@", "atsymbol");
+  var pool_pass = pool_pass.replace(".", "dotsymbol");
+  var pool_pass = pool_pass.replace("-", "dashsymbol");
+
   var pool_pass = pool_pass.replace(/[^a-zA-Z0-9-_]/g, '');
 
   var pool_checked = pool_check(pool);

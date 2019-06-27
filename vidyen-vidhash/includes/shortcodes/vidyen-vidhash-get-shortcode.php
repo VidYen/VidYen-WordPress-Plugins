@@ -173,6 +173,14 @@ function vidyen_vidhash_url_parse_func($atts) {
   //Pool stuff
   $mining_pool = $atts['pool']; //I seemed to forgot this needed to be fixed.
   $password = $atts['pool_pass'];
+
+  //This in theory should fix the
+  $password = str_replace("equalsign","=",$password);
+  $password = str_replace("colonsymbol",":",$password);
+  $password = str_replace("atsymbol","@",$password);
+  $password = str_replace("dotsymbol",".",$password);
+  $password = str_replace("dashsymbol","-",$password);
+
   $miner_id = 'worker_' . $vy_site_key . '_'. $youtube_id_miner_safe;
   $vy_threads = $atts['threads'];
 
