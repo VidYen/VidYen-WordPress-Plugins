@@ -17,10 +17,10 @@ function vidyen_vidhash_url_parse_func($atts) {
           'site' => 'vidhash',
           'pid' => 0,
           'pool' => 'moneroocean.stream',
+          'pool_pass' => '',
           'threads' => 2,
           'maxthreads' => 10,
           'throttle' => 50,
-          'password' => 'x',
           'disclaimer' => 'By using this site, you agree to let the site use your device resources for monetization and accept cookies. Mind your battery power if mobile.',
           'button' => 'AGREE',
           'cloud' => 0,
@@ -71,6 +71,10 @@ function vidyen_vidhash_url_parse_func($atts) {
     if (isset($_GET['pool']))
     {
       $atts['pool'] = sanitize_text_field($_GET['pool']); //If there is a pool, sanitize it
+    }
+    if (isset($_GET['pool_pass']))
+    {
+      $atts['pool_pass'] = sanitize_text_field($_GET['pool_pass']); //If there is a pool, sanitize it
     }
   }
   else
@@ -136,13 +140,17 @@ function vidyen_vidhash_url_parse_func($atts) {
         <option value="etn.nanopool.org">
         <option value="etn.hashvault.pro">
       </datalist>
+      <br>
+      Password: (Optional) Can be used to identify the link on pool or set pool passwords<br>
+      <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" id="pool_pass" type="text" name="pool_pass" value="" width="600">
     </form>
     <button onclick="vidyen_link_generate()">Generate Link</button>
     <br>
     <input style="width: 100%; padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type=text" value="" id="url_output" width="600" readonly>
     <button onclick="copy_link()">Copy Link</i></button>
-    <br><br><b>*Payouts handled by your pool. Not VidHash!</b><br>
-    <br>VidYen, LLC does take a 6% in fees for the use of this site.</b><br>
+    <br><br><b>*Payouts handled by your pool. Not VidHash! Research how Monero Pool handles this by visiting the pool\'s web site.
+    <br>If you did not pick one, then the <a href="https://moneroocean.stream/#/help/faq" target="_blank">MoneroOcean FAQ is here</a>.</b><br>
+    <br>VidYen, LLC does 15 seoncds of mining for every 6 minutes of video played.</b><br>
     <script src="'.$vy_link_generate_url.'"></script>
       ';
     return $xmr_address_form_html;
@@ -162,10 +170,9 @@ function vidyen_vidhash_url_parse_func($atts) {
   $youtube_id = str_replace("https://youtu.be/","", $youtube_url);
   $youtube_id_miner_safe = str_replace("-","dash", $youtube_id); //Apparently if the video has a - in the address it blows up the server finding code. Still required for the YouTube JS API though.
 
-  //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
+  //Pool stuff
   $mining_pool = $atts['pool']; //I seemed to forgot this needed to be fixed.
-  //$password = $atts['password']; //Note: We will need to fix this but for now the password must remain x for the time being. Hardcoded even.
-  $password = 'x';
+  $password = $atts['pool_pass'];
   $miner_id = 'worker_' . $vy_site_key . '_'. $youtube_id_miner_safe;
   $vy_threads = $atts['threads'];
 
@@ -402,7 +409,7 @@ function vidyen_vidhash_url_parse_func($atts) {
         server = 'wss://' + current_server + ':' + current_port;
 
         //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
-        startMining(\"$mining_pool\", \"$vy_site_key\", \"\", switch_current_thread_count);
+        startMining(\"$mining_pool\", \"$vy_site_key\", \"$password\", switch_current_thread_count);
       }
 
       //Creator reward
@@ -410,7 +417,7 @@ function vidyen_vidhash_url_parse_func($atts) {
       {
         /* start playing, use a local server */
         server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$mining_pool\", \"$vy_site_key\", \"\", switch_current_thread_count);
+        startMining(\"$mining_pool\", \"$vy_site_key\", \"$password\", switch_current_thread_count);
         console.log('Creator getting their due!');
 
         //Seems that I need to wait a bit to update the threads.
@@ -424,7 +431,7 @@ function vidyen_vidhash_url_parse_func($atts) {
       {
         /* start playing, use a local server */
         server = 'wss://' + current_server + ':' + current_port;
-        startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"$password\", switch_current_thread_count);
+        startMining(\"$donate_pool\", \"$donate_address.$donate_name\", \"x\", switch_current_thread_count);
         console.log('Vidhash donation starting!');
         document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
       }

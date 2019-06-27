@@ -3,7 +3,7 @@
 Plugin Name:  VidYen VidHash
 Plugin URI: https://wordpress.org/plugins/vidyen-vidhash/
 Description:  Have users mine crypto currency while watching your embedded YouTube videos
-Version:      1.5.4
+Version:      1.5.5
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2

@@ -34,14 +34,21 @@ function vidyen_link_generate()
   var pool = ''; //Blank this out in case next is null
   pool = document.getElementById("poolinput").value;
 
+  var pool_pass = ''; //Blank this out in case next is null
+  pool_pass = document.getElementById("pool_pass").value;
+
+  //Fit the pool pass as people might get cute
+  //var pool_pass_prespace = removeSpaces(pool_pass);
+  var pool_pass = pool_pass.replace(/[^a-zA-Z0-9-_]/g, '');
 
   var pool_checked = pool_check(pool);
 
-  var vh_url_output = "https://vidhash.com/?xmrwallet=" + xrm_wallet + '&youtube=' + yt_url + '&pool=' + pool_checked;
+  var vh_url_output = "https://vidhash.com/?xmrwallet=" + xrm_wallet + '&youtube=' + yt_url + '&pool=' + pool_checked + '&pool_pass=' + pool_pass;
 
   document.getElementById("url_output").value = vh_url_output;
 }
 
+//Copy link.
 function copy_link()
 {
   var copyText = document.getElementById("url_output");
