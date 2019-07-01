@@ -54,5 +54,7 @@ function vyps_wannads_sub_menu_page()
 	<p>One for [vyps-wannads apikey=(found on Wannads site)] which contains the Offer Wall which is visible to users.</p>
 	<p>The other for [vyps-wannads-postback outputid=(point ID) secret=(your Wannads secret key)] which only for the Wannads server to see when it communicates with your site.</p>
 	<p>The error of INVALID SIGNATURE is actually supposed to be there as only Wannads will be able to see that page and not you. If the post back fails, they will send you an email.</p>
+	<h2>Video Tutorial</h2>
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/2twSvOvMhq0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
  ';
 }

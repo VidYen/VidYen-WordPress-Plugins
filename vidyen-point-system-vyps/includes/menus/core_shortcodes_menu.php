@@ -46,6 +46,7 @@ function vyps_core_shortcodes_sub_menu_page()
   <p>This shows the log just for the user to see their own log and is useful for the new post back implementation with Wannads as their response takes time to be reported.</p>
  	<p><b>[vyps-balance pid=# uid=optional icon=optional ]</b></p>
  	<p>This shortcode shows the balance of a particular point. Replace # with the corresponding pointid (optional). You can set a specific user ID by setting the uid attribute. If you want to turn off icons, set to icon=0.</p>
+  <p><b>NOTE:</b> Both this and the public log's active button color can be set by <b>color=#ff8432</b> in the shortcode.</p>
  	<p><b>[vyps-balance-ww]</b></p>
  	<p>This shows the current <a href=\"https://wordpress.org/plugins/woo-wallet/\" target=\"_blank\">Tera Wallet for WooCommerce</a> if it is installed.</p>
  	<p><b>[vyps-balance-ww-menu]</b></p>

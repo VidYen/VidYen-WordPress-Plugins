@@ -114,6 +114,7 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - Add: New shortcodes for these are: `[vidyen-public-log]` and `[vidyen-user-log]`
 - Add: Put some tutorial videos on the VidYen miner instructions page on how to make a wallet and how payout works.
 - Fix: User logs are fixed under the edit points screen of users on admin panel. (Yeah it took a year no?)
+- Add: Embedded the Wannads Tutorial to the menu so won't have to keep copy and pasting it in Discord
 
 = 2.4.1 =
 

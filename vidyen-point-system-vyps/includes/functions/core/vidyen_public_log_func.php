@@ -19,6 +19,7 @@ function vidyen_public_log_func($atts)
 				'pages' => 10, //How many pages will have
 				'start' => 1,
 				'end' => 5,
+				'color' => '#ff8432',
 		), $atts, 'vidyen-user-log' );
 
 	$point_id = $atts['point_id'];
@@ -27,6 +28,7 @@ function vidyen_public_log_func($atts)
 	$boostrap_on = $atts['bootstrap'];
 	$max_pages = $atts['pages'];
 	$max_pages_middle = intval($max_pages/2); //The middle in theory. I guess?
+	$button_color = $atts['color'];
 
 	//Start and end row
 	$start_row = $atts['start'];
@@ -154,8 +156,28 @@ function vidyen_public_log_func($atts)
 
 	//Below is the HTML output for the pagenation
 	$html_output .= '
-		<ul class="pagination">
-		<li><a href="?action=1">Newest</a></li>'; //First boot strap
+		<style type="text/css" media="screen">
+
+			.pagination {
+				display: inline-block;
+			}
+
+			.pagination a {
+				color: black;
+				float: left;
+				padding: 8px 16px;
+				text-decoration: none;
+			}
+
+			.pagination a.active {
+				background-color: '.$button_color.';
+				color: white;
+			}
+
+			.pagination a:hover:not(.active) {background-color: #ddd;}
+		</style>
+		<div class="pagination">
+		<a href="?action=1">&laquo;</a>'; //First boot strap
 
 	if ( $amount_of_pages < $max_pages_middle)
 	{
@@ -181,13 +203,20 @@ function vidyen_public_log_func($atts)
 	//Ok. Just going to loop for nubmer of pages.
 	for ($p_for_count = $page_number_start; $p_for_count <= $page_number_end; $p_for_count = $p_for_count + 1 )
 	{
-		$page_button = "<li><a href=\"?action=$p_for_count\">$p_for_count</a></li>";
+		if( $page_number == $p_for_count)
+		{
+			$page_button = "<a class =\"active\"href=\"?action=$p_for_count\">$p_for_count</a>";
+		}
+		else
+		{
+			$page_button = "<a href=\"?action=$p_for_count\">$p_for_count</a>";
+		}
 
 		$html_output .= $page_button;
 		//end for
 	}
 
-	$html_output .= '<li><a href="?action='.$amount_of_pages.'">Oldest</a></li></ul>';
+	$html_output .= '<a href="?action='.$amount_of_pages.'">&raquo;</a></div>';
 
 	//$html_output = 'Begin<br><br>';
 	$html_output .= '<table width="100%">';
