@@ -184,21 +184,23 @@ if(current_user_can('install_plugins')){
 		//I should functionize it or do an include. But I'll kick that can of worms down the road after we burn the bridge when we get to it.
 		//For now I'm litteraly just going to to an isset on the user id to make it look nice. Please no WTF in the github comments
 
-		if ( isset( $user_id ) ) {
-
+		if ( isset( $user_id ) )
+		{
 			//Shortcode hard coding for the admin log. Yes, it is missing the actual user name (has the UID though) this should suffice
 			$atts = array(
-				'pid' => '0',
-				'reason' => '0',
-				'rows' => 50,
-				'bootstrap' => 'no',
-				'userid' => $user_id,
-				'uid' => TRUE,
-				'admin' => TRUE,
-			);
+						'point_id' => 0,
+						'reason' => '',
+						'rows' => 50,
+						'bootstrap' => FALSE,
+						'pages' => 10, //How many pages will have
+						'start' => 1,
+						'end' => 5,
+						'user_id' => $user_id,
+						'admin' => TRUE,
+				);
 
 			//Echo and not return due to the nature of this not being a shortcode and a page.
-			echo vyps_public_log_func( $atts );
+			echo vidyen_user_log_func($atts);
 
 		} //NOTE: I believe this is where it cuts off for point list
 

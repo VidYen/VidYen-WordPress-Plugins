@@ -37,9 +37,9 @@ function vyps_core_shortcodes_sub_menu_page()
  	<h1>Shortcodes and Syntax</h1>
  	<p>This plugin allows you to add shortcodes so your users can see a complete transaction log on the VidYen Point System.</p>
  	<h2>Public Log</h2>
- 	<p><b>[vidyen-point-log]</b></p>
+ 	<p><b>[vidyen-public-log]</b></p>
  	<p>This shows 50 log entries at a time.</p>
-  <p><b>[vidyen-point-log rows=25 pages=25 bootstrap=yes]</b></p>
+  <p><b>[vidyen-public-log rows=25 pages=25 bootstrap=yes]</b></p>
  	<p>Set the rows options to set the number of rows per page of the transaction log. If you use a bootstrap theme, you can turn option on to bootstrap=yes to get bootstrap pagination. pagination is set to default of 10 but setting pages=(number) can set to desired amount.</p>
   <p>NOTE: You can set log rows to something big, like 1000000, but it may slow the site if you have that many transactions on your VYPS table.</p>
   <p><b>[vidyen-user-log start=1 end=20]</b></p>

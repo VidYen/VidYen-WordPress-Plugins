@@ -50,6 +50,8 @@ function vyps_vy256_sub_menu_page()
     <p>The payouts and accepted hash monitoring are through MoneroOcean (not VidYen) and if you need to change your minimum payouts please refer to their <a href="https://moneroocean.stream/#/help/faq" target="_blank">FAQ</a>.</p>
     <p>Even though this version did not cause uBlock, Brave Browser, or Malwarebytes to complain, you should take full advantage of the consent system so your site does not get blacklisted by mistake by causing CPU usage on users who were not aware this would happen.</p>
     <p>You should make users aware that this miner may drain their battery and use their electrcity in your consent disclaimer. The consent system only loads the mining code to the client after it has been accepted.</p>
+    <p>See this video for how to make a simple webwallet if you are new:</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/x7yq-5PWWPo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <h1>Virtual Rewards vs Tangible Rewards Philosophy</h1>
     <p>Due to the confusion and frustration of users, I would like to take a moment to explain what the miner is good for and what it is not. For the sake of proper understanding when I say virutal reward, I mean a digital reward that costs nothing for you to reproduce or sell. Tangible, even if digital, it goods that cost you money to obtain even if digital like crypto currency.</p>
     <p>Although I have plans on adding a more dynamic point system based on the price of Monero, I inteded it to be used for virtual rewards because of the nature of mining and crypto currency, knowing exactly how much a point earned from mining is worth is diffuclty because not only doe sthe price of Monero changes but so does the difficulty of the block being mined making hashes and shares worth more or lesss depending.</p>
@@ -122,6 +124,8 @@ function vyps_vy256_sub_menu_page()
     <p>The rates of XMR per hash is determined by them as well as the minimum payouts. An account is not required, but by default, the minimum payout is 0.3 XMR, and if you wish to adjust that, you will have to create an account through them.</p>
     <p>To see your progress toward payout, visit the <a href="https://moneroocean.stream/#/dashboard" target="_blank">dashboard</a> and add your XMR wallet where it says Enter Payment Address at the bottom of page. There, you can see total hashes, current hash rate, and account option if you wish to change payout rate.</p>
     <p>NOTE: The hashes the user mines versus what MoneroOcean shows will differ because of fees and rejected hashes. As browser mining is often low CPU, many hashes are rejected, but VY256 rewards user regardless for fair effort. VY256 has a range of 1%–5% developer fee, depending on the overall network rate.</p>
+    <p>Here is a video on how payouts work on MoneroOcean with another product we made called VidHash but the Pool is the same:</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/_HS4HQvqOUY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <h1>Worker Name Explanation</h1>
     <p>Something I have never explained, but if you are looking on MoneroOcean dashboard, you will see worker names such as "3vidyenlive1297"</p>
     <p>The leading 3 is the user id number on WordPress db, and the 1297 is the transaction id.</p>

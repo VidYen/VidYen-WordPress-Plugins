@@ -6,14 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* Main Public Log shortcode function */
 
-function vidyen_user_log_func($atts)
+function vidyen_public_log_func($atts)
 {
-	//Make sure user is logged in since the functionality for other users not yet in.
-	if ( !is_user_logged_in() )
-	{
-		return;
-	}
-
 	//Shortcode stuff
 	//I'm going to eventually have site admins set logs for activities like reason etc and the meta fields, but for now.
 	$atts = shortcode_atts(
@@ -25,8 +19,6 @@ function vidyen_user_log_func($atts)
 				'pages' => 10, //How many pages will have
 				'start' => 1,
 				'end' => 5,
-				'user_id' => 0,
-				'admin' => FALSE,
 		), $atts, 'vidyen-user-log' );
 
 	$point_id = $atts['point_id'];
@@ -40,19 +32,8 @@ function vidyen_user_log_func($atts)
 	$start_row = $atts['start'];
 	$end_row = $atts['end'];
 
-	//User identification
-	$user_id = intval($atts['user_id']);
-
-	//Admin mode
-	$admin_mode = intval($atts['admin']);
-
-	if ($user_id < 1)
-	{
-		//If user id is less than 1, it means that its zero or some negative number so we need to check for current id.
-		$user_id = get_current_user_id(); //Over riding the current userid to show just the current user. I have no idea if this actually works as may have not set it up correctly.
-	}
-
-	//Else the user ID above is fed into the new system.
+	//This is obvious
+	$user_id = get_current_user_id(); //Over riding the current userid to show just the current user. I have no idea if this actually works as may have not set it up correctly.
 
 	//SQL setup stuff
 	global $wpdb;
@@ -60,24 +41,23 @@ function vidyen_user_log_func($atts)
 	$table_name_log = $wpdb->prefix . 'vyps_points_log';
 	$table_name_users = $wpdb->prefix . 'users'; //Needed for their name.
 
+	//SQL query of user display name. This should weed out any deleted users. (I think)
+	$min_user_id = 0;
+
 	//SQL query of current user on log
-	$user_data_query = "SELECT * FROM ". $table_name_log . " WHERE user_id = %d";
-	$user_data_query_prepared = $wpdb->prepare( $user_data_query, $user_id );
-	$user_data = $wpdb->get_results($user_data_query_prepared);
+	$user_data_query = "SELECT * FROM ". $table_name_log . " WHERE user_id > %d";
+	$user_data_query_prepared = $wpdb->prepare( $user_data_query, $min_user_id );
+	$user_data = $wpdb->get_results( $user_data_query_prepared );
+
+	$user_name_data_query = "SELECT * FROM ". $table_name_users . " WHERE id > %d";
+	$user_name_data_query_prepared = $wpdb->prepare( $user_name_data_query, $min_user_id );
+	$user_name_data = $wpdb->get_results( $user_name_data_query_prepared );
 
 	//SQL count number of rows. (have to count backwards it seems)
-	$user_count_query = "SELECT COUNT(user_id) FROM ". $table_name_log . " WHERE user_id = %d";
-	$user_count_query_prepared = $wpdb->prepare( $user_count_query, $user_id );
+	$user_count_query = "SELECT COUNT(id) FROM ". $table_name_log . " WHERE id > %d";
+	$user_count_query_prepared = $wpdb->prepare( $user_count_query, $min_user_id );
 	$user_count = $wpdb->get_var($user_count_query_prepared);
 	$user_count = intval($user_count); //Intval due to it be repeated
-
-	//Going to save this for global log
-	/*
-	//SQL query of user display name
-	$user_name_data_query = "SELECT * FROM ". $table_name_users . " WHERE user_id = %d";
-	$user_name_data_query_prepared = $wpdb->prepare( $user_name_data_query, $user_id );
-	$user_name_data = $wpdb->get_results( $user_name_data_query_prepared );
-	*/
 
 	//SQL query of point names. Going to grab them all.
 	$min_point_id = 0; //Saving this for later. Hopefully I remember to put in a point range
@@ -117,6 +97,18 @@ function vidyen_user_log_func($atts)
 		$page_number = 1; //Well... Always first.
 	}
 
+	//User name pull
+	//Point name pull from SQL results
+	foreach ($user_name_data as $result)
+	{
+		$index = $result->ID; //The index will be the user ID. NOTE: It has to be in caps. Dumb SQL
+		$user_name = $result->display_name;	 //Using display name as don't want to expose user names
+
+		//I realized the index will be the point id
+		$user_name_array[$index]['user_name'] = $user_name;
+	}
+
+	//Point name pull from SQL results
 	foreach ($point_name as $result)
 	{
 		$index = $result->id; //Point Id is the index. Shoulnd't have to cont since all points are a possiblity for a single user
@@ -155,28 +147,15 @@ function vidyen_user_log_func($atts)
 
 	//This had to go below the foreach and use the $index for number of rows
 	$amount_of_pages = ceil( $user_count / $table_row_limit);
-	$display_name = vidyen_user_display_name($user_id);
+	//$display_name = vidyen_user_display_name($user_id); //whoops forgot to comment this out
 
-	//Setting this here all others will be .=
+	//HTML start. all will be .= after $this->
 	$html_output = '';
 
-	if($admin_mode == FALSE)
-	{
-		//Below is the HTML output for the pagenation
-		$html_output .= '<h1>'.$display_name.'\'s Transaction Log</h1>
-			<ul class="pagination">
-			<li><a href="?action=1">Newest</a></li>'; //First boot strap
-	}
-	elseif($admin_mode == TRUE)
-	{
-		//If is admin
-		$html_output .= '<h1>'.$display_name.'\'s Transaction Log</h1>';
-	}
-	else
-	{
-		//Something is broke but not sure what so
-		$html_output .= '';
-	}
+	//Below is the HTML output for the pagenation
+	$html_output .= '
+		<ul class="pagination">
+		<li><a href="?action=1">Newest</a></li>'; //First boot strap
 
 	if ( $amount_of_pages < $max_pages_middle)
 	{
@@ -199,29 +178,16 @@ function vidyen_user_log_func($atts)
 		$page_number_end = $max_pages;
 	}
 
-	if ($admin_mode == FALSE)
+	//Ok. Just going to loop for nubmer of pages.
+	for ($p_for_count = $page_number_start; $p_for_count <= $page_number_end; $p_for_count = $p_for_count + 1 )
 	{
-		//Ok. Just going to loop for nubmer of pages.
-		for ($p_for_count = $page_number_start; $p_for_count <= $page_number_end; $p_for_count = $p_for_count + 1 )
-		{
-			$page_button = "<li><a href=\"?action=$p_for_count\">$p_for_count</a></li>";
+		$page_button = "<li><a href=\"?action=$p_for_count\">$p_for_count</a></li>";
 
-			$html_output .= $page_button;
-			//end for
-		}
+		$html_output .= $page_button;
+		//end for
+	}
 
-		$html_output .= '<li><a href="?action='.$amount_of_pages.'">Oldest</a></li></ul>';
-	}
-	elseif($admin_mode == TRUE)
-	{
-		//If is admin
-		$html_output .= '<p>Last 50 transactions:</p>';
-	}
-	else
-	{
-		//Something is broke but not sure what so
-		$html_output .= '';
-	}
+	$html_output .= '<li><a href="?action='.$amount_of_pages.'">Oldest</a></li></ul>';
 
 	//$html_output = 'Begin<br><br>';
 	$html_output .= '<table width="100%">';
@@ -229,6 +195,7 @@ function vidyen_user_log_func($atts)
 			<tr>
 				<th>$transaction_id_label</th>
 				<th>$date_label</th>
+				<th>$display_name_label</th>
 				<th>$point_type_label</th>
 				<th>$amount_label</th>
 				<th>$reason_label</th>
@@ -240,10 +207,9 @@ function vidyen_user_log_func($atts)
 	$end_row = ($page_number * $table_row_limit );
 
 	//Sometimes the rows are less than the max on the last page.
-	if ($end_row > $user_count)
+	if ($end_row > $index)
 	{
-			//$end_row = $user_count - 1; //Should be the last row at the end minus the last lop. Goddamn loop logic.
-			//NOTE: This might not be needed since we reversing order.
+			//$end_row = $index - 1; //Should be the last row at the end minus the last lop. Goddamn loop logic.
 	}
 
 	for ($x = $start_row; $x <= $end_row; $x++)
@@ -253,25 +219,35 @@ function vidyen_user_log_func($atts)
 		{
 			//Ok here is where we use the array of array to get the iconv
 			$current_point_id = $parsed_array[$x]['point_id'];
+			$current_user_id = intval($parsed_array[$x]['user_id']); //Make sure its actually numerical or a
 
 			//I hate arrays but this is some technological magic
 			$current_point_name = $point_name_array[$current_point_id]['point_name'];
 			$current_icon_url = $point_name_array[$current_point_id]['icon_url'];
 
-			$html_output .= '
-				<tr>
-					<td>'.$parsed_array[$x]['transaction_id'].'</td>
-					<td>'.$parsed_array[$x]['transaction_time'].'</td>
-					<td><img src="'.$current_icon_url.'" title="'.$current_point_name.'" style="height:16px;"></td>
-					<td>'.$parsed_array[$x]['point_amount'].'</td>
-					<td>'.$parsed_array[$x]['reason'].'</td>
-				</tr>
-					';
+			//Check for deleted user. I believe we are looking for key via the index.
+			if (array_key_exists($current_user_id, $user_name_array))
+			{
+				$current_user_name = $user_name_array[$current_user_id]['user_name'];
+				$html_output .= '
+					<tr>
+						<td>'.$parsed_array[$x]['transaction_id'].'</td>
+						<td>'.$parsed_array[$x]['transaction_time'].'</td>
+						<td>'.$current_user_name.'</td>
+						<td><img src="'.$current_icon_url.'" title="'.$current_point_name.'" style="height:16px;"></td>
+						<td>'.$parsed_array[$x]['point_amount'].'</td>
+						<td>'.$parsed_array[$x]['reason'].'</td>
+					</tr>';
 			}
 			else
 			{
-				$html_output .= ''; //The point type doesn't exist, so we ignor the row
+				$html_output .= ''; //If user deleted we just don't show row.
 			}
+		}
+		else
+		{
+			$html_output .= ''; //Invalid Inex so something messed up.
+		}
 	}
 
 	$html_output .= '</table>';

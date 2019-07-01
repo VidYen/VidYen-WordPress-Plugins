@@ -205,6 +205,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_wannads_pro
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_balance_func.php'); //Functionalized balance (FINALLY! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_public_log_func.php'); //Functionalized public log (This should have been months ago! -Felty)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_user_log_func.php'); //Log for just the user. This was a long time coming. I may had some gets.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_public_log_func.php'); //New log for public use. Should be way more SQL efficient. Not there is the old so it won't break old version by upgrading (will be depreciated)
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_user_display_name_func.php'); //Log for just the user. This was a long time coming. I may had some gets.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_add_func.php'); //Functionalized adds to the log
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_deduct_func.php'); //Functionalized deducts to the log

@@ -3,7 +3,7 @@ Contributors: vidyen, felty, shanevidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: Rewards, Miner, Crypto, Monero, Adscend, Wannads, mining, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
 Requires at least: 4.9.8
-Tested up to: 5.2.1
+Tested up to: 5.2.2
 Requires PHP: 7.0
 Stable tag: 2.3.0
 License: GPLv2
@@ -109,6 +109,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 = 2.4.2 =
 
 - Update: Made functions more compatible with WordPress RTS interface from Github (Yes a VidYen RTS exists)
+- Fix: Fixed current user log to not error.
+- Add: Added icons to new current user log and public log.
+- Add: New shortcodes for these are: `[vidyen-public-log]` and `[vidyen-user-log]`
+- Add: Put some tutorial videos on the VidYen miner instructions page on how to make a wallet and how payout works.
+- Fix: User logs are fixed under the edit points screen of users on admin panel. (Yeah it took a year no?)
 
 = 2.4.1 =
 
