@@ -88,13 +88,15 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 1. Create your own point types with their own name and icon.
 2. You can name the point type anything you would like and use any image that would make a good icon.
 3. Admins can manually add point transactions for their users through the WordPress user panel.
-4. Using the point transfer shortcodes, users can exchange points at various rates to other points or WooCommerce credit.
+4. Using the point transfer shortcodes, users can exchange points at various rates to other points or WooCommerce credit. Also timed rewards buttons!
 5. Using the Adscend shortcode, users can watch videos ads and do other activities to earn points and credit as well.
 6. Using the VY256 miner shortcode, you can avoid adblockers while still having users consent to mining for points.
 7. You can use shortcodes to display leaderboards for user rank by point earnings.
 8. Or you can display which user owns what percent of the current supply of points.
 9. Wannads support included in VYPS 1.9
 10. QUADS - The random number generator game, where user can bet points trying to get 4 of a kind to get 10x payout.
+11. Logs for users to see their history.
+12. Public logs so all users can see if site is being fair and what other users are doing..
 
 == This plugin uses the 3rd party services ==
 
