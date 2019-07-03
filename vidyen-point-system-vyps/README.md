@@ -108,6 +108,11 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.4.3 =
+
+- Fix: Adscend now uses proper WordPress POST and GET functions to improve performance on redeeming.
+- Add: Created de-branding option so users can download branding removal on Adscend for free as long as they give email they used to sign up with Adscend downloading pro plugin.
+
 = 2.4.2 =
 
 - Update: Made functions more compatible with WordPress RTS interface from Github (Yes a VidYen RTS exists)

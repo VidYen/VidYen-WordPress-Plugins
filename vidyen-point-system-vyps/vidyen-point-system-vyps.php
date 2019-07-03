@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      2.4.2
+Version:      2.4.3
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -180,7 +180,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_2in.php'); //
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-point-exchange.php'); //Point Exchange is going to depreciate all earlier versions of Point Transfer
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypspt_ww.php'); //WW point transfer bridge Shortcode table
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-login.php'); //You are not logged in blank shortcode.
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-adscend.php'); //Rolling the Adscend in. I hate ads but I'm being pragmatic
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-adscend.php'); //Updated Adscend module.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads.php'); //Adding Wannads support. Not the naming convention change.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-wannads-postback.php'); //Wannads post back
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Threshold Raffle shortcode. This is going to be cool
