@@ -165,7 +165,7 @@ function vidyen_mmo_mtest_id_func($atts)
             <p class=\"submit\">
             <input type=\"hidden\" name=\"vypsnoncepost\" id=\"vypsnoncepost\" value=\"$vyps_nonce_check\" />
             <input type=\"hidden\" name=\"change_mtest_id_action\" id=\"change_mtest_id_action\" value=\"change_mtest_id_action\" />
-            <input type=\"submit\" name=\"set_mtest_id\" id=\"set_mtest_id\" class=\"button button-primary\" value=\"Clear ID\" onclick=\"return confirm('Are you sure you want to change your ID?');\">
+            <input type=\"submit\" name=\"set_mtest_id\" id=\"set_mtest_id\" class=\"button button-primary\" value=\"Set Mine Test Name\" onclick=\"return confirm('Are you sure you want to change your ID?');\">
           </p>
         </form>
       </div>
