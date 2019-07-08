@@ -55,6 +55,14 @@ function vidyen_mmo_postback_api_bal_func( $atts )
 			//$user_id = 1; //Hard coded for now
 			$mmo_get_balance = vyps_point_balance_func($point_id, $user_id);
 		}
+		elseif (isset($_GET['mtname']))
+		{
+			$point_id = intval($atts['point_id']);
+			$mtest_user_id = sanitize_text_field($_GET['mtname']);
+			$user_id = vidyen_mmo_mtest_user_query_func($mtest_user_id);
+			//$user_id = 1; //Hard coded for now
+			$mmo_get_balance = vyps_point_balance_func($point_id, $user_id);
+		}
 		else
 		{
 			$mmo_get_balance = 0;

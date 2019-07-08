@@ -86,6 +86,17 @@ function vidyen_mmo_postback_deduct_func( $atts )
 				return 2; //Error code for user id not found. Game client should tell them to find in game id and put it in website.
 			}
 		}
+		elseif (isset($_POST['mtname']))
+		{
+			$point_id = intval($atts['point_id']);
+			$mtest_user_id = sanitize_text_field($_POST['mtname']);
+			$user_id = vidyen_mmo_mtest_user_query_func($mtest_user_id);
+			//$user_id = 1; //Hard coded for now
+			if ($user_id < 1)
+			{
+				return 2; //Error code for user id not found. Game client should tell them to find in game id and put it in website.
+			}
+		}
 
 		//$user_id = 2;
 

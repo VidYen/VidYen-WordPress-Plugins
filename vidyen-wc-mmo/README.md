@@ -14,6 +14,10 @@ Patreon supports get free webhosting btw.
 
 # Change Log
 
+= 0.6.0 =
+
+- Added Mintest support
+
 = 0.5.0 =
 
 - Update: Added latest backend funcitonality to make the in game monentization without having to register an account.
