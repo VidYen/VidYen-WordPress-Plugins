@@ -797,17 +797,17 @@ function vyps_vy256_solver_func($atts) {
           <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text\">'.$start_message_verbage.'</span></div></div>
         </div>
         <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
-          <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span></div></div>
+          <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div id="time_bar_font_div" style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span></div></div>
         </div>
         <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
-          <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div style="position: absolute; right:12%; font-size:1.25vw; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="progress_text"> Effort[0]</span></div></div>
+          <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="progress_text"> Effort[0]</span></div></div>
         </div>
         <div id="poolProgress" style="position:relative; display: '.$poolBar_display.';width:100%; background-color: grey; ">
-          <div id="poolBar" style="display: '.$poolBar_display.';width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%; font-size:1.25vw; color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
+          <div id="poolBar" style="display: '.$poolBar_display.';width:0%; height: 30px; background-color: '.$poolBar_color.';"><div id="pool_text" style="position: absolute; right:12%; color:'.$poolBar_text_color.';">Reward['.$reward_icon.' 0] - Progress[0/'.$hash_per_point.']</div></div>
         </div>
         <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
           <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
-          <span style="font-size:1.25vw;">Threads:&nbsp;</span><span style="display:inline; font-size:1.25vw;" id="thread_count">0</span>
+          <span id="threads_bar_font_span">Threads:&nbsp;</span><span id="thread_count" style="display:inline;">0</span>
           <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" disabled>+</button>
           <form method="post" style="display:none;margin:5px !important;" id="redeem">
             <input type="hidden" value="" name="redeem"/>
@@ -907,6 +907,18 @@ function vyps_vy256_solver_func($atts) {
             }
 
             mobile_use = detectmob();
+
+            if (mobile_use == true)
+            {
+              var mobile_font_size = '3vw';
+              document.getElementById('time_bar_font_div').style.fontSize = mobile_font_size;
+              document.getElementById('worker_bar_font_div').style.fontSize = mobile_font_size;
+              document.getElementById('pool_text').style.fontSize = mobile_font_size;
+              document.getElementById('threads_bar_font_span').style.fontSize = mobile_font_size;
+              document.getElementById('thread_count').style.fontSize = mobile_font_size;
+              document.getElementById('status-text').style.fontSize = mobile_font_size;
+              document.getElementById('pause-text').style.fontSize = mobile_font_size;
+            }
 
             function pull_mo_stats()
             {
