@@ -68,7 +68,7 @@ function vidyen_mmo_postback_credit_func( $atts )
 */
 	//We are getting the user and then get the user id from that since they might be different between servers. I'm just guessing
 	//So we need to see if email and points or just a user id wihcih work different.
-	if ( (isset($_POST['email']) AND isset($_POST['points'])) OR (isset($_POST['userid']) AND isset($_POST['points'])))
+	if ( (isset($_POST['email']) AND isset($_POST['points'])) OR (isset($_POST['userid']) AND isset($_POST['points'])) OR (isset($_POST['mtname']) AND isset($_POST['points'])) )
 	{
 		if ( isset($_POST['email']) AND !isset($_POST['userid']) )
 		{
