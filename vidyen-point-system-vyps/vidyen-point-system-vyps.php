@@ -187,7 +187,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr.php'); //Thre
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypstr_cl.php'); //Current game log so you can see progress. Need to work on a game history log.
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-public-balance.php'); //Point balances for public viewing (and maybe some leaderboard stuff)
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-public-balance-earned.php'); //Point balances of lifetime earnings for public viewing (and maybe some leaderboard stuff)
-include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-vy256.php'); //VYPS WMP shortcode
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-vy256.php'); //VYPS WMP shortcode
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsxmr_wallet.php'); //Let's user add XMR wallet to usermeta table in WP
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vypsws_pick.php'); //Shareholder pick. Is shortcode but used elsewhere
 include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vyps-refer.php'); //Referal shortcode display shortcode.

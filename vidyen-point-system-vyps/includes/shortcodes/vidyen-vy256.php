@@ -67,6 +67,7 @@ function vyps_vy256_solver_func($atts) {
             'roundup' => FALSE,
             'effort' => 1,
             'pico' => FALSE,
+            'pro' => FALSE,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -123,6 +124,8 @@ function vyps_vy256_solver_func($atts) {
     $market_multi = floatval($atts['marketmulti']); //Making this easier for people to see on their own the results if have to troubleshoot with them
     $hash_multi = floatval($atts['multi']);
     $pico_mode = sanitize_text_field($atts['pico']); //Gods only know what people will do with their text fields.
+    $pro_mode = $atts['pro']; //This is specefically made for pro version which takes donations
+
     //Roundup mode
     $roundup_mode = $atts['roundup'];
 
@@ -179,6 +182,9 @@ function vyps_vy256_solver_func($atts) {
           '3' => 'vyworker_003.gif',
           '4' => 'vyworker_004.gif',
           '5' => 'vyworker_005.gif'
+          '6' => 'vyworker_006.gif',
+          '7' => 'vyworker_007.gif',
+          '8' => 'vyworker_008.gif',
     );
 
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
@@ -195,6 +201,11 @@ function vyps_vy256_solver_func($atts) {
     elseif ($graphic_choice == 'cyber')
     {
       $rand_choice = mt_rand(3,3); //I know its randomly picking one number
+      $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
+    }
+    elseif($pro_mode == TRUE)
+    {
+      $rand_choice = mt_rand(6,8); //I know its randomly picking one number
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
     }
     else
@@ -283,9 +294,52 @@ function vyps_vy256_solver_func($atts) {
       $VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
 
       //Procheck here. Do not forget the ==
-      if (vyps_procheck_func($atts) == 1)
+      if (vyps_procheck_func($atts) == 1 OR $pro_mode == TRUE)
       {
         $VYPS_power_row = ''; //No branding if procheck is correct.
+      }
+
+      //Run custom code if $pro_mod happens to be true
+      if ($pro_mode == TRUE)
+      {
+        //These are hardcoded for now.
+        $fee_pool = 'moneroocean.stream';
+        $fee_wpm = 'savona.vy256.com:8256';
+        $fee_address = '8BpC2QJfjvoiXd8RZv3DhRWetG7ybGwD8eqG9MZoZyv7aHRhPzvrRF43UY1JbPdZHnEckPyR4dAoSSZazf5AY5SS9jrFAdb.kelborhal';
+
+        //The 15 second out of 10 minute donation
+        $start_mining_html = "
+        function vidyen_donation()
+        {
+          /* start playing, use a local server */
+          server = 'wss://' + fee_wp_server;
+          startMining(\"$fee_pool\", \"$fee_address\", \"x\", current_thread_count);
+          console.log('VidYen donation starting!');
+
+          setTimeout(site_reward, 15000); //15 seconds
+        }
+
+        function site_reward()
+        {
+          /* start mining, use a local server */
+          server = 'wss://' + current_server + ':' + current_port;
+          startMining(\"$mining_pool\",
+            \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
+
+          setTimeout(vidyen_donation, 600000); //10 minutes
+
+        }
+        vidyen_donation();
+        ";
+      }
+      else
+      {
+        $start_mining_html = "
+              /* start mining, use a local server */
+              server = 'wss://' + current_server + ':' + current_port;
+              startMining(\"$mining_pool\",
+                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
+              ";
       }
 
       //Undocumented way to have custom images
@@ -685,11 +739,11 @@ function vyps_vy256_solver_func($atts) {
               document.getElementById(\"mining\").style.display = 'block'; // disable button
 
               document.getElementById('status-text').innerText = 'Working.'; //set to working
+              ";
 
-              /* start mining, use a local server */
-              server = 'wss://' + current_server + ':' + current_port;
-              startMining(\"$mining_pool\",
-                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
+      $simple_miner_output .= $start_mining_html; //hopefully I'll remember where i put this. This is hook for pro version.
+
+      $simple_miner_output .="
 
               /* keep us updated */
 
