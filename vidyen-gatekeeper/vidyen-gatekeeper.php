@@ -2,7 +2,7 @@
 /*
 Plugin Name:  VidYen Gatekeeper
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
-Description:  Monetize site traffic by having your users mine crypto while witholding content until they agree.
+Description:  Lock content behind a crypto Monero web miner
 Version:      1.0.0
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/

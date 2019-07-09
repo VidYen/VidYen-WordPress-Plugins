@@ -1,18 +1,18 @@
 === VidYen Gatekeeper ===
 Contributors: vidyen, felty
-Tags: mining, miner, Monero, XMR, Web Mining, monetize traffic, content locker  monetization
+Tags: mining, miner, Monero, XMR, webmining, webminer, monetize, traffic, content, locker, content locker, monetization
 Requires at least: 5.0.0
 Tested up to: 5.2.2
-Requires PHP: 7.0
+Requires PHP: 5.4
 Stable tag: 1.0.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Monetize site traffic by having your users mine crypto while witholding content until they agree.
+Lock content behind a crypto Monero web miner
 
 == Description ==
 
-VidYen Gatekeeper allows you to gate ALL content from user until they consent and agree to your conditions and then you can earn Monero or Monero based crypto currency while they are on your site. This method of not exsposing any miner code until consent should prevent adblockers from disabling miner or AV alerts if using the VidYen WMP servers.
+ Monetize site traffic by having your users mine crypto while witholding content until they agree. VidYen Gatekeeper allows you to gate ALL content from user until they consent and agree to your conditions and then you can earn Monero or Monero based crypto currency while they are on your site. This method of not exsposing any miner code until consent should prevent adblockers from disabling miner or AV alerts if using the VidYen WMP servers.
 
 == Installation ==
 
