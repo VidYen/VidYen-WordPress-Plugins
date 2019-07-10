@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      3.0.0
+Version:      3.0.0.4
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -108,6 +108,23 @@ function vyps_points_install()
     require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I am concerned that this used ABSPATH rather than the normie WP methods
 
     dbDelta($sql);
+
+		$default_disclaimer_text = 'By clicking agree, you agree that you are over 18, legally allowed to use this site, have read and agreed to the the Terms of Service, and that you agree to let this site use your device resources to monetize by mining crypto to monetize the site and to use cookies and information gathered to let you use the site functionally.';
+
+		//Default data
+		$data_insert = [
+				'button_text' => 'I agree.',
+				'disclaimer_text' => $default_disclaimer_text,
+				'eula_text' => '',
+				'current_wmp' => 'savona.vy256.com:8183',
+				'current_pool' => 'moneroocean.stream',
+				'pool_password' => '',
+				'crypto_wallet' => '',
+				'wm_active' => 0,
+			  'wm_fee_active' => 0,
+		];
+
+		$wpdb->insert($table_name_wm, $data_insert);
 }
 
 //Updated on 11.14.2018

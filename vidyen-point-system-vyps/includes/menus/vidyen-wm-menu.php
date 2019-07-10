@@ -191,8 +191,7 @@ function vidyen_wm_sub_menu_page()
 
 	//Adding a nonce to the post
 	$vyps_nonce_check = wp_create_nonce( 'vidyen-vy-wm-nonce' );
-
-  $VYPS_worker_url = plugins_url( 'includes/images/stat_vyworker_001.gif',  __FILE__ );
+  $VYPS_worker_url = plugins_url( 'images/stat_vyworker_001.gif', dirname(__FILE__) );
 	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'"></div>';
 	//Static text for the base plugin
 	$vidyen_wm_menu_html_ouput ='

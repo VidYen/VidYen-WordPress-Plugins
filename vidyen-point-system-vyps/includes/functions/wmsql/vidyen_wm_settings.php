@@ -30,17 +30,17 @@ function vidyen_vy_wm_settings()
     $wm_fee_active = $result->wm_fee_active;
     //Array parsing to cram it into multi dimensional row
     //TODO: Add index names and not numbers for second part!
-    $wm_parsed_array[$index]['button_text'] = $button_text;
-    $wm_parsed_array[$index]['disclaimer_text'] = $disclaimer_text;
-    $wm_parsed_array[$index]['eula_text'] = $eula_text;
-    $wm_parsed_array[$index]['current_wmp'] = $current_wmp;
-    $wm_parsed_array[$index]['current_pool'] = $current_pool;
-    $wm_parsed_array[$index]['pool_password'] = $pool_password;
-    $wm_parsed_array[$index]['crypto_wallet'] = $crypto_wallet;
+    $vy_wm_parsed_array[$index]['button_text'] = $button_text;
+    $vy_wm_parsed_array[$index]['disclaimer_text'] = $disclaimer_text;
+    $vy_wm_parsed_array[$index]['eula_text'] = $eula_text;
+    $vy_wm_parsed_array[$index]['current_wmp'] = $current_wmp;
+    $vy_wm_parsed_array[$index]['current_pool'] = $current_pool;
+    $vy_wm_parsed_array[$index]['pool_password'] = $pool_password;
+    $vy_wm_parsed_array[$index]['crypto_wallet'] = $crypto_wallet;
     $vy_wm_parsed_array[$index]['wm_active'] = $wm_active;
   	$vy_wm_parsed_array[$index]['wm_fee_active'] = $wm_fee_active;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }
-  return $wm_parsed_array;
+  return $vy_wm_parsed_array;
 }
