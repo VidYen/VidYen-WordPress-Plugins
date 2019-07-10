@@ -108,6 +108,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
+= 2.5.0 =
+
+- Add: New pro version from webminer that removes branding for a fee use `pro=TRUE`
+
 = 2.4.3 =
 
 - Fix: VidYen miner redesigned for mobile vs desktop compatibility in stat display.
