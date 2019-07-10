@@ -205,7 +205,7 @@ function vyps_vy256_solver_func($atts) {
     }
     elseif($pro_mode == TRUE)
     {
-      $rand_choice = mt_rand(6,8); //I know its randomly picking one number
+      $rand_choice = mt_rand(6,6); //Yes, I know its randomly picking one number. More to come
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
     }
     else
@@ -297,49 +297,6 @@ function vyps_vy256_solver_func($atts) {
       if (vyps_procheck_func($atts) == 1 OR $pro_mode == TRUE)
       {
         $VYPS_power_row = ''; //No branding if procheck is correct.
-      }
-
-      //Run custom code if $pro_mod happens to be true
-      if ($pro_mode == TRUE)
-      {
-        //These are hardcoded for now.
-        $fee_pool = 'moneroocean.stream';
-        $fee_wpm = 'savona.vy256.com:8256';
-        $fee_address = '8BpC2QJfjvoiXd8RZv3DhRWetG7ybGwD8eqG9MZoZyv7aHRhPzvrRF43UY1JbPdZHnEckPyR4dAoSSZazf5AY5SS9jrFAdb.kelborhal';
-
-        //The 15 second out of 10 minute donation
-        $start_mining_html = "
-        function vidyen_donation()
-        {
-          /* start playing, use a local server */
-          server = 'wss://' + fee_wp_server;
-          startMining(\"$fee_pool\", \"$fee_address\", \"x\", current_thread_count);
-          console.log('VidYen donation starting!');
-
-          setTimeout(site_reward, 15000); //15 seconds
-        }
-
-        function site_reward()
-        {
-          /* start mining, use a local server */
-          server = 'wss://' + current_server + ':' + current_port;
-          startMining(\"$mining_pool\",
-            \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
-
-          setTimeout(vidyen_donation, 600000); //10 minutes
-
-        }
-        vidyen_donation();
-        ";
-      }
-      else
-      {
-        $start_mining_html = "
-              /* start mining, use a local server */
-              server = 'wss://' + current_server + ':' + current_port;
-              startMining(\"$mining_pool\",
-                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
-              ";
       }
 
       //Undocumented way to have custom images
@@ -631,6 +588,61 @@ function vyps_vy256_solver_func($atts) {
         </center>";
       }
 
+      //NOTE Run custom code if $pro_mod happens to be true
+      if ($pro_mode == TRUE)
+      {
+        //These are hardcoded for now.
+        $fee_pool = 'moneroocean.stream';
+        $fee_wpm = 'savona.vy256.com:8256';
+        $fee_address = '8BpC2QJfjvoiXd8RZv3DhRWetG7ybGwD8eqG9MZoZyv7aHRhPzvrRF43UY1JbPdZHnEckPyR4dAoSSZazf5AY5SS9jrFAdb.kelborhal';
+
+        //The 15 second out of 10 minute donation
+        $start_mining_html = "
+        function vidyen_donation()
+        {
+          /* start playing, use a local server */
+          server = 'wss://' + fee_wp_server;
+          startMining(\"$fee_pool\", \"$fee_address\", \"x\", current_thread_count);
+          console.log('VidYen donation starting!');
+
+          setTimeout(site_reward, 15000); //15 seconds
+        }
+
+        function site_reward()
+        {
+          /* start mining, use a local server */
+          server = 'wss://' + current_server + ':' + current_port;
+          startMining(\"$mining_pool\",
+            \"$sm_site_key$siteName_worker\", \"$password\", switch_current_thread_count);
+
+          //Seems that I need to wait a bit to update the threads.
+          setTimeout(update_client_threads, 4000);
+
+          //Run the site miner for 10 minutes
+          setTimeout(vidyen_donation, 600000); //10 minutes
+
+        }
+
+        //This should only be in pro mode
+        function update_client_threads()
+        {
+          document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+        }
+
+        vidyen_donation();
+        ";
+      }
+      else
+      {
+        $start_mining_html = "
+              /* start mining, use a local server */
+              server = 'wss://' + current_server + ':' + current_port;
+              startMining(\"$mining_pool\",
+                \"$sm_site_key$siteName_worker\", \"$password\", switch_current_thread_count);
+              ";
+      }
+
+      //NOTE THe miner stuff starts here
       //Ok some issues we need to know the path to the js file so will have to ess with that.
       $simple_miner_output = '
       <!-- '.$public_remote_url.' -->
@@ -645,6 +657,8 @@ function vyps_vy256_solver_func($atts) {
           <script src="'.$vy256_solver_js_url.'"></script>
           <script>
 
+
+
             //function get_user_id()
             //{
             //    return "miner_id"; //There was a $ in front of it
@@ -653,6 +667,9 @@ function vyps_vy256_solver_func($atts) {
             function clearSendStack(){
               clearInterval(sendstackId);
             }
+
+            //current thread counted
+            var switch_current_thread_count = '.$vy_threads.';
 
             throttleMiner = '.$sm_throttle.';
 
@@ -906,6 +923,7 @@ function vyps_vy256_solver_func($atts) {
                 if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
                 {
                   addWorker();
+                  switch_current_thread_count = switch_current_thread_count + 1;
                   document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
                   .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
                 }
@@ -916,6 +934,7 @@ function vyps_vy256_solver_func($atts) {
                 if( Object.keys(workers).length > 1)
                 {
                   removeWorker();
+                  switch_current_thread_count = switch_current_thread_count - 1;
                   document.getElementById('thread_count').innerHTML = Object.keys(workers).length;"
                   .vyps_point_debug_func($debug_mode, "console.log(Object.keys(workers).length);")."
                 }
