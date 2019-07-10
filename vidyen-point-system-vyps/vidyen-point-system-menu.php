@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 //adding menues
 add_action('admin_menu', 'vyps_points_menu');
 
+//This are built into the old core.
 function vyps_points_menu()
 {
     $parent_page_title = "VidYen Point System";
@@ -37,10 +38,11 @@ function vyps_points_menu()
 }
 
 /*** Menu Includes ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/menus/core_shortcodes_menu.php'); //Core shortcodes. Will be just deemed VYPS Shortcodes for menu's sake. Order 360
-include( plugin_dir_path( __FILE__ ) . 'includes/menus/as_menu.php'); //Adscend menu 400 order
-include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256-menu.php'); //CH menu 366 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vidyen-core-shortcodes-menu.php'); //Core shortcodes. Will be just deemed VYPS Shortcodes for menu's sake. Order 360
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vidyen-adscend-menu.php'); //Adscend menu 400 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vy256-menu.php'); //vy256 menu 366 order
 include( plugin_dir_path( __FILE__ ) . 'includes/menus/wannads-menu.php'); //CH menu 420 order
+include( plugin_dir_path( __FILE__ ) . 'includes/menus/vidyen-wm-menu.php'); //VYWM menu 286 order. I'm moving this up.
 
 /*** End of Menu Includes ***/
 

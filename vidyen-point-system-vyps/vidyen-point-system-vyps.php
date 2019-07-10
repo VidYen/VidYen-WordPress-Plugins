@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      2.5.0
+Version:      3.0.0
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -88,6 +88,22 @@ function vyps_points_install()
 		game_id tinytext NOT NULL,
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
+
+		$table_name_wm = $wpdb->prefix . 'vidyen_wm_settings';
+
+		$sql .= "CREATE TABLE {$table_name_wm} (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		button_text TINYTEXT NOT NULL,
+		disclaimer_text MEDIUMTEXT NOT NULL,
+		eula_text MEDIUMTEXT NOT NULL,
+		current_wmp varchar(256) NOT NULL,
+		current_pool varchar(256) NOT NULL,
+		pool_password varchar(256) NOT NULL,
+		crypto_wallet varchar(256) NOT NULL,
+		wm_active BOOL NOT NULL,
+		wm_fee_active BOOL NOT NULL,
+		PRIMARY KEY  (id)
+				) {$charset_collate};";
 
     require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I am concerned that this used ABSPATH rather than the normie WP methods
 
@@ -219,6 +235,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_credi
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_deduct_func.php'); //Streamlined deduct
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_debug_func.php'); //Debug mode. Reduces memory footprint of miner.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_timer.php'); //Timer moved to its own function since more than one short code using it
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/wmsql/vidyen_wm_settings.php'); //Timer moved to its own function since more than one short code using it
 
 /*** MO API ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now

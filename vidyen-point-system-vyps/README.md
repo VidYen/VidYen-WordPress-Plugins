@@ -5,7 +5,7 @@ Tags: Rewards, Miner, Crypto, Monero, Adscend, Wannads, mining, WooCommerce, Gam
 Requires at least: 4.9.8
 Tested up to: 5.2.2
 Requires PHP: 7.0
-Stable tag: 2.3.0
+Stable tag: 3.0.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,10 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 - AdGate Media - Offer Walls [Privacy Policy](https://adgatemedia.com/pp.php)
 
 == Changelog ==
+
+= 2.5.0 =
+
+- Update: Evolutionary jump to GUI miner.
 
 = 2.5.0 =
 
