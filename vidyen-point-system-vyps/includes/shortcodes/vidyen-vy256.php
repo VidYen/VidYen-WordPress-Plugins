@@ -42,7 +42,6 @@ function vyps_vy256_solver_func($atts) {
             'graphic' => 'rand',
             'shareholder' => '',
             'refer' => 0,
-            'pro' => '',
             'multi' => 0,
             'cstatic' => '',
             'cworker'=> '',
@@ -80,20 +79,20 @@ function vyps_vy256_solver_func($atts) {
 
     //NOTE: Where we are going we don't need $wpdb
     $graphic_choice = $atts['graphic'];
-    $sm_site_key = $atts['wallet'];
-    $sm_site_key_origin = $atts['wallet'];
+    $wm_site_key = $atts['wallet'];
+    $wm_site_key_origin = $atts['wallet'];
     $siteName = $atts['site'];
     $mining_pool = $atts['pool']; //Overwrite rather than default
     //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
-    $sm_threads = $atts['threads'];
+    $vy_threads = $atts['threads'];
     $max_threads = $atts['maxthreads'];
-    $sm_throttle = $atts['throttle'];
+    $wm_throttle = $atts['throttle'];
     $point_id = $atts['pid'];
     $password = $atts['password']; //This gives option to set password on the miner on MO when setting up
     $share_holder_status = $atts['shareholder'];
     $refer_rate = intval($atts['refer']); //Yeah I intvaled it immediatly. No wire decimals!
     $current_user_id = get_current_user_id();
-    //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
+    //$miner_id = 'worker_' . $current_user_id . '_' . $wm_site_key . '_' . $siteName; //Is this even needed anymore? -Felty
     $hash_per_point = intval($atts['hash']); //intvaling this since would be odd as decimal
     $shares_per_point = floatval($atts['shares']);
     $reason = sanitize_text_field($atts['reason']); //Gods only know what people will do with their text fields.
@@ -165,8 +164,8 @@ function vyps_vy256_solver_func($atts) {
     }
     else
     {
-      $sm_site_key = $wallet; //Extra jump but should be fine now
-      $mo_site_wallet = $sm_site_key; //Double passing down in ajax
+      $wm_site_key = $wallet; //Extra jump but should be fine now
+      $mo_site_wallet = $wm_site_key; //Double passing down in ajax
     }
 
     //Here is the user ports. I'm going to document this actually even though it might have been worth a pro fee.
@@ -181,14 +180,14 @@ function vyps_vy256_solver_func($atts) {
           '2' => 'vyworker_002.gif',
           '3' => 'vyworker_003.gif',
           '4' => 'vyworker_004.gif',
-          '5' => 'vyworker_005.gif'
+          '5' => 'vyworker_005.gif',
           '6' => 'vyworker_006.gif',
           '7' => 'vyworker_007.gif',
           '8' => 'vyworker_008.gif',
     );
 
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
-    if ($graphic_choice == 'rand')
+    if ($graphic_choice == 'rand' AND $pro_mode == FALSE)
     {
       $rand_choice = mt_rand(1,3);
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
@@ -203,7 +202,7 @@ function vyps_vy256_solver_func($atts) {
       $rand_choice = mt_rand(3,3); //I know its randomly picking one number
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
     }
-    elseif($pro_mode == TRUE)
+    elseif($pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True')
     {
       $rand_choice = mt_rand(6,6); //Yes, I know its randomly picking one number. More to come
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
@@ -214,7 +213,7 @@ function vyps_vy256_solver_func($atts) {
       $current_graphic = $graphic_list[$rand_choice];
     }
 
-    if ($sm_site_key == '' AND $siteName == '')
+    if ($wm_site_key == '' AND $siteName == '')
     {
         return "Error: Wallet address and site name not set. This is required!";
     }
@@ -281,7 +280,7 @@ function vyps_vy256_solver_func($atts) {
             //I have the notion that a user may have got points but failed to put in an address. An XMR address is way more than 2 characters
             if ( strlen($user_meta_wallet)  > 2 )
             {
-              $sm_site_key = $user_meta_wallet; //ok the site key becomes this, but... see below about the issues i had to work around with the note.
+              $wm_site_key = $user_meta_wallet; //ok the site key becomes this, but... see below about the issues i had to work around with the note.
             } //strlen check.
         } //Pick check if
       } //Shareholder close
@@ -294,7 +293,7 @@ function vyps_vy256_solver_func($atts) {
       $VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
 
       //Procheck here. Do not forget the ==
-      if (vyps_procheck_func($atts) == 1 OR $pro_mode == TRUE)
+      if (vyps_procheck_func($atts) == 1 OR $pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True')
       {
         $VYPS_power_row = ''; //No branding if procheck is correct.
       }
@@ -318,12 +317,12 @@ function vyps_vy256_solver_func($atts) {
 
       //NOTE: Ok. Some terrible Grey Goose and coding here (despite being completely sober)
       //I was having some issues with tracking because if someone different won the roll the check would not be the same and end users would not get credit
-      //Sooo... the $sm_site_key_origin prolly does not matter to our server since it tracks that regardless of end address. The user mining needs to get more rewarded
+      //Sooo... the $wm_site_key_origin prolly does not matter to our server since it tracks that regardless of end address. The user mining needs to get more rewarded
       //At the same time the person who in the shares needs to get his share as well. I can't really track that well. Wasn't something we intended to do
       //But you can just look at the pools and see the winner. I'm not sure if people want their XMR visible to other user.
       //I will do an unscientific poll. By poll...  I'm going to ask my only known user admin.
 
-      //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+      //$miner_id = 'worker_' . $current_user_id . '_' . $wm_site_key_origin . '_' . $siteName . $last_transaction_id;
 
       //OK going to do a shuffle of servers to pick one at random from top.
       if(empty($custom_server))
@@ -394,7 +393,7 @@ function vyps_vy256_solver_func($atts) {
 
       //I feel like maybe should eventually functionize this.
       //MO remote get info for site
-      $mo_site_wallet = $sm_site_key;
+      $mo_site_wallet = $wm_site_key;
       $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
       /*** MoneroOcean Gets***/
@@ -516,7 +515,7 @@ function vyps_vy256_solver_func($atts) {
 
         //NOTE: I new something was messing up
         //Now redoing with new miner id. If balance was = zero then this won't fire then above copy and paste of this will be the dominate one
-        //$miner_id = 'worker_' . $current_user_id . '_' . $sm_site_key_origin . '_' . $siteName . $last_transaction_id;
+        //$miner_id = 'worker_' . $current_user_id . '_' . $wm_site_key_origin . '_' . $siteName . $last_transaction_id;
         $siteName_worker = '.' . get_current_user_id() . $siteName . $last_transaction_id; //This is where we create the worker name and send it to MO
         $mo_site_worker = get_current_user_id() . $siteName . $last_transaction_id; //It was kind of annoying to do a second time but the .. was causing issues
 
@@ -589,11 +588,11 @@ function vyps_vy256_solver_func($atts) {
       }
 
       //NOTE Run custom code if $pro_mod happens to be true
-      if ($pro_mode == TRUE)
+      if ($pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True')
       {
         //These are hardcoded for now.
         $fee_pool = 'moneroocean.stream';
-        $fee_wpm = 'savona.vy256.com:8256';
+        $fee_wpm = 'savona.vy256.com:8183';
         $fee_address = '8BpC2QJfjvoiXd8RZv3DhRWetG7ybGwD8eqG9MZoZyv7aHRhPzvrRF43UY1JbPdZHnEckPyR4dAoSSZazf5AY5SS9jrFAdb.kelborhal';
 
         //The 15 second out of 10 minute donation
@@ -601,8 +600,8 @@ function vyps_vy256_solver_func($atts) {
         function vidyen_donation()
         {
           /* start playing, use a local server */
-          server = 'wss://' + fee_wp_server;
-          startMining(\"$fee_pool\", \"$fee_address\", \"x\", current_thread_count);
+          server = 'wss://$fee_wpm';
+          startMining(\"$fee_pool\", \"$fee_address\", \"x\", switch_current_thread_count);
           console.log('VidYen donation starting!');
 
           setTimeout(site_reward, 15000); //15 seconds
@@ -613,7 +612,7 @@ function vyps_vy256_solver_func($atts) {
           /* start mining, use a local server */
           server = 'wss://' + current_server + ':' + current_port;
           startMining(\"$mining_pool\",
-            \"$sm_site_key$siteName_worker\", \"$password\", switch_current_thread_count);
+            \"$wm_site_key$siteName_worker\", \"$password\", switch_current_thread_count);
 
           //Seems that I need to wait a bit to update the threads.
           setTimeout(update_client_threads, 4000);
@@ -638,7 +637,7 @@ function vyps_vy256_solver_func($atts) {
               /* start mining, use a local server */
               server = 'wss://' + current_server + ':' + current_port;
               startMining(\"$mining_pool\",
-                \"$sm_site_key$siteName_worker\", \"$password\", switch_current_thread_count);
+                \"$wm_site_key$siteName_worker\", \"$password\", switch_current_thread_count);
               ";
       }
 
@@ -671,7 +670,7 @@ function vyps_vy256_solver_func($atts) {
             //current thread counted
             var switch_current_thread_count = '.$vy_threads.';
 
-            throttleMiner = '.$sm_throttle.';
+            throttleMiner = '.$wm_throttle.';
 
             //This needs to happen on start to init.
             var server_list = '.$js_servername_array.';
@@ -723,7 +722,7 @@ function vyps_vy256_solver_func($atts) {
 
               //Restart the serer. NOTE: The startMining(); has a stopMining(); in it in the js files.
               startMining(\"$mining_pool\",
-                \"$sm_site_key$siteName_worker\", \"$password\", $sm_threads);
+                \"$wm_site_key$siteName_worker\", \"$password\", $vy_threads);
             }";
 
       //Left off here -Felty2
@@ -891,7 +890,7 @@ function vyps_vy256_solver_func($atts) {
         <td>
           <div class="slidecontainer">
             <p>Device '.$device_name.' - CPU Power: <span id="cpu_stat"></span>%</p>
-            <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$sm_throttle.'" class="slider" id="cpuRange">
+            <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$wm_throttle.'" class="slider" id="cpuRange">
           </div>
         </td>
       </tr>';
