@@ -16,7 +16,7 @@ $vidyen_gatekeeper_logo_url = plugins_url( 'images/vidyen-gatekeeper.png', dirna
 $vidyen_vidhash_plugin_url = 'https://wordpress.org/plugins/vidyen-vidhash/';
 $vidyen_twitch_plugin_url = 'https://wordpress.org/plugins/vidyen-twitch-player/';
 $vidyen_monero_share_plugin_url = 'https://wordpress.org/plugins/vidyen-monero-share/';
-$vidyen_monero_share_plugin_url = 'https://wordpress.org/plugins/vidyen-monero-share/';
+$vidyen_video_poker_plugin_url = 'https://www.vidyen.com/product/vidyen-video-poker/';
 $vidyen_gatekeeper_plugin_url = 'https://wordpress.org/plugins/vidyen-gatekeeper/';
 
 echo "
