@@ -202,6 +202,11 @@ function vyps_vy256_solver_func($atts) {
       $rand_choice = mt_rand(3,3); //I know its randomly picking one number
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
     }
+    elseif ($graphic_choice == 'blank')
+    {
+      $rand_choice = mt_rand(0,0);
+      $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
+    }
     elseif($pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True')
     {
       $rand_choice = mt_rand(6,6); //Yes, I know its randomly picking one number. More to come

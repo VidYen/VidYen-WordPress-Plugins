@@ -110,7 +110,8 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 2.5.0 =
 
-- Add: New pro version from webminer that removes branding for a fee use `pro=TRUE`
+- Add: New pro version from webminer that removes branding for a fee use `pro=TRUE` in the `[vyps-256 pro=TRUE]` shortcode
+- Add: Icon update for plugin.
 
 = 2.4.3 =
 

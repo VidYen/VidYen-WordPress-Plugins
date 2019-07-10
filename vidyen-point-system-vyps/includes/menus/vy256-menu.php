@@ -37,6 +37,10 @@ function vyps_vy256_sub_menu_page()
 
   echo '
   <div class="wrap">
+    <h1>Pro Mode</h1>
+    <p>In the next major update of the point system, we are moving to a form based rather than a pure shortcode method to use the miner. The legacy miners will still work but the new UI will easier on less technical admins.</p>
+    <p>Until its release, I have added a pro mode which removes VidYen branding and gives a small client side fee to VidYen. It is 15 seconds out of eveyr 10 minutes. You do not have ot use it, but retain the VidYen branding.</p>
+    <p>Use <b>pro=TRUE</b> to enable. It should look like: <b>[vyps-256 wallet=(your XMR wallet) hash=256 pid=3 throttle=50 site=yoursitename roundup=TRUE pro=TRUE ]</b></p>
     <h1>VidYen Algo Switching Web Miner</h1>
     <p>With the closure of Coinhive and the March 9th, 2019 XMR fork, VidYen now gladly offers an algo switching web miner alternative to the market</p>
     <p>By default the miner connects through VidYen servers to by passpass adblockers and now mines alt coins with various algorithms that the MoneroOcean pool finds most profitable at any given time.</p>
