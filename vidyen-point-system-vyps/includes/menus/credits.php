@@ -10,12 +10,14 @@ $vidyen_vidhash_logo_url = plugins_url( 'images/vidyen-vidhash.png', dirname(__F
 $vidyen_twitch_logo_url = plugins_url( 'images/vidyen-twitch.png', dirname(__FILE__) );
 $vidyen_monero_share_logo_url = plugins_url( 'images/vidyen-monero-share.png', dirname(__FILE__) );
 $vidyen_poker_game_logo_url = plugins_url( 'images/pokergame.png', dirname(__FILE__) );
+$vidyen_gatekeeper_logo_url = plugins_url( 'images/vidyen-gatekeeper.png', dirname(__FILE__) );
 
 //Plugin URLS
 $vidyen_vidhash_plugin_url = 'https://wordpress.org/plugins/vidyen-vidhash/';
 $vidyen_twitch_plugin_url = 'https://wordpress.org/plugins/vidyen-twitch-player/';
 $vidyen_monero_share_plugin_url = 'https://wordpress.org/plugins/vidyen-monero-share/';
-$vidyen_video_poker_plugin_url = 'https://www.vidyen.com/product/vidyen-video-poker/';
+$vidyen_monero_share_plugin_url = 'https://wordpress.org/plugins/vidyen-monero-share/';
+$vidyen_gatekeeper_plugin_url = 'https://wordpress.org/plugins/vidyen-gatekeeper/';
 
 echo "
   <h1>Pro Version</h1>
@@ -34,6 +36,8 @@ echo '
       <td><a href="' . $vidyen_twitch_plugin_url . '" target= "_blank"><img src="' . $vidyen_twitch_logo_url . '" ></a></td>
       <td> </td>
       <td><a href="' . $vidyen_monero_share_plugin_url . '" target= "_blank"><img src="' . $vidyen_monero_share_logo_url . '" ></a></td>
+      <td> </td>
+      <td><a href="' . $vidyen_gatekeeper_plugin_url . '" target= "_blank"><img src="' . $vidyen_gatekeeper_logo_url . '" ></a></td>
     </tr>
     <tr>
       <td>VidYen YouTube Miner</td>
@@ -41,6 +45,8 @@ echo '
       <td>VidYen Twitch Miner</td>
       <td> </td>
       <td>VidYen Monero Share</td>
+      <td> </td>
+      <td>VidYen Gatekeeper</td>
     </tr>
   </table>
   <h2>Available for Purchase</h2>
@@ -53,7 +59,6 @@ echo '
 <p>WordPress has instructons on how to export your tables <a href="https://codex.wordpress.org/Backing_Up_Your_Database" target="_blank">found here</a>.</p>
 <p>The table for the user data for VYPS is called: <b>(db)_vyps_points_log</b></p>
 <h2>Coming Soon:</h2>
-<p>Combat Game</p>
 <p>Strategy Game</p>
 <h1>Warranty</h1>
 <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 2 of the License</p></p>
