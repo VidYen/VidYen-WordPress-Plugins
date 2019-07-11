@@ -88,7 +88,7 @@ function vidyen_wm_sub_menu_page()
 			$current_pool  = $vy_wm_parsed_array[$index]['current_pool'];
 		}
 
-		//The current pool password if supplied
+		//The current site name if supplied
 		if (isset($_POST['site_name']))
 		{
 			$site_name = sanitize_text_field($_POST['site_name']);
@@ -128,6 +128,26 @@ function vidyen_wm_sub_menu_page()
 			$wm_fee_active  = 0;
 		}
 
+		//The desired amount of threads
+		if (isset($_POST['wm_threads']))
+		{
+			$wm_threads = intval($_POST['wm_threads']);
+		}
+		else
+		{
+			$wm_threads  = $vy_wm_parsed_array[$index]['wm_threads'];
+		}
+
+		//The desired amount of throttle
+		if (isset($_POST['wm_throttle']))
+		{
+			$wm_throttle = intval($_POST['wm_throttle']);
+		}
+		else
+		{
+			$wm_throttle  = $vy_wm_parsed_array[$index]['wm_throttle'];
+		}
+
 
 
     $table_name_vy_wm = $wpdb->prefix . 'vidyen_wm_settings';
@@ -143,6 +163,8 @@ function vidyen_wm_sub_menu_page()
 	      'crypto_wallet' => $crypto_wallet,
 	      'wm_active' => $wm_active,
 	      'wm_fee_active' => $wm_fee_active,
+				'wm_threads' => $wm_threads,
+				'wm_throttle' => $wm_throttle,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
@@ -164,6 +186,8 @@ function vidyen_wm_sub_menu_page()
 	$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
 	$wm_active = $vy_wm_parsed_array[$index]['wm_active'];
 	$wm_fee_active  = $vy_wm_parsed_array[$index]['wm_fee_active'];
+	$wm_threads = $vy_wm_parsed_array[$index]['wm_threads'];
+	$wm_throttle = $vy_wm_parsed_array[$index]['wm_throttle'];
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
 	if ($wm_active == 1)
@@ -248,6 +272,14 @@ function vidyen_wm_sub_menu_page()
 			<tr>
 				<td>Your XMR Based Crypto Wallet:</td>
 				<td><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" required="true"></td>
+			</tr>
+			<tr>
+				<td>Default Threads:</td>
+				<td><input type="number" name="wm_threads" id="wm_threads" step="3" min="1" max="10" value="'.$wm_threads.'" size="128" required="true"></td>
+			</tr>
+			<tr>
+				<td>Default CPU Throttle:</td>
+				<td><input type="number" name="wm_throttle" id="wm_throttle" step="0" min="1" max="100" value="'.$wm_throttle.'" size="128" required="true"></td>
 			</tr>
 			<tr>
 				<td><input type="checkbox" name="wm_active" id="wm_active" value="1" '.$wm_checked.'>Activate Webminer</td>
