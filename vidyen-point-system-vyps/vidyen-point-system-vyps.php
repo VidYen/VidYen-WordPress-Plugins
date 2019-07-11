@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      3.0.0.4
+Version:      3.0.0.5
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -98,7 +98,7 @@ function vyps_points_install()
 		eula_text MEDIUMTEXT NOT NULL,
 		current_wmp varchar(256) NOT NULL,
 		current_pool varchar(256) NOT NULL,
-		pool_password varchar(256) NOT NULL,
+		site_name varchar(256) NOT NULL,
 		crypto_wallet varchar(256) NOT NULL,
 		wm_active BOOL NOT NULL,
 		wm_fee_active BOOL NOT NULL,
@@ -109,16 +109,18 @@ function vyps_points_install()
 
     dbDelta($sql);
 
-		$default_disclaimer_text = 'By clicking agree, you agree that you are over 18, legally allowed to use this site, have read and agreed to the the Terms of Service, and that you agree to let this site use your device resources to monetize by mining crypto to monetize the site and to use cookies and information gathered to let you use the site functionally.';
+		$site_disclaim_name = get_bloginfo('name');
+
+		$default_disclaimer_text = "By clicking the button you consent to have your browser mine cryptocurrency and to exchange it with $site_disclaim_name for points. This will use your device’s resources, so we ask you to be mindful of your CPU and battery use.";
 
 		//Default data
 		$data_insert = [
-				'button_text' => 'I agree.',
+				'button_text' => 'I agree and consent',
 				'disclaimer_text' => $default_disclaimer_text,
 				'eula_text' => '',
 				'current_wmp' => 'savona.vy256.com:8183',
 				'current_pool' => 'moneroocean.stream',
-				'pool_password' => '',
+				'site_name' => 'default',
 				'crypto_wallet' => '',
 				'wm_active' => 0,
 			  'wm_fee_active' => 0,

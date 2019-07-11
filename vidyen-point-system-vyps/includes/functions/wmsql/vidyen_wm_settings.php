@@ -24,7 +24,7 @@ function vidyen_vy_wm_settings()
     $eula_text = $result->eula_text;
     $current_wmp = $result->current_wmp;
     $current_pool = $result->current_pool;
-    $pool_password = $result->pool_password;
+    $site_name = $result->site_name;
     $crypto_wallet = $result->crypto_wallet;
     $wm_active = $result->wm_active;
     $wm_fee_active = $result->wm_fee_active;
@@ -35,7 +35,7 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['eula_text'] = $eula_text;
     $vy_wm_parsed_array[$index]['current_wmp'] = $current_wmp;
     $vy_wm_parsed_array[$index]['current_pool'] = $current_pool;
-    $vy_wm_parsed_array[$index]['pool_password'] = $pool_password;
+    $vy_wm_parsed_array[$index]['site_name'] = $site_name;
     $vy_wm_parsed_array[$index]['crypto_wallet'] = $crypto_wallet;
     $vy_wm_parsed_array[$index]['wm_active'] = $wm_active;
   	$vy_wm_parsed_array[$index]['wm_fee_active'] = $wm_fee_active;

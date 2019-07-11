@@ -89,13 +89,13 @@ function vidyen_wm_sub_menu_page()
 		}
 
 		//The current pool password if supplied
-		if (isset($_POST['pool_password']))
+		if (isset($_POST['site_name']))
 		{
-			$pool_password = sanitize_text_field($_POST['pool_password']);
+			$site_name = sanitize_text_field($_POST['site_name']);
 		}
 		else
 		{
-			$pool_password  = $vy_wm_parsed_array[$index]['pool_password'];
+			$site_name  = $vy_wm_parsed_array[$index]['site_name'];
 		}
 
 		//The crypto wallet. This field should have been required but *shrugs*
@@ -139,7 +139,7 @@ function vidyen_wm_sub_menu_page()
 	      'eula_text' => $eula_text,
 	      'current_wmp' => $current_wmp,
 	      'current_pool' => $current_pool,
-	      'pool_password' => $pool_password,
+	      'site_name' => $site_name,
 	      'crypto_wallet' => $crypto_wallet,
 	      'wm_active' => $wm_active,
 	      'wm_fee_active' => $wm_fee_active,
@@ -160,7 +160,7 @@ function vidyen_wm_sub_menu_page()
 	$eula_text  = $vy_wm_parsed_array[$index]['eula_text'];
 	$current_wmp  = $vy_wm_parsed_array[$index]['current_wmp'];
 	$current_pool  = $vy_wm_parsed_array[$index]['current_pool'];
-	$pool_password  = $vy_wm_parsed_array[$index]['pool_password'];
+	$site_name  = $vy_wm_parsed_array[$index]['site_name'];
 	$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
 	$wm_active = $vy_wm_parsed_array[$index]['wm_active'];
 	$wm_fee_active  = $vy_wm_parsed_array[$index]['wm_fee_active'];
@@ -183,6 +183,24 @@ function vidyen_wm_sub_menu_page()
 	else
 	{
 		$wm_fee_checked = '';
+	}
+
+	$vy_algo_selected = '';
+	$vy_pico_selected = '';
+	$mo_algo_selected = '';
+
+	//It dawned on me that these need to go only oce after the SQL parse has been redone.
+	if ($current_wmp == 'savona.vy256.com:8183')
+	{
+		$vy_algo_selected = 'selected';
+	}
+	elseif ($current_wmp == 'igori.vy256.com:8256')
+	{
+		$vy_pico_selected = 'selected';
+	}
+	elseif ($current_wmp == 'webminer.moneroocean.stream:443')
+	{
+		$mo_algo_selected = 'selected';
 	}
 
 	//It's possible we don't use the VYPS logo since no points.
@@ -214,16 +232,18 @@ function vidyen_wm_sub_menu_page()
 				<td><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
 			</tr>
 			<tr>
-				<td>Current WMP Server:</td>
-				<td><input type="text" name="current_wmp" id="current_wmp" value="'.$current_wmp.'" size="128" required="true"></td>
+				<td>Current Web Mining Pool Proxy Server:</td>
+				<td>
+					<select name="current_wmp" id="current_wmp">
+						<option value="savona.vy256.com:8183" '.$vy_algo_selected.'>VidYen Algo Switcher</option>
+						<option value="igori.vy256.com:8256" '.$vy_pico_selected.'>VidYen CN-PICO Only</option>
+						<option value="webminer.moneroocean.stream:443" '.$mo_algo_selected.'>MoneroOcean Algo Switcher</option>
+					</select>
+				</td>
 			</tr>
 			<tr>
-				<td>Current Mining Pool:</td>
-				<td><input type="text" name="current_pool" id="current_pool" value="'.$current_pool.'" size="128" required="true"></td>
-			</tr>
-			<tr>
-				<td>Pool Password:</td>
-				<td><input type="text" name="pool_password" id="pool_password" value="'.$pool_password.'" size="128"></td>
+				<td>Site Name:</td>
+				<td><input type="text" name="site_name" id="site_name" value="'.$site_name.'" size="128"></td>
 			</tr>
 			<tr>
 				<td>Your XMR Based Crypto Wallet:</td>
@@ -259,65 +279,6 @@ function vidyen_wm_sub_menu_page()
 	<h2>Spport</h2>
 	<p>Feel free to open a post on the WordPress forums or reach out to us on the <a href="https://discord.gg/6svN5sS" target="_blank">VidYen Discord</a></p>
 	<p>It is my personal intention to make WebMining the default way of monetization in the future. If you do have problems, I will be happy to look into regardless of the issue. -Felty</p>
-	<h2>VidYen WMP Servers</h2>
-	<p>savona.vy256.com:8183</p>
-	<p>vesalius.vy256.com:8443</p>
-	<p>daidem.vidhash.com:8443</p>
-	<p>clarion.vidhash.com:8286</p>
-	<p>clarion.vidhash.com:8186</p>
-	<h2>VidYen WMP TRTL Only Servers</h2>
-	<p>igori.vy256.com:8256</p>
-	<h2>Alternate 3rd party WMP Servers</h2>
-	<p>Note! These may not be as adblock friendly as VidYen servers.</p>
-	<p>webminer.moneroocean.stream:443</p>
-	<h2>List of known valid Pools (Payouts handled through pools!)</h2>
-	<p>moneroocean.stream</p>
-	<p>xmrpool.eu</p>
-	<p>moneropool.com</p>
-	<p>monero.crypto-pool.fr</p>
-	<p>monerohash.com</p>
-	<p>minexmr.com</p>
-	<p>usxmrpool.com</p>
-	<p>supportxmr.com</p>
-	<p>moneroocean.stream:100</p>
-	<p>moneroocean.stream</p>
-	<p>poolmining.org</p>
-	<p>minemonero.pro</p>
-	<p>xmr.prohash.net</p>
-	<p>minercircle.com</p>
-	<p>xmr.nanopool.org</p>
-	<p>xmrminerpro.com</p>
-	<p>clawde.xyz</p>
-	<p>dwarfpool.com</p>
-	<p>xmrpool.net</p>
-	<p>monero.hashvault.pro</p>
-	<p>osiamining.com</p>
-	<p>killallasics</p>
-	<p>arhash.xyz</p>
-	<p>aeon-pool.com</p>
-	<p>minereasy.com</p>
-	<p>aeon.sumominer.com</p>
-	<p>aeon.rupool.tk</p>
-	<p>aeon.hashvault.pro</p>
-	<p>aeon.n-engine.com</p>
-	<p>aeonpool.xyz</p>
-	<p>aeonpool.dreamitsystems.com</p>
-	<p>aeonminingpool.com</p>
-	<p>aeonhash.com</p>
-	<p>durinsmine.com</p>
-	<p>aeon.uax.io</p>
-	<p>aeon-pool.sytes.net</p>
-	<p>aeonpool.net</p>
-	<p>supportaeon.com</p>
-	<p>pooltupi.com</p>
-	<p>aeon.semipool.com</p>
-	<p>turtlepool.space</p>
-	<p>masari.miner.rocks</p>
-	<p>etn.spacepools.org</p>
-	<p>etn.nanopool.org</p>
-	<p>etn.hashvault.pro</p>
-	<p> </p>
-	<p>If you use a 3rd party WMP server, they may support different ones!</p>
 	';
 
 	//NOTE: I keep forgetting but wss://webminer.moneroocean.stream:443 is the webmining address for MO
