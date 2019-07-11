@@ -4,9 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 //This is designed for the user query in the meta.
 //Perhaps the name is too long?
-function vidyen_mmo_mtest_user_query_func($mtest_user_id)
+function vidyen_mmo_mtest_user_query_func($mtest_id)
 {
-	$user_query = new WP_User_Query( array( 'meta_key' => 'vidyen_mmo_mtest_id', 'meta_value' => $mtest_user_id ) );
+	$user_query = new WP_User_Query( array( 'meta_key' => 'vidyen_mmo_mtest_id', 'meta_value' => $mtest_id ) );
 
 	$users = $user_query->get_results();
 

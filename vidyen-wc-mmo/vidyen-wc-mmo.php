@@ -3,7 +3,7 @@
 Plugin Name:  VidYen MMO Plugin
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  MMO Support Plugin
-Version:      0.6.0
+Version:      0.6.3
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2

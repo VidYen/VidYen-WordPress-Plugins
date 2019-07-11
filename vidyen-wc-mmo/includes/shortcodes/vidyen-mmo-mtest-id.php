@@ -25,6 +25,7 @@ function vidyen_mmo_mtest_id_func($atts)
   $user_info = get_userdata($user_id);
   $user_email =  $user_info->user_email;
   $user_registration_link = '/registerid '. $user_email;
+  $user_already_taken = ''; //Need to define as blank if not existing
   //$mtest_link_generate_url = plugins_url( 'js/', dirname(__FILE__) ) . 'mtest-id-generate.js'; //Not needed I think.
 
   //This is hardcoded, but the label we are going to cram into the usermeta table
@@ -58,8 +59,20 @@ function vidyen_mmo_mtest_id_func($atts)
       //Getting the mtest_id and things.
       $mtest_id = sanitize_text_field($_POST['mtest_id']); //Sanitize it! From orbit!
 
-      //Ok now we update in hell! (Hell = usermeta table) I wonder if anyone reads these coments. -Felty
-      update_user_meta( $user_id, $key, $mtest_id );
+      //We should check to see if the user id is the user id
+			$user_id_check = vidyen_mmo_mtest_user_query_func($mtest_id);
+
+      //Basically this is going to see if there isn't a user resgisterd or the user id already has a name but is updating with same ID
+			if ($user_id_check < 1 OR $user_id_check == $user_id)
+			{
+        //Ok now we update in hell! (Hell = usermeta table) I wonder if anyone reads these coments. -Felty
+        update_user_meta( $user_id, $key, $mtest_id );
+			}
+      else
+      {
+        $user_already_taken = '<div><b>User name already assigned! Contact admin on discord if you believe this to be in error.</b><div>';
+      }
+
     }
 
     //NOTE: This should come after the post so it will update before the refresh or otherwise the mtest_id may be out of date. Remind me to check.
@@ -90,7 +103,7 @@ function vidyen_mmo_mtest_id_func($atts)
                     <label for=\"mtest_id\">Update mtest ID:</label>
                   </th>
                   <td>
-                    <input name=\"mtest_id\" type=\"text\" id=\"mtest_id\" value=\"$mtest_id\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"256\">
+                    <input name=\"mtest_id\" type=\"text\" id=\"mtest_id\" value=\"$mtest_id\" aria-required=\"true\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"256\" required>
                   </td>
                 </tr>
               </tbody>
@@ -101,6 +114,7 @@ function vidyen_mmo_mtest_id_func($atts)
           </p>
         </form>
       </div>
+      $user_already_taken
       ";
     }
     else
@@ -128,8 +142,20 @@ function vidyen_mmo_mtest_id_func($atts)
         {
           $mtest_id = ''; //Tis blank if no post!
         }
-        //Ok now we update in hell! (Hell = usermeta table) I wonder if anyone reads these coments. 300 was a good movie. -Felty
-        update_user_meta( $user_id, $key, $mtest_id );
+
+        //We should check to see if the user id is the user id
+        $user_id_check = vidyen_mmo_mtest_user_query_func($mtest_id);
+
+        //Basically this is going to see if there isn't a user resgisterd or the user id already has a name but is updating with same ID
+        if ($user_id_check < 1 OR $user_id_check == $user_id)
+        {
+          //Ok now we update in hell! (Hell = usermeta table) I wonder if anyone reads these coments. -Felty
+          update_user_meta( $user_id, $key, $mtest_id );
+        }
+        else
+        {
+          $user_already_taken = '<div><b>User name already assigned! Contact admin on discord if you believe this to be in error.</b><div>';
+        }
       }
 
       //Adding a nonce to the post
@@ -157,7 +183,7 @@ function vidyen_mmo_mtest_id_func($atts)
                     <label for=\"mtest_id\">Mine Test ID:</label>
                   </th>
                   <td>
-                    <input name=\"mtest_id\" type=\"text\" id=\"mtest_id\" value=\"$display_mtest_id\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"256\">
+                    <input name=\"mtest_id\" type=\"text\" id=\"mtest_id\" value=\"$display_mtest_id\" autocapitalize=\"none\" autocorrect=\"off\" maxlength=\"256\" required>
                   </td>
                 </tr>
               </tbody>
@@ -169,6 +195,7 @@ function vidyen_mmo_mtest_id_func($atts)
           </p>
         </form>
       </div>
+      $user_already_taken
         ";
     }
 
@@ -190,7 +217,7 @@ function vidyen_load_mtest_id_shortcode_func($atts)
 
     $mtest_user_id = $atts['mtest_id'];
 
-    return vidyen_mmo_mtest_user_query_func($mtest_user_id);
+    return vidyen_mmo_mtest_user_query_func($mtest_user_id). ' and current user id is: '. get_current_user_id();
 }
 
 add_shortcode( 'vyps-mtest-query', 'vidyen_load_mtest_id_shortcode_func');
