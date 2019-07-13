@@ -201,32 +201,32 @@ function vidyen_gatekeeper_menu_page()
 	<table width=100%>
 		<form method="post">
 			<tr>
-				<td>Button Text:</td>
+				<td><b>Button Text:</b></td>
 				<td><input type="text" name="button_text" id="button_text" value="'.$button_text.'" size="128" required="true">
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'.$vyps_nonce_check.'"/></td>
 			</tr>
 			<tr>
-				<td>Disclaimer Text Above Button:</td>
+				<td valign="top"><b>Disclaimer Text Above The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
 				<td><textarea name="disclaimer_text" id="disclaimer_text" rows="10" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
 			</tr>
 			<tr>
-				<td>EULA Text Below Button:</td>
+				<td valign="top"><b>EULA Text Below The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
 				<td><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
 			</tr>
 			<tr>
-				<td>Current WMP Server:</td>
+				<td><b>Current WMP Proxy Server:</b></td>
 				<td><input type="text" name="current_wmp" id="current_wmp" value="'.$current_wmp.'" size="128" required="true"></td>
 			</tr>
 			<tr>
-				<td>Current Mining Pool:</td>
+				<td><b>Current Mining Pool:</b></td>
 				<td><input type="text" name="current_pool" id="current_pool" value="'.$current_pool.'" size="128" required="true"></td>
 			</tr>
 			<tr>
-				<td>Pool Password:</td>
+				<td><b>Pool Password:</b></td>
 				<td><input type="text" name="pool_password" id="pool_password" value="'.$pool_password.'" size="128"></td>
 			</tr>
 			<tr>
-				<td>Your XMR Based Crypto Wallet:</td>
+				<td><b>Your XMR Based Crypto Wallet:</b></td>
 				<td><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" required="true"></td>
 			</tr>
 			<tr>
@@ -259,19 +259,21 @@ function vidyen_gatekeeper_menu_page()
 	<h2>Spport</h2>
 	<p>Feel free to open a post on the WordPress forums or reach out to us on the <a href="https://discord.gg/6svN5sS" target="_blank">VidYen Discord</a></p>
 	<p>It is my personal intention to make WebMining the default way of monetization in the future. If you do have problems, I will be happy to look into regardless of the issue. -Felty</p>
-	<h2>VidYen WMP Servers</h2>
+	<h2>VidYen WMP Proxy Servers</h2>
 	<p>savona.vy256.com:8183</p>
 	<p>vesalius.vy256.com:8443</p>
 	<p>daidem.vidhash.com:8443</p>
 	<p>clarion.vidhash.com:8286</p>
 	<p>clarion.vidhash.com:8186</p>
-	<h2>VidYen WMP TRTL Only Servers</h2>
+	<h2>VidYen WMP TRTL Only Proxy Servers</h2>
 	<p>igori.vy256.com:8256</p>
-	<h2>Alternate 3rd party WMP Servers</h2>
-	<p>Note! These may not be as adblock friendly as VidYen servers.</p>
+	<h2>Alternate 3rd party WMP Proxy Servers</h2>
+	<p>Note: These may not be as adblock friendly as VidYen servers.</p>
 	<p>webminer.moneroocean.stream:443</p>
 	<h2>List of known valid Pools (Payouts handled through pools!)</h2>
-	<p>moneroocean.stream</p>
+	<p><a href="https://moneroocean.stream/" target="_blank">moneroocean.stream</a> - Algo Switching Pool Pay Out In XMR</p>
+	<p><a href="http://turtlepool.space/" target="_blank">turtlepool.space</a> - Turtle Coin Pool</p>
+	<p><a href="https://masari.miner.rocks/" target="_blank">masari.miner.rocks</a> - Masari Coin Pool</p>
 	<p>xmrpool.eu</p>
 	<p>moneropool.com</p>
 	<p>monero.crypto-pool.fr</p>
@@ -311,8 +313,6 @@ function vidyen_gatekeeper_menu_page()
 	<p>supportaeon.com</p>
 	<p>pooltupi.com</p>
 	<p>aeon.semipool.com</p>
-	<p>turtlepool.space</p>
-	<p>masari.miner.rocks</p>
 	<p>etn.spacepools.org</p>
 	<p>etn.nanopool.org</p>
 	<p>etn.hashvault.pro</p>
