@@ -78,7 +78,8 @@ It is, but we kept the defaults low to aid with user experience.
 = 1.0.1 =
 
 - Fix: Changed the Disclaimer and EULA to allow retention of line breaks.
-- Add: Created following fields fo EULA
+- Add: You can use `[img]image url[/img]`, `[b]bold[/b]`, and `[br]` for line breaks for HTML markup in Disclaimer and EULA sections.
+- Add: Add URL links to my most favorite pools. Will update.
 
 = 1.0.0 =
 
