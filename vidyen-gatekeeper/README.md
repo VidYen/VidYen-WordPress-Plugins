@@ -75,6 +75,11 @@ It is, but we kept the defaults low to aid with user experience.
 
 == Changelog ==
 
+= 1.0.1 =
+
+- Fix: Changed the Disclaimer and EULA to allow retention of line breaks.
+- Add: Created following fields fo EULA
+
 = 1.0.0 =
 
 - Release

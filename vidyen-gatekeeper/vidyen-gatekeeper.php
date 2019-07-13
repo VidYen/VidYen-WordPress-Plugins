@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Gatekeeper
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Lock content behind a crypto Monero web miner
-Version:      1.0.0
+Version:      1.0.1
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2

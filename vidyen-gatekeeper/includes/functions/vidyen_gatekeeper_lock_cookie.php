@@ -20,6 +20,42 @@ function vidyen_check_lock_cookie($content)
       $disclaimer_text  = $gatekeeper_parsed_array[$index]['disclaimer_text'];
       $eula_text  = $gatekeeper_parsed_array[$index]['eula_text'];
 
+      //NOTE: I've added [img][/img], [b][/b] for my own use. I'm thinking of adding links later
+      //str_replace("world","Peter","Hello world!");
+
+      //For $disclaimer_text
+      //Images
+      $disclaimer_text = str_replace("[img]",'<img src="',$disclaimer_text);
+      $disclaimer_text = str_replace("[/img]",'">',$disclaimer_text);
+      //Bold
+      $disclaimer_text = str_replace("[b]",'<b>',$disclaimer_text);
+      $disclaimer_text = str_replace("[/b]",'</b>',$disclaimer_text);
+
+      //For $eula_text
+      //Images
+      $eula_text = str_replace("[img]",'<img src="',$eula_text);
+      $eula_text = str_replace("[/img]",'">',$eula_text);
+      //Bold
+      $eula_text = str_replace("[b]",'<b>',$eula_text);
+      $eula_text = str_replace("[/b]",'</b>',$eula_text);
+
+      //For caps! Because I know someone is going to screw it up
+      //For $disclaimer_text
+      //Images
+      $disclaimer_text = str_replace("[IMG]",'<img src="',$disclaimer_text);
+      $disclaimer_text = str_replace("[/IMG]",'">',$disclaimer_text);
+      //Bold
+      $disclaimer_text = str_replace("[B]",'<b>',$disclaimer_text);
+      $disclaimer_text = str_replace("[/B]",'</b>',$disclaimer_text);
+
+      //For $eula_text
+      //Images
+      $eula_text = str_replace("[IMG]",'<img src="',$eula_text);
+      $eula_text = str_replace("[/IMG]",'">',$eula_text);
+      //Bold
+      $eula_text = str_replace("[B]",'<b>',$eula_text);
+      $eula_text = str_replace("[/B]",'</b>',$eula_text);
+
       //Let's have the disclaimer up front
       $disclaimer_text = '<div align="center">'.$disclaimer_text.'</div><br>';
       $consent_button_html = "

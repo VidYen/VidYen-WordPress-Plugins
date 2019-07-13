@@ -50,7 +50,7 @@ function vidyen_gatekeeper_menu_page()
 		//The disclaimer text
 		if (isset($_POST['disclaimer_text']))
 		{
-			$disclaimer_text = sanitize_text_field($_POST['disclaimer_text']);
+			$disclaimer_text = sanitize_textarea_field($_POST['disclaimer_text']);
 		}
 		else
 		{
@@ -60,7 +60,7 @@ function vidyen_gatekeeper_menu_page()
 		//The EULA text. The text below the button if they claim to have read it.
 		if (isset($_POST['eula_text']))
 		{
-			$eula_text = sanitize_text_field($_POST['eula_text']);
+			$eula_text = sanitize_textarea_field($_POST['eula_text']);
 		}
 		else
 		{
