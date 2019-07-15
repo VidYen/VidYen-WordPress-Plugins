@@ -11,8 +11,8 @@ add_action('admin_menu', 'vidyen_wm_menu', 286);
 function vidyen_wm_menu()
 {
 	$parent_menu_slug = 'vyps_points';
-	$page_title = 'VidYen Webminer';
-	$menu_title = "VidYen Webminer";
+	$page_title = 'Crypto Webminer';
+	$menu_title = "Crypto Webminer";
 	$capability = 'manage_options';
 	$menu_slug = 'vidyen_wm';
 	$function = 'vidyen_wm_sub_menu_page';
@@ -108,16 +108,6 @@ function vidyen_wm_sub_menu_page()
 			$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
 		}
 
-		//Whether or not vy_wm is active. If GK is not active the WM will never be
-		if (isset($_POST['wm_active']))
-		{
-			$wm_active = intval($_POST['wm_active']); //should be 1 or 0
-		}
-		else
-		{
-			$wm_active  = 0;
-		}
-
 		//But is it possible to have the WM off while the GK is active.
 		if (isset($_POST['wm_pro_active']))
 		{
@@ -138,17 +128,21 @@ function vidyen_wm_sub_menu_page()
 			$wm_threads  = $vy_wm_parsed_array[$index]['wm_threads'];
 		}
 
-		//The desired amount of throttle
-		if (isset($_POST['wm_throttle']))
+		//So if the pro is not active and they set threads to greater than 6 it gets set to 6
+		if ($wm_pro_active == 0 AND $wm_threads > 6 )
 		{
-			$wm_throttle = intval($_POST['wm_throttle']);
+			$wm_threads = 6;
+		}
+
+		//The desired amount of throttle
+		if (isset($_POST['wm_cpu']))
+		{
+			$wm_cpu = intval($_POST['wm_cpu']);
 		}
 		else
 		{
-			$wm_throttle  = $vy_wm_parsed_array[$index]['wm_throttle'];
+			$wm_cpu  = $vy_wm_parsed_array[$index]['wm_cpu'];
 		}
-
-
 
     $table_name_vy_wm = $wpdb->prefix . 'vidyen_wm_settings';
 
@@ -163,7 +157,7 @@ function vidyen_wm_sub_menu_page()
 	      'crypto_wallet' => $crypto_wallet,
 	      'wm_pro_active' => $wm_pro_active,
 				'wm_threads' => $wm_threads,
-				'wm_throttle' => $wm_throttle,
+				'wm_cpu' => $wm_cpu,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
@@ -185,7 +179,7 @@ function vidyen_wm_sub_menu_page()
 	$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
 	$wm_pro_active  = $vy_wm_parsed_array[$index]['wm_pro_active'];
 	$wm_threads = $vy_wm_parsed_array[$index]['wm_threads'];
-	$wm_throttle = $vy_wm_parsed_array[$index]['wm_throttle'];
+	$wm_cpu = $vy_wm_parsed_array[$index]['wm_cpu'];
 
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
@@ -223,11 +217,11 @@ function vidyen_wm_sub_menu_page()
 	//Adding a nonce to the post
 	$vyps_nonce_check = wp_create_nonce( 'vidyen-vy-wm-nonce' );
   $VYPS_worker_url = plugins_url( 'images/stat_vyworker_001.gif', dirname(__FILE__) );
-	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'" style="height: 256px;"></div>';
+	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'" style="height: 128px;"></div>';
 	//Static text for the base plugin
 	$vidyen_wm_menu_html_ouput ='
-	<br>'.$VYPS_worker_img.'
-	<h1>VidYen Webminer</h1>
+	'.$VYPS_worker_img.'
+	<h1>VidYen Crypto Webminer</h1>
 	<p>Settings:</p>
 	<table width=100%>
 		<form method="post">
@@ -264,16 +258,28 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td><b>Default Threads:</b></td>
-				<td><input type="number" name="wm_threads" id="wm_threads" step="1" min="1" max="4" value="'.$wm_threads.'" size="128" required="true"></td>
+				<td><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="4" value="'.$wm_threads.'" size="128" required="true"></td>
 			</tr>
 			<tr>
-				<td><b>Default CPU Throttle:</b></td>
-				<td><input type="number" name="wm_throttle" id="wm_throttle"  step="1" min="1" max="100" value="'.$wm_throttle.'" size="128" required="true"></td>
+				<td><b>Default CPU USE:</b></td>
+				<td><input type="range" step="1" min="0" max="100" value="'.$wm_cpu.'" class="slider" name="wm_cpu" id="wm_cpu" size="128"></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Pro Mode:</b><br><i>>Disables branding and allows unlimited threads.</i></td>
-				<td><b>NOTE: For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</b></td>
-				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines,<br> 15 seconds will be given as a fee to VidYen for development funding!</td>
+				<td><b>Miner Graphic:</b></td>
+				<td>
+					<select name="current_wmp" id="current_wmp">
+						<option value="random" '.$image_random_selected.'>Random</option>
+						<option value="girlworker" '.$image_girl_selected.'>Girl Miner</option>
+						<option value="guyworker" '.$image_guy_selected.'>Guy Miner</option>
+						<option value="cyberworker" '.$image_cyber_selected.'>Cyber Miner</option>
+						<option value="uneadworker" '.$image_undead_selected.'>Undead Miner</option>
+						<option value="peasantworker" '.$image_peasant_selected.'>Peasant Miner</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top"><b>Pro Mode:</b><br><i>Disables branding and allows unlimited threads.</i></td>
+				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="Save Settings"></td>
@@ -300,6 +306,7 @@ function vidyen_wm_sub_menu_page()
 	';
 
 	//NOTE: I keep forgetting but wss://webminer.moneroocean.stream:443 is the webmining address for MO
+	//Everything created with intelligence is only successful because of Chaos and no reason the creator
 
   echo $vidyen_wm_menu_html_ouput;
 }

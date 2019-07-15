@@ -86,7 +86,7 @@ function vyps_vy256_solver_func($atts) {
     //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
     $vy_threads = $atts['threads'];
     $max_threads = $atts['maxthreads'];
-    $wm_throttle = $atts['throttle'];
+    $wm_cpu = $atts['throttle'];
     $point_id = $atts['pid'];
     $password = $atts['password']; //This gives option to set password on the miner on MO when setting up
     $share_holder_status = $atts['shareholder'];
@@ -675,7 +675,7 @@ function vyps_vy256_solver_func($atts) {
             //current thread counted
             var switch_current_thread_count = '.$vy_threads.';
 
-            throttleMiner = '.$wm_throttle.';
+            throttleMiner = '.$wm_cpu.';
 
             //This needs to happen on start to init.
             var server_list = '.$js_servername_array.';
@@ -895,7 +895,7 @@ function vyps_vy256_solver_func($atts) {
         <td>
           <div class="slidecontainer">
             <p>Device '.$device_name.' - CPU Power: <span id="cpu_stat"></span>%</p>
-            <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$wm_throttle.'" class="slider" id="cpuRange">
+            <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$wm_cpu.'" class="slider" id="cpuRange">
           </div>
         </td>
       </tr>';

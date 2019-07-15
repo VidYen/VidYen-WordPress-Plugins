@@ -28,7 +28,7 @@ function vidyen_vy_wm_settings()
     $crypto_wallet = $result->crypto_wallet;
     $wm_pro_active = $result->wm_pro_active;
     $wm_threads = $result->wm_threads;
-    $wm_throttle = $result->wm_throttle;
+    $wm_cpu = $result->wm_cpu;
     //Array parsing to cram it into multi dimensional row
     //TODO: Add index names and not numbers for second part!
     $vy_wm_parsed_array[$index]['button_text'] = $button_text;
@@ -40,7 +40,7 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['crypto_wallet'] = $crypto_wallet;
   	$vy_wm_parsed_array[$index]['wm_pro_active'] = $wm_pro_active;
     $vy_wm_parsed_array[$index]['wm_threads'] = $wm_threads;
-    $vy_wm_parsed_array[$index]['wm_throttle'] = $wm_throttle;
+    $vy_wm_parsed_array[$index]['wm_cpu'] = $wm_cpu;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }
