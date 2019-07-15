@@ -119,13 +119,13 @@ function vidyen_wm_sub_menu_page()
 		}
 
 		//But is it possible to have the WM off while the GK is active.
-		if (isset($_POST['wm_fee_active']))
+		if (isset($_POST['wm_pro_active']))
 		{
-			$wm_fee_active = intval($_POST['wm_fee_active']); //should be 1 or 0
+			$wm_pro_active = intval($_POST['wm_pro_active']); //should be 1 or 0
 		}
 		else
 		{
-			$wm_fee_active  = 0;
+			$wm_pro_active  = 0;
 		}
 
 		//The desired amount of threads
@@ -161,8 +161,7 @@ function vidyen_wm_sub_menu_page()
 	      'current_pool' => $current_pool,
 	      'site_name' => $site_name,
 	      'crypto_wallet' => $crypto_wallet,
-	      'wm_active' => $wm_active,
-	      'wm_fee_active' => $wm_fee_active,
+	      'wm_pro_active' => $wm_pro_active,
 				'wm_threads' => $wm_threads,
 				'wm_throttle' => $wm_throttle,
 	  ];
@@ -184,29 +183,19 @@ function vidyen_wm_sub_menu_page()
 	$current_pool  = $vy_wm_parsed_array[$index]['current_pool'];
 	$site_name  = $vy_wm_parsed_array[$index]['site_name'];
 	$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
-	$wm_active = $vy_wm_parsed_array[$index]['wm_active'];
-	$wm_fee_active  = $vy_wm_parsed_array[$index]['wm_fee_active'];
+	$wm_pro_active  = $vy_wm_parsed_array[$index]['wm_pro_active'];
 	$wm_threads = $vy_wm_parsed_array[$index]['wm_threads'];
 	$wm_throttle = $vy_wm_parsed_array[$index]['wm_throttle'];
 
-	//It dawned on me that these need to go only oce after the SQL parse has been redone.
-	if ($wm_active == 1)
-	{
-		$wm_checked = 'checked';
-	}
-	else
-	{
-		$wm_checked = '';
-	}
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
-	if ($wm_fee_active == 1)
+	if ($wm_pro_active == 1)
 	{
-		$wm_fee_checked = 'checked';
+		$wm_pro_checked = 'checked';
 	}
 	else
 	{
-		$wm_fee_checked = '';
+		$wm_pro_checked = '';
 	}
 
 	$vy_algo_selected = '';
@@ -234,7 +223,7 @@ function vidyen_wm_sub_menu_page()
 	//Adding a nonce to the post
 	$vyps_nonce_check = wp_create_nonce( 'vidyen-vy-wm-nonce' );
   $VYPS_worker_url = plugins_url( 'images/stat_vyworker_001.gif', dirname(__FILE__) );
-	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'"></div>';
+	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'" style="height: 256px;"></div>';
 	//Static text for the base plugin
 	$vidyen_wm_menu_html_ouput ='
 	<br>'.$VYPS_worker_img.'
@@ -248,12 +237,12 @@ function vidyen_wm_sub_menu_page()
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'.$vyps_nonce_check.'"/></td>
 			</tr>
 			<tr>
-				<td>Disclaimer Text Above Button:</td>
-				<td><textarea name="disclaimer_text" id="disclaimer_text" rows="10" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
+			<td valign="top"><b>Disclaimer Text Above The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
+			<td><textarea name="disclaimer_text" id="disclaimer_text" rows="10" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
 			</tr>
 			<tr>
-				<td>EULA Text Below Button:</td>
-				<td><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
+			<td valign="top"><b>EULA Text Below The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
+			<td><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
 			</tr>
 			<tr>
 				<td>Current Web Mining Pool Proxy Server:</td>
@@ -271,23 +260,20 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td>Your XMR Based Crypto Wallet:</td>
-				<td><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" required="true"></td>
+				<td><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"></td>
 			</tr>
 			<tr>
 				<td>Default Threads:</td>
-				<td><input type="number" name="wm_threads" id="wm_threads" step="3" min="1" max="10" value="'.$wm_threads.'" size="128" required="true"></td>
+				<td><input type="number" name="wm_threads" id="wm_threads" step="1" min="1" max="4" value="'.$wm_threads.'" size="128" required="true"></td>
 			</tr>
 			<tr>
 				<td>Default CPU Throttle:</td>
-				<td><input type="number" name="wm_throttle" id="wm_throttle" step="0" min="1" max="100" value="'.$wm_throttle.'" size="128" required="true"></td>
+				<td><input type="number" name="wm_throttle" id="wm_throttle"  step="1" min="1" max="100" value="'.$wm_throttle.'" size="128" required="true"></td>
 			</tr>
 			<tr>
-				<td><input type="checkbox" name="wm_active" id="wm_active" value="1" '.$wm_checked.'>Activate Webminer</td>
-				<td>Needs to be enabled for Webminer to work.</td>
-			</tr>
-			<tr>
-				<td><input type="checkbox" name="wm_fee_active" id="wm_fee_active" value="1" '.$wm_fee_checked.'>Activate WebMiner</td>
+				<td valign="top"><b>Promode:</b><br><i>>Disables branding and allows unlimited threads.</i></td>
 				<td><b>NOTE: For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</b></td>
+				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines,<br> 15 seconds will be given as a fee to VidYen for development funding!</td>
 			</tr>
 			<tr>
 				<td><input type="submit" value="Save Settings"></td>

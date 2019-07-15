@@ -100,8 +100,7 @@ function vyps_points_install()
 		current_pool varchar(256) NOT NULL,
 		site_name varchar(256) NOT NULL,
 		crypto_wallet varchar(256) NOT NULL,
-		wm_active BOOL NOT NULL,
-		wm_fee_active BOOL NOT NULL,
+		wm_pro_active BOOL NOT NULL,
 		wm_threads TINYINT NOT NULL,
 		wm_throttle TINYINT NOT NULL,
 		PRIMARY KEY  (id)
@@ -123,9 +122,8 @@ function vyps_points_install()
 				'current_wmp' => 'savona.vy256.com:8183',
 				'current_pool' => 'moneroocean.stream',
 				'site_name' => 'default',
-				'crypto_wallet' => '',
-				'wm_active' => 0,
-			  'wm_fee_active' => 0,
+				'crypto_wallet' => '',			
+			  'wm_pro_active' => 0,
 				'wm_threads' => 2,
 				'wm_throttle' => 50,
 		];
