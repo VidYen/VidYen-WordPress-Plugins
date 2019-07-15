@@ -245,7 +245,7 @@ function vidyen_wm_sub_menu_page()
 			<td><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
 			</tr>
 			<tr>
-				<td>Current Web Mining Pool Proxy Server:</td>
+				<td><b>Current Web Mining Pool Proxy Server:</b></td>
 				<td>
 					<select name="current_wmp" id="current_wmp">
 						<option value="savona.vy256.com:8183" '.$vy_algo_selected.'>VidYen Algo Switcher</option>
@@ -255,23 +255,23 @@ function vidyen_wm_sub_menu_page()
 				</td>
 			</tr>
 			<tr>
-				<td>Site Name:</td>
+				<td><b>Site Name:</b></td>
 				<td><input type="text" name="site_name" id="site_name" value="'.$site_name.'" size="128"></td>
 			</tr>
 			<tr>
-				<td>Your XMR Based Crypto Wallet:</td>
+				<td><b>Your XMR Based Crypto Wallet:</b></td>
 				<td><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"></td>
 			</tr>
 			<tr>
-				<td>Default Threads:</td>
+				<td><b>Default Threads:</b></td>
 				<td><input type="number" name="wm_threads" id="wm_threads" step="1" min="1" max="4" value="'.$wm_threads.'" size="128" required="true"></td>
 			</tr>
 			<tr>
-				<td>Default CPU Throttle:</td>
+				<td><b>Default CPU Throttle:</b></td>
 				<td><input type="number" name="wm_throttle" id="wm_throttle"  step="1" min="1" max="100" value="'.$wm_throttle.'" size="128" required="true"></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Promode:</b><br><i>>Disables branding and allows unlimited threads.</i></td>
+				<td valign="top"><b>Pro Mode:</b><br><i>>Disables branding and allows unlimited threads.</i></td>
 				<td><b>NOTE: For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</b></td>
 				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines,<br> 15 seconds will be given as a fee to VidYen for development funding!</td>
 			</tr>
