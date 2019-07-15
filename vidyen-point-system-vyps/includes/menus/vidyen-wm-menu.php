@@ -232,7 +232,7 @@ function vidyen_wm_sub_menu_page()
 	<table width=100%>
 		<form method="post">
 			<tr>
-				<td>Button Text:</td>
+					<td><b>Button Text:</b></td>
 				<td><input type="text" name="button_text" id="button_text" value="'.$button_text.'" size="128" required="true">
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'.$vyps_nonce_check.'"/></td>
 			</tr>
