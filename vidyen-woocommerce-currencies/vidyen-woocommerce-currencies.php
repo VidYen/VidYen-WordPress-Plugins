@@ -63,6 +63,11 @@ function vidyen_woocommerce_currencies_sql_install()
 	$wpdb->insert($table_name_woocommerce_currencies, $data_insert);
 }
 
+/*** MENU Includes INCLUDES ***/
+include( plugin_dir_path( __FILE__ ) . 'vidyen-woocommerce-currencies-menu.php'); //Menus
+
 /*** Includes ***/
 /*** Functions ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_mmo_woocommerce_check_func.php'); //Checks to see if WooCommerce installed, run first
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_woocommerce_check.php'); //Checks to see if WooCommerce installed
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_woowallet_currencies.php'); //Checks to see if WooCommerce installed, run first
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_woowallet_wpdb.php'); //Checks to see if WooCommerce installed, run first

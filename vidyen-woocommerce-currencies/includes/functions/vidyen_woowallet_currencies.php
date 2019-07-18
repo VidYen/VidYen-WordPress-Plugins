@@ -6,8 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 if (vidyen_woocommerce_check())
 {
-  $pull_currency_name = 'VidYen';
-  $pull_currency_symbol = 'V¥';
+  $woocommerce_currencies_parsed_array = vidyen_woocommerce_currencies_settings();
+  $index = 1; //Lazy coding but easier to copy and paste stuff.
+
+  $pull_currency_name  = $woocommerce_currencies_parsed_array[$index]['currency_name'];
+  $pull_currency_symbol  = $woocommerce_currencies_parsed_array[$index]['currency_symbol']
 
  /*** VidYen ***/
  add_filter( 'woocommerce_currencies', 'add_vyps_vidyen_currency' );
