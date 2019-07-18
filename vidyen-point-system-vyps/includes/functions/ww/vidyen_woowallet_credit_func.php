@@ -8,10 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 */
 
 /*** WOOWALLET CREDIT FUNCTION ***/
-function vyps_ww_point_credit_func( $user_id, $output_amount, $reason )
+function vyps_ww_point_credit_func( $user_id, $amount, $details )
 {
-    $amount = intval($output_amount);
-    $details = sanitize_text_field($reason);
+    $user_id = intval($user_id);
+    $amount = floatval($amount);
+    $details = sanitize_text_field($details);
 
     //Well this was 100% easier. I should have did this years ago.
     //Direct WooWallet Calls

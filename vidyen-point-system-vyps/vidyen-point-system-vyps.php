@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      3.0.0.10
+Version:      2.5.0.14
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -274,9 +274,8 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/wallet/vyps_dashed_sl
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_credit_func.php'); //Function to credit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_debit_func.php'); //Function to debit the WooWallet.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_woowallet_bal_func.php'); //Function to check bal the WooWallet.
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_ww_point_credit_func.php'); //Credit for the ajax system. More modern version
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vidyen_woowallet_credit_func.php'); //Credit for the ajax system. More modern version
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ww/vyps_ww_point_bal_func.php'); //Updated balance feature. Can be used more than the get current user
-
 
 /*** AJAX ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/ajax/vyps_ajaxurl.php'); //Forces ajax to be called regardless of installation

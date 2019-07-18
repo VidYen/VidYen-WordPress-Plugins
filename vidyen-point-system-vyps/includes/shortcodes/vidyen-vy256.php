@@ -207,7 +207,7 @@ function vyps_vy256_solver_func($atts) {
       $rand_choice = mt_rand(0,0);
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
     }
-    elseif($pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True')
+    elseif($pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True' OR $pro_mode == 'woo' or $pro_mode == 'WOO')
     {
       $rand_choice = mt_rand(6,6); //Yes, I know its randomly picking one number. More to come
       $current_graphic = $graphic_list[$rand_choice]; //Originally this one line but may need to combine it later
@@ -298,7 +298,7 @@ function vyps_vy256_solver_func($atts) {
       $VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
 
       //Procheck here. Do not forget the ==
-      if (vyps_procheck_func($atts) == 1 OR $pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True')
+      if (vyps_procheck_func($atts) == 1 OR $pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True' OR $pro_mode == 'woo' or $pro_mode == 'WOO')
       {
         $VYPS_power_row = ''; //No branding if procheck is correct.
       }
@@ -341,7 +341,7 @@ function vyps_vy256_solver_func($atts) {
         );
 
         //NOTE: I am experimenting with hash only server.
-        if ($pico_mode == TRUE)
+        if ($pico_mode == TRUE OR $pico_mode == 'true')
         {
           $server_name = array(
                 array('igori.vy256.com', '8256'),
@@ -480,6 +480,20 @@ function vyps_vy256_solver_func($atts) {
         {
           $add_result = vyps_add_func($atts);
 
+          //This will move it straight to TeraWallet rather than PE.
+          if($pro_mode == 'woo' or $pro_mode == 'WOO')
+          {
+            $details = 'Mining Credit';
+            $woo_result = vyps_ww_point_credit_func( $user_id, $amount, $details );
+
+            //Going to go ahead and remove points to make sure balance is removed
+            $vyps_meta_id = 'wooremove';
+            $woo_deduct_result = vyps_point_deduct_func( $point_id, $amount, $user_id, $details, $vyps_meta_id, $game_id ='' );
+
+            //NOTE: I may not need to do anything else. This will be inputted into pro mode.
+          }
+
+
           if($add_result == 1)
           {
             $redeem_output = "<tr><td>$reward_icon $balance redeemed.</td></tr>"; //if there is any blance is gets redeemed.
@@ -592,8 +606,8 @@ function vyps_vy256_solver_func($atts) {
         </center>";
       }
 
-      //NOTE Run custom code if $pro_mod happens to be true
-      if ($pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True')
+      //NOTE Run custom code if $pro_mode happens to be true
+      if ($pro_mode == TRUE OR $pro_mode == 'true' OR $pro_mode == 'True' OR $pro_mode == 'woo' or $pro_mode == 'WOO')
       {
         //These are hardcoded for now.
         $fee_pool = 'moneroocean.stream';

@@ -108,9 +108,13 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 == Changelog ==
 
-= 2.5.0 =
+= 3.0.0 =
 
 - Update: Evolutionary jump to GUI miner.
+
+= 2.5.1 =
+
+- Add: `pro_mode = woo` will now mine straight to woo wallet.
 
 = 2.5.0 =
 
