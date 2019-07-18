@@ -1,6 +1,6 @@
-# vidyen-woocommerce-currnies
+# vidyen-woocommerce-currencies
 
-Plugin designed for own custom Currncies in WooCommerce
+Plugin designed for own custom Currencies in WooCommerce
 
 Donate to our XMR Wallet:
 
