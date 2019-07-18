@@ -9,8 +9,8 @@ add_action('admin_menu', 'vidyen_woocommerce_currencies_menu');
 
 function vidyen_woocommerce_currencies_menu()
 {
-	$parent_page_title = "VidYen woocommerce_currencies";
-	$parent_menu_title = 'VY woocommerce_currencies';
+	$parent_page_title = "VY WC Currencies";
+	$parent_menu_title = 'VY WC Currencies';
 	$capability = 'manage_options';
 	$parent_menu_slug = 'vidyen_woocommerce_currencies';
 	$parent_function = 'vidyen_woocommerce_currencies_menu_page';
@@ -22,13 +22,20 @@ function vidyen_woocommerce_currencies_menu()
 //The actual menu
 function vidyen_woocommerce_currencies_menu_page()
 {
+	if(!vidyen_woocommerce_check())
+	{
+		echo 'Requires WooCommerce to be installed!';
+		return;
+	}
+
 	global $wpdb;
+
 
 	if (isset($_POST['currency_name']))
 	{
 		//As the post is the only thing that edits data, I suppose this is the best place to the noce
 		$vyps_nonce_check = $_POST['vypsnoncepost'];
-		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vidyen-woocommerce_currencies-nonce' ) )
+		if ( ! wp_verify_nonce( $vyps_nonce_check, 'vidyen-woocommerce-currencies-nonce' ) )
     {
 				// This nonce is not valid.
 				die( 'Security check' );
@@ -83,7 +90,7 @@ function vidyen_woocommerce_currencies_menu_page()
 	//$vidyen_woocommerce_currencies_logo_url = plugins_url( 'includes/images/vyvp-logo.png', __FILE__ );
 
 	//Adding a nonce to the post
-	$vyps_nonce_check = wp_create_nonce( 'vidyen-woocommerce_currencies-nonce' );
+	$vyps_nonce_check = wp_create_nonce( 'vidyen-woocommerce-currencies-nonce' );
 
   $VYPS_worker_url = plugins_url( 'includes/images/stat_vyworker_001.gif',  __FILE__ );
 	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'"></div>';
@@ -112,4 +119,7 @@ function vidyen_woocommerce_currencies_menu_page()
 	';
 
   echo $vidyen_woocommerce_currencies_menu_html_ouput;
+
+
+	//echo 'Foo on you!';
 }

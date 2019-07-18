@@ -1,9 +1,9 @@
 <?php
  /*
-Plugin Name:  VidYen WooCommerce currencies
+Plugin Name:  VidYen WooCommerce Currencies
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Adds Custom Currency to WooCommerce
-Version:      0.0.1
+Version:      0.0.17
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -68,6 +68,6 @@ include( plugin_dir_path( __FILE__ ) . 'vidyen-woocommerce-currencies-menu.php')
 
 /*** Includes ***/
 /*** Functions ***/
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_woocommerce_check.php'); //Checks to see if WooCommerce installed
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_woowallet_currencies.php'); //Checks to see if WooCommerce installed, run first
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vidyen_woowallet_wpdb.php'); //Checks to see if WooCommerce installed, run first
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/vidyen_woocommerce_check.php'); //Checks to see if WooCommerce installed
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/vidyen_woocommerce_currencies_func.php'); //Checks to see if WooCommerce installed, run first
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/vidyen_woocommerce_settings.php'); //Checks to see if WooCommerce installed, run first
