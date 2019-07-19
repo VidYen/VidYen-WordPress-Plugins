@@ -270,28 +270,48 @@ function vidyen_wm_sub_menu_page()
 	$image_undead_selected = '';
 	$image_peasant_selected = '';
 
+	//GRAPHICS
+	$VYPS_worker_url = plugins_url( 'images/stat_vyworker_001.gif', dirname(__FILE__) );
+	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'" style="height: 128px;"></div>';
+
+	$image_url_folder = plugins_url( 'images/', dirname(__FILE__) );
+
+	$image_url_girl = $image_url_folder.'vyworker_001.gif';
+	$image_url_guy = $image_url_folder.'vyworker_002.gif';
+	$image_url_cyber = $image_url_folder.'vyworker_003.gif';
+	$image_url_undead = $image_url_folder.'vyworker_004.gif';
+	$image_url_peasant = $image_url_folder.'vyworker_005.gif';
+
 	//Going to use a swithc case as it seems logical.
 	switch ($graphic_selection)
 	{
 		case 0:
 			$image_random_selected = 'selected';
+			$current_image = '';
 			break;
 		case 1:
 			$image_girl_selected = 'selected';
+			$current_image = $image_url_girl;
 			break;
 		case 2:
 			$image_guy_selected = 'selected';
+			$current_image = $image_url_guy;
 			break;
 		case 3:
-			$image_random_selected = 'selected';
+			$image_cyber_selected = 'selected';
+			$current_image = $image_url_cyber;
 			break;
 		case 4:
 			$image_undead_selected = 'selected';
+			$current_image = $image_url_undead;
 			break;
 		case 5:
 			$image_peasant_selected = 'selected';
+			$current_image = $image_url_peasant;
 			break;
 	}
+
+	$current_image_format = '<img style="width: 16px;" src="'.$current_image.'">';
 
 	//It's possible we don't use the VYPS logo since no points.
   //$vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
@@ -299,8 +319,7 @@ function vidyen_wm_sub_menu_page()
 
 	//Adding a nonce to the post
 	$vyps_nonce_check = wp_create_nonce( 'vidyen-vy-wm-nonce' );
-  $VYPS_worker_url = plugins_url( 'images/stat_vyworker_001.gif', dirname(__FILE__) );
-	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'" style="height: 128px;"></div>';
+
 	//Static text for the base plugin
 	$vidyen_wm_menu_html_ouput ='
 	'.$VYPS_worker_img.'
@@ -309,21 +328,21 @@ function vidyen_wm_sub_menu_page()
 	<table width=100%>
 		<form method="post">
 			<tr>
-					<td><b>Button Text:</b></td>
-				<td><input type="text" name="button_text" id="button_text" value="'.$button_text.'" size="128" required="true">
+					<td valign="top"><b>Button Text:</b></td>
+				<td valign="top"><input type="text" name="button_text" id="button_text" value="'.$button_text.'" size="128" required="true">
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'.$vyps_nonce_check.'"/></td>
 			</tr>
 			<tr>
 			<td valign="top"><b>Disclaimer Text Above The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
-			<td><textarea name="disclaimer_text" id="disclaimer_text" rows="10" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
+			<td valign="top"><textarea name="disclaimer_text" id="disclaimer_text" rows="10" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
 			</tr>
 			<tr>
 			<td valign="top"><b>EULA Text Below The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
-			<td><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
+			<td valign="top"><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
 			</tr>
 			<tr>
-				<td><b>Current Web Mining Pool Proxy Server:</b></td>
-				<td>
+				<td valign="top"><b>Current Web Mining Pool Proxy Server:</b></td>
+				<td valign="top">
 					<select name="current_wmp" id="current_wmp">
 						<option value="igori.vy256.com:8256" '.$vy_pico_selected.'>VidYen CN-PICO Only - Stable Rate and Most Mobile Friendly</option>
 						<option value="savona.vy256.com:8183" '.$vy_algo_selected.'>VidYen Algo Switcher - Picks Most Profitable Algo</option>
@@ -332,24 +351,24 @@ function vidyen_wm_sub_menu_page()
 				</td>
 			</tr>
 			<tr>
-				<td><b>Site Name:</b></td>
-				<td><input type="text" name="site_name" id="site_name" value="'.$site_name.'" size="128"></td>
+				<td valign="top"><b>Site Name:</b></td>
+				<td valign="top"><input type="text" name="site_name" id="site_name" value="'.$site_name.'" size="128"></td>
 			</tr>
 			<tr>
-				<td><b>Your XMR Based Crypto Wallet:</b></td>
-				<td><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"></td>
+				<td valign="top"><b>Your XMR Based Crypto Wallet:</b></td>
+				<td valign="top"><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"></td>
 			</tr>
 			<tr>
-				<td><b>Default Threads:</b></td>
-				<td><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="'.$max_threads.'" value="'.$wm_threads.'" size="128" required="true"> Threads: <span id="thread_count">'.$wm_threads.'</span></td>
+				<td valign="top"><b>Default Threads:</b></td>
+				<td valign="top"><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="'.$max_threads.'" value="'.$wm_threads.'" size="128" required="true"> Threads: <span id="thread_count">'.$wm_threads.'</span></td>
 			</tr>
 			<tr>
-				<td><b>Default CPU USE:</b></td>
-				<td><input type="range" step="1" min="0" max="100" value="'.$wm_cpu.'" class="slider" name="wm_cpu" id="wm_cpu" size="128"> Default CPU: <span id="cpu_use">'.$wm_cpu.'</span></td>
+				<td valign="top"><b>Default CPU USE:</b></td>
+				<td valign="top"><input type="range" step="1" min="0" max="100" value="'.$wm_cpu.'" class="slider" name="wm_cpu" id="wm_cpu" size="128"> Default CPU: <span id="cpu_use">'.$wm_cpu.'</span></td>
 			</tr>
 			<tr>
-				<td><b>Miner Graphic:</b></td>
-				<td>
+				<td valign="top"><b>Miner Graphic:</b></td>
+				<td valign="top">
 					<select name="current_wmp" id="current_wmp">
 						<option value="0" '.$image_random_selected.'>Random</option>
 						<option value="1" '.$image_girl_selected.'>Girl Miner</option>
@@ -358,28 +377,29 @@ function vidyen_wm_sub_menu_page()
 						<option value="4" '.$image_undead_selected.'>Undead Miner</option>
 						<option value="5" '.$image_peasant_selected.'>Peasant Miner</option>
 					</select>
+
 				</td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Pro Mode:</b><br><i>Disables branding and allows max of 20 threads.</i></td>
-				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</td>
+				<td valign="top"><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</td>
 			</tr>
 			<tr>
 				<td valign="top"><b>WooCommerce Mode:</b><br><i>Credits Go Straight To WooCommerce Credit</i></td>
-				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires TeraWallet, WooCommerce, and Pro Mode</td>
+				<td valign="top"><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires TeraWallet, WooCommerce, and Pro Mode</td>
 			</tr>
 			<tr>
-				<td><b>Discord Webhook:</b><br><i>Only Available in Pro Mode</i></td>
-				<td><input type="text" name="discord_webhook" id="discord_webhook" value="'.$discord_webhook.'" size="128"></td>
+				<td valign="top"><b>Discord Webhook:</b><br><i>Only Available in Pro Mode</i></td>
+				<td valign="top"><input type="text" name="discord_webhook" id="discord_webhook" value="'.$discord_webhook.'" size="128"></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Save Settings" class="button button-primary"></td>
-				<td></td>
+				<td valign="top"><input type="submit" value="Save Settings" class="button button-primary"></td>
+				<td valign="top"></td>
 			</tr>
 		</form>
 	</table>
 	<h2>Shortcode To Install On Page</h2>
-	<p><input style="padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type=text" value="[vidyen-wm]" id="shortcode_output" width="24" readonly></p>
+	<p><input style="padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type=text" value="[vidyen-wm]" id="shortcode_output" width="21" readonly></p>
 	<button onclick="copy_shortcode()" class="button button-primary">Copy Shortcode To Clipboard</button>
 	<p>Copy and paste onto page where you want Webminer to go.</p>
 	<script>
