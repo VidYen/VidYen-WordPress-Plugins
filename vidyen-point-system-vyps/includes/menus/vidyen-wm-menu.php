@@ -170,7 +170,7 @@ function vidyen_wm_sub_menu_page()
 		//The discord_webhook (optional) neet feature I've been playing with
 		if (isset($_POST['discord_webhook']))
 		{
-			$discord_webhook = esc_url_raw(($_POST['discord_webhook']);
+			$discord_webhook = esc_url_raw($_POST['discord_webhook']);
 		}
 		else
 		{
@@ -378,8 +378,8 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 		</form>
 	</table>
-	<h2>Shortcode</h2>
-	<p><div id="shortcode_output">[vidyen-wm]</div></p>
+	<h2>Shortcode To Install On Page</h2>
+	<p><input style="padding: 12px 20px; margin: 8px 0; box-sizing: border-box;" type=text" value="[vidyen-wm]" id="shortcode_output" width="24" readonly></p>
 	<button onclick="copy_shortcode()" class="button button-primary">Copy Shortcode To Clipboard</button>
 	<p>Copy and paste onto page where you want Webminer to go.</p>
 	<script>
@@ -409,7 +409,7 @@ function vidyen_wm_sub_menu_page()
 		  var copyText = document.getElementById("shortcode_output");
 		  copyText.select();
 		  document.execCommand("copy");
-		  alert("Copied the URL: " + copyText.value);
+		  alert("Copied Shortcode: " + copyText.value);
 		}
 	</script>
 	<h2>Disclaimer</h2>
