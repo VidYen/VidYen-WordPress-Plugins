@@ -26,9 +26,12 @@ function vidyen_vy_wm_settings()
     $current_pool = $result->current_pool;
     $site_name = $result->site_name;
     $crypto_wallet = $result->crypto_wallet;
+    $graphic_selection = $result->graphic_selection;
     $wm_pro_active = $result->wm_pro_active;
+    $wm_woo_active = $result->wm_woo_active;
     $wm_threads = $result->wm_threads;
     $wm_cpu = $result->wm_cpu;
+    $discord_webhook = $result->discord_webhook;
     //Array parsing to cram it into multi dimensional row
     //TODO: Add index names and not numbers for second part!
     $vy_wm_parsed_array[$index]['button_text'] = $button_text;
@@ -38,9 +41,12 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['current_pool'] = $current_pool;
     $vy_wm_parsed_array[$index]['site_name'] = $site_name;
     $vy_wm_parsed_array[$index]['crypto_wallet'] = $crypto_wallet;
+    $vy_wm_parsed_array[$index]['graphic_selection'] = $graphic_selection;
   	$vy_wm_parsed_array[$index]['wm_pro_active'] = $wm_pro_active;
+    $vy_wm_parsed_array[$index]['wm_woo_active'] = $wm_woo_active;
     $vy_wm_parsed_array[$index]['wm_threads'] = $wm_threads;
     $vy_wm_parsed_array[$index]['wm_cpu'] = $wm_cpu;
+    $vy_wm_parsed_array[$index]['discord_webhook'] = $discord_webhook;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }

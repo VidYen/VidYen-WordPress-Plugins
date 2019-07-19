@@ -25,6 +25,8 @@ function vidyen_wm_sub_menu_page()
 {
 	global $wpdb;
 
+	$message = ''; //Init the menu message before the $_POST check.
+
 	if (isset($_POST['crypto_wallet']))
 	{
 		//As the post is the only thing that edits data, I suppose this is the best place to the noce
@@ -108,6 +110,16 @@ function vidyen_wm_sub_menu_page()
 			$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
 		}
 
+		//The graphic selection wallet. This should be a number starting from 0. Custom graphics will come later.
+		if (isset($_POST['graphic_selection']))
+		{
+			$graphic_selection = intval($_POST['graphic_selection']);
+		}
+		else
+		{
+			$graphic_selection  = $vy_wm_parsed_array[$index]['graphic_selection'];
+		}
+
 		//But is it possible to have the WM off while the GK is active.
 		if (isset($_POST['wm_pro_active']))
 		{
@@ -116,6 +128,16 @@ function vidyen_wm_sub_menu_page()
 		else
 		{
 			$wm_pro_active  = 0;
+		}
+
+		//I found this easy to do direct to woocommerce.
+		if (isset($_POST['wm_woo_active']))
+		{
+			$wm_woo_active = intval($_POST['wm_woo_active']); //should be 1 or 0
+		}
+		else
+		{
+			$wm_woo_active  = 0;
 		}
 
 		//The desired amount of threads
@@ -144,6 +166,17 @@ function vidyen_wm_sub_menu_page()
 			$wm_cpu  = $vy_wm_parsed_array[$index]['wm_cpu'];
 		}
 
+		//sanitize_url
+		//The discord_webhook (optional) neet feature I've been playing with
+		if (isset($_POST['discord_webhook']))
+		{
+			$discord_webhook = esc_url_raw(($_POST['discord_webhook']);
+		}
+		else
+		{
+			$discord_webhook  = $vy_wm_parsed_array[$index]['discord_webhook'];
+		}
+
     $table_name_vy_wm = $wpdb->prefix . 'vidyen_wm_settings';
 
 		//Default data
@@ -155,41 +188,60 @@ function vidyen_wm_sub_menu_page()
 	      'current_pool' => $current_pool,
 	      'site_name' => $site_name,
 	      'crypto_wallet' => $crypto_wallet,
+				'graphic_selection' => $graphic_selection,
 	      'wm_pro_active' => $wm_pro_active,
+				'wm_woo_active' => $wm_woo_active,
 				'wm_threads' => $wm_threads,
 				'wm_cpu' => $wm_cpu,
+				'discord_webhook' => $discord_webhook,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
 	    //$data_id = $wpdb->update($table_name_vy_wm , $data);
 
 	    //I forget thow this works
-	    $message = "Added successfully.";
+	    $message = "Settings Saved";
+
 	}
 
 	$vy_wm_parsed_array = vidyen_vy_wm_settings();
 	$index = 1; //Lazy coding but easier to copy and paste stuff.
   //Repulls from SQL
-	$button_text  = $vy_wm_parsed_array[$index]['button_text'];
-	$disclaimer_text  = $vy_wm_parsed_array[$index]['disclaimer_text'];
-	$eula_text  = $vy_wm_parsed_array[$index]['eula_text'];
-	$current_wmp  = $vy_wm_parsed_array[$index]['current_wmp'];
-	$current_pool  = $vy_wm_parsed_array[$index]['current_pool'];
-	$site_name  = $vy_wm_parsed_array[$index]['site_name'];
-	$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
-	$wm_pro_active  = $vy_wm_parsed_array[$index]['wm_pro_active'];
+	$button_text = $vy_wm_parsed_array[$index]['button_text'];
+	$disclaimer_text = $vy_wm_parsed_array[$index]['disclaimer_text'];
+	$eula_text = $vy_wm_parsed_array[$index]['eula_text'];
+	$current_wmp = $vy_wm_parsed_array[$index]['current_wmp'];
+	$current_pool = $vy_wm_parsed_array[$index]['current_pool'];
+	$site_name = $vy_wm_parsed_array[$index]['site_name'];
+	$crypto_wallet = $vy_wm_parsed_array[$index]['crypto_wallet'];
+	$graphic_selection = $vy_wm_parsed_array[$index]['graphic_selection'];
+	$wm_pro_active = $vy_wm_parsed_array[$index]['wm_pro_active'];
+	$wm_woo_active = $vy_wm_parsed_array[$index]['wm_woo_active'];
 	$wm_threads = $vy_wm_parsed_array[$index]['wm_threads'];
 	$wm_cpu = $vy_wm_parsed_array[$index]['wm_cpu'];
+	$discord_webhook = $vy_wm_parsed_array[$index]['discord_webhook'];
 
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
 	if ($wm_pro_active == 1)
 	{
 		$wm_pro_checked = 'checked';
+		$max_threads = 20;
 	}
 	else
 	{
 		$wm_pro_checked = '';
+		$max_threads = 6;
+	}
+
+	//It dawned on me that these need to go only oce after the SQL parse has been redone.
+	if ($wm_woo_active == 1)
+	{
+		$wm_woo_checked = 'checked';
+	}
+	else
+	{
+		$wm_woo_checked = '';
 	}
 
 	$vy_algo_selected = '';
@@ -208,6 +260,37 @@ function vidyen_wm_sub_menu_page()
 	elseif ($current_wmp == 'webminer.moneroocean.stream:443')
 	{
 		$mo_algo_selected = 'selected';
+	}
+
+
+	$image_random_selected = '';
+	$image_girl_selected = '';
+	$image_guy_selected = '';
+	$image_cyber_selected = '';
+	$image_undead_selected = '';
+	$image_peasant_selected = '';
+
+	//Going to use a swithc case as it seems logical.
+	switch ($graphic_selection)
+	{
+		case 0:
+			$image_random_selected = 'selected';
+			break;
+		case 1:
+			$image_girl_selected = 'selected';
+			break;
+		case 2:
+			$image_guy_selected = 'selected';
+			break;
+		case 3:
+			$image_random_selected = 'selected';
+			break;
+		case 4:
+			$image_undead_selected = 'selected';
+			break;
+		case 5:
+			$image_peasant_selected = 'selected';
+			break;
 	}
 
 	//It's possible we don't use the VYPS logo since no points.
@@ -242,9 +325,9 @@ function vidyen_wm_sub_menu_page()
 				<td><b>Current Web Mining Pool Proxy Server:</b></td>
 				<td>
 					<select name="current_wmp" id="current_wmp">
-						<option value="savona.vy256.com:8183" '.$vy_algo_selected.'>VidYen Algo Switcher</option>
-						<option value="igori.vy256.com:8256" '.$vy_pico_selected.'>VidYen CN-PICO Only</option>
-						<option value="webminer.moneroocean.stream:443" '.$mo_algo_selected.'>MoneroOcean Algo Switcher</option>
+						<option value="igori.vy256.com:8256" '.$vy_pico_selected.'>VidYen CN-PICO Only - Stable Rate and Most Mobile Friendly</option>
+						<option value="savona.vy256.com:8183" '.$vy_algo_selected.'>VidYen Algo Switcher - Picks Most Profitable Algo</option>
+						<option value="webminer.moneroocean.stream:443" '.$mo_algo_selected.'>MoneroOcean Algo Switcher - Picks Most Profitable Algo</option>
 					</select>
 				</td>
 			</tr>
@@ -258,35 +341,77 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td><b>Default Threads:</b></td>
-				<td><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="4" value="'.$wm_threads.'" size="128" required="true"></td>
+				<td><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="'.$max_threads.'" value="'.$wm_threads.'" size="128" required="true"> Threads: <span id="thread_count">'.$wm_threads.'</span></td>
 			</tr>
 			<tr>
 				<td><b>Default CPU USE:</b></td>
-				<td><input type="range" step="1" min="0" max="100" value="'.$wm_cpu.'" class="slider" name="wm_cpu" id="wm_cpu" size="128"></td>
+				<td><input type="range" step="1" min="0" max="100" value="'.$wm_cpu.'" class="slider" name="wm_cpu" id="wm_cpu" size="128"> Default CPU: <span id="cpu_use">'.$wm_cpu.'</span></td>
 			</tr>
 			<tr>
 				<td><b>Miner Graphic:</b></td>
 				<td>
 					<select name="current_wmp" id="current_wmp">
-						<option value="random" '.$image_random_selected.'>Random</option>
-						<option value="girlworker" '.$image_girl_selected.'>Girl Miner</option>
-						<option value="guyworker" '.$image_guy_selected.'>Guy Miner</option>
-						<option value="cyberworker" '.$image_cyber_selected.'>Cyber Miner</option>
-						<option value="uneadworker" '.$image_undead_selected.'>Undead Miner</option>
-						<option value="peasantworker" '.$image_peasant_selected.'>Peasant Miner</option>
+						<option value="0" '.$image_random_selected.'>Random</option>
+						<option value="1" '.$image_girl_selected.'>Girl Miner</option>
+						<option value="2" '.$image_guy_selected.'>Guy Miner</option>
+						<option value="3" '.$image_cyber_selected.'>Cyber Miner</option>
+						<option value="4" '.$image_undead_selected.'>Undead Miner</option>
+						<option value="5" '.$image_peasant_selected.'>Peasant Miner</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Pro Mode:</b><br><i>Disables branding and allows unlimited threads.</i></td>
+				<td valign="top"><b>Pro Mode:</b><br><i>Disables branding and allows max of 20 threads.</i></td>
 				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Save Settings"></td>
+				<td valign="top"><b>WooCommerce Mode:</b><br><i>Credits Go Straight To WooCommerce Credit</i></td>
+				<td><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires TeraWallet, WooCommerce, and Pro Mode</td>
+			</tr>
+			<tr>
+				<td><b>Discord Webhook:</b><br><i>Only Available in Pro Mode</i></td>
+				<td><input type="text" name="discord_webhook" id="discord_webhook" value="'.$discord_webhook.'" size="128"></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Save Settings" class="button button-primary"></td>
 				<td></td>
 			</tr>
 		</form>
 	</table>
+	<h2>Shortcode</h2>
+	<p><div id="shortcode_output">[vidyen-wm]</div></p>
+	<button onclick="copy_shortcode()" class="button button-primary">Copy Shortcode To Clipboard</button>
+	<p>Copy and paste onto page where you want Webminer to go.</p>
+	<script>
+		//Thread Slider
+		var thread_slider = document.getElementById("wm_threads");
+		var thread_output = document.getElementById("thread_count");
+		thread_output.innerHTML = thread_slider.value;
+
+		thread_slider.oninput = function()
+		{
+		  thread_output.innerHTML = this.value;
+		}
+
+		//CPU Slider
+		var wm_cpu_slider = document.getElementById("wm_cpu");
+		var cpu_output = document.getElementById("cpu_use");
+		cpu_output.innerHTML = wm_cpu_slider.value;
+
+		wm_cpu_slider.oninput = function()
+		{
+			cpu_output.innerHTML = this.value;
+		}
+
+		//Copy shortcode link.
+		function copy_shortcode()
+		{
+		  var copyText = document.getElementById("shortcode_output");
+		  copyText.select();
+		  document.execCommand("copy");
+		  alert("Copied the URL: " + copyText.value);
+		}
+	</script>
 	<h2>Disclaimer</h2>
 	<p><b>NOTE: For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</b></p>
 	<p>If you do not like it, it would do you good to learn how to code or go back to just giving away your own efforts for free.</p>
@@ -307,6 +432,16 @@ function vidyen_wm_sub_menu_page()
 
 	//NOTE: I keep forgetting but wss://webminer.moneroocean.stream:443 is the webmining address for MO
 	//Everything created with intelligence is only successful because of Chaos and no reason the creator
+
+	//Going to pop up if there s is a a change. Making to look this nice.
+	if(!empty($message))
+	{
+
+		echo '<div id="message" class="updated notice is-dismissible">
+				<p><strong>'.$message.'</strong></p>
+				<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
+			</div>';
+	}
 
   echo $vidyen_wm_menu_html_ouput;
 }
