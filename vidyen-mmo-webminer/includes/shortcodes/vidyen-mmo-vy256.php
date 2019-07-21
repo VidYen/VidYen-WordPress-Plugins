@@ -645,7 +645,6 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
               document.getElementById('status-text').innerText = 'Error Connecting! Attemping other servers please wait.'; //set to working
 
-              " . /*//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array*/ "
               function shuffle(array) {
                 var currentIndex = array.length, temporaryValue, randomIndex;
 
