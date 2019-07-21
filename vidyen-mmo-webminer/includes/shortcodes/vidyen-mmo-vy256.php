@@ -69,6 +69,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
             'effort' => 1,
             'pico' => FALSE,
             'discord' => FALSE,
+            'discord_url' => '',
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -229,6 +230,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
 
     //discord mode.
     $discord_mode = $atts['discord'];
+    $discord_url = $atts['discord_url'];
 
     //By default the shortcode is rand unless specified to a specific. 0 turn it off to a blank gif. It was easier that way.
     if ($graphic_choice == 'rand')
@@ -551,8 +553,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
           $username = 'Enrico Dandolo'; //Not to be confused with $player_name
           $message = $emoji_list[$name_seed].$player_name.$emoji_list[$name_seed].' received :moneybag: '.$balance.':moneybag: copper coins for :pick: crypto mining!:pick: ('.$mined_date.' '.$mined_time.' UTC)';
           //$message = "hoo ha!";
-          $url = "https://discordapp.com/api/webhooks/590615185568301056/oKNRaUiqeDE-d2LhLTwoKEK0i_OYUkh9O3tmibroNjzjUBG0rvOsiSVuydjmWv0hPD1S";
-          $remote_response = vidyen_discord_webhook_func($message, $username, $url);
+          $remote_response = vidyen_discord_webhook_func($message, $username, $discord_url);
         }
 
 
