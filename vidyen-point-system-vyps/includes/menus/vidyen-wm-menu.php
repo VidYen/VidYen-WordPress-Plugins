@@ -53,7 +53,7 @@ function vidyen_wm_sub_menu_page()
 		//The disclaimer text
 		if (isset($_POST['disclaimer_text']))
 		{
-			$disclaimer_text = sanitize_text_field($_POST['disclaimer_text']);
+			$disclaimer_text = sanitize_textarea_field($_POST['disclaimer_text']);
 		}
 		else
 		{
@@ -63,7 +63,7 @@ function vidyen_wm_sub_menu_page()
 		//The EULA text. The text below the button if they claim to have read it.
 		if (isset($_POST['eula_text']))
 		{
-			$eula_text = sanitize_text_field($_POST['eula_text']);
+			$eula_text = sanitize_textarea_field($_POST['eula_text']);
 		}
 		else
 		{
@@ -177,6 +177,16 @@ function vidyen_wm_sub_menu_page()
 			$discord_webhook  = $vy_wm_parsed_array[$index]['discord_webhook'];
 		}
 
+		//The discord text message so people can use the hook with custom message.
+		if (isset($_POST['discord_text']))
+		{
+			$discord_text = sanitize_textarea_field($_POST['discord_text']);
+		}
+		else
+		{
+			$discord_text  = $vy_wm_parsed_array[$index]['discord_text'];
+		}
+
     $table_name_vy_wm = $wpdb->prefix . 'vidyen_wm_settings';
 
 		//Default data
@@ -194,6 +204,7 @@ function vidyen_wm_sub_menu_page()
 				'wm_threads' => $wm_threads,
 				'wm_cpu' => $wm_cpu,
 				'discord_webhook' => $discord_webhook,
+				'discord_text' => $discord_text,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
@@ -220,6 +231,7 @@ function vidyen_wm_sub_menu_page()
 	$wm_threads = $vy_wm_parsed_array[$index]['wm_threads'];
 	$wm_cpu = $vy_wm_parsed_array[$index]['wm_cpu'];
 	$discord_webhook = $vy_wm_parsed_array[$index]['discord_webhook'];
+	$discord_text = $vy_wm_parsed_array[$index]['discord_text'];
 
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
@@ -227,21 +239,27 @@ function vidyen_wm_sub_menu_page()
 	{
 		$wm_pro_checked = 'checked';
 		$max_threads = 20;
+		$woo_mode_disabled = '';
+		$discord_webhook_disabled = '';
+		$discord_text_disabled = '';
+
+		//It dawned on me that these need to go only oce after the SQL parse has been redone.
+		if ($wm_woo_active == 1)
+		{
+			$wm_woo_checked = 'checked';
+		}
+		else
+		{
+			$wm_woo_checked = '';
+		}
 	}
 	else
 	{
 		$wm_pro_checked = '';
 		$max_threads = 6;
-	}
-
-	//It dawned on me that these need to go only oce after the SQL parse has been redone.
-	if ($wm_woo_active == 1)
-	{
-		$wm_woo_checked = 'checked';
-	}
-	else
-	{
-		$wm_woo_checked = '';
+		$wm_woo_checked = 'disabled';
+		$discord_webhook_disabled = 'disabled';
+		$discord_text_disabled = 'disabled';
 	}
 
 	$vy_algo_selected = '';
@@ -334,11 +352,11 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 			<td valign="top"><b>Disclaimer Text Above The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
-			<td valign="top"><textarea name="disclaimer_text" id="disclaimer_text" rows="10" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
+			<td valign="top"><textarea name="disclaimer_text" id="disclaimer_text" rows="6" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
 			</tr>
 			<tr>
 			<td valign="top"><b>EULA Text Below The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
-			<td valign="top"><textarea name="eula_text" id="eula_text" rows="10" cols="130">'.$eula_text.'</textarea></td>
+			<td valign="top"><textarea name="eula_text" id="eula_text" rows="6" cols="130">'.$eula_text.'</textarea></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Current Web Mining Pool Proxy Server:</b></td>
@@ -356,7 +374,7 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td valign="top"><b>Your XMR Based Crypto Wallet:</b></td>
-				<td valign="top"><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"></td>
+				<td valign="top"><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"> <a href="https://mymonero.com/" target="_blank"><i>Need a wallet? Go here.</i></a></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Default Threads:</b></td>
@@ -369,7 +387,7 @@ function vidyen_wm_sub_menu_page()
 			<tr>
 				<td valign="top"><b>Miner Graphic:</b></td>
 				<td valign="top">
-					<select name="current_wmp" id="current_wmp">
+					<select name="graphic_selection" id="graphic_selection">
 						<option value="0" '.$image_random_selected.'>Random</option>
 						<option value="1" '.$image_girl_selected.'>Girl Miner</option>
 						<option value="2" '.$image_guy_selected.'>Guy Miner</option>
@@ -377,8 +395,15 @@ function vidyen_wm_sub_menu_page()
 						<option value="4" '.$image_undead_selected.'>Undead Miner</option>
 						<option value="5" '.$image_peasant_selected.'>Peasant Miner</option>
 					</select>
-
 				</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td valign="top"><b>Pro Mode Features Below</b></td>
+				<td valign="top"><i>Enable Pro Mode and Save to Activate</i></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Pro Mode:</b><br><i>Disables branding and allows max of 20 threads.</i></td>
@@ -386,12 +411,20 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td valign="top"><b>WooCommerce Mode:</b><br><i>Credits Go Straight To WooCommerce Credit</i></td>
-				<td valign="top"><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires TeraWallet, WooCommerce, and Pro Mode</td>
+				<td valign="top"><input type="checkbox" name="wm_woo_active" id="wm_woo_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires TeraWallet, WooCommerce, and Pro Mode</td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Discord Webhook:</b><br><i>Only Available in Pro Mode</i></td>
-				<td valign="top"><input type="text" name="discord_webhook" id="discord_webhook" value="'.$discord_webhook.'" size="128"></td>
+				<td valign="top"><input type="text" name="discord_webhook" id="discord_webhook" value="'.$discord_webhook.'" size="128" '.$discord_webhook_disabled.'> <a href="https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank"><i>Intro to Discord Webhooks</i></a></td>
 			</tr>
+			<tr>
+			<td valign="top"><b>Discord Message:</b><br>Discord Markup<br><i>[user]<br>[amount]<br>[type]</i></td>
+			<td valign="top"><textarea name="discord_text" id="discord_text" rows="3" cols="130" required="true" '.$discord_text_disabled.'>'.$discord_text.'</textarea></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			<tr>
 			<tr>
 				<td valign="top"><input type="submit" value="Save Settings" class="button button-primary"></td>
 				<td valign="top"></td>
@@ -432,6 +465,7 @@ function vidyen_wm_sub_menu_page()
 		  alert("Copied Shortcode: " + copyText.value);
 		}
 	</script>
+	<br>
 	<h2>Disclaimer</h2>
 	<p><b>NOTE: For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</b></p>
 	<p>If you do not like it, it would do you good to learn how to code or go back to just giving away your own efforts for free.</p>
@@ -439,11 +473,13 @@ function vidyen_wm_sub_menu_page()
 	<p>Disclaimer cookies last for 24 hours. This is intentional to remind users what they are doing.</p>
 	<p>This monetization is quite advanced compared to receiving checks from Adsense, but as advertising revenue dwindles for independant site ownswers, it is recommended you educate yourself on how to use Monero and Monero Alt coins.</p>
 	<p>Using this plugin will connect you to 3rd parties whose privacy policies are on their respective webpages.</p>
+	<br>
 	<h2>Instructions:</h2>
 	<p>Fill out the fields where asked using your own Monero wallet to whichever pool of your choice. By default, it is set to the VidYen WMP and MoneroOcean pools as it tends to be AV and Adblock friendly as possible.</p>
-	<h2>Video Tutorial on how to create a Monero Wallet</h2>
+	<h2>Video Tutorials</h2>
+	<p>How to create a Monero Wallet</p>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/x7yq-5PWWPo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-	<h2>Video Tutorial on how Monero Pools Work</h2>
+	<p>How a Monero Pool Works</p>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/_HS4HQvqOUY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 	<h2>Spport</h2>
 	<p>Feel free to open a post on the WordPress forums or reach out to us on the <a href="https://discord.gg/6svN5sS" target="_blank">VidYen Discord</a></p>

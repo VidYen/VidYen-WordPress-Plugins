@@ -32,6 +32,7 @@ function vidyen_vy_wm_settings()
     $wm_threads = $result->wm_threads;
     $wm_cpu = $result->wm_cpu;
     $discord_webhook = $result->discord_webhook;
+    $discord_text = $result->discord_text;
     //Array parsing to cram it into multi dimensional row
     //TODO: Add index names and not numbers for second part!
     $vy_wm_parsed_array[$index]['button_text'] = $button_text;
@@ -47,6 +48,7 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['wm_threads'] = $wm_threads;
     $vy_wm_parsed_array[$index]['wm_cpu'] = $wm_cpu;
     $vy_wm_parsed_array[$index]['discord_webhook'] = $discord_webhook;
+    $vy_wm_parsed_array[$index]['discord_text'] = $discord_text;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }
