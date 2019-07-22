@@ -33,6 +33,8 @@ function vidyen_vy_wm_settings()
     $wm_cpu = $result->wm_cpu;
     $discord_webhook = $result->discord_webhook;
     $discord_text = $result->discord_text;
+    $custom_paused_graphic = $result->custom_paused_graphic;
+    $custom_animated_graphic = $result->custom_animated_graphic;
     //Array parsing to cram it into multi dimensional row
     //TODO: Add index names and not numbers for second part!
     $vy_wm_parsed_array[$index]['button_text'] = $button_text;
@@ -49,6 +51,8 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['wm_cpu'] = $wm_cpu;
     $vy_wm_parsed_array[$index]['discord_webhook'] = $discord_webhook;
     $vy_wm_parsed_array[$index]['discord_text'] = $discord_text;
+    $vy_wm_parsed_array[$index]['custom_paused_graphic'] = $custom_paused_graphic;
+    $vy_wm_parsed_array[$index]['custom_animated_graphic'] = $custom_animated_graphic;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }

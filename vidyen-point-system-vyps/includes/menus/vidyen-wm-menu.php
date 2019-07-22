@@ -110,15 +110,76 @@ function vidyen_wm_sub_menu_page()
 			$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
 		}
 
-		//The graphic selection wallet. This should be a number starting from 0. Custom graphics will come later.
-		if (isset($_POST['graphic_selection']))
+		//Graphics selection. In theory this will all be set by defaultor something went wrong.
+		//NOTE: I feel this is rather clunky and inefficient, but users won't be hitting the menu
+		//And admins will set this a few times and then leave it.
+		if (isset($_POST['graphic_girl']))
 		{
-			$graphic_selection = intval($_POST['graphic_selection']);
+			//Build the string. Each of these should be a 1 or 0.
+			$girl_graphic_selection = 'girl='.intval($_POST['graphic_girl']);
 		}
 		else
 		{
-			$graphic_selection  = $vy_wm_parsed_array[$index]['graphic_selection'];
+			$girl_graphic_selection  = 'girl=0';
 		}
+
+		if (isset($_POST['graphic_guy']))
+		{
+			//Build the string. Each of these should be a 1 or 0.
+			$guy_graphic_selection = '&guy='.intval($_POST['graphic_guy']);
+		}
+		else
+		{
+			$guy_graphic_selection  = '&guy=0';
+		}
+
+		if (isset($_POST['graphic_cyber']))
+		{
+			//Build the string. Each of these should be a 1 or 0.
+			$cyber_graphic_selection = '&cyber='.intval($_POST['graphic_cyber']);
+		}
+		else
+		{
+			$cyber_graphic_selection  = '&cyber=0';
+		}
+
+		if (isset($_POST['graphic_undead']))
+		{
+			//Build the string. Each of these should be a 1 or 0.
+			$undead_graphic_selection = '&undead='.intval($_POST['graphic_undead']);
+		}
+		else
+		{
+			$undead_graphic_selection  = '&undead=0';
+		}
+
+		if (isset($_POST['graphic_peasant']))
+		{
+			//Build the string. Each of these should be a 1 or 0.
+			$peasant_graphic_selection = '&peasant='.intval($_POST['graphic_peasant']);
+		}
+		else
+		{
+			$peasant_graphic_selection  = '&peasant=0';
+		}
+
+		if (isset($_POST['graphic_custom']))
+		{
+			//Build the string. Each of these should be a 1 or 0.
+			$peasant_graphic_selection = '&custom='.intval($_POST['graphic_custom']);
+		}
+		else
+		{
+			$peasant_graphic_selection  = '&custom=0';
+		}
+
+		//Time to build it and shove it into the table.
+		$graphic_selection = $girl_graphic_selection;
+		$graphic_selection .= $guy_graphic_selection;
+		$graphic_selection .= $cyber_graphic_selection;
+		$graphic_selection .= $undead_graphic_selection;
+		$graphic_selection .= $peasant_graphic_selection;
+
 
 		//But is it possible to have the WM off while the GK is active.
 		if (isset($_POST['wm_pro_active']))
@@ -187,6 +248,20 @@ function vidyen_wm_sub_menu_page()
 			$discord_text  = $vy_wm_parsed_array[$index]['discord_text'];
 		}
 
+		/*
+		if (isset($_GET['custom_miner_paused_url']))
+		{
+			//Stationary
+			$custom_miner_paused_upload = media_handle_upload('custom_miner_paused_url'); //Put the graphic in cause $_POST
+			$custom_paused_miner_graphic_url  =  wp_get_attachment_url( $custom_miner_paused_upload ); //get url for SQL
+		}
+
+		*/
+
+		//In motion
+		$custom_miner_animated_upload = media_handle_upload('custom_miner_animated_url'); //Put the graphic in cause $_POST
+		$custom_miner_animated_graphic_url  =  wp_get_attachment_url( $custom_miner_animated_upload ); //get url for SQL
+
     $table_name_vy_wm = $wpdb->prefix . 'vidyen_wm_settings';
 
 		//Default data
@@ -205,6 +280,7 @@ function vidyen_wm_sub_menu_page()
 				'wm_cpu' => $wm_cpu,
 				'discord_webhook' => $discord_webhook,
 				'discord_text' => $discord_text,
+				'custom_animated_graphic' => $custom_miner_animated_graphic_url,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
@@ -232,6 +308,8 @@ function vidyen_wm_sub_menu_page()
 	$wm_cpu = $vy_wm_parsed_array[$index]['wm_cpu'];
 	$discord_webhook = $vy_wm_parsed_array[$index]['discord_webhook'];
 	$discord_text = $vy_wm_parsed_array[$index]['discord_text'];
+	$custom_paused_graphic = $vy_wm_parsed_array[$index]['custom_paused_graphic'];
+	$custom_animated_graphic = $vy_wm_parsed_array[$index]['custom_animated_graphic'];
 
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
@@ -280,56 +358,73 @@ function vidyen_wm_sub_menu_page()
 		$mo_algo_selected = 'selected';
 	}
 
+	//Parse graphics selection.
+	wp_parse_str($graphic_selection, $graphics_selection_arary);
 
+	//Some DEBUG for above
+	//echo 'Girl Result:<br>' . intval($graphics_selection_arary['girl']);
+
+	//Inite the variables.
 	$image_random_selected = '';
 	$image_girl_selected = '';
 	$image_guy_selected = '';
 	$image_cyber_selected = '';
 	$image_undead_selected = '';
 	$image_peasant_selected = '';
+	$image_custom_selected = '';
+
+	//NOTE: These have to checked each and not an elseif since they all could be true
+	//We actually need to check each one. May not be the most efficient.
+	if(intval($graphics_selection_arary['girl'])==1)
+	{
+		$image_girl_selected = 'checked';
+	}
+
+	//We actually need to check each one. May not be the most efficient.
+	if(intval($graphics_selection_arary['guy'])==1)
+	{
+		$image_guy_selected = 'checked';
+	}
+
+	//We actually need to check each one. May not be the most efficient.
+	if(intval($graphics_selection_arary['cyber'])==1)
+	{
+		$image_cyber_selected = 'checked';
+	}
+
+	//We actually need to check each one. May not be the most efficient.
+	if(intval($graphics_selection_arary['undead'])==1)
+	{
+		$image_undead_selected = 'checked';
+	}
+
+	//We actually need to check each one. May not be the most efficient.
+	if(intval($graphics_selection_arary['peasant'])==1)
+	{
+		$image_peasant_selected = 'checked';
+	}
+
+	//We actually need to check each one. May not be the most efficient.
+	if(intval($graphics_selection_arary['custom'])==1)
+	{
+		$image_custom_selected = 'checked';
+	}
+
 
 	//GRAPHICS
 	$VYPS_worker_url = plugins_url( 'images/stat_vyworker_001.gif', dirname(__FILE__) );
-	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'" style="height: 128px;"></div>';
+	$VYPS_worker_img = '<div><img src="'.$VYPS_worker_url.'" style="height: 64px;"></div>';
 
 	$image_url_folder = plugins_url( 'images/', dirname(__FILE__) );
 
-	$image_url_girl = $image_url_folder.'vyworker_001.gif';
-	$image_url_guy = $image_url_folder.'vyworker_002.gif';
-	$image_url_cyber = $image_url_folder.'vyworker_003.gif';
-	$image_url_undead = $image_url_folder.'vyworker_004.gif';
-	$image_url_peasant = $image_url_folder.'vyworker_005.gif';
+	$image_url_girl = '<div><img src="'.$image_url_folder.'vyworker_001.gif'.'" style="height: 64px;"></div>';
+	$image_url_guy = '<div><img src="'.$image_url_folder.'vyworker_002.gif'.'" style="height: 64px;"></div>';
+	$image_url_cyber = '<div><img src="'.$image_url_folder.'vyworker_003.gif'.'" style="height: 64px;"></div>';
+	$image_url_undead = '<div><img src="'.$image_url_folder.'vyworker_004.gif'.'" style="height: 64px;"></div>';
+	$image_url_peasant = '<div><img src="'.$image_url_folder.'vyworker_005.gif'.'" style="height: 64px;"></div>';
 
-	//Going to use a swithc case as it seems logical.
-	switch ($graphic_selection)
-	{
-		case 0:
-			$image_random_selected = 'selected';
-			$current_image = '';
-			break;
-		case 1:
-			$image_girl_selected = 'selected';
-			$current_image = $image_url_girl;
-			break;
-		case 2:
-			$image_guy_selected = 'selected';
-			$current_image = $image_url_guy;
-			break;
-		case 3:
-			$image_cyber_selected = 'selected';
-			$current_image = $image_url_cyber;
-			break;
-		case 4:
-			$image_undead_selected = 'selected';
-			$current_image = $image_url_undead;
-			break;
-		case 5:
-			$image_peasant_selected = 'selected';
-			$current_image = $image_url_peasant;
-			break;
-	}
-
-	$current_image_format = '<img style="width: 16px;" src="'.$current_image.'">';
+	//Custom graphic, I suspec it has the full url rather than being in the plugin. NOTE: Its the animated graphic
+	$image_url_custom = '<div><img src="'.$custom_animated_graphic.'" style="height: 64px;"></div>';
 
 	//It's possible we don't use the VYPS logo since no points.
   //$vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
@@ -385,16 +480,18 @@ function vidyen_wm_sub_menu_page()
 				<td valign="top"><input type="range" step="1" min="0" max="100" value="'.$wm_cpu.'" class="slider" name="wm_cpu" id="wm_cpu" size="128"> Default CPU: <span id="cpu_use">'.$wm_cpu.'</span></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Miner Graphic:</b></td>
+				<td valign="top"><b>Miner Graphics:</b><br><i>Check Or Uncheck Included Graphics you wish to use.<br>Checking more than one will pick one selected at random.<br>Unchecking all will leave use no animation graphic.</i></td>
 				<td valign="top">
-					<select name="graphic_selection" id="graphic_selection">
-						<option value="0" '.$image_random_selected.'>Random</option>
-						<option value="1" '.$image_girl_selected.'>Girl Miner</option>
-						<option value="2" '.$image_guy_selected.'>Guy Miner</option>
-						<option value="3" '.$image_cyber_selected.'>Cyber Miner</option>
-						<option value="4" '.$image_undead_selected.'>Undead Miner</option>
-						<option value="5" '.$image_peasant_selected.'>Peasant Miner</option>
-					</select>
+					<table>
+						<tr>
+							<td><input type="checkbox" name="graphic_girl" id="graphic_girl" value="1" '.$image_girl_selected.'>'.$image_url_girl.'</td>
+							<td><input type="checkbox" name="graphic_guy" id="graphic_guy" value="1" '.$image_guy_selected.'>'.$image_url_guy.'</td>
+							<td><input type="checkbox" name="graphic_cyber" id="graphic_cyber" value="1" '.$image_cyber_selected.'>'.$image_url_cyber.'</td>
+							<td><input type="checkbox" name="graphic_undead" id="graphic_undead" value="1" '.$image_undead_selected.'>'.$image_url_undead.'</td>
+							<td><input type="checkbox" name="graphic_peasant" id="graphic_peasant" value="1" '.$image_peasant_selected.'>'.$image_url_peasant.'</td>
+							<td><input type="checkbox" name="graphic_custom" id="graphic_peasant" value="1" '.$image_custom_selected.'>'.$image_url_custom.'</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 			<tr>
@@ -418,9 +515,13 @@ function vidyen_wm_sub_menu_page()
 				<td valign="top"><input type="text" name="discord_webhook" id="discord_webhook" value="'.$discord_webhook.'" size="128" '.$discord_webhook_disabled.'> <a href="https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank"><i>Intro to Discord Webhooks</i></a></td>
 			</tr>
 			<tr>
-			<td valign="top"><b>Discord Message:</b><br>Discord Markup<br><i>[user]<br>[amount]<br>[type]</i></td>
-			<td valign="top"><textarea name="discord_text" id="discord_text" rows="3" cols="130" required="true" '.$discord_text_disabled.'>'.$discord_text.'</textarea></td>
+				<td valign="top"><b>Discord Message:</b><br>Discord Markup<br><i>[user]<br>[amount]<br>[type]</i></td>
+				<td valign="top"><textarea name="discord_text" id="discord_text" rows="3" cols="130" required="true" '.$discord_text_disabled.'>'.$discord_text.'</textarea></td>
 			</tr>
+			<tr>
+				<td valign="top"><b>Custom Graphic:</b><br><i>Use your own graphic that for miner in motion</i></td>
+				<td><input name="custom_miner_animated_url" type="file" id="custom_miner_animated_url" value="" aria-required="true" autocapitalize="none" autocorrect="off"></td>
+			<tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
