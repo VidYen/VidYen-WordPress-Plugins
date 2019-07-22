@@ -163,14 +163,14 @@ function vidyen_wm_sub_menu_page()
 			$peasant_graphic_selection  = '&peasant=0';
 		}
 
-		if (isset($_POST['graphic_custom']))
+		if (isset($_POST['graphic_youtube']))
 		{
 			//Build the string. Each of these should be a 1 or 0.
-			$peasant_graphic_selection = '&custom='.intval($_POST['graphic_custom']);
+			$youtube_graphic_selection = '&youtube='.intval($_POST['graphic_youtube']);
 		}
 		else
 		{
-			$peasant_graphic_selection  = '&custom=0';
+			$youtube_graphic_selection  = '&youtube=0';
 		}
 
 		//Time to build it and shove it into the table.
@@ -179,6 +179,7 @@ function vidyen_wm_sub_menu_page()
 		$graphic_selection .= $cyber_graphic_selection;
 		$graphic_selection .= $undead_graphic_selection;
 		$graphic_selection .= $peasant_graphic_selection;
+		$graphic_selection .= $youtube_graphic_selection;
 
 
 		//But is it possible to have the WM off while the GK is active.
@@ -248,19 +249,14 @@ function vidyen_wm_sub_menu_page()
 			$discord_text  = $vy_wm_parsed_array[$index]['discord_text'];
 		}
 
-		/*
-		if (isset($_GET['custom_miner_paused_url']))
+		if (isset($_POST['youtube_url']))
 		{
-			//Stationary
-			$custom_miner_paused_upload = media_handle_upload('custom_miner_paused_url'); //Put the graphic in cause $_POST
-			$custom_paused_miner_graphic_url  =  wp_get_attachment_url( $custom_miner_paused_upload ); //get url for SQL
+			$youtube_url = esc_url_raw($_POST['youtube_url']);
 		}
-
-		*/
-
-		//In motion
-		$custom_miner_animated_upload = media_handle_upload('custom_miner_animated_url'); //Put the graphic in cause $_POST
-		$custom_miner_animated_graphic_url  =  wp_get_attachment_url( $custom_miner_animated_upload ); //get url for SQL
+		else
+		{
+			$youtube_url  = $vy_wm_parsed_array[$index]['youtube_url'];
+		}
 
     $table_name_vy_wm = $wpdb->prefix . 'vidyen_wm_settings';
 
@@ -280,7 +276,7 @@ function vidyen_wm_sub_menu_page()
 				'wm_cpu' => $wm_cpu,
 				'discord_webhook' => $discord_webhook,
 				'discord_text' => $discord_text,
-				'custom_animated_graphic' => $custom_miner_animated_graphic_url,
+				'youtube_url' => $youtube_url,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
@@ -288,7 +284,6 @@ function vidyen_wm_sub_menu_page()
 
 	    //I forget thow this works
 	    $message = "Settings Saved";
-
 	}
 
 	$vy_wm_parsed_array = vidyen_vy_wm_settings();
@@ -308,9 +303,7 @@ function vidyen_wm_sub_menu_page()
 	$wm_cpu = $vy_wm_parsed_array[$index]['wm_cpu'];
 	$discord_webhook = $vy_wm_parsed_array[$index]['discord_webhook'];
 	$discord_text = $vy_wm_parsed_array[$index]['discord_text'];
-	$custom_paused_graphic = $vy_wm_parsed_array[$index]['custom_paused_graphic'];
-	$custom_animated_graphic = $vy_wm_parsed_array[$index]['custom_animated_graphic'];
-
+	$youtube_url = $vy_wm_parsed_array[$index]['youtube_url'];
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
 	if ($wm_pro_active == 1)
@@ -320,6 +313,7 @@ function vidyen_wm_sub_menu_page()
 		$woo_mode_disabled = '';
 		$discord_webhook_disabled = '';
 		$discord_text_disabled = '';
+		$youtube_url_disabled = '';
 
 		//It dawned on me that these need to go only oce after the SQL parse has been redone.
 		if ($wm_woo_active == 1)
@@ -338,6 +332,7 @@ function vidyen_wm_sub_menu_page()
 		$wm_woo_checked = 'disabled';
 		$discord_webhook_disabled = 'disabled';
 		$discord_text_disabled = 'disabled';
+		$youtube_url_disabled = 'disabled';
 	}
 
 	$vy_algo_selected = '';
@@ -358,7 +353,7 @@ function vidyen_wm_sub_menu_page()
 		$mo_algo_selected = 'selected';
 	}
 
-	//Parse graphics selection.
+	//Parse graphics selection. I use my own string for SQL
 	wp_parse_str($graphic_selection, $graphics_selection_arary);
 
 	//Some DEBUG for above
@@ -371,7 +366,7 @@ function vidyen_wm_sub_menu_page()
 	$image_cyber_selected = '';
 	$image_undead_selected = '';
 	$image_peasant_selected = '';
-	$image_custom_selected = '';
+	$image_youtube_selected = '';
 
 	//NOTE: These have to checked each and not an elseif since they all could be true
 	//We actually need to check each one. May not be the most efficient.
@@ -405,9 +400,9 @@ function vidyen_wm_sub_menu_page()
 	}
 
 	//We actually need to check each one. May not be the most efficient.
-	if(intval($graphics_selection_arary['custom'])==1)
+	if(intval($graphics_selection_arary['youtube'])==1)
 	{
-		$image_custom_selected = 'checked';
+		$image_youtube_selected = 'checked';
 	}
 
 
@@ -422,9 +417,7 @@ function vidyen_wm_sub_menu_page()
 	$image_url_cyber = '<div><img src="'.$image_url_folder.'vyworker_003.gif'.'" style="height: 64px;"></div>';
 	$image_url_undead = '<div><img src="'.$image_url_folder.'vyworker_004.gif'.'" style="height: 64px;"></div>';
 	$image_url_peasant = '<div><img src="'.$image_url_folder.'vyworker_005.gif'.'" style="height: 64px;"></div>';
-
-	//Custom graphic, I suspec it has the full url rather than being in the plugin. NOTE: Its the animated graphic
-	$image_url_custom = '<div><img src="'.$custom_animated_graphic.'" style="height: 64px;"></div>';
+	$image_url_youtube = '<div><img src="'.$image_url_folder.'youtube_option.png'.'" style="height: 64px;"></div>';
 
 	//It's possible we don't use the VYPS logo since no points.
   //$vyps_logo_url = plugins_url( 'includes/images/logo.png', __FILE__ );
@@ -489,7 +482,7 @@ function vidyen_wm_sub_menu_page()
 							<td><input type="checkbox" name="graphic_cyber" id="graphic_cyber" value="1" '.$image_cyber_selected.'>'.$image_url_cyber.'</td>
 							<td><input type="checkbox" name="graphic_undead" id="graphic_undead" value="1" '.$image_undead_selected.'>'.$image_url_undead.'</td>
 							<td><input type="checkbox" name="graphic_peasant" id="graphic_peasant" value="1" '.$image_peasant_selected.'>'.$image_url_peasant.'</td>
-							<td><input type="checkbox" name="graphic_custom" id="graphic_peasant" value="1" '.$image_custom_selected.'>'.$image_url_custom.'</td>
+							<td><input type="checkbox" name="graphic_youtube" id="graphic_youtube" value="1" '.$image_youtube_selected.'>'.$image_url_youtube.'</td>
 						</tr>
 					</table>
 				</td>
@@ -519,9 +512,9 @@ function vidyen_wm_sub_menu_page()
 				<td valign="top"><textarea name="discord_text" id="discord_text" rows="3" cols="130" required="true" '.$discord_text_disabled.'>'.$discord_text.'</textarea></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Custom Graphic:</b><br><i>Use your own graphic that for miner in motion</i></td>
-				<td><input name="custom_miner_animated_url" type="file" id="custom_miner_animated_url" value="" aria-required="true" autocapitalize="none" autocorrect="off"></td>
-			<tr>
+				<td valign="top"><b>YouTube Graphic URL:</b><br><i>Uses Custom Video For The Graphic. Paste YouTube share link.</i></td>
+				<td valign="top"><input type="text" name="youtube_url" id="youtube_url" value="'.$youtube_url.'" size="128" '.$youtube_url_disabled.'>
+			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
