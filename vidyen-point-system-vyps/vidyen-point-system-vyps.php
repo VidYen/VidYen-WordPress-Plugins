@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      2.5.0.54
+Version:      2.5.0.57
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -96,6 +96,8 @@ function vyps_points_install()
 		button_text TINYTEXT NOT NULL,
 		disclaimer_text MEDIUMTEXT NOT NULL,
 		eula_text MEDIUMTEXT NOT NULL,
+		login_text MEDIUMTEXT NOT NULL,
+		login_url varchar(256) NOT NULL,
 		current_wmp varchar(256) NOT NULL,
 		current_pool varchar(256) NOT NULL,
 		site_name varchar(256) NOT NULL,
@@ -118,12 +120,14 @@ function vyps_points_install()
 		$site_disclaim_name = get_bloginfo('name');
 
 		$default_disclaimer_text = "By clicking the button you consent to have your browser mine cryptocurrency and to exchange it with $site_disclaim_name for points. This will use your device’s resources, so we ask you to be mindful of your CPU and battery use.";
+		$default_login_text = "You need to be logged in to get credit for Webmining!";
 
 		//Default data
 		$data_insert = [
 				'button_text' => 'I agree and consent',
 				'disclaimer_text' => $default_disclaimer_text,
 				'eula_text' => '',
+				'login_text' => $default_login_text,
 				'current_wmp' => 'igori.vy256.com:8256',
 				'current_pool' => 'moneroocean.stream',
 				'site_name' => 'default',
@@ -268,7 +272,7 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_credi
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_deduct_func.php'); //Streamlined deduct
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_debug_func.php'); //Debug mode. Reduces memory footprint of miner.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_timer.php'); //Timer moved to its own function since more than one short code using it
-include( plugin_dir_path( __FILE__ ) . 'includes/functions/wmsql/vidyen_wm_settings.php'); //Timer moved to its own function since more than one short code using it
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/wm/vidyen_wm_settings.php'); //Timer moved to its own function since more than one short code using it
 
 /*** MO API ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now

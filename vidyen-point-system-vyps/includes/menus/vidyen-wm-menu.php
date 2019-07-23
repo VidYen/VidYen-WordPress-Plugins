@@ -70,6 +70,27 @@ function vidyen_wm_sub_menu_page()
 			$eula_text  = $vy_wm_parsed_array[$index]['eula_text'];
 		}
 
+		//The EULA text. The text below the button if they claim to have read it.
+		if (isset($_POST['login_text']))
+		{
+			$login_text = sanitize_textarea_field($_POST['login_text']);
+		}
+		else
+		{
+			$login_text  = $vy_wm_parsed_array[$index]['login_text'];
+		}
+
+		//sanitize_url
+		//The login url (optional) to have button redirect to login.
+		if (isset($_POST['login_url']))
+		{
+			$discord_webhook = esc_url_raw($_POST['login_url']);
+		}
+		else
+		{
+			$discord_webhook  = $vy_wm_parsed_array[$index]['login_url'];
+		}
+
 		//The current WPM server (NOTE Not the pool but the proxy)
 		if (isset($_POST['current_wmp']))
 		{
@@ -265,6 +286,8 @@ function vidyen_wm_sub_menu_page()
 	      'button_text' => $button_text,
 	      'disclaimer_text' => $disclaimer_text,
 	      'eula_text' => $eula_text,
+				'login_text' => $login_text,
+				'login_url' => $login_url,
 	      'current_wmp' => $current_wmp,
 	      'current_pool' => $current_pool,
 	      'site_name' => $site_name,
@@ -292,6 +315,8 @@ function vidyen_wm_sub_menu_page()
 	$button_text = $vy_wm_parsed_array[$index]['button_text'];
 	$disclaimer_text = $vy_wm_parsed_array[$index]['disclaimer_text'];
 	$eula_text = $vy_wm_parsed_array[$index]['eula_text'];
+	$login_text = $vy_wm_parsed_array[$index]['login_text'];
+	$login_url = $vy_wm_parsed_array[$index]['login_url'];
 	$current_wmp = $vy_wm_parsed_array[$index]['current_wmp'];
 	$current_pool = $vy_wm_parsed_array[$index]['current_pool'];
 	$site_name = $vy_wm_parsed_array[$index]['site_name'];
@@ -434,17 +459,25 @@ function vidyen_wm_sub_menu_page()
 	<table width=100%>
 		<form method="post">
 			<tr>
-					<td valign="top"><b>Button Text:</b></td>
+				<td valign="top"><b>Button Text:</b></td>
 				<td valign="top"><input type="text" name="button_text" id="button_text" value="'.$button_text.'" size="128" required="true">
 				<input type="hidden" name="vypsnoncepost" id="vypsnoncepost" value="'.$vyps_nonce_check.'"/></td>
 			</tr>
 			<tr>
-			<td valign="top"><b>Disclaimer Text Above The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
-			<td valign="top"><textarea name="disclaimer_text" id="disclaimer_text" rows="6" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
+				<td valign="top"><b>Disclaimer Text Above The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
+				<td valign="top"><textarea name="disclaimer_text" id="disclaimer_text" rows="6" cols="130" required="true">'.$disclaimer_text.'</textarea></td>
 			</tr>
 			<tr>
-			<td valign="top"><b>EULA Text Below The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
-			<td valign="top"><textarea name="eula_text" id="eula_text" rows="6" cols="130">'.$eula_text.'</textarea></td>
+				<td valign="top"><b>EULA Text Below The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
+				<td valign="top"><textarea name="eula_text" id="eula_text" rows="6" cols="130">'.$eula_text.'</textarea></td>
+			</tr>
+			<tr>
+				<td valign="top"><b>Login Text:</b><br>Text that shows up if user not logged in.<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
+				<td valign="top"><textarea name="login_text" id="login_text" rows="6" cols="130">'.$login_text.'</textarea></td>
+			</tr>
+			<tr>
+				<td valign="top"><b>Login URL:</b><br><i>Button Directs This Login Page if user is not logged on.</i></td>
+				<td valign="top"><input type="text" name="login_url" id="login_url" value="'.$login_url.'" size="128" > <i>(Optional)</i></a></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Current Web Mining Pool Proxy Server:</b></td>
@@ -501,7 +534,7 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td valign="top"><b>WooCommerce Mode:</b><br><i>Credits Go Straight To WooCommerce Credit</i></td>
-				<td valign="top"><input type="checkbox" name="wm_woo_active" id="wm_woo_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires TeraWallet, WooCommerce, and Pro Mode</td>
+				<td valign="top"><input type="checkbox" name="wm_woo_active" id="wm_woo_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires <a href="https://wordpress.org/plugins/woo-wallet/" target="_blank">TeraWallet</a>, <a href="https://wordpress.org/plugins/woocommerce/" target="_blank">WooCommerce</a>, and Pro Mode</td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Discord Webhook:</b><br><i>Only Available in Pro Mode</i></td>

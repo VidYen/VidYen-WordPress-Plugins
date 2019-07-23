@@ -22,6 +22,8 @@ function vidyen_vy_wm_settings()
     $button_text = $result->button_text;
     $disclaimer_text = $result->disclaimer_text;
     $eula_text = $result->eula_text;
+    $login_text = $result->login_text;
+    $login_url = $result->login_url;
     $current_wmp = $result->current_wmp;
     $current_pool = $result->current_pool;
     $site_name = $result->site_name;
@@ -39,6 +41,8 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['button_text'] = $button_text;
     $vy_wm_parsed_array[$index]['disclaimer_text'] = $disclaimer_text;
     $vy_wm_parsed_array[$index]['eula_text'] = $eula_text;
+    $vy_wm_parsed_array[$index]['login_text'] = $login_text;
+    $vy_wm_parsed_array[$index]['login_url'] = $login_url;
     $vy_wm_parsed_array[$index]['current_wmp'] = $current_wmp;
     $vy_wm_parsed_array[$index]['current_pool'] = $current_pool;
     $vy_wm_parsed_array[$index]['site_name'] = $site_name;
@@ -50,7 +54,7 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['wm_cpu'] = $wm_cpu;
     $vy_wm_parsed_array[$index]['discord_webhook'] = $discord_webhook;
     $vy_wm_parsed_array[$index]['discord_text'] = $discord_text;
-    $vy_wm_parsed_array[$index]['youtube_url'] = $youtube_url;    
+    $vy_wm_parsed_array[$index]['youtube_url'] = $youtube_url;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }
