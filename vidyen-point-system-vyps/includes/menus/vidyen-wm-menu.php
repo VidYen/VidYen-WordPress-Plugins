@@ -84,11 +84,11 @@ function vidyen_wm_sub_menu_page()
 		//The login url (optional) to have button redirect to login.
 		if (isset($_POST['login_url']))
 		{
-			$discord_webhook = esc_url_raw($_POST['login_url']);
+			$login_url = esc_url_raw($_POST['login_url']);
 		}
 		else
 		{
-			$discord_webhook  = $vy_wm_parsed_array[$index]['login_url'];
+			$login_url  = $vy_wm_parsed_array[$index]['login_url'];
 		}
 
 		//The current WPM server (NOTE Not the pool but the proxy)
@@ -469,7 +469,7 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td valign="top"><b>EULA Text Below The Button:</b><br>HTML mark up<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>
-				<td valign="top"><textarea name="eula_text" id="eula_text" rows="6" cols="130">'.$eula_text.'</textarea></td>
+				<td valign="top"><textarea name="eula_text" id="eula_text" rows="6" cols="130">'.$eula_text.'</textarea> <i>(Optional)</i></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Login Text:</b><br>Text that shows up if user not logged in.<br><i>[img]image url[/img]<br>[b]bold[/b]<br>[br] for line breaks</i></td>

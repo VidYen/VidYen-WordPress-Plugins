@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Point System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      2.5.0.57
+Version:      2.5.0.66
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -273,6 +273,10 @@ include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_deduc
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_debug_func.php'); //Debug mode. Reduces memory footprint of miner.
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/core/vyps_point_timer.php'); //Timer moved to its own function since more than one short code using it
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/wm/vidyen_wm_settings.php'); //Timer moved to its own function since more than one short code using it
+
+/*** VYVM ***/
+include( plugin_dir_path( __FILE__ ) . 'includes/shortcodes/vidyen-wm.php'); //Going to contain this here on these few lines.
+include( plugin_dir_path( __FILE__ ) . 'includes/functions/wm/vidyen_wm_shortcode_func.php'); //The php code itself.
 
 /*** MO API ***/
 include( plugin_dir_path( __FILE__ ) . 'includes/functions/mo-api/vyps_mo_price_api.php'); //MO API functions. may break into different currencies for but now
