@@ -279,6 +279,15 @@ function vidyen_wm_sub_menu_page()
 			$youtube_url  = $vy_wm_parsed_array[$index]['youtube_url'];
 		}
 
+		if (isset($_POST['custom_wmp']))
+		{
+			$custom_wmp = esc_url_raw($_POST['custom_wmp']);
+		}
+		else
+		{
+			$custom_wmp  = $vy_wm_parsed_array[$index]['custom_wmp'];
+		}
+
     $table_name_vy_wm = $wpdb->prefix . 'vidyen_wm_settings';
 
 		//Default data
@@ -300,6 +309,7 @@ function vidyen_wm_sub_menu_page()
 				'discord_webhook' => $discord_webhook,
 				'discord_text' => $discord_text,
 				'youtube_url' => $youtube_url,
+				'custom_wmp' => $custom_wmp,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
@@ -329,6 +339,7 @@ function vidyen_wm_sub_menu_page()
 	$discord_webhook = $vy_wm_parsed_array[$index]['discord_webhook'];
 	$discord_text = $vy_wm_parsed_array[$index]['discord_text'];
 	$youtube_url = $vy_wm_parsed_array[$index]['youtube_url'];
+  $custom_wmp = $vy_wm_parsed_array[$index]['custom_wmp'];
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
 	if ($wm_pro_active == 1)
@@ -339,6 +350,7 @@ function vidyen_wm_sub_menu_page()
 		$discord_webhook_disabled = '';
 		$discord_text_disabled = '';
 		$youtube_url_disabled = '';
+		$custom_wmp_url_disabled = '';
 
 		//It dawned on me that these need to go only oce after the SQL parse has been redone.
 		if ($wm_woo_active == 1)
@@ -358,6 +370,7 @@ function vidyen_wm_sub_menu_page()
 		$discord_webhook_disabled = 'disabled';
 		$discord_text_disabled = 'disabled';
 		$youtube_url_disabled = 'disabled';
+		$custom_wmp_url_disabled = 'disabled';
 	}
 
 	$vy_algo_selected = '';
@@ -547,6 +560,10 @@ function vidyen_wm_sub_menu_page()
 			<tr>
 				<td valign="top"><b>YouTube Graphic URL:</b><br><i>Uses Custom Video For The Graphic. Paste YouTube share link.</i></td>
 				<td valign="top"><input type="text" name="youtube_url" id="youtube_url" value="'.$youtube_url.'" size="128" '.$youtube_url_disabled.'>
+			</tr>
+			<tr>
+				<td valign="top"><b>Custom WMP:</b><br><i>Advanced! Uses custom Web Miner Pool proxy server.<br>Format:<br>servername:port<br>ie: webminer.moneroocean.stream:443<br>Will override the Proxy server settings above regardless of what set to.</i></td>
+				<td valign="top"><input type="text" name="custom_wmp" id="custom_wmp" value="'.$custom_wmp.'" size="128" '.$custom_wmp_url_disabled.'>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>

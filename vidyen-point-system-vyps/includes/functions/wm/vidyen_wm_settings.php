@@ -36,6 +36,7 @@ function vidyen_vy_wm_settings()
     $discord_webhook = $result->discord_webhook;
     $discord_text = $result->discord_text;
     $youtube_url = $result->youtube_url;
+    $custom_wmp = $result->custom_wmp;
     //Array parsing to cram it into multi dimensional row
     //TODO: Add index names and not numbers for second part!
     $vy_wm_parsed_array[$index]['button_text'] = $button_text;
@@ -55,6 +56,7 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['discord_webhook'] = $discord_webhook;
     $vy_wm_parsed_array[$index]['discord_text'] = $discord_text;
     $vy_wm_parsed_array[$index]['youtube_url'] = $youtube_url;
+    $vy_wm_parsed_array[$index]['custom_wmp'] = $custom_wmp;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }
