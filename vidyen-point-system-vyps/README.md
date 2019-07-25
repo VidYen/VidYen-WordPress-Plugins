@@ -110,6 +110,8 @@ Unfortunately, postbacks are generally not intended for WordPress so I had to sh
 
 = 3.0.0 =
 
+- Fix: WM no longer uses table
+
 - Update: Evolutionary jump to GUI miner.
 
 = 2.5.1 =
