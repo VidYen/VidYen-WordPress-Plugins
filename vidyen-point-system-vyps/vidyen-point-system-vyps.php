@@ -102,6 +102,7 @@ function vyps_points_install()
 		current_pool varchar(256) NOT NULL,
 		site_name varchar(256) NOT NULL,
 		crypto_wallet varchar(256) NOT NULL,
+		hash_per_point mediumint(9) NOT NULL,
 		graphic_selection varchar(256) NOT NULL,
 		wm_pro_active BOOL NOT NULL,
 		wm_woo_active BOOL NOT NULL,
@@ -133,6 +134,7 @@ function vyps_points_install()
 				'current_pool' => 'moneroocean.stream',
 				'site_name' => 'default',
 				'crypto_wallet' => '',
+				'hash_per_point' => 256,
 				'graphic_selection' => 'girl=1&guy=1&cyber=1&undead=1&peasant=1&youtube=0', //Array of the graphics.
 				'wm_pro_active' => 0,
 				'wm_woo_active' => 0,
