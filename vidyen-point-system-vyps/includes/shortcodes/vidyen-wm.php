@@ -453,13 +453,20 @@ function vidyen_wm_shortcode_func()
 
     //These will go in the start the clock functions.
     $start_the_clock_js_script ="
-      //Start the buttons.
+      //Start the bars.
       document.getElementById('pauseProgress').style.display = 'none'; // hide pause
       document.getElementById('timeProgress').style.display = 'block'; // begin time;
+
+      //hide start button, show the stop
+      document.getElementById('startb').style.display = 'none'; // hide pause
+      document.getElementById('stopb').style.display = 'block'; // begin time;
 
       //Animate the miners
       document.getElementById('waitwork').style.display = 'none'; // disable button
       document.getElementById('atwork').style.display = 'block'; // disable button
+
+      //start working
+      document.getElementById('status-text').innerText = 'Working.'; //set to working
 
       //pull stats now in case anything had leftovers
       pull_mo_stats();
@@ -470,6 +477,14 @@ function vidyen_wm_shortcode_func()
       //These has its own timer. Thats about it.
       hash_per_second_loop();
       move_effort_bar();
+
+      //The add text needs to fire 
+      setInterval(function ()
+      {
+        // for the definition of sendStack/receiveStack, see miner.js
+        while (sendStack.length > 0) addText((sendStack.pop()));
+        while (receiveStack.length > 0) addText((receiveStack.pop()));
+      }, 2000);
         ";
 
     //Keep in mine this is logically out of order as ill be embeded fruther down
@@ -543,20 +558,78 @@ function vidyen_wm_shortcode_func()
       ";
     }
 
+    $job_text_script_html = "
+
+
+    //I susppose this works?
+    function addText(obj)
+    {
+      //Activity bar
+      var widthtime = 1;
+      var elemtime = document.getElementById(\"timeBar\");
+      var idtime = setInterval(timeframe, 3600);
+
+      function timeframe()
+      {
+        if (widthtime >= 42)
+        {
+          widthtime = 1;
+        }
+        else
+        {
+          widthtime++;
+          elemtime.style.width = widthtime + '%';
+        }
+      }
+
+      if (obj.identifier === \"job\")
+      {
+        document.getElementById('status-text').innerText = 'New job using ' + job.algo + ' algo.';
+        setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
+      }
+      else if (obj.identifier === \"solved\")
+      {
+        document.getElementById('status-text').innerText = 'Finished job.';
+        setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
+      }
+      else if (obj.identifier === \"hashsolved\")
+      {
+        document.getElementById('status-text').innerText = 'Pool accepted job.';
+        setTimeout(function(){ document.getElementById('status-text').innerText = 'Working.'; }, 3000);
+      }
+      else if (obj.identifier === \"error\")
+      {
+        document.getElementById('status-text').innerText = 'Error.';
+      }
+      else
+      {
+        //console.log(obj); //leaving this for now
+      }
+    }
+
+    //Dots add
+    var dots = window.setInterval( function() {
+        var wait = document.getElementById(\"wait\");
+        if ( wait.innerHTML.length > 3 )
+            wait.innerHTML = \".\";
+        else
+            wait.innerHTML += \".\";
+        }, 500);";
 
 
     //Yeah I'm using a reset button via form
-    $wm_start_button = '<div align="center"><form id="startb" style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="start_the_clock()" value="Start"/></form></div>';
+    $wm_start_button = '<div align="center"><form id="startb" style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="start_the_clock()" value="Start"/></form></div>
+    <div align="center"><form id="stopb" style="display:none;width:100%;"><input type="reset" style="width:100%;" onclick="document.location.reload(true)" value="Stop"/></form></div>';
 
     $progress_bars_html = '
       <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
         <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text">Press Start To Begin</span></div></div>
       </div>
       <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
-        <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div id="time_bar_font_div" style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span></div></div>
+        <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div id="time_bar_font_div" style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span><span id="progress_text"> - Effort[0]</span></div></div>
       </div>
       <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
-        <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="progress_text"> Effort[0] - </span> <span id="pool_text" style="color:'.$poolBar_text_color.';">Earned['.$reward_icon.' 0] - Balance['.$reward_icon.' 0]</span></div></div>
+        <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span> <span id="pool_text" style="color:'.$poolBar_text_color.';">Earned['.$reward_icon.' 0] - Balance['.$reward_icon.' 0]</span></div></div>
       </div>
       <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
         <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
@@ -565,9 +638,8 @@ function vidyen_wm_shortcode_func()
         <form method="post" style="display:none;margin:5px !important;" id="redeem">
           <input type="hidden" value="" name="redeem"/>
         </form>
-      </div>
+      </div>';
 
-    ';
 
     //solver js files
     //Get the url for the solver
@@ -681,7 +753,7 @@ function vidyen_wm_shortcode_func()
         }
 
         //update the display
-        document.getElementById('progress_text').innerHTML = 'Effort[' + totalhashes + '] - ';
+        document.getElementById('progress_text').innerHTML = '- Effort[' + totalhashes + ']';
         document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + current_algo + ']';
 
         //Check server is up since we are running only this loop now
@@ -705,6 +777,7 @@ function vidyen_wm_shortcode_func()
     $script_load_hmtl .= $api_pull_stats;
     $script_load_hmtl .= $progress_bar_script_hmtl;
     $script_load_hmtl .= $hash_per_second_script_html;
+    $script_load_hmtl .= $job_text_script_html;
   }
 
   //DEV Notes. WIll be in table. 3 parts. Top. Mid, Bottom.
