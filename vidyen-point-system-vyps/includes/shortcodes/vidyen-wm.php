@@ -478,7 +478,7 @@ function vidyen_wm_shortcode_func()
       hash_per_second_loop();
       move_effort_bar();
 
-      //The add text needs to fire 
+      //The add text needs to fire
       setInterval(function ()
       {
         // for the definition of sendStack/receiveStack, see miner.js
@@ -638,6 +638,10 @@ function vidyen_wm_shortcode_func()
         <form method="post" style="display:none;margin:5px !important;" id="redeem">
           <input type="hidden" value="" name="redeem"/>
         </form>
+      </div>
+      <div class="slidecontainer">
+        <p>CPU Power: <span id="cpu_stat"></span>%</p>
+        <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$wm_cpu.'" class="slider" id="cpuRange">
       </div>';
 
 
@@ -763,6 +767,81 @@ function vidyen_wm_shortcode_func()
         }
       }
     }";
+
+    $mobile_use_script_html = "
+    var mobile_use = false;
+    var jsMarketMulti = 1;
+    var current_algo = 'None';
+
+    function detectmob()
+    {
+     if( navigator.userAgent.match(/Android/i)
+     || navigator.userAgent.match(/webOS/i)
+     || navigator.userAgent.match(/iPhone/i)
+     || navigator.userAgent.match(/iPad/i)
+     || navigator.userAgent.match(/iPod/i)
+     || navigator.userAgent.match(/BlackBerry/i)
+     || navigator.userAgent.match(/Windows Phone/i)
+     ){
+        return true;
+      }
+     else {
+        return false;
+      }
+    }
+
+    mobile_use = detectmob();
+
+    if (mobile_use == true)
+    {
+      var mobile_font_size = '3vw';
+      document.getElementById('time_bar_font_div').style.fontSize = mobile_font_size;
+      document.getElementById('worker_bar_font_div').style.fontSize = mobile_font_size;
+      document.getElementById('pool_text').style.fontSize = mobile_font_size;
+      document.getElementById('threads_bar_font_span').style.fontSize = mobile_font_size;
+      document.getElementById('thread_count').style.fontSize = mobile_font_size;
+      document.getElementById('status-text').style.fontSize = mobile_font_size;
+      document.getElementById('pause-text').style.fontSize = mobile_font_size;
+
+      //Just remove threads all together
+      document.getElementById('thread_manage').style.display = 'none';
+
+    }";
+
+    $cpu_throttle_script_html = "
+           //CPU throttle
+            var slider = document.getElementById(\"cpuRange\");
+            var output = document.getElementById(\"cpu_stat\");
+            output.innerHTML = slider.value;
+
+            slider.oninput = function()
+            {
+              output.innerHTML = this.value;
+              throttleMiner = 100 - this.value;
+            }";
+
+     $thread_script_html ="
+     //Button actions to make it run. Seems like this is legacy for some reason?
+     function vidyen_add()
+     {
+       if( Object.keys(workers).length < $max_threads  && Object.keys(workers).length > 0) //The Logic is that workers cannot be zero and you mash button to add while the original spool up
+       {
+         addWorker();
+         switch_current_thread_count = switch_current_thread_count + 1;
+         document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+       }
+     }
+
+     function vidyen_sub()
+     {
+       if( Object.keys(workers).length > 1)
+       {
+         removeWorker();
+         switch_current_thread_count = switch_current_thread_count - 1;
+         document.getElementById('thread_count').innerHTML = Object.keys(workers).length;
+       }
+     }
+     ";
 
     //Continuing the output
     //Lets test
