@@ -131,6 +131,38 @@ function vidyen_wm_sub_menu_page()
 			$crypto_wallet  = $vy_wm_parsed_array[$index]['crypto_wallet'];
 		}
 
+		//Hash per point. Almost forgot about this
+		if (isset($_POST['hash_per_point']))
+		{
+			$hash_per_point = floatval($_POST['hash_per_point']);
+
+			//If you are going to not give rewards then why bother?
+			if ($hash_per_point < 1)
+			{
+				$hash_per_point = 1;
+			}
+		}
+		else
+		{
+			$hash_per_point  = $vy_wm_parsed_array[$index]['hash_per_point'];
+		}
+
+		//This reward type.
+		if (isset($_POST['point_id']))
+		{
+			$point_id = intval($_POST['point_id']);
+
+			//There are neither point ids at 0 or negative
+			if ($point_id < 1)
+			{
+				$point_id = 1;
+			}
+		}
+		else
+		{
+			$point_id  = $vy_wm_parsed_array[$index]['point_id'];
+		}
+
 		//Graphics selection. In theory this will all be set by defaultor something went wrong.
 		//NOTE: I feel this is rather clunky and inefficient, but users won't be hitting the menu
 		//And admins will set this a few times and then leave it.
@@ -301,6 +333,8 @@ function vidyen_wm_sub_menu_page()
 	      'current_pool' => $current_pool,
 	      'site_name' => $site_name,
 	      'crypto_wallet' => $crypto_wallet,
+				'hash_per_point' => $hash_per_point,
+				'point_id' => $point_id,
 				'graphic_selection' => $graphic_selection,
 	      'wm_pro_active' => $wm_pro_active,
 				'wm_woo_active' => $wm_woo_active,
@@ -331,6 +365,8 @@ function vidyen_wm_sub_menu_page()
 	$current_pool = $vy_wm_parsed_array[$index]['current_pool'];
 	$site_name = $vy_wm_parsed_array[$index]['site_name'];
 	$crypto_wallet = $vy_wm_parsed_array[$index]['crypto_wallet'];
+	$hash_per_point = $vy_wm_parsed_array[$index]['hash_per_point'];
+	$point_id = 	$vy_wm_parsed_array[$index]['point_id'];
 	$graphic_selection = $vy_wm_parsed_array[$index]['graphic_selection'];
 	$wm_pro_active = $vy_wm_parsed_array[$index]['wm_pro_active'];
 	$wm_woo_active = $vy_wm_parsed_array[$index]['wm_woo_active'];
@@ -500,6 +536,7 @@ function vidyen_wm_sub_menu_page()
 						<option value="savona.vy256.com:8183" '.$vy_algo_selected.'>VidYen Algo Switcher - Picks Most Profitable Algo</option>
 						<option value="webminer.moneroocean.stream:443" '.$mo_algo_selected.'>MoneroOcean Algo Switcher - Picks Most Profitable Algo</option>
 					</select>
+					<a href="https://moneroocean.stream/#/dashboard" target="_blank"><i>Go here to see results of of mining on pool.</i></a>
 				</td>
 			</tr>
 			<tr>
@@ -509,6 +546,14 @@ function vidyen_wm_sub_menu_page()
 			<tr>
 				<td valign="top"><b>Your XMR Based Crypto Wallet:</b></td>
 				<td valign="top"><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"> <a href="https://mymonero.com/" target="_blank"><i>Need a wallet? Go here.</i></a></td>
+			</tr>
+			<tr>
+				<td valign="top"><b>Reward Point Type</b><br><i>This is the Point ID found under the Point List.</i></td>
+				<td valign="top"><input type="number" name="point_id" id="point_id" value="'.$point_id.'" size="18" min="1" step="1" required="true"> <i><b>NOTE:</b> <a href="'.site_url() . '/wp-admin/admin.php?page=vyps_point_list">You need to create at least one reward point here.</a> </i></td>
+			</tr>
+			<tr>
+				<td valign="top"><b>Hash Per Point</b><br><i>Hashes mined per reward point.</i></td>
+				<td valign="top"><input type="number" name="hash_per_point" id="hash_per_point" value="'.$hash_per_point.'" size="18" min="1" step="1" required="true"> <i><b>NOTE:</b> If WooCommerce mode, this is set per $0.1 per hashes mined.</i></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Default Threads:</b></td>
@@ -554,7 +599,7 @@ function vidyen_wm_sub_menu_page()
 				<td valign="top"><input type="text" name="discord_webhook" id="discord_webhook" value="'.$discord_webhook.'" size="128" '.$discord_webhook_disabled.'> <a href="https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks" target="_blank"><i>Intro to Discord Webhooks</i></a></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Discord Message:</b><br>Discord Markup<br><i>[user]<br>[amount]<br>[type]</i></td>
+				<td valign="top"><b>Discord Message:</b><br>Discord Markup<br><i>[user]<br>[amount]</i></td>
 				<td valign="top"><textarea name="discord_text" id="discord_text" rows="3" cols="130" required="true" '.$discord_text_disabled.'>'.$discord_text.'</textarea></td>
 			</tr>
 			<tr>

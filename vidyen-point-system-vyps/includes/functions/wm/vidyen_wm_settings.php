@@ -28,6 +28,8 @@ function vidyen_vy_wm_settings()
     $current_pool = $result->current_pool;
     $site_name = $result->site_name;
     $crypto_wallet = $result->crypto_wallet;
+    $hash_per_point = $result->hash_per_point;
+    $point_id = $result->point_id;
     $graphic_selection = $result->graphic_selection;
     $wm_pro_active = $result->wm_pro_active;
     $wm_woo_active = $result->wm_woo_active;
@@ -48,6 +50,8 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['current_pool'] = $current_pool;
     $vy_wm_parsed_array[$index]['site_name'] = $site_name;
     $vy_wm_parsed_array[$index]['crypto_wallet'] = $crypto_wallet;
+    $vy_wm_parsed_array[$index]['hash_per_point'] = $hash_per_point;
+    $vy_wm_parsed_array[$index]['point_id'] = $point_id;
     $vy_wm_parsed_array[$index]['graphic_selection'] = $graphic_selection;
   	$vy_wm_parsed_array[$index]['wm_pro_active'] = $wm_pro_active;
     $vy_wm_parsed_array[$index]['wm_woo_active'] = $wm_woo_active;

@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Crypto Reward System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      2.5.0.86
+Version:      2.5.0.90
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -102,7 +102,8 @@ function vyps_points_install()
 		current_pool varchar(256) NOT NULL,
 		site_name varchar(256) NOT NULL,
 		crypto_wallet varchar(256) NOT NULL,
-		hash_per_point mediumint(9) NOT NULL,
+		hash_per_point double(64, 0) NOT NULL,
+		point_id varchar(11) NOT NULL,
 		graphic_selection varchar(256) NOT NULL,
 		wm_pro_active BOOL NOT NULL,
 		wm_woo_active BOOL NOT NULL,
@@ -135,13 +136,14 @@ function vyps_points_install()
 				'site_name' => 'default',
 				'crypto_wallet' => '',
 				'hash_per_point' => 256,
+				'point_id' => 1,
 				'graphic_selection' => 'girl=1&guy=1&cyber=1&undead=1&peasant=1&youtube=0', //Array of the graphics.
 				'wm_pro_active' => 0,
 				'wm_woo_active' => 0,
 				'wm_threads' => 2,
 				'wm_cpu' => 50,
 				'discord_webhook' => '',
-				'discord_text' => 'Hey @everyone! User [user], earned [amount] in [type]!',
+				'discord_text' => 'Hey @everyone! User [user], earned [amount] in credit!',
 				'youtube_url' => '',
 
 

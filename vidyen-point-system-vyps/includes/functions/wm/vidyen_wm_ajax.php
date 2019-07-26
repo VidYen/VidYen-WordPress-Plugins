@@ -22,12 +22,36 @@ function vidyen_wm_api_action()
 
   //NOTE: I do not think there is a need for nonce as no user input to wordpress
 
+  //First things first. Let's pull the variables with a single SQL call
+  $vy_wm_parsed_array = vidyen_vy_wm_settings();
+  $index = 1; //Lazy coding but easier to copy and paste stuff.
+
+  //I don't think we need anything beyond this fromt the SQL. Its here if we need it though
+  $hash_per_point = $vy_wm_parsed_array[$index]['hash_per_point'];
+	$point_id = 	$vy_wm_parsed_array[$index]['point_id'];
+  $wm_pro_active = $vy_wm_parsed_array[$index]['wm_pro_active']; //Whoops yeah need this
+  $wm_woo_active = $vy_wm_parsed_array[$index]['wm_woo_active']; //And these
+  $discord_webhook = $vy_wm_parsed_array[$index]['discord_webhook'];
+  $discord_text = $vy_wm_parsed_array[$index]['discord_text'];
+
   //Post gather from the AJAX post
   $site_wallet = sanitize_text_field($_POST['site_wallet']);
   $site_worker = sanitize_text_field($_POST['site_worker']);
 
   $user_id_explode = explode("-", $site_worker); //It's possible that users will have - somewhere else but first shall do
   $user_id = intval($user_id_explode[0]);
+
+  //I am double checking for shennanigans with users getting credit for things not of their own.
+  if ($user_id != get_current_user_id())
+  {
+      wp_die(); // this is required to terminate immediately and return a proper response
+  }
+
+  //Init variables in case not called
+  $site_total_hashes = 0;
+  $credit_result = 0;
+  $rewarded_hashes = 0;
+  $current_xmr_price =0;
 
   /*** MoneroOcean Gets***/
   //Site get
@@ -73,6 +97,34 @@ function vidyen_wm_api_action()
     $meta_value = $site_total_hashes;
     update_user_meta( $user_id, $key, $meta_value, $prev_value );
     update_user_meta( $user_id, $date_key, $current_mined_date, $prev_value );
+
+    $reason = 'WebMining'; //Honestly, I should create a global reason variable but I have deadlines.
+
+    //Ok going to check for pro and woo mode.
+    if($wm_pro_active == 1 AND $wm_woo_active == 1)
+    {
+      $credit_result = vyps_ww_point_credit_func( $user_id, $credit_result, $reason ); //Note no point ID's
+    }
+    else
+    {
+      //The credit result will now be pushed to the vyps credit.
+      $credit_result = vyps_point_credit_func($point_id, $credit_result, $user_id, $reason);
+    }
+
+    if($wm_pro_active == 1 AND $discord_webhook != '')
+    {
+      $username = 'Reward Report Bot'; //I need to fix this. Gah!
+
+      //if you can use a discord hook you can learn how to type it in lower case.
+      //User name replace.
+      $discord_text = str_replace("[user]",vidyen_user_display_name($user_id),$discord_text);
+
+      //Amount replace.
+      $discord_text = str_replace("[amount]",$credit_result,$discord_text);
+
+      $discord_result = vidyen_discord_webhook_func($discord_text, $username, $discord_webhook);
+    }
+
   }
   elseif( $time_difference > 86400 )
   {
@@ -89,8 +141,8 @@ function vidyen_wm_api_action()
 
   $mo_array_server_response = array(
       'site_hashes' => $site_total_hashes,
-      'site_hash_per_second' => $site_hash_per_second,
-      'site_validShares' => $site_valid_shares,
+      'credit_result' => $credit_result
+      'rewarded_hashes' => $rewarded_hashes,
       'current_XMRprice' => $current_xmr_price,
   );
 
