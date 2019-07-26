@@ -33,29 +33,39 @@ function vidyen_wm_api_action()
   $wm_woo_active = $vy_wm_parsed_array[$index]['wm_woo_active']; //And these
   $discord_webhook = $vy_wm_parsed_array[$index]['discord_webhook'];
   $discord_text = $vy_wm_parsed_array[$index]['discord_text'];
+  $site_name = $vy_wm_parsed_array[$index]['site_name'];
 
-  //Post gather from the AJAX post
-  $site_wallet = sanitize_text_field($_POST['site_wallet']);
-  $site_worker = sanitize_text_field($_POST['site_worker']);
+  //Kind of dawned on me we don't need to pass the variables via ajax since they are a known.
+  $crypto_wallet = $vy_wm_parsed_array[$index]['crypto_wallet'];
 
-  $user_id_explode = explode("-", $site_worker); //It's possible that users will have - somewhere else but first shall do
-  $user_id = intval($user_id_explode[0]);
-
-  //I am double checking for shennanigans with users getting credit for things not of their own.
-  if ($user_id != get_current_user_id())
+  if (!is_user_logged_in())
   {
-      wp_die(); // this is required to terminate immediately and return a proper response
+    $mo_array_server_response = array(
+        'site_hashes' => 0,
+        'credit_result' => 0,
+        'rewarded_hashes' => 0,
+        'current_XMRprice' => 0,
+    );
+
+    echo json_encode($mo_array_server_response); //Proper method to return json
+
+    wp_die(); // this is required to terminate immediately and return a proper response
   }
+
+  //Compile the worker
+  $user_id = get_current_user_id();
+  $site_worker = $user_id.'-'.$site_name;
 
   //Init variables in case not called
   $site_total_hashes = 0;
   $credit_result = 0;
   $rewarded_hashes = 0;
   $current_xmr_price =0;
+  $reward_payout = 0;
 
   /*** MoneroOcean Gets***/
   //Site get
-  $site_url = 'https://api.moneroocean.stream/miner/' . $site_wallet . '/stats/' . $site_worker;
+  $site_url = 'https://api.moneroocean.stream/miner/' . $crypto_wallet . '/stats/' . $site_worker;
   $site_mo_response = wp_remote_get( $site_url );
   if ( is_array( $site_mo_response ) )
   {
@@ -93,7 +103,7 @@ function vidyen_wm_api_action()
   if(  $site_total_hashes > $user_prior_total_hashes )
   {
     $rewarded_hashes = $site_total_hashes - $user_prior_total_hashes; //Find the different
-    $credit_result = intval($rewarded_hashes / $hash_per_point);
+    $reward_payout = intval($rewarded_hashes / $hash_per_point);
     $meta_value = $site_total_hashes;
     update_user_meta( $user_id, $key, $meta_value, $prev_value );
     update_user_meta( $user_id, $date_key, $current_mined_date, $prev_value );
@@ -103,12 +113,12 @@ function vidyen_wm_api_action()
     //Ok going to check for pro and woo mode.
     if($wm_pro_active == 1 AND $wm_woo_active == 1)
     {
-      $credit_result = vyps_ww_point_credit_func( $user_id, $credit_result, $reason ); //Note no point ID's
+      $credit_result = vyps_ww_point_credit_func( $user_id, $reward_payout, $reason ); //Note no point ID's
     }
     else
     {
       //The credit result will now be pushed to the vyps credit.
-      $credit_result = vyps_point_credit_func($point_id, $credit_result, $user_id, $reason);
+      $credit_result = vyps_point_credit_func($point_id, $reward_payout, $user_id, $reason);
     }
 
     if($wm_pro_active == 1 AND $discord_webhook != '')
@@ -120,7 +130,7 @@ function vidyen_wm_api_action()
       $discord_text = str_replace("[user]",vidyen_user_display_name($user_id),$discord_text);
 
       //Amount replace.
-      $discord_text = str_replace("[amount]",$credit_result,$discord_text);
+      $discord_text = str_replace("[amount]",$reward_payout,$discord_text);
 
       $discord_result = vidyen_discord_webhook_func($discord_text, $username, $discord_webhook);
     }
@@ -139,11 +149,25 @@ function vidyen_wm_api_action()
     update_user_meta( $user_id, $key, $meta_value, $prev_value );
   }
 
+  //Need an outside to get balance for woo wallet.
+  //Thank the gods I got into funcitons
+  if($wm_pro_active == 1 AND $wm_woo_active == 1)
+  {
+    $reward_balance = vyps_ww_point_bal_func($user_id);
+  }
+  else
+  {
+    $reward_balance = intval(vyps_point_balance_func($point_id, $user_id));
+  }
+
   $mo_array_server_response = array(
       'site_hashes' => $site_total_hashes,
-      'credit_result' => $credit_result
+      'reward_payout' => $reward_payout,
+      'reward_balance' => $reward_balance,
       'rewarded_hashes' => $rewarded_hashes,
       'current_XMRprice' => $current_xmr_price,
+      'site_url' => $site_url,
+      'text_text' => 'goddamnit',
   );
 
   echo json_encode($mo_array_server_response); //Proper method to return json

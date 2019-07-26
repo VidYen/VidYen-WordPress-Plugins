@@ -179,9 +179,14 @@ function vidyen_wm_shortcode_func()
     $site_worker = $user_id.'-'.$site_name;
 
     //Colors, I should make extra menus for these. I'm going to be naughty and put it in pro mode.
-    $timeBar_color = '';
-    $workerBar_color = '';
-    $workerBar_display = '';
+    $timeBar_color = 'orange';
+    $workerBar_color = '#ff8432';
+    $workerBar_display = 'block';
+    $workerBar_text_color = 'white';
+    $poolBar_text_color = 'white';
+
+    //Thank the gods I keep the variable names the same.
+    $reward_icon = vyps_point_icon_func($point_id);
 
     //First things first... Get the graphic.
     wp_parse_str($graphic_selection, $graphics_selection_arary);
@@ -272,8 +277,8 @@ function vidyen_wm_shortcode_func()
     {
       $graphics_html_ouput = '<!-- YouTube version -->
         <div style="text-align: center;">
-          <div id="yt_image" style="display: inline-block;"></div>
-          <div id="player" style="display:none;"></div>
+          <div id="waitwork" style="display: inline-block;"></div>
+          <div id="atwork" style="display:none;"></div>
         </div>
       ';
 
@@ -301,7 +306,7 @@ function vidyen_wm_shortcode_func()
 
         var image_yt_url = 'https://img.youtube.com/vi/' + youtube_id + '/maxresdefault.jpg';
 
-        document.getElementById('yt_image').innerHTML = '<img src=\"' + image_yt_url + '\" style=\"height: 375px;\" />';
+        document.getElementById('waitwork').innerHTML = '<img src=\"' + image_yt_url + '\" style=\"height: 375px;\" />';
 
         // 2. This code loads the IFrame Player API code asynchronously.
         var tag = document.createElement('script');
@@ -314,7 +319,7 @@ function vidyen_wm_shortcode_func()
         //    after the API code downloads.
         var player;
         function onYouTubeIframeAPIReady() {
-          player = new YT.Player('player', {
+          player = new YT.Player('atwork', {
             height: '375',
             width: '700',
             videoId: youtube_id,
@@ -446,6 +451,27 @@ function vidyen_wm_shortcode_func()
           site_reward(); //Just run the site reward. It will kick back over eventually
         }";
 
+    //These will go in the start the clock functions.
+    $start_the_clock_js_script ="
+      //Start the buttons.
+      document.getElementById('pauseProgress').style.display = 'none'; // hide pause
+      document.getElementById('timeProgress').style.display = 'block'; // begin time;
+
+      //Animate the miners
+      document.getElementById('waitwork').style.display = 'none'; // disable button
+      document.getElementById('atwork').style.display = 'block'; // disable button
+
+      //pull stats now in case anything had leftovers
+      pull_mo_stats();
+
+      //run the pull MO stats every 30 secs
+      setInterval(function(){pull_mo_stats()}, 30000);
+
+      //These has its own timer. Thats about it.
+      hash_per_second_loop();
+      move_effort_bar();
+        ";
+
     //Keep in mine this is logically out of order as ill be embeded fruther down
     //NOTE If pro mode active
     if ($wm_pro_active == 1)
@@ -472,7 +498,7 @@ function vidyen_wm_shortcode_func()
         /* start mining, use a local server */
         server = 'wss://' + current_server;
         startMining(\"$mining_pool\",
-          \"$site_name\", \"$password\", switch_current_thread_count);
+          \"$crypto_wallet\", \"$site_worker\", switch_current_thread_count);
 
         //Seems that I need to wait a bit to update the threads.
         setTimeout(update_client_threads, 4000);
@@ -505,7 +531,7 @@ function vidyen_wm_shortcode_func()
         /* start mining, use a local server */
         server = 'wss://' + current_server;
         startMining(\"$mining_pool\",
-          \"$site_name\", \"$password\", switch_current_thread_count);
+          \"$crypto_wallet\", \"$site_worker\", switch_current_thread_count);
       }
 
       //I'm being obtuse here. But this is the function that calls the start regardless.
@@ -517,31 +543,20 @@ function vidyen_wm_shortcode_func()
       ";
     }
 
-    //These will go in the start the clock functions.
-    $start_the_clock_js_script ="
-      //pull stats now in case anything had leftovers
-      pull_mo_stats();
 
-      //run the pull MO stats every 30 secs
-      setInterval(function(){pull_mo_stats()}, 30000);
-
-      //These has its own timer. Thats about it.
-      hash_per_second_loop();
-      move_effort_bar();
-    ";
 
     //Yeah I'm using a reset button via form
     $wm_start_button = '<div align="center"><form id="startb" style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="start_the_clock()" value="Start"/></form></div>';
 
     $progress_bars_html = '
       <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
-        <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text\">'.$start_message_verbage.'</span></div></div>
+        <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text">Press Start To Begin</span></div></div>
       </div>
       <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
         <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div id="time_bar_font_div" style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span></div></div>
       </div>
       <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
-        <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="progress_text"> Effort[0]</span></div> <div id="pool_text" style="position: absolute; right:12%; color:'.$poolBar_text_color.';">Reward Earned['.$reward_icon.' 0]</div></div>
+        <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span><span id="progress_text"> Effort[0] - </span> <span id="pool_text" style="color:'.$poolBar_text_color.';">Earned['.$reward_icon.' 0] - Balance['.$reward_icon.' 0]</span></div></div>
       </div>
       <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
         <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
@@ -560,7 +575,7 @@ function vidyen_wm_shortcode_func()
     //$vy256_solver_url = plugins_url( 'js/solver/miner.js', __FILE__ ); //Ah it was the worker.
 
     //Need to take the shortcode out. I could be wrong. Just rip out 'shortcodes/'
-    $vy_wm_solver_folder_url = str_replace('shortcodes/', '', $vy256_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
+    $vy_wm_solver_folder_url = str_replace('shortcodes/', '', $vy_wm_solver_folder_url); //having to reomove the folder depending on where you plugins might happen to be
     $vy_wm_solver_js_url =  $vy_wm_solver_folder_url. 'solver.js';
     $vy_wm_solver_worker_url = $vy_wm_solver_folder_url. 'worker.js';
 
@@ -573,19 +588,30 @@ function vidyen_wm_shortcode_func()
         }
       </script>
       <script src="'.$vy_wm_solver_js_url.'"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     ';
 
     //Function pull the MO stats and reward
     //It occurred to me we can just set this on a 30 second time rather than the loop. Maybe be more efficent.
     //I'm going to reduce the bars back to two. As the bottom wasn't really required.
     $api_pull_stats = "
+
+    //becuse I sort of have to make this globals
+    var mo_totalhashes = 0;
+    var totalpoints = 0;
+    var mo_XMRprice = 0;
+    var mo_reward_payout = 0;
+    var mo_site_url = '';
+    var mo_text_text = '';
+
     function pull_mo_stats()
     {
+
       jQuery(document).ready(function($) {
        var data = {
-         'action': 'vyps_mo_api_action',
+         'action': 'vidyen_wm_api_action',
          'site_wallet': '$crypto_wallet',
-         'site_worker': '$site_name',
+         'site_worker': '$site_worker',
        };
        // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
        jQuery.post(ajaxurl, data, function(response) {
@@ -593,34 +619,41 @@ function vidyen_wm_shortcode_func()
          //Progressbar for MO Pull
          mo_totalhashes = parseFloat(output_response.site_hashes);
          mo_XMRprice = parseFloat(output_response.current_XMRprice);
-         mo_credit_reslt = parseFloat(output_response.credit_result);
+         mo_reward_payout = parseFloat(output_response.reward_payout);
          mo_rewarded_hashes = parseFloat(output_response.rewarded_hashes);
+         mo_site_url = output_response.site_url;
+         mo_text_text = output_response.text_text;
+         mo_reward_balance = parseFloat(output_response.reward_balance);
+
+         console.log(mo_site_url);
 
          //Note this time around we just need to add to a running total for session since points are added via adjax
-         totalpoints = totalpoints + mo_credit_reslt; //This needs to be init somehwere.
-         document.getElementById('pool_text').innerHTML = 'Reward Earned[' + '$reward_icon ' + totalpoints + ']';
+         document.getElementById('pool_text').innerHTML = 'Earned[' + '$reward_icon ' + mo_reward_payout + '] - Balance[' + '$reward_icon ' + mo_reward_balance + ']';
+         workerwidth = 0; //I am hoping this works
+         elem.style.width = workerwidth + '%';
        });
       });
     }";
 
     //Simple. Just a visual of the API check every 30 seconds
     $progress_bar_script_hmtl = "
+    var elem = document.getElementById('workerBar');
+    var workerwidth = 1;
     function move_effort_bar()
     {
-      var elem = document.getElementById('workerBar');
-      var width = 1;
       var id = setInterval(frame, 300);
       function frame()
       {
-        if (width >= 100)
+        if (workerwidth >= 100)
         {
           //clearInterval(id);
-          width = 0;
+          //workerwidth = 0;
+          //Getting the MO response to clear
         }
         else
         {
-          width++;
-          elem.style.width = width + '%';
+          workerwidth++;
+          elem.style.width = workerwidth + '%';
         }
       }
     }
@@ -629,6 +662,7 @@ function vidyen_wm_shortcode_func()
     $hash_per_second_script_html = "
     function hash_per_second_loop()
     {
+      var prior_totalhashes = 0; //Setup
       var count = 0;
       var id = setInterval(frame, 1000);
       function frame()
@@ -647,7 +681,7 @@ function vidyen_wm_shortcode_func()
         }
 
         //update the display
-        document.getElementById('progress_text').innerHTML = 'Effort[' + reported_hashes + ']';
+        document.getElementById('progress_text').innerHTML = 'Effort[' + totalhashes + '] - ';
         document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + current_algo + ']';
 
         //Check server is up since we are running only this loop now
@@ -663,7 +697,14 @@ function vidyen_wm_shortcode_func()
     $top_output = $graphics_html_ouput;
     $mid_output = $wm_start_button;
     $bottom_output =$progress_bars_html; //Just the first one
-    $script_load_hmtl = $wmp_js_init_script_html.$server_setup_script_html.$server_repick_script_html.$start_mining_html;
+
+    //scripts.
+    $script_load_hmtl = $server_setup_script_html;
+    $script_load_hmtl .= $server_repick_script_html;
+    $script_load_hmtl .= $start_mining_html;
+    $script_load_hmtl .= $api_pull_stats;
+    $script_load_hmtl .= $progress_bar_script_hmtl;
+    $script_load_hmtl .= $hash_per_second_script_html;
   }
 
   //DEV Notes. WIll be in table. 3 parts. Top. Mid, Bottom.
@@ -681,7 +722,7 @@ function vidyen_wm_shortcode_func()
       '.$bottom_output.'
     </div>
   </div>
-
+  '.$wmp_js_init_script_html.'
   <script>
   '.$script_load_hmtl.'
   </script>
