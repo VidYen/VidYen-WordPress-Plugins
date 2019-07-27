@@ -154,7 +154,16 @@ function vidyen_wm_api_action()
   //Thank the gods I got into funcitons
   if($wm_pro_active == 1 AND $wm_woo_active == 1)
   {
+    //NOTE: It's going to return the balance with the symbol
+    //WHich is controlled by WooCommerce.
+    //Mostly a futile effort if I'm the one doing it
     $reward_balance = vyps_ww_point_bal_func($user_id);
+    //This is being rather annoying as the WW people never did make this appropriatley
+    //$woo_wallet_pull = vyps_ww_point_bal_func($user_id);
+    //$reward_balance = str_replace("&#36;","",$woo_wallet_pull); //KIND OF FORGOT IT WAS HTML!
+
+    //$reward_balance = preg_replace('/[^0-9]/', '', $woo_wallet_pull);
+    //$reward_balance = preg_replace('/[^0-9.]/','',$woo_wallet_pull);
   }
   else
   {

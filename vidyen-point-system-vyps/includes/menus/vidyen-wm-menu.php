@@ -557,10 +557,10 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td valign="top"><b>Hash Per Point</b><br><i>Hashes mined per reward point.</i></td>
-				<td valign="top"><input type="number" name="hash_per_point" id="hash_per_point" value="'.$hash_per_point.'" size="18" min="1" step="1" required="true"> <i><b>NOTE:</b> If WooCommerce mode, this is set per $0.1 per hashes mined.</i></td>
+				<td valign="top"><input type="number" name="hash_per_point" id="hash_per_point" value="'.$hash_per_point.'" size="18" min="1" step="1" required="true"> <i><b>NOTE:</b> If WooCommerce mode, this is set per $0.01 per hashes mined. Either use Viritual items or raise hash requirements</i></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Max Threads:</b></td>
+				<td valign="top"><b>Base Threads:</b><br><i>Power will have low, medium, and high. <br>Exponential base from default threads<br>2, 4, 8<br>3, 6, 12</i></td>
 				<td valign="top"><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="'.$max_threads.'" value="'.$wm_threads.'" size="128" required="true"> Threads: <span id="thread_count">'.$wm_threads.'</span></td>
 			</tr>
 			<tr>
@@ -595,7 +595,7 @@ function vidyen_wm_sub_menu_page()
 				<td valign="top"><input type="checkbox" name="wm_pro_active" id="wm_pro_active" value="1" '.$wm_pro_checked.'>Activate Pro Mode. <b>NOTE:</b> For every 10 minutes an end user mines, 15 seconds will be given as a fee to VidYen for development funding!</td>
 			</tr>
 			<tr>
-				<td valign="top"><b>WooCommerce Mode:</b><br><i>Credits Go Straight To WooCommerce Credit</i></td>
+				<td valign="top"><b>WooCommerce Mode:</b><br><i>Credits Go Straight To WooCommerce Credit<br><b>Note:</b> It is highly recommended to turn off email notifications<br>WooCommerce > Settings > Emails > New Wallet Transaction</i></td>
 				<td valign="top"><input type="checkbox" name="wm_woo_active" id="wm_woo_active" value="1" '.$wm_woo_checked.'>Activate WooCommerce Mode. <b>NOTE:</b> Requires <a href="https://wordpress.org/plugins/woo-wallet/" target="_blank">TeraWallet</a>, <a href="https://wordpress.org/plugins/woocommerce/" target="_blank">WooCommerce</a>, and Pro Mode</td>
 			</tr>
 			<tr>

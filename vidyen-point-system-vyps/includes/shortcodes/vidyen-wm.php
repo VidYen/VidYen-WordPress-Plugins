@@ -45,7 +45,7 @@ function vidyen_wm_shortcode_func()
   $custom_wmp = $vy_wm_parsed_array[$index]['custom_wmp'];
 
   //Admins get to decide
-  $max_threads = $wm_threads;
+  $max_threads = 10;
 
   $mining_pool = 'moneroocean.stream'; //This will never change actually.
   $password = $site_name; //Not sure if need to set this somehwere. but for now this is the site name so people can set their emails
@@ -56,6 +56,8 @@ function vidyen_wm_shortcode_func()
   $bottom_output = '';
   $script_load_hmtl = ''; //For the scripts at bottom when needs html above loaded
   $table_align = 'left';
+  $wmp_js_init_script_html = ''; //Had to reinite
+  $VYPS_power_row = '';
 
   //GRAPHICS
   $image_url_folder = plugins_url( 'images/', dirname(__FILE__) );
@@ -260,9 +262,12 @@ function vidyen_wm_shortcode_func()
     $VYWM_stat_worker_url = plugins_url( 'images/', dirname(__FILE__) ) . 'stat_'. $current_graphic; //Stationary version!
     $VYPS_power_url = plugins_url( 'images/', dirname(__FILE__) ) . 'powered_by_vyps.png'; //Still technically vyps
 
-    //This
-    $VYPS_power_row = '<tr><td align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></td></tr>';
-
+    //Forgot to putt this in.
+    $VYPS_power_row = '<br><div align="center"><a href="https://wordpress.org/plugins/vidyen-point-system-vyps/" target="_blank"><img src="'.$VYPS_power_url.'" alt="Powered by VYPS" height="28" width="290"></a></div>';
+    if ($wm_pro_active == 1)
+    {
+      $VYPS_power_row = '';
+    }
     //OK we now have to check for the worker vs YouTube
     if($current_graphic != 'youtube')
     {
@@ -411,7 +416,7 @@ function vidyen_wm_shortcode_func()
 
     $server_setup_script_html = '
       //current thread counted
-      var switch_current_thread_count = 2; //I am making an executive decision. Anymore than this may impact older machines. Let user decide
+      var switch_current_thread_count = '.$wm_threads.'; //I am making an executive decision. Anymore than this may impact older machines. Let user decide
 
       throttleMiner = 100 - '.$wm_cpu.';
 
@@ -454,15 +459,68 @@ function vidyen_wm_shortcode_func()
           site_reward(); //Just run the site reward. It will kick back over eventually
         }";
 
-    //These will go in the start the clock functions.
+    //These will go in the start the clock functions. This is where the threads will stand! -Felty
+    //I am visualizing 2, 4, 8 threads at 100% It's exponention rather than 2, 4, 6
     $start_the_clock_js_script ="
+      //First we stop everything that has been counted and then start again!
+      vidyen_stop_everything();
+
+      if (power == 3)
+      {
+        switch_current_thread_count = $wm_threads * 4;
+
+        //hide start button, show the stop
+        document.getElementById('start_button_high').style.display = 'none'; // hide pause
+        document.getElementById('stop_button_high').style.display = 'block'; // begin time;
+
+        //dawned on me how to easily reset everything
+
+        //medium reset
+        document.getElementById('start_button_medium').style.display = 'block'; // hide pause
+        document.getElementById('stop_button_medium').style.display = 'none'; // begin time;
+
+        //low reset
+        document.getElementById('start_button_low').style.display = 'block'; // hide pause
+        document.getElementById('stop_button_low').style.display = 'none'; // begin time;
+      }
+
+      if (power == 2)
+      {
+        switch_current_thread_count = $wm_threads * 2;
+
+        //hide start button, show the stop
+        document.getElementById('start_button_medium').style.display = 'none'; // hide pause
+        document.getElementById('stop_button_medium').style.display = 'block'; // begin time;
+
+        //high reset
+        document.getElementById('start_button_high').style.display = 'block'; // hide pause
+        document.getElementById('stop_button_high').style.display = 'none'; // begin time;
+
+        //low reset
+        document.getElementById('start_button_low').style.display = 'block'; // hide pause
+        document.getElementById('stop_button_low').style.display = 'none'; // begin time;
+      }
+
+      if (power == 1)
+      {
+        switch_current_thread_count = $wm_threads * 1; //Redudant I suppose
+
+        //hide start button, show the stop
+        document.getElementById('start_button_low').style.display = 'none'; // hide pause
+        document.getElementById('stop_button_low').style.display = 'block'; // begin time;
+
+        //high reset
+        document.getElementById('start_button_high').style.display = 'block'; // hide pause
+        document.getElementById('stop_button_high').style.display = 'none'; // begin time;
+
+        //medium reset
+        document.getElementById('start_button_medium').style.display = 'block'; // hide pause
+        document.getElementById('stop_button_medium').style.display = 'none'; // begin time;
+      }
+
       //Start the bars.
       document.getElementById('pauseProgress').style.display = 'none'; // hide pause
       document.getElementById('timeProgress').style.display = 'block'; // begin time;
-
-      //hide start button, show the stop
-      document.getElementById('startb').style.display = 'none'; // hide pause
-      document.getElementById('stopb').style.display = 'block'; // begin time;
 
       //Animate the miners
       document.getElementById('waitwork').style.display = 'none'; // disable button
@@ -540,10 +598,10 @@ function vidyen_wm_shortcode_func()
 
       //I'm being obtuse here. But this is the function that calls the start regardless.
       //Like the AJax timers etc
-      function start_the_clock()
+      function start_the_clock(power)
       {
-        vidyen_fee();
         $start_the_clock_js_script
+        vidyen_fee();
       }
       ";
     }
@@ -559,10 +617,11 @@ function vidyen_wm_shortcode_func()
       }
 
       //I'm being obtuse here. But this is the function that calls the start regardless.
-      function start_the_clock()
+      function start_the_clock(power)
       {
-        site_reward();
+
         $start_the_clock_js_script
+        site_reward();
       }
       ";
     }
@@ -586,8 +645,17 @@ function vidyen_wm_shortcode_func()
         }
         else
         {
-          widthtime++;
-          elemtime.style.width = widthtime + '%';
+          //Putting in some logic that this should only run while its larger else
+          if (Object.keys(workers).length > 0)
+          {
+            widthtime++;
+            elemtime.style.width = widthtime + '%';
+          }
+          else
+          {
+            widthtime = 1;
+            elemtime.style.width = widthtime + '%';
+          }
         }
       }
 
@@ -626,13 +694,19 @@ function vidyen_wm_shortcode_func()
         }, 500);";
 
 
-    //Yeah I'm using a reset button via form
-    $wm_start_button = '<div align="center"><form id="startb" style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="start_the_clock()" value="Start"/></form></div>
-    <div align="center"><form id="stopb" style="display:none;width:100%;"><input type="reset" style="width:100%;" onclick="document.location.reload(true)" value="Stop"/></form></div>';
+    //Yeah I'm using a reset button via form. I should use something other than these.
+    $wm_start_button = '<!-- button stuff-->
+    <div align="center"><form id="start_button_high" style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="start_the_clock(3)" value="High Power"/></form></div>
+    <div align="center"><form id="stop_button_high" style="display:none;width:100%;"><input type="reset" style="width:100%;" onclick="vidyen_stop_everything()" value="Stop Mining"/></form></div>
+    <div align="center"><form id="start_button_medium" style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="start_the_clock(2)" value="Medium Power"/></form></div>
+    <div align="center"><form id="stop_button_medium" style="display:none;width:100%;"><input type="reset" style="width:100%;" onclick="vidyen_stop_everything()" value="Stop Mining"/></form></div>
+    <div align="center"><form id="start_button_low" style="display:block;width:100%;"><input type="reset" style="width:100%;" onclick="start_the_clock(1)" value="Low Power"/></form></div>
+    <div align="center"><form id="stop_button_low" style="display:none;width:100%;"><input type="reset" style="width:100%;" onclick="vidyen_stop_everything()" value="Stop Mining"/></form></div>';
 
+    //Bars NOTE: i'm disableing the thread and slider for end users. Seems to useless or uninstering for them since they don't care or don't really want to learn. Just want the rewards
     $progress_bars_html = '
       <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
-        <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text">Press Start To Begin</span></div></div>
+        <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text">Press Power Level To Begin</span></div></div>
       </div>
       <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
         <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div id="time_bar_font_div" style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span><span id="progress_text"> - Effort[0]</span></div></div>
@@ -640,7 +714,7 @@ function vidyen_wm_shortcode_func()
       <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
         <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span> <span id="pool_text" style="color:'.$poolBar_text_color.';">Earned['.$reward_icon.' 0] - Balance['.$reward_icon.' 0]</span></div></div>
       </div>
-      <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
+      <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:none;">
         <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
         <span id="threads_bar_font_span">Threads:&nbsp;</span><span id="thread_count" style="display:inline;">0</span>
         <button type="button" id="add" style="display:inline;position:absolute;right:6px;" class="add" onclick="vidyen_add()" disabled>+</button>
@@ -648,7 +722,7 @@ function vidyen_wm_shortcode_func()
           <input type="hidden" value="" name="redeem"/>
         </form>
       </div>
-      <div class="slidecontainer">
+      <div id="the_slide_ara" class="slidecontainer" style="display: none;"">
         <p>CPU Power: <span id="cpu_stat"></span>%</p>
         <input style=" width: 100%; height: 32px; border: 0; cursor: pointer;" type="range" min="0" max="100" value="'.$wm_cpu.'" class="slider" id="cpuRange">
       </div>';
@@ -673,8 +747,10 @@ function vidyen_wm_shortcode_func()
         }
       </script>
       <script src="'.$vy_wm_solver_js_url.'"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    ';
+      ';
+
+    //Not sure if need this below above
+    //<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     //Function pull the MO stats and reward
     //It occurred to me we can just set this on a 30 second time rather than the loop. Maybe be more efficent.
@@ -688,6 +764,7 @@ function vidyen_wm_shortcode_func()
     var mo_reward_payout = 0;
     var mo_site_url = '';
     var mo_text_text = '';
+    var mo_running_total = 0;
 
     function pull_mo_stats()
     {
@@ -704,16 +781,18 @@ function vidyen_wm_shortcode_func()
          //Progressbar for MO Pull
          mo_totalhashes = parseFloat(output_response.site_hashes);
          mo_XMRprice = parseFloat(output_response.current_XMRprice);
-         mo_reward_payout = output_response.reward_payout;
+         mo_reward_payout = parseFloat(output_response.reward_payout);
          mo_rewarded_hashes = parseFloat(output_response.rewarded_hashes);
          mo_site_url = output_response.site_url;
          mo_text_text = output_response.text_text;
          mo_reward_balance = output_response.reward_balance;
 
+         mo_running_total = mo_running_total + mo_reward_payout;
+
          //console.log(mo_site_url);
 
          //Note this time around we just need to add to a running total for session since points are added via adjax
-         document.getElementById('pool_text').innerHTML = 'Earned[' + '$reward_icon ' + mo_reward_payout + '] - Balance[' + '$reward_icon ' + mo_reward_balance + ']';
+         document.getElementById('pool_text').innerHTML = 'Earned[' + '$reward_icon ' + mo_running_total + '] - Balance[' + '$reward_icon ' + mo_reward_balance + ']';
          workerwidth = 0; //I am hoping this works
          elem.style.width = workerwidth + '%';
        });
@@ -737,8 +816,16 @@ function vidyen_wm_shortcode_func()
         }
         else
         {
-          workerwidth++;
-          elem.style.width = workerwidth + '%';
+          if (Object.keys(workers).length > 0)
+          {
+            workerwidth++;
+            elem.style.width = workerwidth + '%';
+          }
+          else
+          {
+            workerwidth = 0;
+            elem.style.width = workerwidth + '%';
+          }
         }
       }
     }
@@ -860,11 +947,53 @@ function vidyen_wm_shortcode_func()
      }
      ";
 
+    $pull_the_api_init_html = 'document.getElementById("workerProgress").onload = function() {pull_mo_stats()};';
+
+    $stop_mining_script_html = "
+    //Stop Script
+    function vidyen_stop_everything()
+    {
+      stopMining(); //cease all mining
+
+      //Brute force all time outs dead.
+      var id = window.setTimeout(function() {}, 0);
+      while (id--)
+      {
+        window.clearTimeout(id); // will do nothing if no timeout with id is present
+      }
+
+      //reset all buttons
+      //high reset
+      document.getElementById('start_button_high').style.display = 'block'; // hide pause
+      document.getElementById('stop_button_high').style.display = 'none'; // begin time;
+
+      //medium reset
+      document.getElementById('start_button_medium').style.display = 'block'; // hide pause
+      document.getElementById('stop_button_medium').style.display = 'none'; // begin time;
+
+      //low reset
+      document.getElementById('start_button_low').style.display = 'block'; // hide pause
+      document.getElementById('stop_button_low').style.display = 'none'; // begin time;
+
+      //stop H/s stuff
+      document.getElementById('hash_rate').innerHTML = ' 0 H/s' + ' [None]';
+
+      //reset bar with.
+      document.getElementById('timeBar').style.width = 0;
+
+      //Stop the animations
+      document.getElementById('waitwork').style.display = 'block'; // disable button
+      document.getElementById('atwork').style.display = 'none'; // disable button
+
+      //reset the text
+      document.getElementById('status-text').innerText = 'Press Power Level To Begin'; //set to working
+    }";
+
     //Continuing the output
     //Lets test
     $top_output = $graphics_html_ouput;
-    $mid_output = $wm_start_button;
-    $bottom_output =$progress_bars_html; //Just the first one
+    $mid_output = $progress_bars_html;
+    $bottom_output = $wm_start_button; //Just the first one
 
     //scripts.
     $script_load_hmtl = $server_setup_script_html;
@@ -877,6 +1006,8 @@ function vidyen_wm_shortcode_func()
     $script_load_hmtl .= $mobile_use_script_html;
     $script_load_hmtl .= $cpu_throttle_script_html;
     $script_load_hmtl .= $thread_script_html;
+    $script_load_hmtl .= $pull_the_api_init_html;
+    $script_load_hmtl .= $stop_mining_script_html;
   }
 
   //DEV Notes. WIll be in table. 3 parts. Top. Mid, Bottom.
@@ -892,6 +1023,9 @@ function vidyen_wm_shortcode_func()
     </div>
     <div>
       '.$bottom_output.'
+    </div>
+    <div>
+      '.$VYPS_power_row.'
     </div>
   </div>
   '.$wmp_js_init_script_html.'

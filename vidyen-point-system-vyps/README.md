@@ -43,7 +43,7 @@ There are plans to include other monetization systems with more games and other 
 
 == Frequently Asked Questions ==
 
-=Can I delete point types=
+=Can I delete point types?=
 
 No. In order to make a more open and fair system, admins can only change the name and icon of the points rather than allowing the wiping of entire balances. You can simply change the name and then remove all possibility of users interacting with that point type going forward. You cannot wipe the history though.
 
@@ -82,6 +82,10 @@ There is a pro version plugin you can buy off [VidYen.com](https://vidyen.com) t
 =Why postback support not included in base version?=
 
 Unfortunately, postbacks are generally not intended for WordPress so I had to shuffle that part off the official repository and required a bit more work and testing. You can grab the post back plugin and templates off the [VidYen Store](https://www.vidyen.com/product/wannads-postback-plugin/). NOTE: You can use rewards credit earned off the site to purchase or contact us showing you have confirmation of using our referral code with Wannads and we will give you the credit to purchase. (Adscend postback coming down road)
+
+=Why did you remove the throttles and threads on the miner?=
+
+After a long period of user feed back and watching people struggle with the controls, I realized that no one ever used those as the majority of the people who mine for rewards aren't miners or otherwise they would be miners for themselves. The majority of the time they just click one setting every time or they just get confused. It is easier this way trust me.
 
 == Screenshots ==
 
