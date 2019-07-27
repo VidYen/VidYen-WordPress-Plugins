@@ -10,7 +10,7 @@ add_action('admin_menu', 'vyps_points_menu');
 //This are built into the old core.
 function vyps_points_menu()
 {
-    $parent_page_title = "VidYen Point System";
+    $parent_page_title = "VidYen Crypto Reward System";
     $parent_menu_title = 'VidYen';
     $capability = 'manage_options';
     $parent_menu_slug = 'vyps_points';
@@ -57,10 +57,10 @@ function vyps_points_parent_menu_page()
 
 	//Static text for the base plugin
 	echo
-	"<h1>VidYen Point System Base Plugin</h1>
-	<p>VYPS allows you to gamify monetization by giving your users a reason to turn off adblockers in return for rewards and recognition.</p>
+	"<h1>VidYen Crypto Reward System</h1>
+	<p>VidyYen Crypto Reward System allows you to gamify monetization by giving your users a reason to turn off adblockers in return for rewards and recognition.</p>
 	<p>This is a multi-part system, similar to WooCommerce, that allows WordPress administrators to track points for rewards using monetization systems.</p>
-	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VYPS user data. To drop your VYPS tables from the WPDB, use the VYPS Uninstall plugin to do a clean install.</p>
+	<p>To prevent catastrophic data loss, uninstalling this plugin will no longer automatically delete the VidYen Crypto Reward System user data. To drop your VidYen Crypto Reward System tables from the WPDB, use the VYPS Uninstall plugin to do a clean install.</p>
 	<br>
 	<h2>Base Plugin Instructions</h2>
 	<p>Navigate to the Add Points menu to add points.</p>

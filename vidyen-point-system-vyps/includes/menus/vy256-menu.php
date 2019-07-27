@@ -5,15 +5,15 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-add_action('admin_menu', 'vyps_vy256_submenu', 366 );
+add_action('admin_menu', 'vyps_vy256_submenu', 666 );
 
 /* Creates the VY256 submenu on the main VYPS plugin */
 
 function vyps_vy256_submenu() {
 
   $parent_menu_slug = 'vyps_points';
-  $page_title = "VidYen Miner Shortcodes";
-  $menu_title = 'VidYen Miner Shortcodes';
+  $page_title = "Lagacy Miner";
+  $menu_title = 'Legacy Miner';
   $capability = 'manage_options';
   $menu_slug = 'vyps_vy256_page';
   $function = 'vyps_vy256_sub_menu_page';
@@ -37,7 +37,10 @@ function vyps_vy256_sub_menu_page()
 
   echo '
   <div class="wrap">
-    <h1>Pro Mode</h1>
+    <h1>Legacy Miner - Depreciated</h1>
+    <p>As of VidYen Point System 3.0 (Not VidYen Crypto Reward System) the new GUI miner will be the one worked on going forward. Site admins found that the shortcode system often too complex and while there users did not really find the extra controls useful.</p>
+    <p>Although the shortcodes will not be removed, the menus will eventually be removed when the next XMR hard fork down the road. Please use the miner at the top.</p>
+    <h2>Pro Mode</h2>
     <p>In the next major update of the point system, we are moving to a form based rather than a pure shortcode method to use the miner. The legacy miners will still work but the new UI will easier on less technical admins.</p>
     <p>Until its release, I have added a pro mode which removes VidYen branding and gives a small client side fee to VidYen. It is 15 seconds out of eveyr 10 minutes. You do not have ot use it, but retain the VidYen branding.</p>
     <p>Use <b>pro=TRUE</b> to enable. It should look like: <b>[vyps-256 wallet=(your XMR wallet) hash=256 pid=3 throttle=50 site=yoursitename roundup=TRUE pro=TRUE ]</b></p>

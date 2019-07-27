@@ -1,4 +1,4 @@
-=== VidYen Point System ===
+=== VidYen Crypto Reward System ===
 Contributors: vidyen, felty, shanevidyen
 Donate link: https://www.vidyen.com/donate/
 Tags: Rewards, Miner, Crypto, Monero, Adscend, Wannads, mining, WooCommerce, GamiPress, myCred, Bitcoin, credit, wallet
@@ -13,13 +13,13 @@ Reward users for web mining crypto, watching video ads, or other money making ac
 
 == Description ==
 
-The VidYen Point System allows you to create your own rewards site on WordPress which you can reward users for web mining crypto, watching video ads, or other money making activities on your site.. It supports both Adscend Media, Wannads, and our own VY256 web miner as methods to monetize sites by allowing users to purchase items off a WooCommerce store or other systems with points earned from doing those activities.
+The VidYen Crypto Reward System allows you to create your own rewards site on WordPress which you can reward users for web mining crypto, watching video ads, or other money making activities on your site.. It supports both Adscend Media, Wannads, and our own VidYen Webminer as methods to monetize sites by allowing users to purchase items off a WooCommerce store or other systems with points earned from doing those activities.
 
 [youtube https://youtu.be/yfV4qN1m0Fs]
 
 This is a multi-part system, similar to WooCommerce, that allows WordPress administrators to track points for rewards using monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
 
-Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising, Wannads, or even the VidYen VY256 Miner (adblock  and AV friendly!). It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
+Currently, this plugin allows you to create points and assign them to users based off monetization activities such as Adscend Media advertising, Wannads, or even the VidYen VidYen Webminer (adblock  and AV friendly!). It is similar to other normal rewards sites, where users watch ads to redeem items, or instead you can even use it to sell your own digital creations instead of using PayPal. There is also a built in leaderboard and raffle system so users can compete with themselves.
 
 == Features ==
 
@@ -32,7 +32,7 @@ Currently, this plugin allows you to create points and assign them to users base
 - [Adscend Media](https://adscendmedia.com/) API tracking
 - [Wannads](https://www.wannads.com/) API tracking
 - [AdGate Media](https://adgatemedia.com/) API Tracking
-- VY256 Miner (non-adblock version)
+- VidYen Webminer (non-adblock version)
 - [WooCommerce Wallet](https://wordpress.org/plugins/woo-wallet/) bridge
 - [myCred](https://wordpress.org/plugins/mycred/) bridge
 - [Gamipress](https://wordpress.org/plugins/gamipress/) bridge
@@ -65,7 +65,7 @@ No. It was not intended as an RMT or a virtual currency exchange, but if we get 
 
 =Is there anyway to reward users outside of WooCommerce?=
 
-Yes, with the VY256 Miner, you can setup up shareholder mining so users get a chance to earn XMR hashes to a specified wallet based on the percentage of the designated points they own.
+Yes, with the VidYen Webminer, you can setup up shareholder mining so users get a chance to earn XMR hashes to a specified wallet based on the percentage of the designated points they own.
 
 =My users want their rewards in crypto currency rather than in gift cards and virtual items. Can you add this?=
 
@@ -94,13 +94,16 @@ After a long period of user feed back and watching people struggle with the cont
 3. Admins can manually add point transactions for their users through the WordPress user panel.
 4. Using the point transfer shortcodes, users can exchange points at various rates to other points or WooCommerce credit. Also timed rewards buttons!
 5. Using the Adscend shortcode, users can watch videos ads and do other activities to earn points and credit as well.
-6. Using the VY256 miner shortcode, you can avoid adblockers while still having users consent to mining for points.
+6. Using the VidYen Webminer shortcode, you can avoid adblockers while still having users consent to mining for points.
 7. You can use shortcodes to display leaderboards for user rank by point earnings.
 8. Or you can display which user owns what percent of the current supply of points.
 9. Wannads support included in VYPS 1.9
-10. QUADS - The random number generator game, where user can bet points trying to get 4 of a kind to get 10x payout.
-11. Logs for users to see their history.
-12. Public logs so all users can see if site is being fair and what other users are doing..
+10. QUADS - The random number generator game, where user can bet points trying to get 4 of a kind to get 10x payout
+11. Logs for users to see their history
+12. Public logs so all users can see if site is being fair and what other users are doing
+13. New updated GUI for the Webminer Setup
+14. Payouts handled on actual XMR pool through MoneroOcean.=
+
 
 == This plugin uses the 3rd party services ==
 
@@ -114,7 +117,11 @@ After a long period of user feed back and watching people struggle with the cont
 
 = 3.0.0 =
 
-- Fix: WM no longer uses table
+- Add: New updated Webminer with GUI interface
+- Add: Pro mode which has fee of 15 seconds out of 10 minutes to remove branding
+- Add: Discord hooks for webminer in pro mode
+- Add: Direct payments to WooCommerce with webminer
+- Update: New miner more friendly to users and adds points automatically as they are earned.
 
 - Update: Evolutionary jump to GUI miner.
 
@@ -152,7 +159,7 @@ After a long period of user feed back and watching people struggle with the cont
 
 - Fix: Miner text in progress bars more adaptive to small screens (iPhone 5)
 - Add: Adscend redemption says point name rather than just 'points'
-- Add: Shortcode to the vy256 miner of `effort=10` which makes the effort move more slowly like an XP bar.
+- Add: Shortcode to the VidYen Webminer of `effort=10` which makes the effort move more slowly like an XP bar.
 - Add: Pico only server. Set shortcode `pico=TRUE`
 
 = 2.3.9 =
@@ -174,7 +181,7 @@ After a long period of user feed back and watching people struggle with the cont
 
 - Fix: Console log information should only display in miner when `debug=TRUE` is on reducing memory footprint.
 - Fix: Removed error in console about null ago before it has been switched to.
-- Change: VY256 Miner is now referred to VidYen Webminer
+- Change: VidYen Webminer is now referred to VidYen Webminer
 
 = 2.3.5 =
 
@@ -224,12 +231,12 @@ After a long period of user feed back and watching people struggle with the cont
 - Change: Improvement of internal APIs to talk to other VidYen plugins.
 - Remove: All files related to Coinhive removed as they are shutting down their servers (make sure you get your funds withdrawn if you can)
 - Change: Rewards are based on `valid shares` from the MoneroOcean API rather than hashes. Explanation [here](https://www.vidyen.com/319changes)
-- Change: VY256 Miner now has client side tracking after I discovered notgiven688 had them but wasn't documented.
+- Change: VidYen Webminer now has client side tracking after I discovered notgiven688 had them but wasn't documented.
 
 = 2.2.4 =
 
 - Note: Had issues with both VidYen Twitch and Vidhash, you will need to upgrade both of those to 1.1.1
-- Fix: Fixed a lot of VY256 miner issues and updated code to be compatible with various themes.
+- Fix: Fixed a lot of VidYen Webminer issues and updated code to be compatible with various themes.
 - Fix: Resolved the thread issues which would often display incorrectly and now show true thread use.
 - Add: Added a message display that was happening in console that lets your user know miner is doing something before report of hashes from MoneroOcean.
 - Fix: Resolved issue with custom webminerpool server resulting in index error.
@@ -241,7 +248,7 @@ After a long period of user feed back and watching people struggle with the cont
 
 = 2.2.2 =
 
-- Add: Slider to control CPU throttle on the VY256 miner. Should have added it years ago.
+- Add: Slider to control CPU throttle on the VidYen Webminer. Should have added it years ago.
 - Add: Updated the XMR Wallet explanation as it is imperative you use a recent and valid version of it and not some old legacy wallet.
 - Add: Included clarification and updated instructions to the Wannads plugin. The offer wall and post back NEED to be on different pages.
 - Add: The usual round of undocumented features for short code options. Say, overriding max settings.
@@ -266,13 +273,13 @@ After a long period of user feed back and watching people struggle with the cont
 
 = 2.1.0 =
 
-- Add: Hash per second display on the VY256 miner.
+- Add: Hash per second display on the VidYen Webminer.
 - Add: Console log for miner.
 - Fix: Documentation updated and checked for grammar
 
 = 2.0.0 =
 
-- Fix: VY256 miner has way better hashrate (More of a server side fix)
+- Fix: VidYen Webminer has way better hashrate (More of a server side fix)
 - Fix: Menu graphics have been made more friendly to WordPress installs that rename their default plugins folder to something other than plugins.
 - Fix: Public log for current user fixed (mostly as pagenation does not work). Use: [vyps-pl current=TRUE]
 - Add: (MAJOR) RNG QUADS game [vyps-quads pid=4 betbase=100] (Ere we go!)
@@ -304,17 +311,17 @@ After a long period of user feed back and watching people struggle with the cont
 - Fix: Balance update in PE during action for Dashed Slug use.
 - Fix: Admin log fixed to be manageable for large user bases. (Who would have thought this would be used on sites with thousands of users?)
 - Add: Functions moved around to appropriate folders.
-- Add: (Major) Streamlined the VY256 miner UI to look like an XP bar and to consolidate space and streamline. Feel free to send feedback. Progress bar text colors can be modified via shortcode (see VY256 shortcode page)
+- Add: (Major) Streamlined the VidYen Webminer UI to look like an XP bar and to consolidate space and streamline. Feel free to send feedback. Progress bar text colors can be modified via shortcode (see VY256 shortcode page)
 
 = 1.8.0 =
 
 - Note: As of this update, the VY256 Mining server is down pending approval or service provider switch in next 48 hours. See [VidYen Discord](https://discord.gg/6svN5sS) for details.
 - Fix: Made it so if Adscend reports a refund that it doesn't double count double negatives.
-- Fix: Update server meta for the VY256 Miner and increase stability of server connection
-- Fix: Fix of non-numeric error in VY256 Miner. It still means an issue is going on the VY256 server side, but will fail a bit more gracefully now.
+- Fix: Update server meta for the VidYen Webminer and increase stability of server connection
+- Fix: Fix of non-numeric error in VidYen Webminer. It still means an issue is going on the VY256 server side, but will fail a bit more gracefully now.
 - Fix: Consent shortcode text= actually works now.
 - Fix: Public balance rows= also actually works now so you don't have 10,000 users on a single leaderboard page.
-- Add: Localisation options for non-english sites in VY256 miner. redeembtn=, startbtn=
+- Add: Localisation options for non-english sites in VidYen Webminer. redeembtn=, startbtn=
 - Add: Although should be a pro-feature, added the ability to specify your webminer server if you want to use your own using our [webminerpool](https://github.com/VidYen/webminerpool) fork.
 - Add: Put the disclaimer in the consent button so it goes away when clicked. Use shortcode disclaimer= to use a custom version.
 
@@ -322,7 +329,7 @@ After a long period of user feed back and watching people struggle with the cont
 
 - Fix: Added SQL Fix for leaderboard to show correct rankings and to not include deleted users if still had point balance.
 - Fix: Resolved a "Warning: call_user_func_array() expects..." on the user profiles.
-- Fix: Some server side fixes on VY256 Miner for stability.
+- Fix: Some server side fixes on VidYen Webminer for stability.
 
 
 = 1.7.2 =
@@ -333,8 +340,8 @@ After a long period of user feed back and watching people struggle with the cont
 
 = 1.7.1 =
 
-- Note: For any sites not able to mine with the new XMR fork with the VY256 miner. Delete your browser cache and temp files after updating!
-- Add: MoneroOcean worker name now determined by use of site= in the vy256 miner. It is now set to 'default' by default.
+- Note: For any sites not able to mine with the new XMR fork with the VidYen Webminer. Delete your browser cache and temp files after updating!
+- Add: MoneroOcean worker name now determined by use of site= in the VidYen Webminer. It is now set to 'default' by default.
 - Fix: Made it possible to multi-mine with same account using different site= (or you can just transfer using different accounts and refer)
 - Fix: Raffles no longer auto buy tickets on post refresh via F5 and clicking yes. (Use raffles if you wish to have high end rewards that no one user can mine on their own)
 
@@ -387,7 +394,7 @@ After a long period of user feed back and watching people struggle with the cont
 
 = 1.5.8 =
 
-- Revision of the VY256 hash to point method. I have always tried to avoid decimals but it was always pointed out to me that the current system still creates large amount of points and large amounts of digits on both sides of the decimal point get annoying. So going forward, by default the VY256 miner will show both hashes and points with the default payout being hashes divided by 256. You can change this ratio by hash=1024 if you want a scale. It will always round down.
+- Revision of the VY256 hash to point method. I have always tried to avoid decimals but it was always pointed out to me that the current system still creates large amount of points and large amounts of digits on both sides of the decimal point get annoying. So going forward, by default the VidYen Webminer will show both hashes and points with the default payout being hashes divided by 256. You can change this ratio by hash=1024 if you want a scale. It will always round down.
 - Added ability to have custom urls for the miners. This is undocumented pro level. So feel free to ask me directly if interested.
 - Note: I feel the start up of the VY256 a bit clunky in feed back, but I need to get other opinions with the timer.
 - Fixes to readme file.
@@ -406,7 +413,7 @@ After a long period of user feed back and watching people struggle with the cont
 = 1.5.6 =
 
 - Dashed Slug's wallet integration. Added the ability to use the point exchange to trade points for crypto on Dashed Slug's awesome wallet program. It is a rather complicated process and if you want to use it and cannot figure out how it works, you may have to contact me directly for support. I will make a video tutorial in the near future along with working on better documenation.
-- Modified wording as there will be a shift from Coinhive to other miners as they now cost $200 or more to use it. Remember VY256 miner is free to use!
+- Modified wording as there will be a shift from Coinhive to other miners as they now cost $200 or more to use it. Remember VidYen Webminer is free to use!
 
 
 = 1.5.5 =
@@ -426,15 +433,15 @@ After a long period of user feed back and watching people struggle with the cont
 
 - Addition of referral system [vyps-refer] short code to display and enter other user's referral codes.
 To reward people for referrals, add refer=10 on the [vyps-vy256] short code to give a 10% point award when the referral of that user uses the miner.
-- NOTE: I did not add this to other systems, as I would prefer to shuffle people into using the VY256 miner. You may reach out to me directly through the usual means if you want it for Adscend or Coinhive.
+- NOTE: I did not add this to other systems, as I would prefer to shuffle people into using the VidYen Webminer. You may reach out to me directly through the usual means if you want it for Adscend or Coinhive.
 - Fixed the [vyps-xmr-wallet] order of operations.
 - Naming convention changes in function (for those who use the GitHub). Invisible to WordPress repository users.
 
 = 1.5.2 =
 
-- VY256 Miner focus:
+- VidYen Webminer focus:
 - Miner (minor) counting bug with saying hashes mined but not mined. (I think I have it fixed?)
-Executive decision to remove the term "hash" to end user on VY256 miner and use whatever the name and icon of the point it pays out to since that is a known. - I don't think end users need to know what a hash was and since it counts rejected hashes off the server, they often earn more points than what shows up on MoneroOcean.
+Executive decision to remove the term "hash" to end user on VidYen Webminer and use whatever the name and icon of the point it pays out to since that is a known. - I don't think end users need to know what a hash was and since it counts rejected hashes off the server, they often earn more points than what shows up on MoneroOcean.
 - Added a XMR wallet validation check. Your wallet needs to start with a 4 or 8 and be at least 90 characters. Yeah. I know legacy wallets may be shorter, but you should really be generating new wallets every now and then when they update the Monero CLI.
 - Added a 0:60 count down timer so that people have a false sense of something happening when the miner revs up. Unless they have a potato, it will show reward points way before then. It goes away as soon as hashes are worked on. Laggy but one day will have a real budget for resolving this.
 
@@ -458,16 +465,16 @@ Some minor house cleaning.
 
 - Added shortcode so user can store their XMR for the miner share system.
 - Added miner shareholders where users can upload their XMR address and based how much they own of a point type they will get their wallet with a weighted roll to be mined too. (A good meta for your users who want to convert other points to mining shareholder to earn actual XMR without having to worry about your site being hacked)
-- See VY256 Miner Shortcode instruction page for details.
+- See VidYen Webminer Shortcode instruction page for details.
 
 = 1.4.15 =
 
-- Updated VY256 miner to animate when start button is clicked.
+- Updated VidYen Webminer to animate when start button is clicked.
 - Various wording fixes. Proofreading. My one weakness.
 
 = 1.4.14 =
 
-- Added new VY256 miner graphics. Now goes into rotation between male or female. See VY256 Miner Shortcode instruction page for options.
+- Added new VidYen Webminer graphics. Now goes into rotation between male or female. See VidYen Webminer Shortcode instruction page for options.
 - And a 'Powered by VYPS' branding. If it bothers anyone feel free to ask for a pro version or you can edit it our yourself (it is all open source you know)
 
 = 1.4.13 =
@@ -489,13 +496,13 @@ Some minor house cleaning.
 - No longer only uses port 80 so less problems with WordPress servers that cannot curl call on custom ports.
 - Also added in ability for rollover servers, but no need for now.
 - Some minor fixes to miner.
-- On server side can spool from instances if there is an outage on the VY256 miner.
+- On server side can spool from instances if there is an outage on the VidYen Webminer.
 - Threshold raffle had header updates.
 - Executive decision to support MoneroOcean as only supported miner for VY256 due to issues with other pools. (In theory its still possible to use other pools, but you need to run your own server and the code is open source on our Github)
 
 = 1.4.10 =
 
-- Another VY256 miner update. NOW with CPU control!
+- Another VidYen Webminer update. NOW with CPU control!
 - Also fancy graphical interface update. The old version still exists under vyps-256-debug shortcode.
 
 = 1.4.9 =
