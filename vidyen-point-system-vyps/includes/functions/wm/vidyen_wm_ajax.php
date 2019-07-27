@@ -113,6 +113,7 @@ function vidyen_wm_api_action()
     //Ok going to check for pro and woo mode.
     if($wm_pro_active == 1 AND $wm_woo_active == 1)
     {
+      $reward_payout = $reward_payout / 100; //Well we got to have it per $0.01 for those who want to use USD
       $credit_result = vyps_ww_point_credit_func( $user_id, $reward_payout, $reason ); //Note no point ID's
     }
     else

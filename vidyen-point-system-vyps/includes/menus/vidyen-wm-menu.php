@@ -270,6 +270,10 @@ function vidyen_wm_sub_menu_page()
 		{
 			$wm_threads = 6;
 		}
+		elseif ($wm_pro_active == 1 AND $wm_threads > 20 )
+		{
+			$wm_threads = 20; //I realized someone might do an invalid post
+		}
 
 		//The desired amount of throttle
 		if (isset($_POST['wm_cpu']))
@@ -313,7 +317,7 @@ function vidyen_wm_sub_menu_page()
 
 		if (isset($_POST['custom_wmp']))
 		{
-			$custom_wmp = esc_url_raw($_POST['custom_wmp']);
+			$custom_wmp = sanitize_text_field($_POST['custom_wmp']);
 		}
 		else
 		{
@@ -381,7 +385,7 @@ function vidyen_wm_sub_menu_page()
 	if ($wm_pro_active == 1)
 	{
 		$wm_pro_checked = 'checked';
-		$max_threads = 20;
+		$max_threads = 20; //Yes yes, you an go 20 max threads, but only if user can handle.
 		$woo_mode_disabled = '';
 		$discord_webhook_disabled = '';
 		$discord_text_disabled = '';
@@ -556,7 +560,7 @@ function vidyen_wm_sub_menu_page()
 				<td valign="top"><input type="number" name="hash_per_point" id="hash_per_point" value="'.$hash_per_point.'" size="18" min="1" step="1" required="true"> <i><b>NOTE:</b> If WooCommerce mode, this is set per $0.1 per hashes mined.</i></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Default Threads:</b></td>
+				<td valign="top"><b>Max Threads:</b></td>
 				<td valign="top"><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="'.$max_threads.'" value="'.$wm_threads.'" size="128" required="true"> Threads: <span id="thread_count">'.$wm_threads.'</span></td>
 			</tr>
 			<tr>

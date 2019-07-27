@@ -44,6 +44,9 @@ function vidyen_wm_shortcode_func()
   $login_url = $vy_wm_parsed_array[$index]['login_url'];
   $custom_wmp = $vy_wm_parsed_array[$index]['custom_wmp'];
 
+  //Admins get to decide
+  $max_threads = $wm_threads;
+
   $mining_pool = 'moneroocean.stream'; //This will never change actually.
   $password = $site_name; //Not sure if need to set this somehwere. but for now this is the site name so people can set their emails
 
@@ -408,7 +411,7 @@ function vidyen_wm_shortcode_func()
 
     $server_setup_script_html = '
       //current thread counted
-      var switch_current_thread_count = '.$wm_threads.';
+      var switch_current_thread_count = 2; //I am making an executive decision. Anymore than this may impact older machines. Let user decide
 
       throttleMiner = 100 - '.$wm_cpu.';
 
@@ -486,6 +489,12 @@ function vidyen_wm_shortcode_func()
         while (receiveStack.length > 0) addText((receiveStack.pop()));
       }, 2000);
         ";
+
+  //Small addition if current graphic is youtube to throw in start video commen to start the clock
+  if($current_graphic == 'youtube')
+  {
+      $start_the_clock_js_script .="player.playVideo();";
+  }
 
     //Keep in mine this is logically out of order as ill be embeded fruther down
     //NOTE If pro mode active
@@ -634,7 +643,7 @@ function vidyen_wm_shortcode_func()
       <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:block;">
         <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
         <span id="threads_bar_font_span">Threads:&nbsp;</span><span id="thread_count" style="display:inline;">0</span>
-        <button type="button" id="add" style="display:inline;position:absolute;right:50px;" class="add" onclick="vidyen_add()" disabled>+</button>
+        <button type="button" id="add" style="display:inline;position:absolute;right:6px;" class="add" onclick="vidyen_add()" disabled>+</button>
         <form method="post" style="display:none;margin:5px !important;" id="redeem">
           <input type="hidden" value="" name="redeem"/>
         </form>
@@ -695,13 +704,13 @@ function vidyen_wm_shortcode_func()
          //Progressbar for MO Pull
          mo_totalhashes = parseFloat(output_response.site_hashes);
          mo_XMRprice = parseFloat(output_response.current_XMRprice);
-         mo_reward_payout = parseFloat(output_response.reward_payout);
+         mo_reward_payout = output_response.reward_payout;
          mo_rewarded_hashes = parseFloat(output_response.rewarded_hashes);
          mo_site_url = output_response.site_url;
          mo_text_text = output_response.text_text;
-         mo_reward_balance = parseFloat(output_response.reward_balance);
+         mo_reward_balance = output_response.reward_balance;
 
-         console.log(mo_site_url);
+         //console.log(mo_site_url);
 
          //Note this time around we just need to add to a running total for session since points are added via adjax
          document.getElementById('pool_text').innerHTML = 'Earned[' + '$reward_icon ' + mo_reward_payout + '] - Balance[' + '$reward_icon ' + mo_reward_balance + ']';
@@ -764,6 +773,14 @@ function vidyen_wm_shortcode_func()
         if (serverError > 0)
         {
           repickServer(); //yep we have it above
+        }
+
+        //Unlock threads
+        document.getElementById('thread_count').innerHTML = Object.keys(workers).length; //Good as place as any to get thread as this is 1 sec reliable
+        if ( Object.keys(workers).length > 1 && mobile_use == false )
+        {
+          document.getElementById(\"add\").disabled = false; //enable the + button
+          document.getElementById(\"sub\").disabled = false; //enable the - button
         }
       }
     }";
@@ -857,6 +874,9 @@ function vidyen_wm_shortcode_func()
     $script_load_hmtl .= $progress_bar_script_hmtl;
     $script_load_hmtl .= $hash_per_second_script_html;
     $script_load_hmtl .= $job_text_script_html;
+    $script_load_hmtl .= $mobile_use_script_html;
+    $script_load_hmtl .= $cpu_throttle_script_html;
+    $script_load_hmtl .= $thread_script_html;
   }
 
   //DEV Notes. WIll be in table. 3 parts. Top. Mid, Bottom.
