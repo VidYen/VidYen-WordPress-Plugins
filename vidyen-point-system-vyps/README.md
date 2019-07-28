@@ -53,7 +53,7 @@ No. In order to have a system similar to a blockchain or a bank ledger, to decre
 
 =Can I use point types I create with VYPS to give credit to users on WooCommerce?=
 
-Yes. You can install WooCommerce Wallet and use the point transfer shortcode to transfer points at various rates and then the user can use the wallet credit to make purchases.
+Yes. You can install TeraWallet for WooCommerce and use the point transfer shortcode to transfer points at various rates and then the user can use the wallet credit to make purchases.
 
 =Can users transfer points between themselves=
 
@@ -117,13 +117,12 @@ After a long period of user feed back and watching people struggle with the cont
 
 = 3.0.0 =
 
+- Update: Evolutionary jump to GUI miner.
+- Update: New miner more friendly to users and adds points automatically as they are earned.
 - Add: New updated Webminer with GUI interface
 - Add: Pro mode which has fee of 15 seconds out of 10 minutes to remove branding
-- Add: Discord hooks for webminer in pro mode
+- Add: Discord hooks for Webminer in pro mode
 - Add: Direct payments to WooCommerce with webminer
-- Update: New miner more friendly to users and adds points automatically as they are earned.
-
-- Update: Evolutionary jump to GUI miner.
 
 = 2.5.1 =
 
