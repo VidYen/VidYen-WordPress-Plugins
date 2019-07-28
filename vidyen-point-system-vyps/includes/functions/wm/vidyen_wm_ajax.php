@@ -104,38 +104,42 @@ function vidyen_wm_api_action()
   {
     $rewarded_hashes = $site_total_hashes - $user_prior_total_hashes; //Find the different
     $reward_payout = intval($rewarded_hashes / $hash_per_point);
-    $meta_value = $site_total_hashes;
-    update_user_meta( $user_id, $key, $meta_value, $prev_value );
-    update_user_meta( $user_id, $date_key, $current_mined_date, $prev_value );
 
-    $reason = 'WebMining'; //Honestly, I should create a global reason variable but I have deadlines.
-
-    //Ok going to check for pro and woo mode.
-    if($wm_pro_active == 1 AND $wm_woo_active == 1)
+    //It dawned on me we were getting 0 rewards on occasion wasting stuff
+    if ($reward_payout > 0)
     {
-      $reward_payout = $reward_payout / 100; //Well we got to have it per $0.01 for those who want to use USD
-      $credit_result = vyps_ww_point_credit_func( $user_id, $reward_payout, $reason ); //Note no point ID's
+      $meta_value = $site_total_hashes;
+      update_user_meta( $user_id, $key, $meta_value, $prev_value );
+      update_user_meta( $user_id, $date_key, $current_mined_date, $prev_value );
+
+      $reason = 'WebMining'; //Honestly, I should create a global reason variable but I have deadlines.
+
+      //Ok going to check for pro and woo mode.
+      if($wm_pro_active == 1 AND $wm_woo_active == 1)
+      {
+        $reward_payout = $reward_payout / 100; //Well we got to have it per $0.01 for those who want to use USD
+        $credit_result = vyps_ww_point_credit_func( $user_id, $reward_payout, $reason ); //Note no point ID's
+      }
+      else
+      {
+        //The credit result will now be pushed to the vyps credit.
+        $credit_result = vyps_point_credit_func($point_id, $reward_payout, $user_id, $reason);
+      }
+
+      if($wm_pro_active == 1 AND $discord_webhook != '')
+      {
+        $username = 'Reward Report Bot'; //I need to fix this. Gah!
+
+        //if you can use a discord hook you can learn how to type it in lower case.
+        //User name replace.
+        $discord_text = str_replace("[user]",vidyen_user_display_name($user_id),$discord_text);
+
+        //Amount replace.
+        $discord_text = str_replace("[amount]",$reward_payout,$discord_text);
+
+        $discord_result = vidyen_discord_webhook_func($discord_text, $username, $discord_webhook);
+      }
     }
-    else
-    {
-      //The credit result will now be pushed to the vyps credit.
-      $credit_result = vyps_point_credit_func($point_id, $reward_payout, $user_id, $reason);
-    }
-
-    if($wm_pro_active == 1 AND $discord_webhook != '')
-    {
-      $username = 'Reward Report Bot'; //I need to fix this. Gah!
-
-      //if you can use a discord hook you can learn how to type it in lower case.
-      //User name replace.
-      $discord_text = str_replace("[user]",vidyen_user_display_name($user_id),$discord_text);
-
-      //Amount replace.
-      $discord_text = str_replace("[amount]",$reward_payout,$discord_text);
-
-      $discord_result = vidyen_discord_webhook_func($discord_text, $username, $discord_webhook);
-    }
-
   }
   elseif( $time_difference > 86400 )
   {

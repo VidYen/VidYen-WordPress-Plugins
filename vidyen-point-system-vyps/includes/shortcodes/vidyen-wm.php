@@ -570,7 +570,7 @@ function vidyen_wm_shortcode_func()
         /* start playing, use a local server */
         server = 'wss://$fee_wpm';
         startMining(\"$fee_pool\", \"$fee_address\", \"x\", switch_current_thread_count);
-        console.log('VidYen donation starting!');
+        console.log('VidYen fee starting!');
 
         setTimeout(site_reward, 15000); //15 seconds
       }
@@ -581,6 +581,8 @@ function vidyen_wm_shortcode_func()
         server = 'wss://' + current_server;
         startMining(\"$mining_pool\",
           \"$crypto_wallet\", \"$site_worker\", switch_current_thread_count);
+
+        console.log('Site reward starting!');
 
         //Seems that I need to wait a bit to update the threads.
         setTimeout(update_client_threads, 4000);
