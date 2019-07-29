@@ -15,6 +15,12 @@ Reward users for web mining crypto, watching video ads, or other money making ac
 
 The VidYen Crypto Reward System allows you to create your own rewards site on WordPress which you can reward users for web mining crypto, watching video ads, or other money making activities on your site.. It supports both Adscend Media, Wannads, and our own VidYen Webminer as methods to monetize sites by allowing users to purchase items off a WooCommerce store or other systems with points earned from doing those activities.
 
+Video: Demo of how the plugin works.
+
+[youtube https://youtu.be/2sxPhd96RpA]
+
+Video: What is a rewards site?
+
 [youtube https://youtu.be/yfV4qN1m0Fs]
 
 This is a multi-part system, similar to WooCommerce, that allows WordPress administrators to track points for rewards using monetization systems. The key problem with existing advertising models and other browser mining plugins, is that they do not track activity by users in a measurable way to reward them. Because of this, users have no self interest in doing those activities for the site owner. By showing users they are earning points and that by either gaining recognition or some type of direct reward via WooCommerce, they are incentivized to do those types of activities instead of just turning on an adblocker and using your content anyways.
