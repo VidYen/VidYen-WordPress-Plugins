@@ -115,6 +115,10 @@ After a long period of user feed back and watching people struggle with the cont
 
 == Changelog ==
 
+= 3.0.1 =
+
+- Update: Added specific settings to each power level as previous version was unusable to some users.
+
 = 3.0.0 =
 
 - Update: Evolutionary jump to GUI miner.
