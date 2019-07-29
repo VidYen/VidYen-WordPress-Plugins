@@ -43,9 +43,15 @@ function vidyen_wm_shortcode_func()
   $login_text = $vy_wm_parsed_array[$index]['login_text'];
   $login_url = $vy_wm_parsed_array[$index]['login_url'];
   $custom_wmp = $vy_wm_parsed_array[$index]['custom_wmp'];
+  $wm_threads_low = $vy_wm_parsed_array[$index]['wm_threads_low'];
+  $wm_cpu_low = $vy_wm_parsed_array[$index]['wm_cpu_low'];
+  $wm_threads_medium = $vy_wm_parsed_array[$index]['wm_threads_medium'];
+  $wm_cpu_medium = $vy_wm_parsed_array[$index]['wm_cpu_medium'];
+  $wm_threads_high = $vy_wm_parsed_array[$index]['wm_threads_high'];
+  $wm_cpu_high = $vy_wm_parsed_array[$index]['wm_cpu_high'];
 
   //Admins get to decide
-  $max_threads = 10;
+  $max_threads = 20;
 
   $mining_pool = 'moneroocean.stream'; //This will never change actually.
   $password = $site_name; //Not sure if need to set this somehwere. but for now this is the site name so people can set their emails
@@ -467,7 +473,8 @@ function vidyen_wm_shortcode_func()
 
       if (power == 3)
       {
-        switch_current_thread_count = $wm_threads * 4;
+        switch_current_thread_count = $wm_threads_high;
+        throttleMiner = 100 - $wm_cpu_high;
 
         //hide start button, show the stop
         document.getElementById('start_button_high').style.display = 'none'; // hide pause
@@ -486,7 +493,8 @@ function vidyen_wm_shortcode_func()
 
       if (power == 2)
       {
-        switch_current_thread_count = $wm_threads * 2;
+        switch_current_thread_count = $wm_threads_medium;
+        throttleMiner = 100 - $wm_cpu_medium;
 
         //hide start button, show the stop
         document.getElementById('start_button_medium').style.display = 'none'; // hide pause
@@ -503,7 +511,8 @@ function vidyen_wm_shortcode_func()
 
       if (power == 1)
       {
-        switch_current_thread_count = $wm_threads * 1; //Redudant I suppose
+        switch_current_thread_count = $wm_threads_low;
+        throttleMiner = 100 - $wm_cpu_low;
 
         //hide start button, show the stop
         document.getElementById('start_button_low').style.display = 'none'; // hide pause

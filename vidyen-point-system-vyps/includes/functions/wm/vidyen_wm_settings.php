@@ -39,6 +39,12 @@ function vidyen_vy_wm_settings()
     $discord_text = $result->discord_text;
     $youtube_url = $result->youtube_url;
     $custom_wmp = $result->custom_wmp;
+    $wm_threads_low = $result->wm_threads_low;
+    $wm_cpu_low = $result->wm_cpu_low;
+    $wm_threads_medium = $result->wm_threads_medium;
+    $wm_cpu_medium = $result->wm_cpu_medium;
+    $wm_threads_high = $result->wm_threads_high;
+    $wm_cpu_high = $result->wm_cpu_high;
     //Array parsing to cram it into multi dimensional row
     //TODO: Add index names and not numbers for second part!
     $vy_wm_parsed_array[$index]['button_text'] = $button_text;
@@ -61,6 +67,12 @@ function vidyen_vy_wm_settings()
     $vy_wm_parsed_array[$index]['discord_text'] = $discord_text;
     $vy_wm_parsed_array[$index]['youtube_url'] = $youtube_url;
     $vy_wm_parsed_array[$index]['custom_wmp'] = $custom_wmp;
+    $vy_wm_parsed_array[$index]['wm_threads_low'] = $wm_threads_low;
+    $vy_wm_parsed_array[$index]['wm_cpu_low'] = $wm_cpu_low;
+    $vy_wm_parsed_array[$index]['wm_threads_medium'] = $wm_threads_medium;
+    $vy_wm_parsed_array[$index]['wm_cpu_medium'] = $wm_cpu_medium;
+    $vy_wm_parsed_array[$index]['wm_threads_high'] = $wm_threads_high;
+    $vy_wm_parsed_array[$index]['wm_cpu_high'] = $wm_cpu_high;
 
     $index++; //Technically it should be only one row unless I screwed up.
   }

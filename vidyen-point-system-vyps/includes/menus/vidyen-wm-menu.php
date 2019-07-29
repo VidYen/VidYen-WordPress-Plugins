@@ -255,34 +255,67 @@ function vidyen_wm_sub_menu_page()
 			$wm_woo_active  = 0;
 		}
 
+		//Low
 		//The desired amount of threads
-		if (isset($_POST['wm_threads']))
+		if (isset($_POST['wm_threads_low']))
 		{
-			$wm_threads = intval($_POST['wm_threads']);
+			$wm_threads_low = intval($_POST['wm_threads_low']);
 		}
 		else
 		{
-			$wm_threads  = $vy_wm_parsed_array[$index]['wm_threads'];
-		}
-
-		//So if the pro is not active and they set threads to greater than 6 it gets set to 6
-		if ($wm_pro_active == 0 AND $wm_threads > 6 )
-		{
-			$wm_threads = 6;
-		}
-		elseif ($wm_pro_active == 1 AND $wm_threads > 20 )
-		{
-			$wm_threads = 20; //I realized someone might do an invalid post
+			$wm_threads_low  = $vy_wm_parsed_array[$index]['wm_threads_low'];
 		}
 
 		//The desired amount of throttle
-		if (isset($_POST['wm_cpu']))
+		if (isset($_POST['wm_cpu_low']))
 		{
-			$wm_cpu = intval($_POST['wm_cpu']);
+			$wm_cpu_low = intval($_POST['wm_cpu_low']);
 		}
 		else
 		{
-			$wm_cpu  = $vy_wm_parsed_array[$index]['wm_cpu'];
+			$wm_cpu_low  = $vy_wm_parsed_array[$index]['wm_cpu_low'];
+		}
+
+		//medium
+		//The desired amount of threads
+		if (isset($_POST['wm_threads_medium']))
+		{
+		  $wm_threads_medium = intval($_POST['wm_threads_medium']);
+		}
+		else
+		{
+		  $wm_threads_medium  = $vy_wm_parsed_array[$index]['wm_threads_medium'];
+		}
+
+		//The desired amount of throttle
+		if (isset($_POST['wm_cpu_medium']))
+		{
+		  $wm_cpu_medium = intval($_POST['wm_cpu_medium']);
+		}
+		else
+		{
+		  $wm_cpu_medium  = $vy_wm_parsed_array[$index]['wm_cpu_medium'];
+		}
+
+		//high
+		//The desired amount of threads
+		if (isset($_POST['wm_threads_high']))
+		{
+		  $wm_threads_high = intval($_POST['wm_threads_high']);
+		}
+		else
+		{
+		  $wm_threads_high  = $vy_wm_parsed_array[$index]['wm_threads_high'];
+		}
+
+		//The desired amount of throttle
+		if (isset($_POST['wm_cpu_high']))
+		{
+		  $wm_cpu_high = intval($_POST['wm_cpu_high']);
+		}
+		else
+		{
+		  $wm_cpu_high  = $vy_wm_parsed_array[$index]['wm_cpu_high'];
 		}
 
 		//sanitize_url
@@ -342,12 +375,16 @@ function vidyen_wm_sub_menu_page()
 				'graphic_selection' => $graphic_selection,
 	      'wm_pro_active' => $wm_pro_active,
 				'wm_woo_active' => $wm_woo_active,
-				'wm_threads' => $wm_threads,
-				'wm_cpu' => $wm_cpu,
 				'discord_webhook' => $discord_webhook,
 				'discord_text' => $discord_text,
 				'youtube_url' => $youtube_url,
 				'custom_wmp' => $custom_wmp,
+				'wm_threads_low' => $wm_threads_low,
+				'wm_cpu_low' => $wm_cpu_low,
+				'wm_threads_medium' => $wm_threads_medium,
+				'wm_cpu_medium' => $wm_cpu_medium,
+				'wm_threads_high' => $wm_threads_high,
+				'wm_cpu_high' => $wm_cpu_high,
 	  ];
 
 			$wpdb->update($table_name_vy_wm, $data, ['id' => 1]);
@@ -380,6 +417,13 @@ function vidyen_wm_sub_menu_page()
 	$discord_text = $vy_wm_parsed_array[$index]['discord_text'];
 	$youtube_url = $vy_wm_parsed_array[$index]['youtube_url'];
   $custom_wmp = $vy_wm_parsed_array[$index]['custom_wmp'];
+	$wm_threads_low = $vy_wm_parsed_array[$index]['wm_threads_low'];
+	$wm_cpu_low = $vy_wm_parsed_array[$index]['wm_cpu_low'];
+	$wm_threads_medium = $vy_wm_parsed_array[$index]['wm_threads_medium'];
+	$wm_cpu_medium = $vy_wm_parsed_array[$index]['wm_cpu_medium'];
+	$wm_threads_high = $vy_wm_parsed_array[$index]['wm_threads_high'];
+	$wm_cpu_high = $vy_wm_parsed_array[$index]['wm_cpu_high'];
+
 
 	//It dawned on me that these need to go only oce after the SQL parse has been redone.
 	if ($wm_pro_active == 1)
@@ -405,7 +449,7 @@ function vidyen_wm_sub_menu_page()
 	else
 	{
 		$wm_pro_checked = '';
-		$max_threads = 6;
+		$max_threads = 8;
 		$wm_woo_checked = 'disabled';
 		$discord_webhook_disabled = 'disabled';
 		$discord_text_disabled = 'disabled';
@@ -560,12 +604,31 @@ function vidyen_wm_sub_menu_page()
 				<td valign="top"><input type="number" name="hash_per_point" id="hash_per_point" value="'.$hash_per_point.'" size="18" min="1" step="1" required="true"> <i><b>NOTE:</b> If WooCommerce mode, this is set per $0.01 per hashes mined. Either use Viritual items or raise hash requirements</i></td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Base Threads:</b><br><i>Power will have low, medium, and high. <br>Exponential base from default threads<br>2, 4, 8<br>3, 6, 12</i></td>
-				<td valign="top"><input type="range" name="wm_threads" id="wm_threads" step="1" min="1" max="'.$max_threads.'" value="'.$wm_threads.'" size="128" required="true"> Threads: <span id="thread_count">'.$wm_threads.'</span></td>
-			</tr>
-			<tr>
-				<td valign="top"><b>Default CPU USE:</b></td>
-				<td valign="top"><input type="range" step="1" min="0" max="100" value="'.$wm_cpu.'" class="slider" name="wm_cpu" id="wm_cpu" size="128"> Default CPU: <span id="cpu_use">'.$wm_cpu.'</span></td>
+				<td valign="top"><b>Power Button Settings:</b><br><i><b>Note:</b><br>Thread counts above 8 are only possible on Pro Mode</i></td>
+				<td valign="top">
+					<table>
+						<tr>
+							<td><b>Low Power</b></td>
+							<td>Threads</td>
+							<td valign="top"><input type="number" name="wm_threads_low" id="wm_threads_low" value="'.$wm_threads_low.'" size="18" min="1" max="'.$max_threads.'" step="1" required="true"></td>
+							<td>CPU</td>
+							<td valign="top"><input type="number" name="wm_cpu_low" id="wm_cpu_low" value="'.$wm_cpu_low.'" size="18" min="1" max="100" step="1" required="true"></td>
+						</tr>
+						<tr>
+						  <td><b>Medium Power</b></td>
+						  <td>Threads</td>
+						  <td valign="top"><input type="number" name="wm_threads_medium" id="wm_threads_medium" value="'.$wm_threads_medium.'" size="18" min="1" max="'.$max_threads.'" step="1" required="true"></td>
+						  <td>CPU</td>
+						  <td valign="top"><input type="number" name="wm_cpu_medium" id="wm_cpu_medium" value="'.$wm_cpu_medium.'" size="18" min="1" max="100" step="1" required="true"></td>
+						</tr>
+						<tr>
+						  <td><b>High Power</b></td>
+						  <td>Threads</td>
+						  <td valign="top"><input type="number" name="wm_threads_high" id="wm_threads_high" value="'.$wm_threads_high.'" size="18" min="1" max="'.$max_threads.'" step="1" required="true"></td>
+						  <td>CPU</td>
+						  <td valign="top"><input type="number" name="wm_cpu_high" id="wm_cpu_high" value="'.$wm_cpu_high.'" size="18" min="1" max="100" step="1" required="true"></td>
+						</tr>
+					</table>
 			</tr>
 			<tr>
 				<td valign="top"><b>Miner Graphics:</b><br><i>Check Or Uncheck Included Graphics you wish to use.<br>Checking more than one will pick one selected at random.<br>Unchecking all will leave use no animation graphic.</i></td>
@@ -630,8 +693,8 @@ function vidyen_wm_sub_menu_page()
 	<p>Copy and paste onto page where you want Webminer to go.</p>
 	<script>
 		//Thread Slider
-		var thread_slider = document.getElementById("wm_threads");
-		var thread_output = document.getElementById("thread_count");
+		var thread_slider = document.getElementById("wm_threads_low");
+		var thread_output = document.getElementById("thread_count_low");
 		thread_output.innerHTML = thread_slider.value;
 
 		thread_slider.oninput = function()
@@ -640,8 +703,8 @@ function vidyen_wm_sub_menu_page()
 		}
 
 		//CPU Slider
-		var wm_cpu_slider = document.getElementById("wm_cpu");
-		var cpu_output = document.getElementById("cpu_use");
+		var wm_cpu_slider = document.getElementById("wm_cpu_low");
+		var cpu_output = document.getElementById("cpu_use_low");
 		cpu_output.innerHTML = wm_cpu_slider.value;
 
 		wm_cpu_slider.oninput = function()
