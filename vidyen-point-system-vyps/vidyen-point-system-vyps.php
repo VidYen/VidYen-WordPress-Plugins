@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Crypto Reward System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      3.0.1
+Version:      3.0.1.12
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2

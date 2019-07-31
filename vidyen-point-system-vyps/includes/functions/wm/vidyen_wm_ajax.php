@@ -35,6 +35,18 @@ function vidyen_wm_api_action()
   $discord_text = $vy_wm_parsed_array[$index]['discord_text'];
   $site_name = $vy_wm_parsed_array[$index]['site_name'];
 
+  //This must be active to be active.
+  if ($wm_pro_active != 1)
+  {
+    $wm_woo_active = 0; //slap that down, no WC without pro
+    $discord_webhook = ''; //no discord either
+  }
+  elseif ($wm_woo_active ==1)
+  {
+    $site_name = $site_name.'-wc'; //site name should have its own meta fields
+  }
+
+
   //Kind of dawned on me we don't need to pass the variables via ajax since they are a known.
   $crypto_wallet = $vy_wm_parsed_array[$index]['crypto_wallet'];
 
@@ -89,12 +101,12 @@ function vidyen_wm_api_action()
   //Let's get the price of XMR now if we can: I need to really do something with this since I put the effort into finding this out.
   $current_xmr_price = vyps_mo_xmr_usd_api();
 
-  $key = 'vidyen_wm_total_hash';
+  $key = 'vidyen_wm_total_hash'.$site_name; //Sitename must be applied
   $single = TRUE;
   $user_prior_total_hashes = floatval(get_user_meta( $user_id, $key, $single ));
 
   //Get time stamp
-  $date_key = 'vidyen_wm_last_mined_date';
+  $date_key = 'vidyen_wm_last_mined_date'.$site_name; //Unique name with -wc at end
   $user_prior_mined_date = floatval(get_user_meta( $user_id, $date_key, $single )); //This will be raw UTC
   $current_mined_date = time();
   $time_difference = $current_mined_date - $user_prior_mined_date;
@@ -103,10 +115,10 @@ function vidyen_wm_api_action()
   if(  $site_total_hashes > $user_prior_total_hashes )
   {
     $rewarded_hashes = $site_total_hashes - $user_prior_total_hashes; //Find the different
-    $reward_payout = intval($rewarded_hashes / $hash_per_point);
+    $reward_payout = floatval($rewarded_hashes / $hash_per_point);
 
     //It dawned on me we were getting 0 rewards on occasion wasting stuff
-    if ($reward_payout > 0)
+    if ($reward_payout > 0 AND $wm_woo_active == 1)
     {
       $meta_value = $site_total_hashes;
       update_user_meta( $user_id, $key, $meta_value, $prev_value );
@@ -114,31 +126,30 @@ function vidyen_wm_api_action()
 
       $reason = 'WebMining'; //Honestly, I should create a global reason variable but I have deadlines.
 
-      //Ok going to check for pro and woo mode.
-      if($wm_pro_active == 1 AND $wm_woo_active == 1)
-      {
-        $reward_payout = $reward_payout / 100; //Well we got to have it per $0.01 for those who want to use USD
-        $credit_result = vyps_ww_point_credit_func( $user_id, $reward_payout, $reason ); //Note no point ID's
-      }
-      else
-      {
-        //The credit result will now be pushed to the vyps credit.
-        $credit_result = vyps_point_credit_func($point_id, $reward_payout, $user_id, $reason);
-      }
+      $round_places = intval(get_option( 'woocommerce_price_num_decimals' )); //pulling from woocommerce what the decimal places are options are
+      $reward_payout = $reward_payout / (10 ^ $round_places); //This should work. 1/100 = 0.01, 1/1000 = 0.001 and so on 10^0 should be 1
+      $reward_payout = round($reward_payout, $round_places ); //In case there is some weird math.
+      $credit_result = vyps_ww_point_credit_func( $user_id, $reward_payout, $reason ); //Note no point ID's
+    }
+    elseif (intval($reward_payout) > 0)
+    {
+      $reward_payout = intval($reward_payout);
+      //The credit result will now be pushed to the vyps credit.
+      $credit_result = vyps_point_credit_func($point_id, $reward_payout, $user_id, $reason);
+    }
 
-      if($wm_pro_active == 1 AND $discord_webhook != '')
-      {
-        $username = 'Reward Report Bot'; //I need to fix this. Gah!
+    if($discord_webhook != '' AND $reward_payout > 0)
+    {
+      $username = 'Reward Report Bot'; //I need to fix this. Gah!
 
-        //if you can use a discord hook you can learn how to type it in lower case.
-        //User name replace.
-        $discord_text = str_replace("[user]",vidyen_user_display_name($user_id),$discord_text);
+      //if you can use a discord hook you can learn how to type it in lower case.
+      //User name replace.
+      $discord_text = str_replace("[user]",vidyen_user_display_name($user_id),$discord_text);
 
-        //Amount replace.
-        $discord_text = str_replace("[amount]",$reward_payout,$discord_text);
+      //Amount replace.
+      $discord_text = str_replace("[amount]",$reward_payout,$discord_text);
 
-        $discord_result = vidyen_discord_webhook_func($discord_text, $username, $discord_webhook);
-      }
+      $discord_result = vidyen_discord_webhook_func($discord_text, $username, $discord_webhook);
     }
   }
   elseif( $time_difference > 86400 )

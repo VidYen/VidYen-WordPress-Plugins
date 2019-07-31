@@ -111,10 +111,10 @@ function vidyen_wm_sub_menu_page()
 			$current_pool  = $vy_wm_parsed_array[$index]['current_pool'];
 		}
 
-		//The current site name if supplied
+		//Going to slugify to worker readable
 		if (isset($_POST['site_name']))
 		{
-			$site_name = sanitize_text_field($_POST['site_name']);
+			$site_name = sanitize_title($_POST['site_name']);
 		}
 		else
 		{
@@ -588,8 +588,8 @@ function vidyen_wm_sub_menu_page()
 				</td>
 			</tr>
 			<tr>
-				<td valign="top"><b>Site Name:</b></td>
-				<td valign="top"><input type="text" name="site_name" id="site_name" value="'.$site_name.'" size="128"></td>
+				<td valign="top"><b>Site Name:</b><br><i>Change this to a unique name if you run more than one site.</i></td>
+				<td valign="top"><input type="text" name="site_name" id="site_name" value="'.$site_name.'" size="128" maxlength="64" required="true"></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Your XMR Based Crypto Wallet:</b></td>
@@ -601,7 +601,7 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td valign="top"><b>Hash Per Point</b><br><i>Hashes mined per reward point.</i></td>
-				<td valign="top"><input type="number" name="hash_per_point" id="hash_per_point" value="'.$hash_per_point.'" size="18" min="1" step="1" required="true"> <i><b>NOTE:</b> If WooCommerce mode, this is set per $0.01 per hashes mined. Either use Viritual items or raise hash requirements</i></td>
+				<td valign="top"><input type="number" name="hash_per_point" id="hash_per_point" value="'.$hash_per_point.'" size="18" min="1" step="1" required="true"><br><i><b>NOTE:</b> If WooCommerce mode, this round to smallest unit of your decimal places setting.<br>0 decimal places = $1 <br>2 decimal places = $0.01<br>8 decimal places = 0.00000001<br>This is set in WooCommerce Settings</i></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Power Button Settings:</b><br><i><b>Note:</b><br>Thread counts above 8 are only possible on Pro Mode</i></td>

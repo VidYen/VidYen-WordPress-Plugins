@@ -121,6 +121,14 @@ After a long period of user feed back and watching people struggle with the cont
 
 == Changelog ==
 
+= 3.0.2 =
+
+- Major Fix: WooCommerce mode now pays to the smallest unit based on the rounding in WooCommerce settings. ie: 1, 0.01, 0.0001 and so on. Check your hash settings!
+- Fix: Removed but that allowed TeraWallet on while Pro Mode was off (Sorry)
+- Fix: Fixed issue where current balance was not loading correctly before pushing button
+- Update: Brackets removed as no longer needed in this format for better readability
+
+
 = 3.0.1 =
 
 - Update: Added specific settings to each power level as previous version was unusable to some users.

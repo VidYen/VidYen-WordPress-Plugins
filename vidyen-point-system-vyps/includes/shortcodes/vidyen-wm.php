@@ -50,8 +50,26 @@ function vidyen_wm_shortcode_func()
   $wm_threads_high = $vy_wm_parsed_array[$index]['wm_threads_high'];
   $wm_cpu_high = $vy_wm_parsed_array[$index]['wm_cpu_high'];
 
-  //Admins get to decide
-  $max_threads = 20;
+  $round_places = 0; //Init for the js rounding
+
+  //Whoops forgot to turn woo mode off if pro mode was not 1 to turn it off.
+  if ($wm_pro_active != 1)
+  {
+    $wm_woo_active = 0;
+    $max_threads = 8;
+  }
+  else
+  {
+    //Admins get to decide
+    $max_threads = 20;
+  }
+
+  //Adding a case for woccomer use as stuff blows up switching back and forth
+  if ($wm_woo_active == 1)
+  {
+    $site_name = $site_name.'-wc'; //site name should have its own meta fields
+    $round_places = intval(get_option( 'woocommerce_price_num_decimals' )); //pulling from woocommerce what the decimal places are options are
+  }
 
   $mining_pool = 'moneroocean.stream'; //This will never change actually.
   $password = $site_name; //Not sure if need to set this somehwere. but for now this is the site name so people can set their emails
@@ -196,8 +214,19 @@ function vidyen_wm_shortcode_func()
     $workerBar_text_color = 'white';
     $poolBar_text_color = 'white';
 
+    if ($wm_woo_active == 1)
+    {
+      $reward_icon = '<span class="woo-wallet-icon-wallet"></span>';
+      $spool_up_balance = vyps_ww_point_bal_func($user_id); //I'm using a different variable than $reward least it get in tthe way
+    }
+    else
+    {
+      $reward_icon = vyps_point_icon_func($point_id);
+      $spool_up_balance = intval(vyps_point_balance_func($point_id, $user_id));
+    }
+
     //Thank the gods I keep the variable names the same.
-    $reward_icon = vyps_point_icon_func($point_id);
+
 
     //First things first... Get the graphic.
     wp_parse_str($graphic_selection, $graphics_selection_arary);
@@ -717,13 +746,13 @@ function vidyen_wm_shortcode_func()
     //Bars NOTE: i'm disableing the thread and slider for end users. Seems to useless or uninstering for them since they don't care or don't really want to learn. Just want the rewards
     $progress_bars_html = '
       <div id="pauseProgress" style="position:relative;width:100%; background-color: grey; ">
-        <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text">Press Power Level To Begin</span></div></div>
+        <div id="pauseBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="pause-text">Press Power Level To Begin!</span></div></div>
       </div>
       <div id="timeProgress" style="position:relative;display:none;width:100%; background-color: grey; ">
-        <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div id="time_bar_font_div" style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span><span id="progress_text"> - Effort[0]</span></div></div>
+        <div id="timeBar" style="width:1%; height: 30px; background-color: '.$timeBar_color.';"><div id="time_bar_font_div" style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="status-text">Spooling up.</span><span id="wait">.</span><span id="hash_rate"></span><span id="progress_text"> - Effort: 0</span></div></div>
       </div>
       <div id="workerProgress" style="position:relative; display: '.$workerBar_display.';width:100%; background-color: grey; ">
-        <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span> <span id="pool_text" style="color:'.$poolBar_text_color.';">Earned['.$reward_icon.' 0] - Balance['.$reward_icon.' 0]</span></div></div>
+        <div id="workerBar" style="display: '.$workerBar_display.';width:0%; height: 30px; background-color: '.$workerBar_color.';"><div id="worker_bar_font_div"style="position: absolute; right:12%; color:'.$workerBar_text_color.';"><span id="current-algo-text"></span> <span id="pool_text" style="color:'.$poolBar_text_color.';">Session Earnings: '.$reward_icon.' 0 - Balance: '.$reward_icon.' '.$spool_up_balance.'</span></div></div>
       </div>
       <div id="thread_manage" style="position:relative;display:inline;margin:5px !important;display:none;">
         <button type="button" id="sub" style="display:inline;" class="sub" onclick="vidyen_sub()" disabled>-</button>
@@ -776,6 +805,8 @@ function vidyen_wm_shortcode_func()
     var mo_site_url = '';
     var mo_text_text = '';
     var mo_running_total = 0;
+    var mo_running_total_display = ''; //Not a number
+    var mo_reward_balance_display = ''; //Also not a number
 
     function pull_mo_stats()
     {
@@ -798,12 +829,15 @@ function vidyen_wm_shortcode_func()
          mo_text_text = output_response.text_text;
          mo_reward_balance = output_response.reward_balance;
 
+
          mo_running_total = mo_running_total + mo_reward_payout;
+
+         mo_running_total_display = mo_running_total.toFixed($round_places);      
 
          //console.log(mo_site_url);
 
          //Note this time around we just need to add to a running total for session since points are added via adjax
-         document.getElementById('pool_text').innerHTML = 'Earned[' + '$reward_icon ' + mo_running_total + '] - Balance[' + '$reward_icon ' + mo_reward_balance + ']';
+         document.getElementById('pool_text').innerHTML = 'Session Earnings: ' + '$reward_icon ' + mo_running_total_display + ' - Balance: ' + '$reward_icon ' + mo_reward_balance;
          workerwidth = 0; //I am hoping this works
          elem.style.width = workerwidth + '%';
        });
@@ -864,7 +898,7 @@ function vidyen_wm_shortcode_func()
         }
 
         //update the display
-        document.getElementById('progress_text').innerHTML = '- Effort[' + totalhashes + ']';
+        document.getElementById('progress_text').innerHTML = ' - Effort: ' + totalhashes;
         document.getElementById('hash_rate').innerHTML = ' ' + hash_per_second_estimate + ' H/s' + ' [' + current_algo + ']';
 
         //Check server is up since we are running only this loop now
