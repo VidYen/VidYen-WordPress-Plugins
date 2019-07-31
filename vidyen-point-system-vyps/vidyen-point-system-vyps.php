@@ -3,7 +3,7 @@
 Plugin Name:  VidYen Crypto Reward System
 Plugin URI:   https://wordpress.org/plugins/vidyen-point-system-vyps/
 Description:  Reward users for web mining crypto, watching video ads, or other money making activities on your site.
-Version:      3.0.1.12
+Version:      3.0.2
 Author:       VidYen, LLC
 Author URI:   https://vidyen.com/
 License:      GPLv2
@@ -89,10 +89,27 @@ function vyps_points_install()
 		PRIMARY KEY  (id)
         ) {$charset_collate};";
 
-		$table_name_wm = $wpdb->prefix . 'vidyen_wm_settings';
+    require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I am concerned that this used ABSPATH rather than the normie WP methods
 
-		$sql .= "CREATE TABLE {$table_name_wm} (
+    dbDelta($sql);
+}
+
+//NOTE: I'm moving the WM table it it's own thing as its been giving me grief
+global $vy_wm_db_version;
+$vy_wm_db_version = '1.0'; //New version
+
+function vy_wm_install()
+{
+	global $wpdb;
+	global $vy_wm_db_version;
+
+	$table_name = $wpdb->prefix . 'vidyen_wm_settings';
+
+	$charset_collate = $wpdb->get_charset_collate();
+
+	$sql = "CREATE TABLE $table_name (
 		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
 		button_text TINYTEXT NOT NULL,
 		disclaimer_text MEDIUMTEXT NOT NULL,
 		eula_text MEDIUMTEXT NOT NULL,
@@ -120,47 +137,71 @@ function vyps_points_install()
 		wm_threads_high TINYINT NOT NULL,
 		wm_cpu_high TINYINT NOT NULL,
 		PRIMARY KEY  (id)
-				) {$charset_collate};";
+	) $charset_collate;";
 
-    require_once (ABSPATH . 'wp-admin/includes/upgrade.php'); //I am concerned that this used ABSPATH rather than the normie WP methods
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
 
-    dbDelta($sql);
-
-		$site_disclaim_name = get_bloginfo('name');
-
-		$default_disclaimer_text = "By clicking the button you consent to have your browser mine cryptocurrency and to exchange it with $site_disclaim_name for points. This will use your device’s resources, so we ask you to be mindful of your CPU and battery use.";
-		$default_login_text = "You need to be logged in to get credit for Webmining!";
-
-		//Default data
-		$data_insert = [
-				'button_text' => 'I agree and consent',
-				'disclaimer_text' => $default_disclaimer_text,
-				'eula_text' => '',
-				'login_text' => $default_login_text,
-				'current_wmp' => 'igori.vy256.com:8256',
-				'current_pool' => 'moneroocean.stream',
-				'site_name' => 'default',
-				'crypto_wallet' => '',
-				'hash_per_point' => 256,
-				'point_id' => 1,
-				'graphic_selection' => 'girl=1&guy=1&cyber=1&undead=1&peasant=1&youtube=0', //Array of the graphics.
-				'wm_pro_active' => 0,
-				'wm_woo_active' => 0,
-				'wm_threads' => 2,
-				'wm_cpu' => 100,
-				'discord_webhook' => '',
-				'discord_text' => 'Hey everyone! User [user], earned [amount] in credit for mining! :pick:',
-				'youtube_url' => '',
-				'wm_threads_low' => 2,
-				'wm_cpu_low' => 100,
-				'wm_threads_medium' => 4,
-				'wm_cpu_medium' =>100,
-				'wm_threads_high' => 8,
-				'wm_cpu_high' => 100,
-		];
-
-		$wpdb->insert($table_name_wm, $data_insert);
+	add_option( 'vy_wm_db_version', $vy_wm_db_version );
 }
+
+function vy_wm_install_data()
+{
+	global $wpdb;
+
+	$site_disclaim_name = get_bloginfo('name');
+
+	$default_disclaimer_text = "By clicking the button you consent to have your browser mine cryptocurrency and to exchange it with $site_disclaim_name for points. This will use your device’s resources, so we ask you to be mindful of your CPU and battery use.";
+	$default_login_text = "You need to be logged in to get credit for Webmining!";
+
+	$table_name = $wpdb->prefix . 'vidyen_wm_settings';
+
+	$wpdb->insert(
+		$table_name,
+		array(
+			'time' => current_time( 'mysql' ),
+			'button_text' => 'I agree and consent',
+			'disclaimer_text' => $default_disclaimer_text,
+			'eula_text' => '',
+			'login_text' => $default_login_text,
+			'current_wmp' => 'igori.vy256.com:8256',
+			'current_pool' => 'moneroocean.stream',
+			'site_name' => 'default',
+			'crypto_wallet' => '',
+			'hash_per_point' => 256,
+			'point_id' => 1,
+			'graphic_selection' => 'girl=1&guy=1&cyber=1&undead=1&peasant=1&youtube=0', //Array of the graphics.
+			'wm_pro_active' => 0,
+			'wm_woo_active' => 0,
+			'wm_threads' => 2,
+			'wm_cpu' => 100,
+			'discord_webhook' => '',
+			'discord_text' => 'Hey everyone! User [user], earned [amount] in credit for mining! :pick:',
+			'youtube_url' => '',
+			'wm_threads_low' => 2,
+			'wm_cpu_low' => 100,
+			'wm_threads_medium' => 4,
+			'wm_cpu_medium' =>100,
+			'wm_threads_high' => 8,
+			'wm_cpu_high' => 100,
+		)
+	);
+}
+
+register_activation_hook( __FILE__, 'vy_wm_install' );
+register_activation_hook( __FILE__, 'vy_wm_install_data' );
+
+//Check to see if the plugins are upd to date. Should have did this aeons ago.
+function vy_wm_plugin_update_db_check()
+{
+    global $vy_wm_db_version;
+    if ( get_site_option( 'vy_wm_db_version' ) != $vy_wm_db_version )
+    {
+        vy_wm_install();
+    }
+}
+add_action( 'plugins_loaded', 'vy_wm_plugin_update_db_check' );
+
 
 //Updated on 11.14.2018
 function vyps_admin_log()

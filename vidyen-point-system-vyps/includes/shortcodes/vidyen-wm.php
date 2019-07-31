@@ -68,7 +68,7 @@ function vidyen_wm_shortcode_func()
   if ($wm_woo_active == 1)
   {
     $site_name = $site_name.'-wc'; //site name should have its own meta fields
-    $round_places = intval(get_option( 'woocommerce_price_num_decimals' )); //pulling from woocommerce what the decimal places are options are
+    $round_places = intval(get_option( 'woocommerce_price_num_decimals' )); //this is better than to pull from say the ajax IMO
   }
 
   $mining_pool = 'moneroocean.stream'; //This will never change actually.
@@ -386,7 +386,7 @@ function vidyen_wm_shortcode_func()
           //event.target.playVideo();
           var video_duration;
           video_duration = player.getDuration();
-          console.log('Video length is: ' + video_duration);
+          //console.log('Video length is: ' + video_duration);
         }
 
         // 5. The API calls this function when the player's state changes.
@@ -397,7 +397,7 @@ function vidyen_wm_shortcode_func()
           if (event.data == YT.PlayerState.PLAYING && !done) {
             //setTimeout(stopVideo, 6000);
             //done = true;
-            console.log('Hey it is playing');
+            //console.log('Hey it is playing');
           }
         }
         function stopVideo() {
@@ -805,8 +805,8 @@ function vidyen_wm_shortcode_func()
     var mo_site_url = '';
     var mo_text_text = '';
     var mo_running_total = 0;
-    var mo_running_total_display = ''; //Not a number
-    var mo_reward_balance_display = ''; //Also not a number
+    var mo_running_total_display = 0; //Should be a number
+    var mo_round_place = 0;
 
     function pull_mo_stats()
     {
@@ -828,13 +828,16 @@ function vidyen_wm_shortcode_func()
          mo_site_url = output_response.site_url;
          mo_text_text = output_response.text_text;
          mo_reward_balance = output_response.reward_balance;
+         mo_round_place = output_response.round_place;
 
 
          mo_running_total = mo_running_total + mo_reward_payout;
 
-         mo_running_total_display = mo_running_total.toFixed($round_places);      
+         mo_running_total_display = mo_running_total.toFixed($round_places);
 
          //console.log(mo_site_url);
+
+         //console.log(mo_round_place);
 
          //Note this time around we just need to add to a running total for session since points are added via adjax
          document.getElementById('pool_text').innerHTML = 'Session Earnings: ' + '$reward_icon ' + mo_running_total_display + ' - Balance: ' + '$reward_icon ' + mo_reward_balance;

@@ -123,6 +123,7 @@ After a long period of user feed back and watching people struggle with the cont
 
 = 3.0.2 =
 
+- Major Fix: Webminer wpdb table will now upgrade correctly
 - Major Fix: WooCommerce mode now pays to the smallest unit based on the rounding in WooCommerce settings. ie: 1, 0.01, 0.0001 and so on. Check your hash settings!
 - Fix: Removed but that allowed TeraWallet on while Pro Mode was off (Sorry)
 - Fix: Fixed issue where current balance was not loading correctly before pushing button

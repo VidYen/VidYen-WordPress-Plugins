@@ -40,10 +40,12 @@ function vidyen_wm_api_action()
   {
     $wm_woo_active = 0; //slap that down, no WC without pro
     $discord_webhook = ''; //no discord either
+    $round_places = 0;
   }
   elseif ($wm_woo_active ==1)
   {
     $site_name = $site_name.'-wc'; //site name should have its own meta fields
+    $round_places = intval(get_option( 'woocommerce_price_num_decimals' )); //pulling from woocommerce what the decimal places are options are
   }
 
 
@@ -74,6 +76,7 @@ function vidyen_wm_api_action()
   $rewarded_hashes = 0;
   $current_xmr_price =0;
   $reward_payout = 0;
+  $reason = 'WebMining'; //Honestly, I should create a global reason variable but I have deadlines.
 
   /*** MoneroOcean Gets***/
   //Site get
@@ -124,11 +127,8 @@ function vidyen_wm_api_action()
       update_user_meta( $user_id, $key, $meta_value, $prev_value );
       update_user_meta( $user_id, $date_key, $current_mined_date, $prev_value );
 
-      $reason = 'WebMining'; //Honestly, I should create a global reason variable but I have deadlines.
-
-      $round_places = intval(get_option( 'woocommerce_price_num_decimals' )); //pulling from woocommerce what the decimal places are options are
-      $reward_payout = $reward_payout / (10 ^ $round_places); //This should work. 1/100 = 0.01, 1/1000 = 0.001 and so on 10^0 should be 1
-      $reward_payout = round($reward_payout, $round_places ); //In case there is some weird math.
+      $reward_payout = $reward_payout / pow(10,$round_places); //This should work. 1/100 = 0.01, 1/1000 = 0.001 and so on 10^0 should be 1
+      //$reward_payout = round($reward_payout, $round_places ); //In case there is some weird math.
       $credit_result = vyps_ww_point_credit_func( $user_id, $reward_payout, $reason ); //Note no point ID's
     }
     elseif (intval($reward_payout) > 0)
@@ -192,7 +192,7 @@ function vidyen_wm_api_action()
       'rewarded_hashes' => $rewarded_hashes,
       'current_XMRprice' => $current_xmr_price,
       'site_url' => $site_url,
-      'text_text' => 'goddamnit',
+      'round_place' => $round_places,
   );
 
   echo json_encode($mo_array_server_response); //Proper method to return json
