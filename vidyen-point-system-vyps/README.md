@@ -125,6 +125,7 @@ After a long period of user feed back and watching people struggle with the cont
 
 - Fix: Major bug related to over counting hashes. You should update to this version.
 - Update: Wallet link change if you need an exchange.
+- Add: Both `[date]` and `[time]` fields added to the Discord hook bot as makes it easier to see logs.
 
 = 3.0.2 =
 

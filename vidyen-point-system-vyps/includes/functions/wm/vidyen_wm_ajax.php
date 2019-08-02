@@ -145,6 +145,8 @@ function vidyen_wm_api_action()
     if($discord_webhook != '' AND $reward_payout > 0)
     {
       $username = 'Reward Report Bot'; //I need to fix this. Gah!
+      $mined_date = date("m/d/Y");
+      $mined_time = date("H:i:s");
 
       //if you can use a discord hook you can learn how to type it in lower case.
       //User name replace.
@@ -152,6 +154,13 @@ function vidyen_wm_api_action()
 
       //Amount replace.
       $discord_text = str_replace("[amount]",$reward_payout,$discord_text);
+
+      //Date replace
+      $discord_text = str_replace("[date]",$mined_date,$discord_text);
+
+      //Date replace
+      $discord_text = str_replace("[time]",$mined_time,$discord_text);
+
 
       $discord_result = vidyen_discord_webhook_func($discord_text, $username, $discord_webhook);
     }

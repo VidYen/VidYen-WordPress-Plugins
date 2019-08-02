@@ -176,7 +176,7 @@ function vy_wm_install_data()
 			'wm_threads' => 2,
 			'wm_cpu' => 100,
 			'discord_webhook' => '',
-			'discord_text' => 'Hey everyone! User [user], earned [amount] in credit for mining! :pick:',
+			'discord_text' => 'Hey everyone! User [user], earned [amount] in credit for mining! :pick: ([date] [time])',
 			'youtube_url' => '',
 			'wm_threads_low' => 2,
 			'wm_cpu_low' => 100,
