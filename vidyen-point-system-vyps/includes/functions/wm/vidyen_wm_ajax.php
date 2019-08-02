@@ -133,6 +133,10 @@ function vidyen_wm_api_action()
     }
     elseif (intval($reward_payout) > 0)
     {
+      $meta_value = $site_total_hashes;
+      update_user_meta( $user_id, $key, $meta_value, $prev_value );
+      update_user_meta( $user_id, $date_key, $current_mined_date, $prev_value );
+
       $reward_payout = intval($reward_payout);
       //The credit result will now be pushed to the vyps credit.
       $credit_result = vyps_point_credit_func($point_id, $reward_payout, $user_id, $reason);

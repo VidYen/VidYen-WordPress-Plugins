@@ -593,7 +593,7 @@ function vidyen_wm_sub_menu_page()
 			</tr>
 			<tr>
 				<td valign="top"><b>Your XMR Based Crypto Wallet:</b></td>
-				<td valign="top"><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"> <a href="https://mymonero.com/" target="_blank"><i>Need a wallet? Go here.</i></a></td>
+				<td valign="top"><input type="text" name="crypto_wallet" id="crypto_wallet" value="'.$crypto_wallet.'" size="128" minlength="90" required="true"> <a href="https://gocps.net/sfgatw016kvzrw1jcb34e8qy1yg5/" target="_blank"><i>Need a wallet? Go here.</i></a></td>
 			</tr>
 			<tr>
 				<td valign="top"><b>Reward Point Type</b><br><i>This is the Point ID found under the Point List.</i></td>

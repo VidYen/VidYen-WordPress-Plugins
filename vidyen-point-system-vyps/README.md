@@ -121,6 +121,11 @@ After a long period of user feed back and watching people struggle with the cont
 
 == Changelog ==
 
+= 3.0.3 =
+
+- Fix: Major bug related to over counting hashes. You should update to this version.
+- Update: Wallet link change if you need an exchange.
+
 = 3.0.2 =
 
 - Major Fix: Webminer wpdb table will now upgrade correctly
