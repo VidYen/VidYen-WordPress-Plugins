@@ -141,6 +141,10 @@ function vidyen_wm_api_action()
       //The credit result will now be pushed to the vyps credit.
       $credit_result = vyps_point_credit_func($point_id, $reward_payout, $user_id, $reason);
     }
+    else
+    {
+      $reward_payout = 0;
+    }
 
     if($discord_webhook != '' AND $reward_payout > 0)
     {
