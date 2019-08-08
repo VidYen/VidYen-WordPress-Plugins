@@ -121,6 +121,10 @@ After a long period of user feed back and watching people struggle with the cont
 
 == Changelog ==
 
+= 3.0.4 =
+
+- Fix: Discord bot will not report decimals if not in WooCommerce mode.
+
 = 3.0.3 =
 
 - Fix: Major bug related to over counting hashes. You should update to this version.
