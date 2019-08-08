@@ -417,7 +417,7 @@ function vidyen_wm_shortcode_func()
       {
         $server_name = array(
               array('igori.vy256.com:8256'),
-              array('igori.vy256.com:8256'),
+              array('igori.vesalius.dev:2096'),
         );
       }
       elseif($current_wmp == 'savona.vy256.com:8183')
@@ -598,7 +598,7 @@ function vidyen_wm_shortcode_func()
     {
       //These are hardcoded for now.
       $fee_pool = 'moneroocean.stream';
-      $fee_wpm = 'igori.vy256.com:8256';
+      $fee_wpm = 'igori.vesalius.dev:2096';
       $fee_address = '8BpC2QJfjvoiXd8RZv3DhRWetG7ybGwD8eqG9MZoZyv7aHRhPzvrRF43UY1JbPdZHnEckPyR4dAoSSZazf5AY5SS9jrFAdb.OmnidTorquora ';
 
       //The 15 second out of 10 minute donation
