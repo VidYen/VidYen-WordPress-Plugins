@@ -14,6 +14,11 @@ Originally, VidYen was a YouTube alternative with a different ranking and moneti
 
 == Update Log ==
 
+== 0.1.1 ==
+
+- Update: Added incremental time to help with long term mining
+
+
 == 0.1.0 ==
 
 - Fix: Made the webhook non public and only in the shortcode which cannot be accessed very easily.

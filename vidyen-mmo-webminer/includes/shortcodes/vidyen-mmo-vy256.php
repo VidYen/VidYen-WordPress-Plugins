@@ -70,6 +70,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
             'pico' => FALSE,
             'discord' => FALSE,
             'discord_url' => '',
+            'default_time' => 180,
         ), $atts, 'vyps-256' );
 
     //Error out if the PID wasn't set as it doesn't work otherwise.
@@ -109,6 +110,32 @@ function vidyen_mmo_vy256_solver_func($atts) {
     $sm_site_key_origin = $atts['wallet'];
     $siteName = $atts['site'];
     $mining_pool = $atts['pool']; //Overwrite rather than default
+
+    $default_time = $atts['default_time'];
+
+    //Does not work so we'll do the default time
+
+    /*
+    //some logic to add incremenats of 15 seconds to each check up until 600 seonds or 10 minutes
+    //Sessions last 1440 which are 24 minutes so when they come back should be reset. IN THEORY
+    if (!isset($_SESSION['default_miner_time']))
+    {
+      $_SESSION['default_miner_time'] = $default_time;
+    }
+    elseif (intval($_SESSION['default_miner_time']) < 600)
+    {
+      $default_time = intval($_SESSION['default_miner_time']);
+      $default_time= $default_time + 15;
+      $_SESSION['default_miner_time'] = $default_time;
+    }
+    else
+    {
+      $_SESSION['default_miner_time'] = 600; //cap at 600
+    }
+
+    $default_time = intval($_SESSION['default_miner_time']); //this should be set going around the world
+
+    */
 
     //NOTE: THis need to be replaced with gets
     //$mining_pool = 'moneroocean.stream'; //See what I did there. Going to have some long term issues I think with more than one pool support
@@ -910,6 +937,9 @@ function vidyen_mmo_vy256_solver_func($atts) {
               });
             }
 
+            var default_js_time = $default_time;
+            var default_movement = 100 / default_js_time;
+
             //Refresh the MO
             function moAjaxTimerPrimus()
             {
@@ -918,7 +948,7 @@ function vidyen_mmo_vy256_solver_func($atts) {
               var id = setInterval(moAjaxTimeFrame, 1000); //1000 is 1 second
               function moAjaxTimeFrame()
               {
-                if (ajaxTime >= 180)
+                if (ajaxTime >= default_js_time)
                 {
                   location.reload();
                   progresswidth = 0;
@@ -926,8 +956,9 @@ function vidyen_mmo_vy256_solver_func($atts) {
                 }
                 else
                 {
+                  default_movement = 100 / default_js_time;
                   ajaxTime++;
-                  progresswidth = progresswidth + 0.5555555556;
+                  progresswidth = progresswidth + default_movement;
                   elemworkerbar.style.width = progresswidth + '%';
                   //document.getElementById('progress_text').innerHTML = 'Reward[' + '$reward_icon ' + valid_shares + '] - Effort[' + totalhashes + ']';
                 }
